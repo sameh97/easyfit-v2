@@ -1,3 +1,42 @@
-:host {
-    display: block;
+/* Tooltip shown next to rail items when the sidebar is collapsed (72px). */
+.rail-tip {
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  z-index: 60;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #1b1c20;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
+.rail-link:hover .rail-tip,
+.rail-link:focus-visible .rail-tip {
+  opacity: 1;
+}
+
+/* Visually hidden until focused by keyboard. */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -100px;
+  z-index: 70;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #1b1c20;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: 16px;
+  color: #fff;
 }

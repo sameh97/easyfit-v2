@@ -26,6 +26,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { NavComponent } from './components/nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import { A11yModule } from '@angular/cdk/a11y';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -212,6 +213,7 @@ const routes: Routes = [
     MatPaginatorModule,
     MatSortModule,
     LayoutModule,
+    A11yModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
