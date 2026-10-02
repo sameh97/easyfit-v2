@@ -135,6 +135,9 @@
                 <ng-content></ng-content>
             </main>
         </div>
+
+        <!-- ============ AI panel (third column on ≥ xl, overlay below) ============ -->
+        <app-ai-panel [docked]="aiDocked" [phone]="isPhone"></app-ai-panel>
     </div>
 
     <app-command-palette></app-command-palette>

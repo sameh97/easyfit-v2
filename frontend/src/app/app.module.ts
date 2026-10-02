@@ -26,6 +26,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { NavComponent } from './components/nav/nav.component';
 import { CommandPaletteComponent } from './components/shell/command-palette/command-palette.component';
+import { AiPanelComponent } from './components/shell/ai-panel/ai-panel.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { A11yModule } from '@angular/cdk/a11y';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -161,6 +162,7 @@ const routes: Routes = [
     MachinesTableComponent,
     NavComponent,
     CommandPaletteComponent,
+    AiPanelComponent,
     HomeComponent,
     MembersChartComponent,
     MembersPageComponent,
