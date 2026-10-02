@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { debounceTime, filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NavigationHelperService } from 'src/app/shared/services/navigation-helper.service';
 import { AppUtil } from 'src/app/common/app-util';
@@ -38,6 +38,8 @@ export class NavComponent implements OnInit, OnDestroy {
   aiPanelOpen: boolean = false;
   private userCollapsed: boolean = false;
   private subscriptions: Subscription[] = [];
+  /** Job alerts can arrive in bursts; refresh the badge once things settle. */
+  private readonly alertArrived = new Subject<void>();
 
   @ViewChild('drawerCloseButton') private drawerCloseButton?: ElementRef<HTMLButtonElement>;
   @ViewChild('userMenuButton') private userMenuButton?: ElementRef<HTMLButtonElement>;
@@ -112,6 +114,8 @@ export class NavComponent implements OnInit, OnDestroy {
       )
     );
 
+    this.subscriptions.push(this.refreshOnAlerts());
+
     this.subscriptions.push(
       this.webSocketService
         .onMessage(SocketTopics.TOPIC_GROUPED_NOTIFICATION)
@@ -122,7 +126,7 @@ export class NavComponent implements OnInit, OnDestroy {
           }
           this.notificationNumber = sum;
           // A job just fired: refresh the due/overdue count behind the Maintenance badge.
-          this.dashboardService.load().subscribe({ error: () => undefined });
+          this.alertArrived.next();
         })
     );
   }
@@ -136,6 +140,12 @@ export class NavComponent implements OnInit, OnDestroy {
     }
     return count;
   };
+
+  private refreshOnAlerts(): Subscription {
+    return this.alertArrived
+      .pipe(debounceTime(2000))
+      .subscribe(() => this.dashboardService.load().subscribe({ error: () => undefined }));
+  }
 
   // ---- Layout ----------------------------------------------------------
 
