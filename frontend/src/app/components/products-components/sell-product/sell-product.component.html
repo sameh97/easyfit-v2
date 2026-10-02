@@ -1,0 +1,153 @@
+<div class="center">
+    <h2 mat-dialog-title>Sell product </h2>
+</div>
+
+<form *ngIf="sellProductForm" name="sellProductForm" #theForm="ngForm" [formGroup]="sellProductForm" (ngSubmit)="sellProduct()">
+
+    <mat-grid-list cols="5" rowHeight="70px">
+        <!-- <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="lightblue">
+        </mat-grid-tile> -->
+
+        <mat-grid-tile [colspan]="3" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Customer name</mat-label>
+                <input matInput type="text" name="coustomerName" formControlName="coustomerName" [(ngModel)]="bill.coustomerName" placeholder="Customer name">
+                <mat-icon *ngIf="sellProductForm.controls.coustomerName.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(sellProductForm.controls.coustomerName)" class="validation-err-container">
+
+                <div *ngIf="sellProductForm.controls.coustomerName.errors.nameNotValid">
+                    <small> Customer name is not valid.
+          </small>
+                </div>
+                <div *ngIf="sellProductForm.controls.coustomerName.errors.required">
+                    <small> Customer name is required.
+          </small>
+                </div>
+
+
+
+            </div>
+
+
+
+        </mat-grid-tile>
+
+
+
+        <mat-grid-tile [colspan]="3" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Customer phone</mat-label>
+                <input matInput type="text" name="coustomerPhone" formControlName="coustomerPhone" [(ngModel)]="bill.coustomerPhone" placeholder="Customer phone">
+                <mat-icon *ngIf="sellProductForm.controls.coustomerPhone.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+                <!-- <mat-hint><small>Phone number should consist of 10 digits and start with '05'</small></mat-hint> -->
+            </mat-form-field>
+            <br>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+
+            <div *ngIf="isInputValidationFailed(sellProductForm.controls.coustomerPhone)" class="validation-err-container">
+
+                <div *ngIf="sellProductForm.controls.coustomerPhone.errors.phoneNotValid">
+                    <small> Product name is not valid.
+          </small>
+                </div>
+                <div *ngIf="sellProductForm.controls.coustomerPhone.errors.required">
+                    <small> Product name is required.
+          </small>
+                </div>
+
+
+
+            </div>
+
+
+
+        </mat-grid-tile>
+
+
+
+        <mat-grid-tile [colspan]="3" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Cusstomer ID</mat-label>
+                <input matInput type="text" [(ngModel)]="bill.coustomerID" name="coustomerID" formControlName="coustomerID" placeholder="Customer ID">
+                <mat-icon *ngIf="sellProductForm.controls.coustomerID.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+            </mat-form-field>
+
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(sellProductForm.controls.coustomerID)" class="validation-err-container">
+
+                <div *ngIf="sellProductForm.controls.coustomerID.errors.idNotValid">
+                    <small> Cusstomer ID is not valid.
+          </small>
+                </div>
+                <div *ngIf="sellProductForm.controls.coustomerID.errors.required">
+                    <small> Cusstomer ID is required.
+          </small>
+                </div>
+            </div>
+
+
+
+        </mat-grid-tile>
+
+
+        <mat-grid-tile [colspan]="3" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Quantity</mat-label>
+                <input min="1" type="number" formControlName="quantity" [(ngModel)]="bill.quantity" matInput placeholder="Quantity" value="1">
+                <mat-icon *ngIf="sellProductForm.controls.quantity.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(sellProductForm.controls.quantity)" class="validation-err-container">
+
+                <div *ngIf="sellProductForm.controls.quantity.errors.nonZero">
+                    <small> Quantity should be at least 1.
+          </small>
+                </div>
+                <div *ngIf="sellProductForm.controls.quantity.errors.required">
+                    <small> Quantity is required.
+          </small>
+                </div>
+                <div *ngIf="sellProductForm.controls.quantity.errors.quantityNotValid">
+                    <small> Quantity is not available.
+          </small>
+                </div>
+
+
+
+
+            </div>
+
+        </mat-grid-tile>
+
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="lightblue">
+
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="3" [rowspan]="1" [style.background]="lightblue">
+            Total Price: {{ bill.quantity * product.price }}
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" [rowspan]="1" [style.background]="lightblue">
+
+        </mat-grid-tile>
+
+
+    </mat-grid-list>
+
+    <button id="sell-product-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+    Sell </button>
+</form>

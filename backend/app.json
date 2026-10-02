@@ -1,0 +1,8 @@
+{
+  "name": "easyfit",
+  "description": "easyfit is a gym managment software solution",
+  "keywords": ["node", "express", "static"],
+  "repository": "https://github.com/sameh97/easyfit-backend.git",
+  "logo": "https://small-sharp-tool.com/logo.svg",
+  "image": "heroku/nodejs"
+}

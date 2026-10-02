@@ -1,0 +1,55 @@
+.sidenav-container {
+    height: 100%;
+}
+
+.sidenav {
+    width: 200px;
+}
+
+.sidenav .mat-toolbar {
+    background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.notification-bell {
+    flex: 2;
+}
+
+.logout-button {
+    flex: 2;
+}
+
+.space {
+    flex: 50;
+}
+
+.menu-flex-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: row;
+}
+
+.menu-flex-container>div {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.is-active {
+    background-color: #DCDCDC;
+}
+
+::ng-deep .my-menu {
+    width: 190px;
+}
+
+.menu-header {
+    text-align: center;
+}

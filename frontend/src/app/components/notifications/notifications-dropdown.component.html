@@ -1,0 +1,37 @@
+<h2 style="text-align: center;">All Notifications</h2><br>
+<mat-card class="dashboard-card">
+    <mat-card-header>
+
+    </mat-card-header>
+    <mat-card-content class="dashboard-card-content">
+        <div class="center" *ngIf="isNotificationsEmpty()">
+            <h3>No Notifications Found</h3>
+        </div>
+
+        <!-- TODO: display (No Notifications Found) better && fix length unndefined problem-->
+        <cdk-virtual-scroll-viewport appendOnly itemSize="100" class="example-viewport">
+            <div *cdkVirtualFor="let notification of notificationsGroped" class="example-item">
+                <mat-card>
+                    <div class="list-notification-flex-container">
+                        <div class="details">
+                            <h3><b>Machine with name '{{notification.machineName}}' has {{notification.notificationsCount}}
+                  notifications
+                </b></h3>
+
+                            <!-- <p>From {{notification.createdAt | date : 'yyyy-MM-dd HH:mm:ss'}}</p> -->
+
+                        </div>
+                        <div class="done-button">
+                            <button mat-raised-button color="primary" (click)="viewNotification(notification)">View
+              </button>
+
+                        </div>
+                    </div>
+
+
+
+                </mat-card>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </mat-card-content>
+</mat-card>

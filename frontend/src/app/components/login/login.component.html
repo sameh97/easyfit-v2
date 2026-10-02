@@ -1,0 +1,78 @@
+<div class="flex min-h-screen bg-white font-sans">
+    <!-- Brand panel -->
+    <div class="relative hidden overflow-hidden bg-ink-900 lg:flex lg:w-1/2 xl:w-3/5">
+        <img src="https://images.pexels.com/photos/1954524/pexels-photo-1954524.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" class="absolute inset-0 h-full w-full object-cover opacity-40" />
+        <div class="absolute inset-0 bg-gradient-to-br from-ink-900 via-ink-900 to-transparent opacity-80"></div>
+
+        <div class="relative z-10 flex w-full flex-col justify-between p-12">
+            <div class="flex items-center gap-3">
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-400 text-ink-900">
+                    <span class="material-icons">fitness_center</span>
+                </span>
+                <span class="font-display text-3xl font-extrabold uppercase tracking-wide text-white">Easy<span class="text-brand-400">fit</span></span>
+            </div>
+
+            <div class="max-w-lg">
+                <h1 class="m-0 font-display text-6xl font-extrabold uppercase leading-none text-white">
+                    Run your gym.<br /><span class="text-brand-400">Not your paperwork.</span>
+                </h1>
+                <p class="mt-6 text-lg text-ink-300">Members, trainers, machines and sales. Everything your gym runs on, in one place.</p>
+            </div>
+
+            <div class="flex gap-10 text-ink-400">
+                <div class="flex items-center gap-2 text-sm"><span class="material-icons text-brand-400">groups</span> Members</div>
+                <div class="flex items-center gap-2 text-sm"><span class="material-icons text-brand-400">event</span> Classes</div>
+                <div class="flex items-center gap-2 text-sm"><span class="material-icons text-brand-400">insights</span> Insights</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form panel -->
+    <div class="flex flex-1 items-center justify-center px-6 py-12 sm:px-12">
+        <div class="w-full max-w-sm">
+            <div class="mb-10 flex items-center gap-3 lg:hidden">
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-400 text-ink-900">
+                    <span class="material-icons">fitness_center</span>
+                </span>
+                <span class="font-display text-3xl font-extrabold uppercase tracking-wide text-ink-900">Easy<span class="text-brand-600">fit</span></span>
+            </div>
+
+            <h2 class="m-0 font-display text-4xl font-bold uppercase text-ink-900">Welcome back</h2>
+            <p class="mt-2 text-sm text-ink-500">Sign in to your account to continue.</p>
+
+            <form class="mt-8 space-y-5" (keydown.enter)="handleEnterKeyPress($event)" (ngSubmit)="login()" name="loginForm" [formGroup]="loginForm" novalidate>
+                <div>
+                    <label for="email" class="mb-1.5 block text-sm font-medium text-ink-700">Email</label>
+                    <div class="relative">
+                        <span class="material-icons pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 transform text-xl text-ink-400">mail</span>
+                        <input id="email" type="email" formControlName="email" placeholder="you@gym.com" autocomplete="email" autofocus class="block w-full rounded-lg border bg-white py-2.5 pl-10 pr-3 text-sm text-ink-900 placeholder-ink-400 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200" [ngClass]="isInputValidationFailed(loginForm.controls['email']) ? 'border-red-400' : 'border-ink-300'"
+                        />
+                    </div>
+                    <p *ngIf="isInputValidationFailed(loginForm.controls['email'])" class="mt-1.5 mb-0 text-xs text-red-600">Please enter a valid email address.</p>
+                </div>
+
+                <div>
+                    <label for="password" class="mb-1.5 block text-sm font-medium text-ink-700">Password</label>
+                    <div class="relative">
+                        <span class="material-icons pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 transform text-xl text-ink-400">lock</span>
+                        <input id="password" formControlName="password" [type]="hide ? 'password' : 'text'" placeholder="••••••••" autocomplete="current-password" class="block w-full rounded-lg border bg-white py-2.5 pl-10 pr-11 text-sm text-ink-900 placeholder-ink-400 outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-200" [ngClass]="isInputValidationFailed(loginForm.controls['password']) ? 'border-red-400' : 'border-ink-300'"
+                        />
+                        <button type="button" (click)="hide = !hide" class="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-md p-1 text-ink-400 hover:text-ink-700" [attr.aria-label]="hide ? 'Show password' : 'Hide password'" [attr.aria-pressed]="!hide">
+                            <span class="material-icons text-xl">{{ hide ? 'visibility' : 'visibility_off' }}</span>
+                        </button>
+                    </div>
+                    <p *ngIf="isInputValidationFailed(loginForm.controls['password'])" class="mt-1.5 mb-0 text-xs text-red-600">Password is required.</p>
+                </div>
+
+                <div *ngIf="invalidLogin" class="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    <span class="material-icons text-lg">error_outline</span> Invalid email or password.
+                </div>
+
+                <button type="submit" [disabled]="!loginForm.valid || showSpinner" class="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-400 px-4 py-3 font-display text-lg font-bold uppercase tracking-wider text-ink-900 shadow-sm transition hover:bg-brand-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    <span *ngIf="showSpinner" class="h-5 w-5 animate-spin rounded-full border-2 border-ink-900 border-t-transparent"></span>
+                    {{ showSpinner ? 'Signing in' : 'Sign in' }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

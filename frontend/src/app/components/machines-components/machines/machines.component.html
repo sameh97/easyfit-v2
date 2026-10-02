@@ -1,0 +1,105 @@
+<app-nav>
+
+
+    <div class="flex-container">
+        <div>
+            <div class="flex-container-header">
+                <div class="header-title">
+                    <h1 class="mat-h1">Machines Page</h1><br>
+                </div>
+
+                <div class="header-actions"><button (click)="openCreateMachineDialog()" mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon">
+            <mat-icon>add</mat-icon>
+          </button></div>
+
+            </div>
+
+        </div>
+        <div>
+
+            <mat-card class="dashboard-card">
+                <mat-card-header>
+
+                    <mat-form-field fxFlex="40%">
+                        <input #myInput matInput type="text" placeholder="Search by serial number" (input)="filterItem(myInput.value)">
+                    </mat-form-field>
+
+
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+
+                    <cdk-virtual-scroll-viewport itemSize="70" class="example-viewport">
+                        <mat-list role="list">
+                            <mat-list-item *cdkVirtualFor="let machine of filteredItems;" class="example-item" role="listitem">
+
+                                <div class="list-element-flex-container">
+                                    <div class="img"><img style="width: 250px; height: 250px; margin: 4px;" src="{{machine.imgUrl}}">
+                                    </div>
+
+                                    <div class="details">
+                                        <div class="machine-details">
+                                            <h3 matLine><b>Name:</b> {{machine.name}}</h3>
+                                            <h4 matLine> <b>Serial Number:</b> {{machine.serialNumber}}</h4>
+                                            <p>
+                                                <span><b> Description:</b> {{machine.description}} </span>
+                                            </p>
+
+                                            <p matLine>
+                                                <span> <b> Production Year:</b> {{machine.productionYear}}
+                        </span>
+
+                                            </p>
+
+                                            <p matLine>
+                                                <span> <b>price:</b> {{machine.price | currency:'ILS'}}
+                        </span>
+
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div class="view-notifications"> <button mat-raised-button (click)="openViewMachineNotificationsDialog(machine)">View
+                      Notifications</button>
+                                    </div>
+                                    <div class="edit">
+
+                                        <button mat-flat-button color="primary" (click)="openUpdateMachineDialog(machine)">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                                    </div>
+                                    <div class="delete">
+                                        <button mat-raised-button (click)="delete(machine)" color="warn">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+
+
+                                    </div>
+
+                                </div>
+
+
+                                <mat-divider></mat-divider>
+                            </mat-list-item>
+
+                        </mat-list>
+
+                        <div *ngIf="isMachinesEmpty()">
+                            <h3> No Results</h3>
+                        </div>
+
+                    </cdk-virtual-scroll-viewport>
+
+
+                </mat-card-content>
+            </mat-card>
+
+
+
+        </div>
+
+        <!-- <div>
+
+        </div> -->
+    </div>
+
+</app-nav>

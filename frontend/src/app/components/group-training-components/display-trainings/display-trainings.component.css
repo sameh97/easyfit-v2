@@ -1,0 +1,88 @@
+.dashboard-card {
+    margin: 20px;
+}
+
+.flex-container {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: column;
+}
+
+.flex-container>div {
+    font-size: 15px;
+    padding: 1px 0;
+    /* border: black solid 1px; */
+}
+
+
+/* **************** header flex ****************** */
+
+.header-title {
+    flex: 1;
+    display: block;
+    justify-content: center;
+    text-align: center;
+}
+
+.header-actions {
+    flex: 4;
+}
+
+.flex-container-header {
+    display: flex;
+    gap: 3px;
+    flex: 0 0 100%;
+    flex-direction: row;
+}
+
+.flex-container-header>div {
+    padding: 10px;
+    /* border: black solid 1px; */
+}
+
+.add-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.dashboard-card-content {
+    text-align: center;
+}
+
+h1,
+h2 {
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
+
+/* table */
+
+.full-width-table {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 500px;
+}
+
+th.mat-header-cell {
+    text-align: left;
+    max-width: 300px;
+}
+
+th {
+    font-size: 14px;
+    color: black;
+}
+
+:host ::ng-deep .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+}

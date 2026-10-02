@@ -1,0 +1,53 @@
+<div class="center">
+    <h2 mat-dialog-title>Create catalog </h2>
+</div>
+
+<div class="flex-container">
+    <form *ngIf="addCatalogForm && catalog" name="addCatalogForm" #theForm="ngForm" [formGroup]="addCatalogForm" (ngSubmit)="create()">
+
+        <div class="row1">
+            <mat-form-field class="duration-days" appearance="fill">
+                <mat-label>Catalog duration days</mat-label>
+                <input type="number" [(ngModel)]="catalog.durationDays" formControlName="durationDays" matInput placeholder="Duration days" value="1">
+                <mat-icon *ngIf="addCatalogForm.controls.durationDays.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(addCatalogForm.controls.durationDays)" class="validation-err-container">
+
+                <div *ngIf="addCatalogForm.controls.durationDays.errors.required">
+                    <small> Duration is required</small>
+
+                </div>
+                <div *ngIf="addCatalogForm.controls.durationDays.errors.min">
+                    <small> duration must be minimum one day
+          </small>
+                </div>
+                <div *ngIf="addCatalogForm.controls.durationDays.errors.max">
+                    <small> duration must be maximum 100 days
+          </small>
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <div class="row2">
+            <mat-label>Please choose products to include in the catalog: </mat-label>
+            <ng-multiselect-dropdown [placeholder]="'Choose Products to include in Catalog'" formControlName="products" [settings]="dropdownSettings" [data]="dropdownList" [(ngModel)]="selectedItems" (onSelect)="onItemSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                (onSelectAll)="onSelectAll($event)" (onDeSelect)="onItemDeSelect($event)">
+            </ng-multiselect-dropdown>
+            <div *ngIf="isInputValidationFailed(addCatalogForm.controls.products)" class="validation-err-container">
+                <div *ngIf="addCatalogForm.controls.products.errors.required && addCatalogForm.controls.products?.touched">
+                    <small> Products are required</small>
+
+                </div>
+            </div>
+        </div>
+        <div class="row3">
+            <button id="add-catalog-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+        Add New Catalog </button>
+        </div>
+    </form>
+</div>

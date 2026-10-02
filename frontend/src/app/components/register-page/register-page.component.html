@@ -1,0 +1,130 @@
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div class="row">
+      <div class="col-6 col-md-4"></div>
+      <div class="col-6 col-md-4"><br><br><br></div>
+      <div class="col-6 col-md-4"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 col-md-4"></div>
+      <div class="col-6 col-md-4">
+        <form #registerForm="ngForm" novalidate (ngSubmit)="register(registerForm.value)">
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label for="validationServer01">First name</label>
+              <input type="text" class="form-control is-valid" name="firstName" id="validationServer01"
+                placeholder="First name" value="Mark" required ngModel>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="validationServer02">Last name</label>
+              <input type="text" class="form-control is-valid" name="lastName" id="validationServer02"
+                placeholder="Last name" value="Otto" required ngModel>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+
+            <div class="col-md-6 mb-3">
+              <label for="validationServer02">Passowrd</label>
+              <input type="password" class="form-control is-valid" name="password" id="validationServer02"
+                placeholder="Passowrd" placeholder="enter your Passowrd" required ngModel>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="validationServer02">confirm Passowrd</label>
+              <input type="password" class="form-control is-valid" name="confirmPassowrd" id="validationServer02"
+                placeholder="confirm Passowrd" placeholder="confirm Passowrd" required ngModel>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label for="validationServer02">Email</label>
+              <input type="text" class="form-control is-valid" name="email" id="validationServer02"
+                placeholder="enter your Email" placeholder="enter your Email" #email="ngModel" required email ngModel>
+
+              <div *ngIf="email.valid" class="valid-feedback">
+                Looks good!</div>
+              <div *ngIf="email.invalid && (email?.dirty || email?.touched)" class="alert alert-danger">
+                email is not valid</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="validationServer03">Address</label>
+              <input type="text" class="form-control is-invalid" name="address" id="validationServer03"
+                placeholder="address" required ngModel>
+              <div class="invalid-feedback">
+                Please provide a valid city.
+              </div>
+            </div>
+
+          </div>
+          <!--  -->
+          <div class="form-row">
+            <div class="col-md-5 mb-3">
+              <label for="validationServer04">Birth Day</label>
+              <input type="date" class="form-control is-invalid" name="birthDay" id="validationServer04"
+                placeholder="Birth Day" required ngModel>
+              <div class="invalid-feedback">
+                Please provide a valid state.
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="validationServer03">Phone</label>
+              <input type="text" class="form-control is-invalid" name="phone" id="validationServer03"
+                placeholder="enter phone number" required ngModel>
+              <div class="invalid-feedback">
+                Please provide a valid city.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required ngModel>
+              <label class="form-check-label" for="invalidCheck3">
+                Agree to terms and conditions
+              </label>
+              <div class="invalid-feedback">
+                You must agree before submitting.
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" name="submit" type="submit">Sign up</button>
+        </form>
+
+      </div>
+      <div class="col-6 col-md-4"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-6"></div>
+      <div class="col-6"></div>
+      <div class="col-6"></div>
+    </div>
+
+
+
+
+  </body>
+
+  </html>

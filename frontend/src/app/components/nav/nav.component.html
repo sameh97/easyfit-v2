@@ -1,0 +1,75 @@
+<div class="min-h-screen bg-ink-50 font-sans text-ink-800">
+    <!-- Mobile backdrop -->
+    <div *ngIf="sidebarOpen" class="fixed inset-0 z-30 bg-ink-900 bg-opacity-60 lg:hidden" (click)="sidebarOpen = false"></div>
+
+    <!-- Sidebar -->
+    <aside class="fixed inset-y-0 left-0 z-40 flex w-64 transform flex-col bg-ink-900 transition-transform duration-200 ease-out lg:translate-x-0" [ngClass]="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+        <div class="flex h-16 items-center gap-3 px-6">
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-400 text-ink-900">
+                <span class="material-icons text-xl">fitness_center</span>
+            </span>
+            <span class="font-display text-2xl font-extrabold uppercase tracking-wide text-white">Easy<span class="text-brand-400">fit</span></span>
+        </div>
+
+        <nav class="mt-4 flex-1 space-y-1 overflow-y-auto px-3" aria-label="Main">
+            <a *ngFor="let item of navItems" [routerLink]="item.path" routerLinkActive="bg-ink-800 text-white border-brand-400" #rla="routerLinkActive" (click)="sidebarOpen = false" class="group flex items-center gap-3 rounded-lg border-l-4 px-3 py-2.5 text-sm font-medium no-underline transition-colors hover:bg-ink-800 hover:text-white hover:no-underline" [ngClass]="rla.isActive ? '' : 'border-transparent text-ink-400'">
+                <span class="material-icons text-xl" [ngClass]="rla.isActive ? 'text-brand-400' : 'text-ink-500 group-hover:text-ink-300'">{{ item.icon }}</span>
+                {{ item.label }}
+            </a>
+        </nav>
+
+        <div *ngIf="currentUser" class="border-t border-ink-800 p-4">
+            <a routerLink="/profile" class="flex items-center gap-3 rounded-lg p-2 no-underline transition-colors hover:bg-ink-800 hover:no-underline">
+                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-ink-700 text-sm font-semibold uppercase text-white">{{ userInitials }}</span>
+                <span class="min-w-0">
+                    <span class="block truncate text-sm font-semibold text-white">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+                    <span class="block truncate text-xs text-ink-400">{{ currentUser.email }}</span>
+                </span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main column -->
+    <div class="flex min-h-screen flex-col lg:pl-64">
+        <header class="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-ink-200 bg-white bg-opacity-90 px-4 backdrop-filter backdrop-blur sm:px-6">
+            <button type="button" class="-ml-1 rounded-lg p-2 text-ink-500 hover:bg-ink-100 lg:hidden" (click)="sidebarOpen = true" aria-label="Open navigation">
+                <span class="material-icons">menu</span>
+            </button>
+
+            <div class="flex-1"></div>
+
+            <button type="button" class="relative rounded-lg p-2 text-ink-500 transition-colors hover:bg-ink-100 hover:text-ink-800" (click)="openNotificationsDialog()" aria-label="Notifications">
+                <span class="material-icons">notifications</span>
+                <span *ngIf="notificationNumber > 0" class="absolute right-1 top-1 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-xs font-bold leading-none text-white">{{ notificationNumber > 99 ? '99+' : notificationNumber }}</span>
+            </button>
+
+            <div class="relative">
+                <button type="button" class="flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 transition-colors hover:bg-ink-100" (click)="userMenuOpen = !userMenuOpen" aria-haspopup="true" [attr.aria-expanded]="userMenuOpen">
+                    <span class="flex h-8 w-8 items-center justify-center rounded-full bg-brand-400 text-xs font-bold uppercase text-ink-900">{{ userInitials }}</span>
+                    <span *ngIf="currentUser" class="hidden text-sm font-medium text-ink-700 sm:block">{{ currentUser.firstName }}</span>
+                    <span class="material-icons text-lg text-ink-400">expand_more</span>
+                </button>
+
+                <ng-container *ngIf="userMenuOpen">
+                    <div class="fixed inset-0 z-10" (click)="userMenuOpen = false"></div>
+                    <div class="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-ink-100 bg-white py-1 shadow-lg" role="menu">
+                        <div *ngIf="currentUser" class="border-b border-ink-100 px-4 py-3">
+                            <p class="m-0 text-xs text-ink-400">Signed in as</p>
+                            <p class="m-0 truncate text-sm font-semibold text-ink-800">{{ currentUser.email }}</p>
+                        </div>
+                        <a routerLink="/profile" (click)="userMenuOpen = false" class="flex items-center gap-3 px-4 py-2 text-sm text-ink-700 no-underline hover:bg-ink-50 hover:text-ink-900 hover:no-underline" role="menuitem">
+                            <span class="material-icons text-lg text-ink-400">person</span> Profile
+                        </a>
+                        <button type="button" (click)="userMenuOpen = false; logout()" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50" role="menuitem">
+                            <span class="material-icons text-lg">logout</span> Log out
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+        </header>
+
+        <main class="flex-1">
+            <ng-content></ng-content>
+        </main>
+    </div>
+</div>

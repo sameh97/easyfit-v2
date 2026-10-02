@@ -1,0 +1,137 @@
+<div class="center">
+    <h2 mat-dialog-title>Add Machine </h2>
+</div>
+
+<form *ngIf="createMachineForm" name="createMachineForm" #theForm="ngForm" [formGroup]="createMachineForm" (ngSubmit)="create(theForm.value)">
+
+    <mat-grid-list cols="4" rowHeight="70px">
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Machine name</mat-label>
+                <input matInput type="text" [(ngModel)]="machine.name" name="machine" formControlName="name" placeholder="Machine name">
+                <mat-icon *ngIf="createMachineForm.controls.name.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(createMachineForm.controls.name)" class="validation-err-container">
+
+                <div *ngIf="createMachineForm.controls.name.errors.machineNameNotValid">
+                    <small> Machine name is not valid.
+          </small>
+                </div>
+
+
+
+            </div>
+        </mat-grid-tile>
+
+
+
+        <mat-grid-tile [colspan]="4" [rowspan]="1" [style.background]="lightblue">
+
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>description</mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" name="machine" formControlName="description" [(ngModel)]="machine.description" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" placeholder="Machine description"></textarea>
+                <mat-icon *ngIf="createMachineForm.controls.description.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>Production Year</mat-label>
+                <input matInput type="number" id="productionYear" [(ngModel)]="machine.productionYear" formControlName="productionYear" min="1900" max="2099" step="1" placeholder="Production Year" />
+                <mat-icon *ngIf="createMachineForm.controls.productionYear.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(createMachineForm.controls.productionYear)" class="validation-err-container">
+
+                <div *ngIf="createMachineForm.controls.productionYear.errors.yearNotValid">
+                    <small> Production year is not valid.
+          </small>
+                </div>
+
+
+
+            </div>
+        </mat-grid-tile>
+
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Machine serial number</mat-label>
+                <input matInput type="text" [(ngModel)]="machine.serialNumber" name="serialNumber" formControlName="serialNumber" placeholder="Machine serial number">
+                <mat-icon *ngIf="createMachineForm.controls.serialNumber.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(createMachineForm.controls.serialNumber)" class="validation-err-container">
+
+                <div *ngIf="createMachineForm.controls.serialNumber.errors?.minlength">
+                    <small> Machine serial number must consist from min 4 characters </small>
+                </div>
+
+                <div *ngIf="createMachineForm.controls.serialNumber.errors?.maxLength">
+                    <small> Machine serial number must consist from max 50 characters </small>
+                </div>
+
+                <div *ngIf="createMachineForm.controls.serialNumber.errors.serialNumberNotValid">
+                    <small> Machine serial number not valid. </small>
+                </div>
+
+
+            </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Price</mat-label>
+                <input matInput type="number" min="0" [(ngModel)]="machine.price" name="price" formControlName="price" placeholder="Machine price">
+                <mat-icon *ngIf="createMachineForm.controls.price.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(createMachineForm.controls.price)" class="validation-err-container">
+
+                <div *ngIf="createMachineForm.controls.price.errors.priceNotValid">
+                    <small> Price is not valid. </small>
+                </div>
+
+
+            </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="4" [rowspan]="1" [style.background]="lightblue">
+
+            <label for="image">Image</label>
+            <input type="file" formControlName="imgUrl" placeholder="Image" accept=".png, .jpg, .jpeg" (change)="handleSelectedImage($event.target.files)">
+
+
+
+        </mat-grid-tile>
+
+
+
+    </mat-grid-list>
+
+    <button id="update-job-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+    Add Machine </button>
+
+</form>

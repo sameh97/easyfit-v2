@@ -1,0 +1,47 @@
+<app-nav>
+    <div class="flex-container">
+        <div>
+
+        </div>
+        <div>
+            <mat-card *ngIf="currentUser" class="example-card">
+                <mat-card-header>
+                    <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url(' + currentUser.imageURL + ')'}">
+                    </div>
+
+                    <mat-card-title>{{currentUser.firstName}} {{currentUser.lastName}}</mat-card-title>
+                    <mat-card-subtitle>Created at {{currentUser.createdAt | date}}
+                    </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+
+                    <p matLine>
+                        <span><b>Email:</b> {{currentUser.email}}</span>
+                    </p>
+                    <p matLine>
+                        <span><b>Phone:</b> {{currentUser.phone}}</span>
+                    </p>
+                    <p matLine>
+                        <span><b>Address:</b> {{currentUser.address}}</span>
+                    </p>
+
+                    <p matLine>
+                        <span><b>Birth day:</b> {{currentUser.birthDay | date}}</span>
+                    </p>
+
+
+                </mat-card-content>
+                <mat-card-actions>
+                    <button (click)="openUpdateUserDialog()" mat-button>Edit
+          </button>
+
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+</app-nav>

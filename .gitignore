@@ -1,0 +1,35 @@
+# Dependencies (Frontend & Backend)
+node_modules/
+
+# Compiled Output / Build Artifacts
+dist/
+build/
+out-tsc/
+
+# Angular Specific
+.angular/
+.sass-cache/
+
+# Environment Variables / Secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing / Coverage
+coverage/
+/e2e/test-output/
+
+# IDEs and OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# TypeScript Cache
+*.tsbuildinfo

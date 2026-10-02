@@ -1,0 +1,131 @@
+.example-viewport {
+    height: 400px;
+}
+
+.example-item {
+    height: 30px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+
+/*****************************************/
+
+.row1 {
+    flex: 1;
+}
+
+.row2 {
+    flex: 5;
+}
+
+.row3 {
+    flex: 6;
+}
+
+.flex-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: column;
+}
+
+.flex-container>div {
+    font-size: 15px;
+    padding: 1px 0;
+}
+
+
+/* *** list element flex *** */
+
+.img {}
+
+.details {}
+
+.edit {}
+
+.delete {}
+
+.sell {}
+
+.list-element-flex-container {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    flex: 0 0 100%;
+    flex-direction: row;
+}
+
+.list-element-flex-container>div {
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+.dashboard-card-bills {
+    margin: 5px;
+    height: 470px;
+}
+
+.dashboard-card-content-bills {
+    font-family: "Times New Roman", Times, serif;
+}
+
+.viewport-bills {
+    height: 380px;
+}
+
+.bill-item {
+    height: 250px;
+}
+
+
+/* *** bill card flex *** */
+
+.details {
+    flex: 6;
+}
+
+.product-description {
+    max-width: 350px;
+    word-wrap: break-word;
+}
+
+.done-button {
+    flex: 1;
+}
+
+.bill-list-flex-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: row;
+}
+
+.bill-list-flex-container>div {
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+
+/* **************************************/
+
+.dashboard-card-products {
+    height: 520px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.dashboard-card-content-products {
+    font-family: "Times New Roman", Times, serif;
+}
+
+h1 {
+    font-family: 'Trebuchet MS', sans-serif;
+}

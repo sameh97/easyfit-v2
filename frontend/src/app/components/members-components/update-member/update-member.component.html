@@ -1,0 +1,187 @@
+<div class="center">
+    <h2 mat-dialog-title>Update Member </h2>
+</div>
+
+
+<form *ngIf="updateMemberForm" #theForm="ngForm" name="updateMemberForm" [formGroup]="updateMemberForm" (ngSubmit)="update(theForm.value)">
+    <div class="grid-container">
+        <div class="first-name">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>first name</mat-label>
+                <input name="firstName" formControlName="firstName" matInput placeholder="Placeholder">
+                <mat-icon *ngIf="updateMemberForm.controls.firstName.errors === null " matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.firstName)" class="validation-err-container">
+
+                <div *ngIf="updateMemberForm.controls.firstName.errors.nameNotValid">
+                    <small> First name is not valid.
+          </small>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="last-name">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>last name</mat-label>
+                <input name="lastName" formControlName="lastName" matInput placeholder="Last Name">
+                <mat-icon *ngIf="updateMemberForm.controls.lastName.errors === null " matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.lastName)" class="validation-err-container">
+
+                <div *ngIf="updateMemberForm.controls.lastName.errors.nameNotValid">
+                    <small> Last name is not valid.
+          </small>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="end-date">
+
+            <!-- TODO: fix the date display problem -->
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>End Date</mat-label>
+                <input type="date" name="endOfMembershipDate" formControlName="endOfMembershipDate" matInput placeholder="End Date">
+                <mat-icon *ngIf="updateMemberForm.controls.endOfMembershipDate.errors === null" matSuffix>
+                    sentiment_very_satisfied</mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="checkDate(updateMemberForm.controls.endOfMembershipDate)" class="validation-err-container">
+                <div *ngIf="updateMemberForm.controls.endOfMembershipDate.errors.required">
+                    <small> End date is required. </small>
+                </div>
+                <div *ngIf="updateMemberForm.controls.endOfMembershipDate.errors.dateNotValid">
+                    <small> End date must be at least one day after join date
+          </small>
+                </div>
+            </div>
+        </div>
+        <div class="email-class">
+
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>Email</mat-label>
+                <input type="email" name="email" formControlName="email" matInput placeholder="Email">
+                <mat-icon *ngIf="updateMemberForm.controls.email.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.email)" class="validation-err-container">
+                <div *ngIf="updateMemberForm.controls.email.errors.required">
+                    <small> Email is required. </small>
+                </div>
+                <div *ngIf="updateMemberForm.controls.email.errors.email">
+                    <small> Email is not valid. </small>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="address-class">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>Address</mat-label>
+                <input type="text" name="address" formControlName="address" matInput placeholder="Address">
+                <mat-icon *ngIf="updateMemberForm.controls.address.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.address)" class="validation-err-container">
+                <div *ngIf="updateMemberForm.controls.address.errors.required">
+                    <small> Address is required. </small>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="phone">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>Phone number</mat-label>
+                <input name="phone" formControlName="phone" matInput placeholder="Phone">
+                <mat-icon *ngIf="updateMemberForm.controls.phone.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+                <mat-hint> <small>Numebr should consists of 10 digits and start with '05' </small> </mat-hint>
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.phone)" class="validation-err-container">
+                <br>
+                <div *ngIf="updateMemberForm.controls.phone.errors.empty">
+                    <small> Phone number is required. </small>
+                </div>
+                <div *ngIf="updateMemberForm.controls.phone.errors.phoneNotValid">
+                    <small> Phone number is not valid
+          </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="birthday">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>BirthDay</mat-label>
+                <input type="date" name="birthDay" formControlName="birthDay" format="longDate" mask="dd-MM-y" [(ngModel)]="member.birthDay" matInput placeholder="Birth Day">
+                <mat-icon *ngIf="updateMemberForm.controls.birthDay.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.birthDay)" class="validation-err-container">
+                <div *ngIf="updateMemberForm.controls.birthDay.errors.required">
+                    <small> Birth day is required. </small>
+                </div>
+                <div *ngIf="updateMemberForm.controls.birthDay.errors.ageUnder">
+                    <small> Member should be at least 16 years old
+          </small>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- TODO: fix the date display problem -->
+        <div class="join-date">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>join Date</mat-label>
+                <input type="date" name="joinDate" formControlName="joinDate" matInput placeholder="join time">
+                <mat-icon *ngIf="updateMemberForm.controls.joinDate.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.joinDate)" class="validation-err-container">
+                <div *ngIf="updateMemberForm.controls.joinDate.errors.required">
+                    <small> Join date is required. </small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="image">
+
+            <label for="image">Image</label>
+            <input type="file" formControlName="imageURL" placeholder="Image" accept=".png, .jpg, .jpeg" (change)="handleSelectedImage($event.target.files)">
+
+        </div>
+
+        <div class="gender">
+            <mat-radio-group [(ngModel)]="member.gender" formControlName="gender" aria-label="Select an option">
+                <mat-radio-button value="1">Male</mat-radio-button>
+                <mat-radio-button value="2">Female</mat-radio-button>
+            </mat-radio-group>
+            <div *ngIf="isInputValidationFailed(updateMemberForm.controls.gender)" class="validation-err-container">
+                <div *ngIf="updateMemberForm.controls.gender.errors.required">
+                    <small> Gender is required. </small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+    <div class="center"> <button id="update-member-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+      Update </button></div>
+</form>

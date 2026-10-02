@@ -1,0 +1,23 @@
+.example-card {
+    /* max-width: 400px; */
+    margin: 30px;
+}
+
+.example-header-image {
+    background-size: cover;
+}
+
+.flex-container {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: column;
+}
+
+.flex-container>div {
+    font-size: 15px;
+    padding: 1px 0;
+    /* border: black solid 1px; */
+}

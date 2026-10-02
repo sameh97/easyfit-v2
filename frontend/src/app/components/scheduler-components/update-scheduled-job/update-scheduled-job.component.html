@@ -1,0 +1,127 @@
+<div class="center">
+    <h2 mat-dialog-title>Edit scheduled job </h2>
+</div>
+
+<form *ngIf="updateJobForm" name="updateJobForm" #theForm="ngForm" [formGroup]="updateJobForm" (ngSubmit)="update(theForm.value)">
+
+    <div class="flex-container">
+        <div>
+            <mat-label>Please choose gym for this user: </mat-label>
+
+            <ng-multiselect-dropdown [placeholder]="'Choose machine for this scheduled job'" formControlName="machineSerialNumber" [settings]="dropdownSettings" [data]="dropdownList" [(ngModel)]="selectedItems" (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)">
+            </ng-multiselect-dropdown>
+        </div>
+        <div>
+
+            <div class="flex-container-inside-row">
+
+                <div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Mission</mat-label>
+                        <mat-select formControlName="jobID" [(ngModel)]="scheduledJob.jobID">
+                            <mat-option value="1">Clean</mat-option>
+                            <mat-option value="2">Service</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+
+                <div>
+                    <div *ngIf="isInputValidationFailed(updateJobForm.controls.jobID)" class="validation-err-container">
+                        <div *ngIf="updateJobForm.controls.jobID.errors.required" class="validation-err-container">
+                            <small> Mission is required. </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div>
+            <mat-form-field class="wide">
+                <input matInput [(ngModel)]="scheduledJob.startTime" [ngxMatDatetimePicker]="startTimePicker" placeholder="Choose start time" [(ngModel)]="scheduledJob.startTime" formControlName="startTime" [min]="minDate" [max]="maxDate" [disabled]="disabled">
+                <mat-datepicker-toggle matSuffix [for]="startTimePicker"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #startTimePicker [showSpinners]="showSpinners" [showSeconds]="showSeconds" [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute"
+                    [hideTime]="hideTime">
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateJobForm.controls.startTime)" class="validation-err-container">
+                <div *ngIf="updateJobForm.controls.startTime.errors.required">
+                    <small> Start time is required. </small>
+                </div>
+            </div>
+
+        </div>
+        <div>
+            <mat-form-field class="wide">
+                <input matInput [ngxMatDatetimePicker]="endTimePicker" placeholder="Choose end time" [(ngModel)]="scheduledJob.endTime" [(ngModel)]="scheduledJob.endTime" formControlName="endTime" [min]="minDate" [max]="maxDate" [disabled]="disabled">
+                <mat-datepicker-toggle matSuffix [for]="endTimePicker"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #endTimePicker [showSpinners]="showSpinners" [showSeconds]="showSeconds" [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute"
+                    [hideTime]="hideTime">
+                </ngx-mat-datetime-picker>
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateJobForm.controls.endTime)" class="validation-err-container">
+                <div *ngIf="updateJobForm.controls.endTime.errors.required">
+                    <small> End time is required. </small>
+                </div>
+                <div *ngIf="updateJobForm.controls.endTime.errors.endDateBeforeStartDate">
+                    <small> End time must be after start time </small>
+                </div>
+                <div *ngIf="updateJobForm.controls.endTime.errors.endDateNotValid">
+                    <small> End time must be in present </small>
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <div>
+            <mat-form-field class="frequency-full-width" appearance="fill">
+                <mat-label>Scheduler Frequency (in days)</mat-label>
+                <input type="number" formControlName="daysFrequency" [(ngModel)]="scheduledJob.daysFrequency" matInput placeholder="Frequency" value="1">
+            </mat-form-field>
+            <!--  (ngModelChange)="onFrequencySelected($event)" -->
+            <div *ngIf="isInputValidationFailed(updateJobForm.controls.daysFrequency)" class="validation-err-container">
+                <div *ngIf="updateJobForm.controls.daysFrequency.errors.required" class="validation-err-container">
+                    <small> Frequency is required. </small>
+                </div>
+                <div *ngIf="updateJobForm.controls.daysFrequency.errors.frequencyLowerThanOneDay" class="validation-err-container">
+                    <small> Frequency should be at least one day </small>
+                </div>
+                <div *ngIf="updateJobForm.controls.daysFrequency.errors.overFrequency" class="validation-err-container">
+                    <small> Frequency days is greater the the range of days bettween start and end time </small>
+                </div>
+            </div>
+
+        </div>
+        <!-- <div>
+            <div class="flex-container-inside-row">
+
+                <div>
+                  
+                    <mat-form-field appearance="fill">
+                        <mat-label>Job Status</mat-label>
+                        <mat-select formControlName="isActive" [(ngModel)]="scheduledJob.isActive">
+                            <mat-option value="true">Enabled</mat-option>
+                            <mat-option value="false">Disabled</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div></div>
+
+                <div></div>
+            </div>
+
+
+
+        </div> -->
+
+    </div>
+
+
+    <button id="update-job-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+    Update </button>
+
+</form>

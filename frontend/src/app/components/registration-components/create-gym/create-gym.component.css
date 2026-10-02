@@ -1,0 +1,23 @@
+.flex-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: column;
+}
+
+.flex-container>div {
+    text-align: center;
+    font-size: 15px;
+    padding: 1px 0;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.example-full-width {
+    width: 100%;
+}

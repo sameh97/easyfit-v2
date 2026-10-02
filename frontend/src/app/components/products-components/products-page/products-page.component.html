@@ -1,0 +1,171 @@
+<app-nav>
+    <mat-tab-group mat-stretch-tabs>
+        <mat-tab label="Products">
+            <div class="flex-container">
+                <div>
+                    <mat-grid-list cols="6" rowHeight="70px">
+                        <mat-grid-tile [colspan]="1" [rowspan]="1">
+                            <h1>All Products</h1>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="4" [rowspan]="1">
+
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="1" [rowspan]="1">
+                            <button (click)="openCreateProductDialog()" mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon">
+                <mat-icon>add</mat-icon>
+              </button>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+
+                </div>
+
+                <div>
+
+                    <mat-card class="dashboard-card-products">
+                        <mat-card-header>
+                            <mat-form-field fxFlex="40%">
+                                <input #myInput matInput type="text" placeholder="Search by product code" (input)="filterProducts(myInput.value)">
+                            </mat-form-field>
+
+                        </mat-card-header>
+                        <mat-card-content class="dashboard-card-content-products">
+
+                            <cdk-virtual-scroll-viewport itemSize="70" class="example-viewport">
+                                <mat-list role="list">
+                                    <mat-list-item *cdkVirtualFor="let product of filteredProducts" class="example-item" role="listitem">
+
+                                        <div class="list-element-flex-container">
+                                            <div class="img"><img style="width: 250px; height: 250px; margin: 4px;" src="{{product.imgUrl}}">
+                                            </div>
+                                            <div class="details">
+                                                <h2 matLine>{{product.name}}</h2>
+                                                <h4 matLine><b>Category:</b> {{getCategory(product.categoryID)}}</h4>
+                                                <div class="product-description">
+                                                    <p>
+
+                                                        <span><b>description:</b> {{product.description}} </span>
+                                                    </p>
+                                                </div>
+
+                                                <p matLine>
+                                                    <span><b>Code:</b> {{product.code}}</span>
+                                                </p>
+                                                <p matLine>
+                                                    <span><b>Quantity:</b> {{product.quantity}}
+                          </span>
+
+                                                </p>
+                                                <p matLine>
+                                                    <span><b>Price:</b> {{product.price}}
+                          </span>
+
+                                                </p>
+
+                                            </div>
+                                            <div class="sell"><button mat-raised-button (click)="openSellProductDialog(product)">Sell
+                          <mat-icon>
+                            add_shopping_cart</mat-icon>
+                        </button>
+
+                                            </div>
+                                            <div class="edit"><button mat-flat-button color="primary" (click)="openUpdateProductDialog(product)">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+
+                                            </div>
+                                            <div class="delete"><button mat-raised-button (click)="delete(product)" color="warn">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                                            </div>
+                                        </div>
+                                        <mat-divider></mat-divider>
+                                    </mat-list-item>
+
+                                </mat-list>
+                                <div class="center" *ngIf="isProductsEmpty()">
+                                    <h3> No Results</h3>
+                                </div>
+
+                            </cdk-virtual-scroll-viewport>
+
+                        </mat-card-content>
+                    </mat-card>
+
+                </div>
+                <div>
+
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Bills">
+            <div class="flex-container">
+                <div>
+                    <mat-grid-list cols="6" rowHeight="70px">
+                        <mat-grid-tile [colspan]="1" [rowspan]="1">
+                            <h1>All Bills</h1>
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="4" [rowspan]="1">
+
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="1" [rowspan]="1">
+
+                        </mat-grid-tile>
+                    </mat-grid-list>
+
+                </div>
+                <div>
+                    <mat-card class="dashboard-card-bills">
+                        <mat-card-header>
+                            <mat-form-field fxFlex="40%">
+                                <input #billsFilter matInput type="text" placeholder="Search by customer name" (input)="filterItem(billsFilter.value)">
+                            </mat-form-field>
+
+                        </mat-card-header>
+                        <mat-card-content class="dashboard-card-content-bills">
+                            <cdk-virtual-scroll-viewport itemSize="80" class="viewport-bills">
+                                <div *cdkVirtualFor="let bill of filteredBills" class="bill-item">
+
+
+                                    <mat-card>
+                                        <div class="bill-list-flex-container">
+                                            <div class="details">
+                                                <h2>{{bill.productName}}</h2>
+
+                                                <p><b>Coustomer name:</b> {{bill.coustomerName}}</p>
+                                                <p><b>Coustomer ID:</b> {{bill.coustomerID}}</p>
+                                                <p><b>Coustomer Phone:</b> {{bill.coustomerPhone}}</p>
+                                                <p><b>Quantity:</b> {{bill.quantity}}</p>
+                                                <p><b>Total cost:</b> {{bill.totalCost}}</p>
+                                                <p><b>Date:</b> {{bill.createdAt | date:'d/M/yy, h:mm a'}}</p>
+
+                                            </div>
+                                            <div>
+                                                <button mat-icon-button color="warn" (click)="deleteBill(bill)">
+                          <mat-icon class="mat-18">delete</mat-icon>
+                        </button>
+
+                                            </div>
+                                        </div>
+
+
+
+                                    </mat-card>
+                                </div>
+
+                                <div *ngIf="isBillsEmpty()">
+                                    <h3> No Results</h3>
+                                </div>
+                                <mat-divider></mat-divider>
+                            </cdk-virtual-scroll-viewport>
+                        </mat-card-content>
+
+                    </mat-card>
+                </div>
+                <div></div>
+            </div>
+
+        </mat-tab>
+
+    </mat-tab-group>
+
+</app-nav>

@@ -1,0 +1,65 @@
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.first-name {
+    grid-area: first;
+}
+
+.last-name {
+    grid-area: last;
+}
+
+.certificationDate {
+    grid-area: endate;
+}
+
+.email-class {
+    grid-area: email;
+}
+
+.address-class {
+    grid-area: address;
+}
+
+.phone {
+    grid-area: phone;
+}
+
+.birthday {
+    grid-area: birthday;
+}
+
+.join-date {
+    grid-area: joindate;
+}
+
+.image {
+    grid-area: image;
+}
+
+.gender {
+    grid-area: gender;
+}
+
+.wide {
+    width: 100%;
+}
+
+.mat-radio-button~.mat-radio-button {
+    margin-left: 16px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-areas: 'first first last last last last' 'joindate joindate joindate joindate joindate joindate' 'endate endate endate endate endate endate' 'email email email address address address' 'phone phone phone birthday birthday birthday' 'image image image image image image' 'gender gender gender gender gender gender';
+    grid-gap: 14px;
+    padding: 2px;
+}
+
+.grid-container>div {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 15px;
+}

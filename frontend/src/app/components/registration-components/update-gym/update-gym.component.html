@@ -1,0 +1,69 @@
+<div class="center">
+    <h2 mat-dialog-title>Update gym </h2>
+</div>
+
+
+<form *ngIf="updateGymForm" name="updateGymForm" #theForm="ngForm" [formGroup]="updateGymForm" (ngSubmit)="update()">
+
+    <div class="flex-container">
+        <div>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Gym name</mat-label>
+                <input matInput type="text" [(ngModel)]="gym.name" name="name" formControlName="name" placeholder="Enter gym name please">
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateGymForm.controls.name)" class="validation-err-container">
+
+                <div *ngIf="updateGymForm.controls.name.errors.gymNotValid">
+                    <small> Gym name is not valid.
+          </small>
+                </div>
+
+                <div *ngIf="updateGymForm.controls.name.errors.required">
+                    <small> Gym name is required.
+          </small>
+                </div>
+
+
+
+            </div>
+
+        </div>
+        <div>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Gym phone</mat-label>
+                <input matInput type="text" [(ngModel)]="gym.phone" name="phone" formControlName="phone" placeholder="Enter gym phone please">
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateGymForm.controls.phone)" class="validation-err-container">
+
+                <div *ngIf="updateGymForm.controls.phone.errors.gymPhoneNotValid">
+                    <small> Gym phone is not valid.
+          </small>
+                </div>
+                <div *ngIf="updateGymForm.controls.phone.errors.required">
+                    <small> Gym phone is required.
+          </small>
+                </div>
+            </div>
+        </div>
+        <div>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Gym address</mat-label>
+                <input matInput type="text" [(ngModel)]="gym.address" name="address" formControlName="address" placeholder="Enter gym address please">
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateGymForm.controls.address)" class="validation-err-container">
+                <div *ngIf="updateGymForm.controls.address.errors.required">
+                    <small> Gym address is required.
+          </small>
+                </div>
+            </div>
+
+        </div>
+        <div>
+            <button id="update-gym-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+        Add gym </button>
+
+        </div>
+    </div>
+
+
+</form>

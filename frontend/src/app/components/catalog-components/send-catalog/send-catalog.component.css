@@ -1,0 +1,40 @@
+.example-chip-list {
+    width: 100%;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.row1 {
+    width: 100%;
+}
+
+.row2 {
+    width: 100%;
+}
+
+.row3 {
+    width: 100%;
+}
+
+.flex-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: row;
+    height: 500px;
+}
+
+.flex-container>div {
+    /* text-align: center; */
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+.wide {
+    width: 100%;
+}

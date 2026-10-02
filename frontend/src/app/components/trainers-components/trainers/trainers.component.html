@@ -1,0 +1,38 @@
+<app-nav>
+    <div class="flex-container">
+        <div>
+            <div class="flex-container-header">
+                <div class="header-title">
+                    <h1 class="mat-h1">Trainers Page</h1>
+                </div>
+
+                <div class="header-actions"></div>
+
+            </div>
+
+        </div>
+        <div>
+            <mat-card class="dashboard-card">
+                <mat-card-header>
+                    <mat-card-title>
+                        <h2>All Trainers</h2>
+                        <button class="add-button" type="button" (click)="openCreateTrainerDialog()" mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon">
+              <mat-icon>add</mat-icon>
+            </button>
+
+                        <mat-menu #menu="matMenu" xPosition="before">
+                            <button mat-menu-item>Expand</button>
+                            <button mat-menu-item>Remove</button>
+                        </mat-menu>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+
+                    <app-trainers-table></app-trainers-table>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+    </div>
+
+</app-nav>

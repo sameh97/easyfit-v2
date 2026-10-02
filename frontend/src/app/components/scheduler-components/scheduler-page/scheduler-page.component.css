@@ -1,0 +1,85 @@
+.flex-container-header {
+    display: flex;
+    gap: 3px;
+    flex: 0 0 100%;
+    flex-direction: row;
+}
+
+.header-title {
+    flex: 1;
+    display: block;
+    justify-content: center;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 8px;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: right;
+    align-items: right;
+    flex: 4;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.flex-container {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: column;
+}
+
+.flex-container>div {
+    font-size: 15px;
+    padding: 1px 0;
+}
+
+.example-viewport {
+    height: 600px;
+}
+
+.example-item {
+    height: 50px;
+}
+
+
+/* ******************* list item flex ***************** */
+
+.details {
+    margin: 8px;
+    flex: 6;
+    text-align: left;
+}
+
+
+/* .edit {}
+
+.delete {} */
+
+.flex-container-list-item {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+}
+
+.flex-container-list-item>div {
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+.dashboard-card {
+    margin: 20px;
+}
+
+.dashboard-card-content {
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Trebuchet MS', sans-serif;
+}

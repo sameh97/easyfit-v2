@@ -1,0 +1,21 @@
+@import "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.validation-err-container {
+    height: auto;
+    color: red;
+    padding-left: 5px;
+}

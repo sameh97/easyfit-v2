@@ -1,0 +1,184 @@
+<div class="center">
+    <h2 mat-dialog-title>Add New Product </h2>
+</div>
+
+<form *ngIf="addProductForm" name="addProductForm" #theForm="ngForm" [formGroup]="addProductForm" (ngSubmit)="create(theForm.value)">
+
+    <mat-grid-list cols="4" rowHeight="70px">
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Product name</mat-label>
+                <input matInput type="text" [(ngModel)]="product.name" name="name" formControlName="name" placeholder="Product name">
+                <mat-icon *ngIf="addProductForm.controls.name.errors === null" matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
+
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(addProductForm.controls.name)" class="validation-err-container">
+
+                <div *ngIf="addProductForm.controls.name.errors.productNameNotValid">
+                    <small> Product name is not valid.
+          </small>
+                </div>
+                <div *ngIf="addProductForm.controls.name.errors.required">
+                    <small> Product name is required.
+          </small>
+                </div>
+
+
+
+            </div>
+
+
+        </mat-grid-tile>
+
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Price</mat-label>
+                <input matInput type="number" min="0" [(ngModel)]="product.price" name="price" formControlName="price" placeholder="Machine price">
+                <mat-icon *ngIf="addProductForm.controls.price.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(addProductForm.controls.price)" class="validation-err-container">
+
+                <div *ngIf="addProductForm.controls.price.errors.priceNotValid">
+                    <small> Price is not valid. </small>
+                </div>
+                <div *ngIf="addProductForm.controls.price.errors.required">
+                    <small> Price is required. </small>
+                </div>
+
+
+            </div>
+        </mat-grid-tile>
+
+
+
+
+
+        <mat-grid-tile [colspan]="4" [rowspan]="1" [style.background]="lightblue">
+
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>description</mat-label>
+                <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" name="description" formControlName="description" [(ngModel)]="product.description" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" placeholder="Product description"></textarea>
+                <mat-icon *ngIf="addProductForm.controls.description.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>Code</mat-label>
+                <input matInput type="text" name="code" formControlName="code" [(ngModel)]="product.code" placeholder="Product Code">
+                <mat-icon *ngIf="addProductForm.controls.code.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(addProductForm.controls.code)" class="validation-err-container">
+
+                <div *ngIf="addProductForm.controls.code.errors.productCodeNotValid">
+                    <small> Product code is not valid.
+          </small>
+                </div>
+                <div *ngIf="addProductForm.controls.code.errors.required">
+                    <small> Product code is required.
+          </small>
+                </div>
+
+
+
+            </div>
+
+
+
+        </mat-grid-tile>
+
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Quantity</mat-label>
+                <input min="0" type="number" [(ngModel)]="product.quantity" formControlName="quantity" matInput placeholder="Quantity" value="1">
+                <mat-icon *ngIf="addProductForm.controls.quantity.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(addProductForm.controls.quantity)" class="validation-err-container">
+
+                <div *ngIf="addProductForm.controls.quantity.errors.nonZero">
+                    <small> Product quantity should be at least 0.
+          </small>
+                </div>
+                <div *ngIf="addProductForm.controls.quantity.errors.required">
+                    <small> Quantity is required.
+          </small>
+                </div>
+
+
+
+            </div>
+
+
+
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <mat-form-field appearance="fill" class="wide">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="categoryID" [(ngModel)]="product.categoryID">
+                    <mat-option value="1">protein</mat-option>
+                    <mat-option value="2">BCAA</mat-option>
+                    <mat-option value="3">Glutamine</mat-option>
+                    <mat-option value="4">Creatine</mat-option>
+                    <mat-option value="5">Clothes</mat-option>
+                </mat-select>
+                <mat-icon *ngIf="addProductForm.controls.categoryID.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1" [style.background]="lightblue">
+            <div *ngIf="isInputValidationFailed(addProductForm.controls.categoryID)" class="validation-err-container">
+
+
+                <div *ngIf="addProductForm.controls.categoryID.errors.required">
+                    <small> Category is required.
+          </small>
+                </div>
+
+
+
+            </div>
+
+
+
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="4" [rowspan]="1" [style.background]="lightblue">
+            <label for="image">Image</label>
+            <input type="file" formControlName="imgUrl" placeholder="Image" accept=".png, .jpg, .jpeg" (change)="handleSelectedImage($event.target.files)">
+
+
+        </mat-grid-tile>
+
+
+
+    </mat-grid-list>
+
+    <button id="update-job-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+    Add Product </button>
+
+</form>

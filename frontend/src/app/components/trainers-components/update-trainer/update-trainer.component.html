@@ -1,0 +1,175 @@
+<div class="center">
+    <h2 mat-dialog-title>Update Trainer </h2>
+</div>
+
+
+<form *ngIf="updateTrainerForm" #theForm="ngForm" [formGroup]="updateTrainerForm" (ngSubmit)="update(theForm.value)">
+    <div class="grid-container">
+        <div class="first-name">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>first name</mat-label>
+                <input name="firstName" [(ngModel)]="trainer.firstName" formControlName="firstName" matInput placeholder="Placeholder">
+                <mat-icon *ngIf="updateTrainerForm.controls.firstName.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.firstName)" class="validation-err-container">
+
+                <div *ngIf="updateTrainerForm.controls.firstName.errors.nameNotValid">
+                    <small> First name is not valid.
+          </small>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="last-name">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>last name</mat-label>
+                <input name="lastName" [(ngModel)]="trainer.lastName" formControlName="lastName" matInput placeholder="Last Name">
+                <mat-icon *ngIf="updateTrainerForm.controls.lastName.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.lastName)" class="validation-err-container">
+
+                <div *ngIf="updateTrainerForm.controls.lastName.errors.nameNotValid">
+                    <small> Last name is not valid.
+          </small>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="certificationDate">
+
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>certificationDate </mat-label>
+                <input type="date" [(ngModel)]="trainer.certificationDate" name="certificationDate" formControlName="certificationDate" matInput placeholder="End Date">
+                <mat-icon *ngIf="updateTrainerForm.controls.certificationDate.errors === null" matSuffix>
+                    sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.certificationDate)" class="validation-err-container">
+
+                <div *ngIf="updateTrainerForm.controls.certificationDate.errors.required">
+                    <small> Certification Date is required</small>.
+                </div>
+            </div>
+
+        </div>
+        <div class="email-class">
+
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Email</mat-label>
+                <input type="email" [(ngModel)]="trainer.email" name="email" formControlName="email" matInput placeholder="Email">
+                <mat-icon *ngIf="updateTrainerForm.controls.email.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.email)" class="validation-err-container">
+                <div *ngIf="updateTrainerForm.controls.email.errors.required">
+                    <small> Email is required. </small>
+                </div>
+                <div *ngIf="updateTrainerForm.controls.email.errors.email">
+                    <small> Email is not valid. </small>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="address-class">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Address</mat-label>
+                <input type="text" [(ngModel)]="trainer.address" name="address" formControlName="address" matInput placeholder="Address">
+                <mat-icon *ngIf="updateTrainerForm.controls.address.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.address)" class="validation-err-container">
+
+                <div *ngIf="updateTrainerForm.controls.address.errors.required">
+                    <small> Address is required</small>.
+                </div>
+            </div>
+        </div>
+
+        <div class="phone">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>Phone</mat-label>
+                <input name="phone" [(ngModel)]="trainer.phone" formControlName="phone" matInput placeholder="Phone">
+                <mat-icon *ngIf="updateTrainerForm.controls.phone.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.phone)" class="validation-err-container">
+                <br>
+                <div *ngIf="updateTrainerForm.controls.phone.errors.empty">
+                    <small> Phone number is required. </small>
+                </div>
+                <div *ngIf="updateTrainerForm.controls.phone.errors.phoneNotValid">
+                    <small> Phone number is not valid
+          </small>
+                </div>
+            </div>
+        </div>
+        <!-- TODO: fix the date display problem -->
+        <div class="birthday">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>BirthDay</mat-label>
+                <input type="date" name="birthDay" formControlName="birthDay" format="longDate" mask="dd-MM-y" [(ngModel)]="trainer.birthDay" matInput placeholder="Birth Day">
+                <mat-icon *ngIf="updateTrainerForm.controls.birthDay.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.birthDay)" class="validation-err-container">
+                <div *ngIf="updateTrainerForm.controls.birthDay.errors.required">
+                    <small> Birth day is required. </small>
+                </div>
+                <div *ngIf="updateTrainerForm.controls.birthDay.errors.ageUnder">
+                    <small> Trainer should be at least 16 years old
+          </small>
+                </div>
+            </div>
+
+
+
+        </div>
+        <!-- TODO: fix the date display problem -->
+        <div class="join-date">
+            <mat-form-field class="wide" appearance="fill">
+                <mat-label>join Date</mat-label>
+                <input type="date" [(ngModel)]="trainer.joinDate" name="joinDate" formControlName="joinDate" matInput placeholder="join time">
+                <mat-icon *ngIf="updateTrainerForm.controls.joinDate.errors === null" matSuffix>sentiment_very_satisfied
+                </mat-icon>
+
+            </mat-form-field>
+            <div *ngIf="isInputValidationFailed(updateTrainerForm.controls.joinDate)" class="validation-err-container">
+
+                <div *ngIf="updateTrainerForm.controls.joinDate.errors.required">
+                    <small> Join date is required</small>.
+                </div>
+            </div>
+        </div>
+
+        <div class="image">
+            <label for="image">Image</label>
+            <input type="file" formControlName="imageURL" placeholder="Image" accept=".png, .jpg, .jpeg" (change)="handleSelectedImage($event.target.files)">
+
+        </div>
+
+        <div class="gender">
+            <mat-radio-group [(ngModel)]="trainer.gender" formControlName="gender" aria-label="Select an option">
+                <mat-radio-button value="1">Male</mat-radio-button>
+                <mat-radio-button value="2">Female</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+
+
+    </div>
+    <div class="center"> <button id="add-trainer-btn" class="btn btn-primary btn-block" [disabled]="!theForm.valid">
+      Update </button> </div>
+</form>

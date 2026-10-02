@@ -1,0 +1,79 @@
+.wide {
+    width: 100%;
+}
+
+.row1 {
+    flex: 1;
+    text-align: left;
+}
+
+.row2 {
+    flex: 1;
+}
+
+.row3 {
+    flex: 1;
+}
+
+.flex-container {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: column;
+}
+
+.flex-container>div {
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* *****************members table***************** */
+
+.full-width-table {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-width: 500px;
+}
+
+th.mat-header-cell {
+    text-align: left;
+    max-width: 300px;
+}
+
+th {
+    font-size: 14px;
+    color: black;
+}
+
+:host ::ng-deep .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* *** card *** */
+
+.example-card {
+    max-width: 400px;
+}
+
+.example-header-image {
+    background-size: cover;
+}
+
+.trainer-img {
+    height: 150px;
+    width: 150px;
+}

@@ -1,0 +1,51 @@
+<h1 style="text-align: center;font-family: 'Trebuchet MS', sans-serif;">All Notifications</h1><br>
+
+
+<mat-grid-list cols="4" rowHeight="70px">
+    <mat-grid-tile [colspan]="2" [rowspan]="1">
+        <h3><b>Machine with Serial Number:</b> {{machine.serialNumber}}</h3>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <button (click)="deleteByMachineSerialNumber(machine.serialNumber)" mat-raised-button>Clear
+      all</button>
+
+    </mat-grid-tile>
+</mat-grid-list>
+
+<mat-card class="dashboard-card">
+    <mat-card-header>
+
+    </mat-card-header>
+    <mat-card-content class="dashboard-card-content">
+
+        <div class="center" *ngIf="isNotificationsEmpty()">
+            <h3>No Notifications Found</h3>
+        </div>
+
+        <!-- TODO: display (No Notifications Found) better && fix length unndefined problem-->
+        <cdk-virtual-scroll-viewport appendOnly itemSize="100" class="example-viewport">
+            <div *cdkVirtualFor="let notification of notifications" class="example-item">
+                <mat-card>
+                    <div class="list-notification-flex-container">
+                        <div class="details">
+                            <h3><b>{{getJob(notification.content.jobID)}} job needed for this Mahine</b></h3>
+
+                            <p>From {{notification.createdAt | date : 'yyyy-MM-dd HH:mm:ss'}}</p>
+
+                        </div>
+                        <div class="done-button">
+                            <button mat-button (click)="onDone(notification)" color="success">Done</button>
+
+                        </div>
+                    </div>
+
+
+
+                </mat-card>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </mat-card-content>
+</mat-card>

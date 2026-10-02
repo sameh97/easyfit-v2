@@ -1,0 +1,78 @@
+<app-nav>
+
+    <div class="flex-container">
+        <div>
+            <div class="flex-container-header">
+                <div class="header-title">
+                    <h1 class="mat-h1">All Scheduled Jobs</h1>
+                </div>
+
+                <div class="header-actions">
+                    <button (click)="openCreateScheduledJobDialog()" mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon">
+            <mat-icon>add</mat-icon>
+          </button>
+                </div>
+
+            </div>
+
+        </div>
+        <div>
+            <mat-card class="dashboard-card">
+                <mat-card-header>
+                    <div *ngIf="isSceduledJobsEmpty()">
+                        <h3> No Results</h3>
+                    </div>
+
+
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+                    <cdk-virtual-scroll-viewport itemSize="70" class="example-viewport">
+                        <mat-list>
+                            <mat-list-item *cdkVirtualFor="let scheduledjob of scheduledJobs" class="example-item">
+                                <div class="flex-container-list-item">
+                                    <div class="details">
+
+                                        <h2 matLine><b>{{getJob(scheduledjob.jobID)}} Job</b></h2>
+                                        <h4 matLine> <b>Status:</b> {{getJobStatus(scheduledjob.isActive)}}</h4>
+                                        <p matLine>
+                                            <span> <b>Start time:</b> {{scheduledjob.startTime | date}} </span>
+                                        </p>
+                                        <p matLine>
+                                            <span><b>End time:</b> {{scheduledjob.endTime | date}}</span>
+                                        </p>
+                                        <p matLine>
+                                            <span><b>Runs Every:</b> {{scheduledjob.daysFrequency}} days
+                      </span>
+
+                                        </p>
+
+                                        <p matLine>
+
+                                            <button mat-stroked-button color="primary" (click)="openMachineDetailsDialog(scheduledjob.machineSerialNumber)">Machine Details</button>
+                                        </p>
+                                    </div>
+                                    <div class="edit"> <button mat-flat-button color="primary" (click)="openUpdateScheduledJobDialog(scheduledjob)">
+                      <mat-icon>edit</mat-icon>
+                    </button></div>
+                                    <div class="delete"> <button mat-raised-button (click)="delete(scheduledjob)" color="warn">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                                    </div>
+                                    <!-- TODO: consider deleting all notifications from datbase when deleting job-->
+                                </div>
+                                <mat-divider></mat-divider>
+                            </mat-list-item>
+
+                        </mat-list>
+
+                    </cdk-virtual-scroll-viewport>
+
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+    </div>
+
+
+
+</app-nav>

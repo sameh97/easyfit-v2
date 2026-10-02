@@ -1,0 +1,37 @@
+.row1 {
+    flex: 8;
+}
+
+.row2 {
+    flex: 4;
+    height: 150px;
+}
+
+.row3 {
+    flex: 4;
+}
+
+.flex-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: column;
+    height: 500px;
+}
+
+.flex-container>div {
+    text-align: center;
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+.duration-days {
+    width: 100%;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}

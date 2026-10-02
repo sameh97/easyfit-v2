@@ -1,0 +1,48 @@
+.example-viewport {
+    height: 400px;
+    /* width: 800px; */
+    /* border: 1px solid black; */
+}
+
+.example-item {
+    height: 150px;
+}
+
+.dashboard-card {
+    padding: 10px;
+}
+
+.dashboard-card-content {
+    text-align: center;
+}
+
+
+/* ********* notification card flex ********* */
+
+.details {
+    flex: 6;
+}
+
+.done-button {
+    flex: 1;
+}
+
+.list-notification-flex-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex: 0 0 100%;
+    flex-direction: row;
+}
+
+.list-notification-flex-container>div {
+    text-align: center;
+    font-size: 15px;
+    padding: 10px 0;
+}
+
+.mat-button.mat-success {
+    color: white;
+    background-color: green;
+}
