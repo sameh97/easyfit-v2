@@ -426,4 +426,21 @@ Work in phases. **Only do the phase you are asked for**, and leave anything stil
 - The shell, palette and AI panel are fully usable by keyboard.
 - Screenshots at 1440, 1024 and 390px wide broadly match the mockups.
 
+#### Notes for later phases
+
+**Tailwind runs with `important: true` and only scans Studio files** (decided in Phase 1, see `frontend/tailwind.config.js`).
+
+- **Why:** two legacy stylesheets beat plain Tailwind utilities.
+  - **Bootstrap 4** ships `!important` helpers with the same names as Tailwind utilities but different values. `p-5` is 3rem instead of 1.25rem, the 3/4/5 spacing steps differ, and `bg-white`, `bg-transparent`, `text-warning`, `text-danger`, `text-success`, `border`, `border-0` and `rounded-lg` all clash. As a result, cards got 48px padding, status colours turned Bootstrap yellow and green, and `bg-opacity-*` stopped working.
+  - **`body.mat-typography`** (Angular Material) styles `h1`, `h2` and `p` at specificity 0,1,1, which beats a single utility class. Headings rendered as 24px Roboto 400.
+- **What was done:**
+  1. `important: true`, so every utility is `!important` and wins over both.
+  2. The JIT `purge` list contains **only Studio folders** (`shared/ui`, `components/nav`, `components/shell`, `components/home`, `components/login`). This way Tailwind never generates `!important` versions of Bootstrap helper names that only legacy templates use, and legacy pages keep Bootstrap's values.
+  3. The `.studio` base layer in `src/styles.css` uses `body .studio :where(…)` selectors. They beat Bootstrap's reboot and `.mat-typography`, lose to utilities, and include a scoped border reset so that `border-t` styles one side only.
+- **Rules for every later phase:**
+  - **Add each newly redesigned page's folder to the `purge` list** in `tailwind.config.js`. Utilities used in a file outside the list are not generated, and that page silently renders unstyled.
+  - Put the `studio` class on the redesigned page's root element so it gets the base layer.
+  - When a legacy page is migrated, remove the Bootstrap helper classes from its template in the same change, so `!important` Tailwind and Bootstrap helpers never meet on one element.
+  - Once Bootstrap and Material are removed (§2 ✏️), turn preflight back on, drop `important: true` and the `.studio` layer, and scan `./src/**/*.{html,ts}` again.
+
 **Phase 2+** (to be written once the ✏️ decisions are made): component patterns for forms and lists (§7.4), then the page-by-page redesign in the §7.5 order, clean-up (Bootstrap/Material/jQuery), a possible Angular upgrade, and the AI backend (§7.6).
