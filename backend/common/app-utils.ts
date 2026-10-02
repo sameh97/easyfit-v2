@@ -29,21 +29,6 @@ export class AppUtils {
     return false;
   }
   // create cron expression for scheduled job:
-  public static createCronExpression = async (
-    scheduledJob: MachineScheduledJob
-  ): Promise<string> => {
-    const daysFrequency = AppUtils.hasValue(scheduledJob.daysFrequency)
-      ? `*/${scheduledJob.daysFrequency}`
-      : "*";
-
-    let cronExp: string = `0 0 ${daysFrequency} * *`;
-
-    // if hour is not choosen, make the job to run every 3 days:
-    cronExp = cronExp === `0 0 * * *` ? `0 0 */3 * *` : cronExp;
-    cronExp = `* * * * *`;
-    return cronExp;
-  };
-
   // add days to a givin date
   public static addDays = (date: Date, days: number): Date => {
     var result = new Date(date);

@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { MemberDtoMapper } from "../common/dto-mapper/member-dto-mapper";
+import { nextOccurrence } from "../common/job-occurrence";
 import { Bill } from "../models/bill";
 import {
   DashboardClassDto,
@@ -221,7 +222,7 @@ export class DashboardService {
     todayStart: Date
   ): Promise<DashboardMaintenanceDto[]> => {
     const upcoming = jobs
-      .map((job: MachineScheduledJob) => ({ job, nextDue: this.nextOccurrence(job, todayStart) }))
+      .map((job: MachineScheduledJob) => ({ job, nextDue: nextOccurrence(job, todayStart) }))
       .filter((entry): entry is { job: MachineScheduledJob; nextDue: Date } => entry.nextDue !== null)
       .sort((a, b) => a.nextDue.getTime() - b.nextDue.getTime())
       .slice(0, MAINTENANCE_LIMIT);
@@ -255,7 +256,7 @@ export class DashboardService {
     const dueToday = new Set<number>(
       jobs
         .filter((job: MachineScheduledJob) => {
-          const next = this.nextOccurrence(job, todayStart);
+          const next = nextOccurrence(job, todayStart);
           return next !== null && next < tomorrowStart;
         })
         .map((job: MachineScheduledJob) => job.id)
@@ -283,21 +284,5 @@ export class DashboardService {
     }
   }
 
-  /** First run of `startTime + n × daysFrequency` on or after today's midnight, within `endTime`. */
-  private nextOccurrence(job: MachineScheduledJob, todayStart: Date): Date | null {
-    const start = new Date(job.startTime).getTime();
-    const end = new Date(job.endTime).getTime();
-    const from = todayStart.getTime();
-    const periodMs = Number(job.daysFrequency) * DAY_MS;
 
-    let next: number;
-    if (start >= from) {
-      next = start;
-    } else if (periodMs > 0) {
-      next = start + Math.ceil((from - start) / periodMs) * periodMs;
-    } else {
-      return null;
-    }
-    return next <= end ? new Date(next) : null;
-  }
 }

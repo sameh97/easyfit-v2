@@ -28,6 +28,29 @@ export class AppNotificationRepository {
     });
   }
 
+  /**
+   * Whether an alert for scheduled job `jobId` on this machine was created at or after `since`.
+   * Alerts store the job as JSON in `content`, so the job id is read from there.
+   */
+  public async existsForJobSince(
+    gymId: number,
+    machineSerialNumber: string,
+    jobId: number,
+    since: Date
+  ): Promise<boolean> {
+    const candidates: AppNotification[] = await AppNotification.findAll({
+      attributes: ["content"],
+      where: { gymId: gymId, targetObjectId: machineSerialNumber, createdAt: { [Op.gte]: since } },
+    });
+    return candidates.some((alert: AppNotification) => {
+      try {
+        return JSON.parse(alert.content).id === jobId;
+      } catch {
+        return false;
+      }
+    });
+  }
+
   public save = async (
     appNotificationMessage: AppNotification,
     transaction?: Transaction
