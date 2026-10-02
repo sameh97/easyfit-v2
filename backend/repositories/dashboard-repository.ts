@@ -1,4 +1,5 @@
 import { injectable } from "inversify";
+import { AppNotification } from "../models/app-notification";
 import { Bill } from "../models/bill";
 import { GroupTraining } from "../models/group-training";
 import { Gym } from "../models/gym";
@@ -91,6 +92,14 @@ export class DashboardRepository {
     return await Machine.findAll({
       attributes: ["id", "name", "serialNumber"],
       where: { gymId: gymId, serialNumber: serialNumbers },
+    });
+  };
+
+  /** Open (not marked Done) alerts created before `before`. Done deletes the row. */
+  public getOpenNotificationsBefore = async (gymId: number, before: Date): Promise<AppNotification[]> => {
+    return await AppNotification.findAll({
+      attributes: ["id", "content"],
+      where: { gymId: gymId, seen: false, createdAt: { [Op.lt]: before } },
     });
   };
 

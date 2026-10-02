@@ -18,9 +18,11 @@ export interface DashboardSummaryDto {
     list: DashboardClassDto[];
   };
   revenue: {
+    /** Month to date. */
     thisMonth: number;
-    lastMonth: number;
-    /** Rounded % change vs last month; null when last month had no sales. */
+    /** The same days of last month (1–2 Oct ↔ 1–2 Sep), capped at last month's end. */
+    lastMonthSamePeriod: number;
+    /** Rounded % change vs the same period last month; null when that period had no sales. */
     changePct: number | null;
   };
   /** Index 0 = January, up to and including the current month. */
@@ -29,6 +31,8 @@ export interface DashboardSummaryDto {
   productsSoldByMonth: number[];
   /** Next occurrences of active maintenance jobs, soonest first, at most 3. */
   maintenance: DashboardMaintenanceDto[];
+  /** Maintenance jobs due today or overdue (sidebar badge). */
+  maintenanceDue: DashboardMaintenanceDueDto;
   /** Products with quantity <= 5, lowest first, at most 5. */
   lowStock: DashboardLowStockDto[];
 }
@@ -49,6 +53,14 @@ export interface DashboardMaintenanceDto {
   serialNumber: string;
   jobType: MaintenanceJobType;
   nextDue: string;
+}
+
+export interface DashboardMaintenanceDueDto {
+  /** Active jobs with a run scheduled today. */
+  today: number;
+  /** Active jobs (not due today) whose alert from an earlier day is still open, i.e. not marked Done. */
+  overdue: number;
+  total: number;
 }
 
 export interface DashboardLowStockDto {

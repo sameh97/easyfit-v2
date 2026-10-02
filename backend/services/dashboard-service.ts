@@ -5,10 +5,12 @@ import {
   DashboardClassDto,
   DashboardLowStockDto,
   DashboardMaintenanceDto,
+  DashboardMaintenanceDueDto,
   DashboardSummaryDto,
   MaintenanceJobType,
 } from "../models/dto/dashboard-summary-dto";
 import { GroupTraining } from "../models/group-training";
+import { AppNotification } from "../models/app-notification";
 import { Machine } from "../models/machines";
 import { MachineScheduledJob } from "../models/machine-scheduled-job";
 import { Member } from "../models/member";
@@ -89,10 +91,14 @@ export class DashboardService {
     const monthStart = cal.startOf(cal.year, cal.month);
     const nextMonthStart = cal.startOf(cal.year, cal.month + 1);
     const lastMonthStart = cal.startOf(cal.year, cal.month - 1);
+    // Same days of last month as month-to-date (1–2 Oct ↔ 1–2 Sep), capped at last month's end
+    // (31 Oct ↔ 1–30 Sep): the day after today's date in last month, or this month's start.
+    const lastMonthSameDayEnd = cal.startOf(cal.year, cal.month - 1, cal.date + 1);
+    const lastMonthPeriodEnd = lastMonthSameDayEnd < monthStart ? lastMonthSameDayEnd : monthStart;
     // Today plus the next 7 days (end of day 7 = start of day 8).
     const expiringEnd = new Date(todayStart.getTime() + 8 * DAY_MS);
 
-    const [gym, memberCount, activeCount, joinedThisYear, expiringMembers, trainings, bills, jobs, lowStock] =
+    const [gym, memberCount, activeCount, joinedThisYear, expiringMembers, trainings, bills, jobs, lowStock, openAlerts] =
       await Promise.all([
         this.dashboardRepository.getGym(gymId),
         this.dashboardRepository.countMembers(gymId),
@@ -104,6 +110,7 @@ export class DashboardService {
         this.dashboardRepository.getBillsBetween(gymId, lastMonthStart < yearStart ? lastMonthStart : yearStart, nextMonthStart),
         this.dashboardRepository.getActiveJobsEndingAfter(gymId, todayStart),
         this.dashboardRepository.getLowStockProducts(gymId, LOW_STOCK_MAX_QUANTITY, LOW_STOCK_LIMIT),
+        this.dashboardRepository.getOpenNotificationsBefore(gymId, todayStart),
       ]);
 
     const monthsSoFar = cal.month + 1;
@@ -117,20 +124,25 @@ export class DashboardService {
 
     const incomeByMonth = new Array<number>(monthsSoFar).fill(0);
     const productsSoldByMonth = new Array<number>(monthsSoFar).fill(0);
-    let lastMonthRevenue = 0;
-    const lastMonth = cal.monthOf(lastMonthStart);
+    let thisMonthToDate = 0;
+    let lastMonthSamePeriod = 0;
     bills.forEach((bill: Bill) => {
-      const { year, month } = cal.monthOf(new Date(bill.createdAt));
+      const createdAt = new Date(bill.createdAt);
+      const { year, month } = cal.monthOf(createdAt);
       const total = Number(bill.totalCost) || 0;
       if (year === cal.year && month < monthsSoFar) {
         incomeByMonth[month] += total;
         productsSoldByMonth[month] += Number(bill.quantity) || 0;
       }
-      if (year === lastMonth.year && month === lastMonth.month) {
-        lastMonthRevenue += total;
+      // Whole days on both sides: 1st → end of today vs 1st → end of the same day last month.
+      if (createdAt >= monthStart && createdAt < tomorrowStart) {
+        thisMonthToDate += total;
+      }
+      if (createdAt >= lastMonthStart && createdAt < lastMonthPeriodEnd) {
+        lastMonthSamePeriod += total;
       }
     });
-    const thisMonthRevenue = incomeByMonth[cal.month];
+    const thisMonthRevenue = thisMonthToDate;
 
     const expiringList = expiringMembers.map((member: Member) => ({
       member: this.memberDtoMapper.asDto(member),
@@ -148,13 +160,15 @@ export class DashboardService {
       classesToday: await this.buildClassesToday(gymId, trainings, now),
       revenue: {
         thisMonth: thisMonthRevenue,
-        lastMonth: lastMonthRevenue,
-        changePct: lastMonthRevenue > 0 ? Math.round(((thisMonthRevenue - lastMonthRevenue) / lastMonthRevenue) * 100) : null,
+        lastMonthSamePeriod: lastMonthSamePeriod,
+        changePct:
+          lastMonthSamePeriod > 0 ? Math.round(((thisMonthRevenue - lastMonthSamePeriod) / lastMonthSamePeriod) * 100) : null,
       },
       incomeByMonth,
       newMembersByMonth,
       productsSoldByMonth,
       maintenance: await this.buildMaintenance(gymId, jobs, todayStart),
+      maintenanceDue: this.countMaintenanceDue(jobs, openAlerts, todayStart, tomorrowStart),
       lowStock: lowStock.map(
         (product): DashboardLowStockDto => ({
           id: product.id,
@@ -226,6 +240,48 @@ export class DashboardService {
       nextDue: nextDue.toISOString(),
     }));
   };
+
+  /**
+   * Jobs needing attention (sidebar badge): active jobs with a run due today, plus active jobs
+   * whose alert from an earlier day is still open (not marked Done) — overdue. The schema has no
+   * per-run completion record, so an open alert is the only "not done yet" signal. Each job counts once.
+   */
+  private countMaintenanceDue(
+    jobs: MachineScheduledJob[],
+    openAlerts: AppNotification[],
+    todayStart: Date,
+    tomorrowStart: Date
+  ): DashboardMaintenanceDueDto {
+    const dueToday = new Set<number>(
+      jobs
+        .filter((job: MachineScheduledJob) => {
+          const next = this.nextOccurrence(job, todayStart);
+          return next !== null && next < tomorrowStart;
+        })
+        .map((job: MachineScheduledJob) => job.id)
+    );
+
+    const activeIds = new Set<number>(jobs.map((job: MachineScheduledJob) => job.id));
+    const overdue = new Set<number>();
+    openAlerts.forEach((alert: AppNotification) => {
+      const jobId = this.jobIdOf(alert);
+      if (jobId !== null && activeIds.has(jobId) && !dueToday.has(jobId)) {
+        overdue.add(jobId);
+      }
+    });
+
+    return { today: dueToday.size, overdue: overdue.size, total: dueToday.size + overdue.size };
+  }
+
+  /** Scheduled-job alerts store the job DTO as JSON in `content`; other alerts yield null. */
+  private jobIdOf(alert: AppNotification): number | null {
+    try {
+      const parsed: { id?: unknown } = JSON.parse(alert.content);
+      return typeof parsed.id === "number" ? parsed.id : null;
+    } catch {
+      return null;
+    }
+  }
 
   /** First run of `startTime + n × daysFrequency` on or after today's midnight, within `endTime`. */
   private nextOccurrence(job: MachineScheduledJob, todayStart: Date): Date | null {

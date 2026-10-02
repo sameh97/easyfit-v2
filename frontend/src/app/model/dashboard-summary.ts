@@ -14,12 +14,15 @@ export interface DashboardSummary {
     remaining: number;
     list: DashboardClass[];
   };
-  revenue: { thisMonth: number; lastMonth: number; changePct: number | null };
+  /** thisMonth = month to date; compared with the same days of last month. */
+  revenue: { thisMonth: number; lastMonthSamePeriod: number; changePct: number | null };
   /** Index 0 = January, up to and including the current month. */
   incomeByMonth: number[];
   newMembersByMonth: number[];
   productsSoldByMonth: number[];
   maintenance: DashboardMaintenanceJob[];
+  /** Jobs due today or overdue (alert from an earlier day not marked Done). */
+  maintenanceDue: { today: number; overdue: number; total: number };
   lowStock: DashboardLowStockProduct[];
 }
 

@@ -9,9 +9,11 @@ import { DashboardService } from './dashboard-service/dashboard.service';
 export interface ShellContext {
   gymName: string | null;
   memberCount: number | null;
+  /** Maintenance jobs due today or overdue. */
+  maintenanceDue: number | null;
 }
 
-const EMPTY_CONTEXT: ShellContext = { gymName: null, memberCount: null };
+const EMPTY_CONTEXT: ShellContext = { gymName: null, memberCount: null, maintenanceDue: null };
 
 /** Data the shell shows on every page (gym card, Members badge), taken from the dashboard summary. */
 @Injectable({
@@ -26,7 +28,13 @@ export class ShellContextService {
       this.dashboardService.ensureLoaded();
       return this.dashboardService.summary$.pipe(
         map((summary: DashboardSummary | null) =>
-          summary ? { gymName: summary.gym.name || null, memberCount: summary.gym.memberCount } : EMPTY_CONTEXT
+          summary
+            ? {
+                gymName: summary.gym.name || null,
+                memberCount: summary.gym.memberCount,
+                maintenanceDue: summary.maintenanceDue.total,
+              }
+            : EMPTY_CONTEXT
         )
       );
     }),

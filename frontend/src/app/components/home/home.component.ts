@@ -241,7 +241,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private buildKpis(summary: DashboardSummary): Kpi[] {
     const month: number = this.today.getMonth();
-    const lastMonth: string = MONTHS_LONG[(month + 11) % 12];
     const nextClass: DashboardClass | undefined = summary.classesToday.list.find(
       (c: DashboardClass) => new Date(c.startTime).getTime() > Date.now()
     );
@@ -282,7 +281,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         chip: change === null ? null : `${change >= 0 ? '↑' : '↓'} ${Math.abs(change)}%`,
         chipStatus: change !== null && change >= 0 ? 'active' : 'expiring',
         caption:
-          summary.revenue.lastMonth > 0 ? `vs ${this.money(summary.revenue.lastMonth)} in ${lastMonth}` : `No sales in ${lastMonth}`,
+          summary.revenue.lastMonthSamePeriod > 0
+            ? `vs ${this.money(summary.revenue.lastMonthSamePeriod)} same period last month`
+            : 'No sales in the same period last month',
       },
     ];
   }

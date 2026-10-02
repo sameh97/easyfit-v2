@@ -16,6 +16,7 @@ import { NavBadge, NavGroup, NAV_GROUPS } from '../shell/shell-nav';
 import { ShellStateService } from 'src/app/services/shell-state.service';
 import { ShellContext, ShellContextService } from 'src/app/services/shell-context.service';
 import { initialsOf } from 'src/app/shared/ui/avatar/avatar.component';
+import { DashboardService } from 'src/app/services/dashboard-service/dashboard.service';
 
 /** Below md: off-canvas drawer. md–lg: 72px rail. ≥ lg: full sidebar (user can collapse). ≥ xl: AI panel docks. */
 type Viewport = 'phone' | 'tablet' | 'desktop' | 'wide';
@@ -30,7 +31,7 @@ const ROLE_LABELS: Record<number, string> = { 1: 'Manager', 2: 'Admin' };
 export class NavComponent implements OnInit, OnDestroy {
   notificationNumber: number = 0;
   currentUser: User | null = null;
-  context: ShellContext = { gymName: null, memberCount: null };
+  context: ShellContext = { gymName: null, memberCount: null, maintenanceDue: null };
   viewport: Viewport = 'desktop';
   drawerOpen: boolean = false;
   userMenuOpen: boolean = false;
@@ -52,6 +53,7 @@ export class NavComponent implements OnInit, OnDestroy {
     private breakpointObserver: BreakpointObserver,
     private router: Router,
     private shellContextService: ShellContextService,
+    private dashboardService: DashboardService,
     public shell: ShellStateService
   ) {}
 
@@ -119,6 +121,8 @@ export class NavComponent implements OnInit, OnDestroy {
             sum += notification.notificationsCount;
           }
           this.notificationNumber = sum;
+          // A job just fired: refresh the due/overdue count behind the Maintenance badge.
+          this.dashboardService.load().subscribe({ error: () => undefined });
         })
     );
   }
@@ -189,7 +193,9 @@ export class NavComponent implements OnInit, OnDestroy {
       return this.context.memberCount !== null ? String(this.context.memberCount) : null;
     }
     if (badge === 'maintenance') {
-      return this.notificationNumber > 0 ? this.formatCount(this.notificationNumber) : null;
+      // Jobs due today or overdue (not the unread-alert count, which stays on the bell). Hidden at 0.
+      const due: number | null = this.context.maintenanceDue;
+      return due ? this.formatCount(due) : null;
     }
     return null;
   }
