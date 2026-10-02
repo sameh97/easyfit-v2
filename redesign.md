@@ -134,6 +134,13 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 > 4. **Row (1/3 × 3):** **Expiring soon** (avatar, name, "Expires in N days", **Renew** button), **Maintenance** (next 3 jobs by due date, with type and serial number, and "Due today" in red), **Low stock** (products with quantity ≤ 5, shown as "N left").
 > - The four existing Chart.js charts (new members, products sold, genders) move out of the dashboard, or behind a segmented control on the income card (Members / Income / Products sold). Chart colours use the brand tokens only.
 > - All KPI numbers need backend aggregate endpoints; see §7.6.
+>
+> ✅ **Decisions after the Phase 1 review:**
+> - **Revenue KPI compares month to date with the same days of last month.** For example, 1–2 Oct is compared with 1–2 Sep. Both sides are whole days, from the 1st to the end of today. Last month's window is capped at its last day, so on 31 Oct it is 1–30 Sep and on 30–31 Mar it is all of February. The caption reads "vs ₪X same period last month". When that period had no sales, the caption reads "No sales in the same period last month" and the % chip is hidden. The endpoint returns `revenue.thisMonth` (month to date), `revenue.lastMonthSamePeriod` and `revenue.changePct`.
+> - **The sidebar Maintenance badge counts maintenance jobs that are due today or overdue,** not unread notifications, and is hidden at 0. The bell keeps the unread-notification count.
+>   - *Due today:* an active job with a scheduled run (`startTime + n × daysFrequency`, before `endTime`) on today's date.
+>   - *Overdue:* an active job, not due today, whose alert from an earlier day is still open. "Open" means it was not cleared with **Done** in the machine-notifications dialog, which deletes it. The schema has no per-run completion record, so an open alert is the only "not done yet" signal.
+>   - Each job counts once. The endpoint returns `maintenanceDue: { today, overdue, total }`, and the badge refreshes when a new alert arrives over socket.io.
 
 ### 5.2 Members `/members`
 - **Today:** a `mat-card` with a title, a mini FAB "+" button and a menu. Below it is a `mat-table` (`MembersTableComponent`) with a search box and paginator. Columns: first name, last name, phone, birthday, address, email, status (active/inactive), join date, end of membership, image, edit, delete.
