@@ -147,14 +147,39 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Add/Edit member dialogs:** first/last name, phone, email, birthday, address, join date, end of membership, gender radio (male/female), image upload to S3. Every field has a `mat-form-field` with a prefix icon and hints.
 - **Data:** `id, firstName, lastName, phone, birthDay, email, address, isActive, joinDate, endOfMembershipDate, gender (1 = male, 2 = female), imageURL, gymId`.
 
-> ✏️ Your vision (table vs cards, avatars, status pills, "expiring soon" highlighting, filters by status/gender, member detail page/drawer, bulk actions…):
+> ✅ **Decision (Phase 2):** a **table with a detail side panel**. Mockups: `P2-Members-Detail.dc.html`, `P2-Member-Form.dc.html`, `P2-Members-Hebrew.dc.html`.
+> - **Status** is derived on the frontend from the existing fields:
+>   - **Inactive:** `isActive = false`.
+>   - **Expired:** active, and `endOfMembershipDate` is before today.
+>   - **Expiring:** active, and the membership ends within the next 7 days.
+>   - **Active:** everything else.
+>   - Pill colours: success / warning / danger-soft (`#FBE4DF` with `#A6321D`) / neutral.
+> - **Toolbar:** a segmented filter with counts (All · Active · Expiring · Expired · Inactive), search across name, phone and email, a gender filter, and **Export** (CSV of the current filtered list, built on the client).
+> - **Table columns:**
+>   - Member: avatar, name, and email underneath.
+>   - Phone.
+>   - Status pill.
+>   - Membership ends: the date, plus a note like "In 3 days" (amber) or "2 months ago" (red).
+>   - Joined.
+>   - Actions: edit, plus a more-menu with Delete.
+>   - Expiring rows get a faint amber background (`#FFF8EB`).
+>   - Default sort: membership ending soonest first.
+> - **Clicking a row opens the detail panel** (420px) and narrows the table to Member · Status · Membership ends. The panel shows:
+>   - Header: avatar, name and status.
+>   - Buttons: **Renew membership** (primary), **Edit**, and a more-menu (Deactivate, Delete).
+>   - Tabs: **Overview** (a membership card with a progress bar and **quick renew** chips for +1, +3 and +12 months, then contact details and upcoming classes), **Classes**, and **Purchases**.
+> - **Renew** updates `endOfMembershipDate` (and sets `isActive = true`) through the **existing** update endpoint. It extends from the later of today and the current end date. Then a toast appears with **Undo**.
+> - The panel can be deep-linked as `/members?member=<id>`. The dashboard's Renew buttons and the ⌘K member results open it.
 
 ### 5.3 Trainers `/trainers`
 - **Today:** the same layout as Members (`TrainersTableComponent`). Columns: name, phone, birthday, address, email, status, join date, certification date, image, edit, delete.
 - **Add/Edit trainer dialogs:** the same fields as a member, plus certification date.
 - **Data:** `id, firstName, lastName, phone, birthDay, email, address, isActive, joinDate, certificationDate, imageURL, gymId`, and the trainer has many group trainings.
 
-> ✏️ Your vision (trainer profile cards with photo, classes they teach, schedule…):
+> ✅ **Decision (Phase 2):** a **card grid** (there are few trainers) with the same detail panel and side-panel forms as Members.
+> - **Card:** photo or initials avatar (56px), name, phone, status pill (Active / Inactive), "Certified {certificationDate}", and "{N} classes this week · next: {description} {day time}". The card opens the detail panel.
+> - **Detail panel:** Overview (contact details, join and certification dates) and Classes (upcoming and past group trainings they lead).
+> - **Add/Edit trainer** uses the same side-panel form as a member, plus **certification date** and minus the membership section.
 
 ### 5.4 Group trainings `/group-trainings`
 - **Today:** a `mat-card` with a search box and a `mat-table`. Columns: training (trainer), start time, description, edit, delete.
@@ -241,7 +266,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - Chart colors don't match the brand.
 - Some tables and dialogs aren't mobile-friendly.
 - Typos in the UI copy ("peer month" and similar).
-- The UI is English left-to-right only (✏️ do you need Hebrew or Arabic right-to-left?).
+- The UI is English left-to-right only. ✅ Hebrew with RTL is added in Phase 2 (§7.8).
 - The admin routes have no role guard.
 
 ---
@@ -335,17 +360,43 @@ Reference: `mockups/Final-Dashboard.dc.html` (shell), `mockups/Nav-1-Sidebar-AI-
 **Tablet (md–lg):** the sidebar starts collapsed (72px rail), and the AI panel overlays the page.
 **Phone (< md):** the sidebar becomes an off-canvas drawer opened from a hamburger in the top row, and the AI panel and palette are full-screen sheets. ✏️ Confirm phone support is needed (§7.8).
 
-### 7.4 Components and patterns
-> ✏️ Modals vs side drawers vs full pages for create/edit?
->
-> ✏️ Tables vs cards for lists?
->
-> ✏️ One date picker to standardise on?
->
-> ✏️ Toasts style/position?
+### 7.4 Components and patterns ✅
+- **Create/edit = side panel.** It slides in from the inline-end side (right in English, left in Hebrew).
+  - 480px wide, radius 24, inset 16px, with a backdrop `rgba(27,28,32,.38)`.
+  - Header: title, a "Fields marked * are required" note, and a close button.
+  - The body scrolls, and is split into sections with uppercase labels.
+  - A sticky footer holds **Cancel** (secondary) and the primary action ("Add member" / "Save changes").
+  - Focus is trapped inside, Esc closes it, and if there are unsaved changes it asks "Discard changes?".
+  - On phones it's full-screen.
+  - Mockup: `P2-Member-Form.dc.html`.
+- **Detail views = side panel without a backdrop** (420px). The list stays usable next to it, and selecting another row swaps the panel's content.
+- **Lists:** a **table** for large lists (members, sales, later machines and jobs) and **cards** for small visual sets (trainers, later products).
+  - Tables come from one shared `DataTable` pattern: header row, 62px rows, row hover, the selected row in `accent-soft`, client-side sort and pagination, skeleton rows while loading, an empty state and an error state.
+  - **Below `md`, table rows stack into cards.**
+- **Forms:**
+  - Pill-shaped inputs (46px) with the label above.
+  - Help text below in `ink-3`. The error replaces the help text, in `danger` with a red ring, and appears on blur or submit.
+  - Required fields are marked with a red `*`.
+  - Two-column grid on ≥ md, one column on phones.
+  - Phone and email inputs are always `dir="ltr"`.
+  - Validation **rules stay exactly as in `FormInputComponent`**; only the look and the (translated) messages change.
+- **One date picker:** the **Angular Material datepicker**, restyled to Studio (a pill input with a calendar icon at the end, and a Studio-styled popup), locale-aware (Hebrew month and day names in Hebrew). `ng-pick-datetime` and `@angular-material-components/datetime-picker` are not used in redesigned pages. They're removed in the clean-up phase, once no page uses them.
+- **Toasts:**
+  - A dark (`ink`) pill, **bottom-centre**, 4 seconds.
+  - A green check icon for success and a red icon for errors (errors stay until dismissed).
+  - An optional action button such as **Undo**, and `aria-live="polite"`.
+  - They replace the Material snackbar on redesigned pages.
+- **Confirm dialog:**
+  - A small centred Studio modal (400px, radius 24).
+  - Title, one sentence, then Cancel and a destructive button in `danger`.
+  - Used for delete and deactivate.
 
-### 7.5 Page priorities
-> ✏️ Order to redesign in (e.g. Members → Classes → Products → Machines → Scheduler → Catalog → Profile → Admin):
+### 7.5 Page priorities ✅
+1. **Phase 2:** shared patterns (§7.4) + **Hebrew/RTL** + **Members** + **Trainers**
+2. **Phase 3:** Classes (group trainings), Machines, Maintenance (scheduler), notifications panel
+3. **Phase 4:** Products and Sales, Catalogs, Profile and settings, Admin (Gyms, Users, the same shell with admin nav), 404
+4. **Phase 5:** clean-up. Remove Bootstrap, jQuery, Angular Material components and the extra date pickers; turn preflight back on; drop `important`. Then decide on the Angular upgrade.
+5. **Phase 6:** the AI backend (§7.6)
 
 ### 7.6 New features or fields
 **AI assistant ("EasyFit AI").** The UI is in §7.3. The backend has two separate capabilities, and they need different architectures:
@@ -357,6 +408,8 @@ Reference: `mockups/Final-Dashboard.dc.html` (shell), `mockups/Nav-1-Sidebar-AI-
 - ✏️ Which LLM provider? Which languages should the AI answer in (Hebrew)? Is the AI in scope for this redesign, or only its UI shell with a "coming soon" state?
 
 **Dashboard aggregates** (for §5.1): an endpoint returning active members, new this month, expiring in 7/3 days, today's classes (from `startTime`), month revenue and % change (from bills), low-stock products (qty ≤ 5), and the next maintenance jobs.
+
+**Member activity** (for §5.2, Phase 2): a read-only `GET /api/members/:id/activity` returning the member's group trainings and their purchases matched by phone. See §7.10.
 
 ✏️ Anything else that needs backend changes (class capacity/duration, member check-ins, payments/subscriptions, trainer schedules, membership price/renewal, …)?
 
@@ -370,15 +423,22 @@ Reference: `mockups/Final-Dashboard.dc.html` (shell), `mockups/Nav-1-Sidebar-AI-
 
 ### 7.8 Devices and accessibility
 *(These are proposed defaults; change any of them.)*
-- **Screens:** desktop (≥ 1280px) is the main target. Tablet (768–1279px) is fully supported, for the reception desk. Phone (< 768px) is usable: the sidebar becomes a drawer and tables scroll or stack, but it isn't specially optimised. ✏️ Confirm or change.
+- **Screens ✅:** desktop (≥ 1280px) is the main target. Tablet (768–1279px) is fully supported, for the reception desk. Phone (< 768px) is **usable**: the sidebar becomes a drawer, table rows stack into cards, and side panels are full-screen. It isn't specially polished.
 - **Accessibility: WCAG 2.1 AA.**
   - Text contrast at least 4.5:1.
   - A visible focus ring on everything (2px accent + 2px offset).
   - Everything works by keyboard: sidebar, palette, AI panel and dialogs, which trap focus and close on Esc.
   - Real `<button>`/`<a>` elements, `aria-label` on icon-only buttons, `aria-current` on the active nav item.
   - Touch targets ≥ 44px. Respect `prefers-reduced-motion`.
-- **Language:** English, left-to-right only, for now. User-entered text such as names and addresses gets `dir="auto"` so Hebrew names display correctly. ✏️ Is a Hebrew right-to-left UI needed later? If so, new components avoid hard-coded left/right where that's cheap.
-- **Formats:** dates like `14 Mar 2027` (the Angular `date` pipe, `d MMM y`), times as 24h `17:30`, money as `₪48,250`.
+- **Language ✅: English and Hebrew, switchable, with a full right-to-left layout in Hebrew** (built in Phase 2). Mockup: `P2-Members-Hebrew.dc.html`.
+  - **Switching:** an "English / עברית" choice in the user menu at the bottom of the sidebar and on the profile page. Remembered in `localStorage`. The default is English. It sets `<html lang dir>` immediately, with no reload.
+  - **RTL means mirrored:** the sidebar is on the right, side panels open from the left, text aligns to the start, and the order of table columns is reversed. **Directional icons** (chevrons, arrows, the "next page" control) are flipped. **Non-directional icons** (search, bell, plus, user, check, calendar) are not.
+  - **Always left-to-right, even in Hebrew:** phone numbers, emails, URLs, serial numbers, codes, prices typed into inputs, and keyboard hints like `Ctrl K`. Wrap them in `<bdi dir="ltr">`, or use `dir="ltr"` on inputs.
+  - **Fonts:** Plus Jakarta Sans has no Hebrew letters, so the font stack is `'Plus Jakarta Sans', 'Rubik', sans-serif` (Rubik from Google Fonts, weights 400–800). In Hebrew, don't use negative letter-spacing on headings.
+  - **Translations:** every UI string in redesigned pages comes from translation files (`en.json` / `he.json`), never hard-coded. This includes validation messages, toasts, empty states, aria-labels and the AI "coming soon" text. Data typed by users (names, addresses, product names) is never translated. The owner will review the Hebrew wording.
+  - **Dates in Hebrew** use Hebrew month names (`14 במרץ 2027`), still with the Gregorian calendar. Numbers use Western digits. Currency is `₪48,250` in both languages.
+  - **Legacy pages** (not yet redesigned) stay English and left-to-right inside a `dir="ltr"` wrapper until their phase migrates them.
+- **Formats:** dates like `14 Mar 2027` (`d MMM y`, locale-aware), times as 24h `17:30`, money as `₪48,250`.
 
 ### 7.9 Anything else
 - Every redesigned page has a **loading state** (skeletons), an **empty state** (icon, a short line and the main action) and an **error state** with a retry button.
@@ -450,4 +510,70 @@ Work in phases. **Only do the phase you are asked for**, and leave anything stil
   - When a legacy page is migrated, remove the Bootstrap helper classes from its template in the same change, so `!important` Tailwind and Bootstrap helpers never meet on one element.
   - Once Bootstrap and Material are removed (§2 ✏️), turn preflight back on, drop `important: true` and the `.studio` layer, and scan `./src/**/*.{html,ts}` again.
 
-**Phase 2+** (to be written once the ✏️ decisions are made): component patterns for forms and lists (§7.4), then the page-by-page redesign in the §7.5 order, clean-up (Bootstrap/Material/jQuery), a possible Angular upgrade, and the AI backend (§7.6).
+---
+
+**Phase 2: patterns, Hebrew/RTL, Members, Trainers**
+Branch `redesign/phase-2` (from master, after Phase 1 is merged). Mockups: `P2-Members-Detail.dc.html`, `P2-Member-Form.dc.html`, `P2-Members-Hebrew.dc.html`. Decisions: §5.2, §5.3, §7.4, §7.8.
+
+1. **Language and RTL foundation** (do this first; everything after it is built bilingual from the start):
+   - Add **`@ngx-translate/core` v13 + `@ngx-translate/http-loader` v6** (the versions for Angular 11), with `assets/i18n/en.json` and `he.json`. Keys are grouped by area: `shell.*`, `dashboard.*`, `members.*`, `common.*`, `validation.*`.
+   - A typed **`LanguageService`**:
+     - holds the current language, and remembers it in `localStorage`
+     - sets `document.documentElement.lang` and `dir`
+     - exposes the language as an observable
+     - registers Angular locale data for `he`
+   - Pipes and adapters that follow the current language at runtime (the built-in `date` pipe only uses the fixed `LOCALE_ID`): a `localDate` pipe (wraps `formatDate`), and a Material `DateAdapter` locale for the date picker.
+   - **Logical-direction utilities for Tailwind 2** (it has no `ms-`/`ps-`/`start-` utilities):
+     - Add a small typed plugin in `tailwind.config.js` that generates `ms-*`, `me-*`, `ps-*`, `pe-*`, `start-*`, `end-*`, `text-start`, `text-end`, `border-s`, `border-e`, `rounded-s-*`, `rounded-e-*` from the spacing and radius scales, using CSS logical properties.
+     - Studio code must use **only** these for horizontal direction: no `ml-`, `mr-`, `pl-`, `pr-`, `left-`, `right-`, `text-left`, `text-right`, `border-l`, `border-r` or `rounded-l`/`r` in Studio templates.
+     - Add a `flip-rtl` class (`[dir=rtl] .flip-rtl { transform: scaleX(-1) }`) and use it on directional icons.
+   - Load **Rubik** (400–800) next to Plus Jakarta Sans, and update the font stack. Remove the negative heading letter-spacing in Hebrew.
+   - The **language switch** goes in the sidebar user menu (English / עברית).
+   - Wrap legacy pages in `dir="ltr"` so they don't break.
+   - **Translate and mirror everything from Phase 1:** shell, sidebar, ⌘K palette, AI panel, dashboard and login. The sidebar sits on the inline-start side, the AI panel on the inline-end side, and the palette's results and hints are translated.
+2. **Overlay kit** (`shared/ui`, using `@angular/cdk` overlay and a11y, which already come with Material and are kept after the clean-up):
+   - `SidePanelService` / `<app-side-panel>`: a form variant (480px, backdrop, unsaved-changes guard) and a detail variant (420px, no backdrop). It opens from the inline-end side, is full-screen below `md`, traps focus, closes on Esc, and returns focus to the trigger when it closes.
+   - `ConfirmDialogService` (Studio confirm, §7.4).
+   - `ToastService` + `<app-toast-host>`: bottom-centre, success and error, an optional action such as Undo, `aria-live`. It replaces the snackbar on redesigned pages only.
+3. **Form kit** (`shared/ui/form`):
+   - `TextField`, `TextArea`, `Select`, `DateField` (the Material datepicker, restyled; no other date picker), `SegmentedField` (for gender), `ImageUpload` (the existing S3 upload flow), `FormSection`, plus a shared field-error component.
+   - It works with the **existing validators** from `FormInputComponent` without changing their rules. Messages come from `validation.*` keys in both languages.
+   - Errors show on blur or submit. On submit, focus moves to the first invalid field.
+4. **DataTable pattern** (`shared/ui/data-table`):
+   - Column definitions (typed), client-side sort, pagination (10 / 25 / 50), row click, selected row, skeleton rows, empty and error states, and a stacked-card layout below `md`.
+   - The header and the pager are translated, and the chevrons mirror in RTL.
+5. **Members page** (§5.2): rebuild `/members` as a Studio page following the mockups.
+   - Status derivation, the segmented filter with counts, search, the gender filter, CSV export, and the "ends soonest" default sort.
+   - **Detail panel** with Overview / Classes / Purchases tabs, Renew (quick +1 / +3 / +12 months, with a toast and Undo), Edit, Deactivate and Delete (with confirm). Deep link `?member=<id>`.
+   - **Add/Edit side panel:** photo, personal details, gender, address, membership dates, and length chips (1 / 3 / 6 / 12 months) that set the end date from the join date.
+   - **One new read-only endpoint:** `GET /api/members/:id/activity`, scoped by `gymId` on the server. It returns:
+     - the member's group trainings (upcoming and the last 10 past), from `MemberParticipate`
+     - their purchases: bills whose `coustomerPhone` matches the member's phone after removing spaces and dashes. Bills don't reference members, so phone matching is the only link. The tab says "Matched by phone number".
+   - Wire up the dashboard's "Renew" buttons, the ⌘K member results and the "Add member" action to the new panels.
+6. **Trainers page** (§5.3): the card grid, the detail panel (Overview, Classes) and the add/edit side panel with certification date. ⌘K "Add trainer" opens the new panel.
+7. **Tidy-up:**
+   - Add the new folders to the Tailwind `purge` list (see the notes above) and put `studio` on each page root.
+   - Remove Bootstrap and Material classes from the migrated templates.
+   - Delete the replaced old components (`members-table`, `add-member`, `update-member`, `trainers-table`, `add-trainer`, `update-trainer` and their dialogs) once nothing references them.
+   - Fix copy typos you come across.
+
+**Do not in Phase 2:**
+- Remove the Bootstrap, jQuery, Angular Material or date-picker libraries from the project.
+- Upgrade Angular.
+- Redesign or translate any other page (Classes, Machines, Maintenance, Products, Catalogs, Profile, Admin). The only exception is the language switch on Profile, which may be a small Studio section.
+- Change the DB schema or any existing endpoint's request or response.
+- Change validation rules.
+- Build any AI backend.
+
+**Phase 2 is done when:**
+- `ng build --prod` passes with no new warnings and no `any`. The backend type-checks.
+- Members and trainers can be created, viewed, edited, renewed (members), deactivated and deleted against the **real backend**, in **both languages**. Validation errors show in the right language.
+- In Hebrew, every Studio page (login, shell, dashboard, members, trainers, palette, AI panel, side panels, toasts, confirm dialogs) is fully mirrored and translated. Phone numbers and emails still read left to right. Legacy pages still work, in English.
+- These checks pass:
+  - a script confirms `en.json` and `he.json` have exactly the same keys
+  - a grep finds no physical-direction utilities (`ml-`, `mr-`, `pl-`, `pr-`, `left-`, `right-`, `text-left`, `text-right`, `border-l`, `border-r`) in Studio folders
+- Screenshots at 1440, 1024 and 390px, in English and Hebrew, broadly match the mockups. At 390px, rows stack and panels are full-screen.
+- Keyboard: side panels and dialogs trap focus, close on Esc and return focus. Every icon button has a translated `aria-label`.
+- **Report:** the Hebrew strings you wrote, in a list, for the owner to review.
+
+**Phase 3+:** written after Phase 2, following the order in §7.5.
