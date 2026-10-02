@@ -5,7 +5,20 @@ const ACCENT_SOFT = '#E2E6FD';
 
 module.exports = {
   mode: 'jit',
-  purge: ['./src/**/*.{html,ts}'],
+  // Utilities are generated ONLY from Studio code. Legacy templates use Bootstrap helpers
+  // (p-3, mt-4, text-danger…) whose names collide with Tailwind's; scanning them would let
+  // Tailwind restyle legacy pages. Add new Studio folders here as pages are redesigned.
+  purge: [
+    './src/app/shared/ui/**/*.{html,ts}',
+    './src/app/components/nav/**/*.{html,ts}',
+    './src/app/components/shell/**/*.{html,ts}',
+    './src/app/components/home/**/*.{html,ts}',
+    './src/app/components/login/**/*.{html,ts}',
+  ],
+  // Bootstrap 4 ships !important helpers with the same names (p-5 = 3rem, bg-white, text-warning…)
+  // and body.mat-typography styles h1/h2/p at higher specificity than a utility. Making utilities
+  // !important lets Studio markup win; it only affects classes generated from the paths above.
+  important: true,
   darkMode: false,
   theme: {
     extend: {

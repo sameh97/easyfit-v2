@@ -198,8 +198,10 @@ export class NavComponent implements OnInit, OnDestroy {
     return this.context.gymName ?? 'Your gym';
   }
 
+  /** First letters of the first two words ("Power House TLV" → "PH"), as in the mockup. */
   get gymInitials(): string {
-    return initialsOf(this.gymName) || 'G';
+    const words: string[] = this.gymName.trim().split(/\s+/).slice(0, 2);
+    return initialsOf(words.join(' ')) || 'G';
   }
 
   get gymSubtitle(): string {
