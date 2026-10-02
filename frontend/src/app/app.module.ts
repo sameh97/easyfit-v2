@@ -15,6 +15,7 @@ import { UpdateMemberComponent } from './components/members-components/update-me
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from './shared/shared.module';
+import { UiModule } from './shared/ui/ui.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MachinesComponent } from './components/machines-components/machines/machines.component';
 import { CreateMachineComponent } from './components/machines-components/create-machine/create-machine.component';
@@ -202,6 +203,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    UiModule,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MatDialogModule,
