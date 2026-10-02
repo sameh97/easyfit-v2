@@ -60,6 +60,10 @@ import { GroupTrainingDtoMapper } from "./common/dto-mapper/group-training-dto-m
 import { GroupTrainingController } from "./controllers/group-training-controller";
 import { GroupTrainingApi } from "./routes/group-training-api";
 import { GroupedTraingingRepository } from "./repositories/grouped-training-repository";
+import { DashboardRepository } from "./repositories/dashboard-repository";
+import { DashboardService } from "./services/dashboard-service";
+import { DashboardController } from "./controllers/dashboard-controller";
+import { DashboardApi } from "./routes/dashboard.api";
 // TODO: improve the container, it should use types
 
 const container = new Container({ defaultScope: "Singleton" });
@@ -130,5 +134,10 @@ container.bind<GroupTrainingService>(GroupTrainingService).toSelf();
 container.bind<GroupTrainingDtoMapper>(GroupTrainingDtoMapper).toSelf();
 container.bind<GroupTrainingController>(GroupTrainingController).toSelf();
 container.bind<GroupTrainingApi>(GroupTrainingApi).toSelf();
+
+container.bind<DashboardRepository>(DashboardRepository).toSelf();
+container.bind<DashboardService>(DashboardService).toSelf();
+container.bind<DashboardController>(DashboardController).toSelf();
+container.bind<DashboardApi>(DashboardApi).toSelf();
 
 export default container;

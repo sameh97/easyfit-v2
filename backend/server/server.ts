@@ -25,6 +25,7 @@ import { TempUrlApi } from "../routes/temp-url-api";
 import { Role } from "../models/role";
 import { UploadFilesApi } from "../routes/upload-file";
 import { GroupTrainingApi } from "../routes/group-training-api";
+import { DashboardApi } from "../routes/dashboard.api";
 import { User } from "../models/user";
 import { Gym } from "../models/gym";
 import { PasswordManagerService } from "../services/password-manager-service";
@@ -60,7 +61,9 @@ export class EasyFitApp {
     @inject(GroupTrainingApi)
     private groupTrainingApi: GroupTrainingApi,
     @inject(PasswordManagerService)
-    private passwordManager: PasswordManagerService
+    private passwordManager: PasswordManagerService,
+    @inject(DashboardApi)
+    private dashboardApi: DashboardApi
   ) {
     this.app = express();
     this.app.use(express.json());
@@ -270,6 +273,7 @@ export class EasyFitApp {
     this.app.use(this.tempUrlApi.getRouter());
     this.app.use(this.uploadFilesApi.getRouter());
     this.app.use(this.groupTrainingApi.getRouter());
+    this.app.use(this.dashboardApi.getRouter());
     // Catch all other get requests
     const publicPath = express.static(path.join(__dirname, "./../easyfit"), {
       redirect: false,

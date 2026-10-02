@@ -11,6 +11,7 @@ import { KpiCardComponent } from './kpi-card/kpi-card.component';
 import { SegmentedControlComponent } from './segmented-control/segmented-control.component';
 import { EmptyStateComponent } from './empty-state/empty-state.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
 
 const COMPONENTS = [
   IconComponent,
@@ -24,6 +25,7 @@ const COMPONENTS = [
   SegmentedControlComponent,
   EmptyStateComponent,
   SkeletonComponent,
+  BarChartComponent,
 ];
 
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */
