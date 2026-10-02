@@ -12,24 +12,10 @@ import { WebSocketService } from 'src/app/services/web-socket.service';
 import { SocketTopics } from 'src/app/shared/util/socket-util';
 import { UserNotificationsService } from 'src/app/services/user-notifications.service';
 import { User } from 'src/app/model/user';
-import { IconName } from 'src/app/shared/ui/icon/icons';
+import { NavBadge, NavGroup, NAV_GROUPS } from '../shell/shell-nav';
 import { ShellStateService } from 'src/app/services/shell-state.service';
 import { ShellContext, ShellContextService } from 'src/app/services/shell-context.service';
 import { initialsOf } from 'src/app/shared/ui/avatar/avatar.component';
-
-type NavBadge = 'members' | 'maintenance';
-
-interface NavItem {
-  label: string;
-  path: string;
-  icon: IconName;
-  badge?: NavBadge;
-}
-
-interface NavGroup {
-  label: string;
-  items: NavItem[];
-}
 
 /** Below md: off-canvas drawer. md–lg: 72px rail. ≥ lg: full sidebar (user can collapse). ≥ xl: AI panel docks. */
 type Viewport = 'phone' | 'tablet' | 'desktop' | 'wide';
@@ -56,31 +42,7 @@ export class NavComponent implements OnInit, OnDestroy {
   @ViewChild('userMenuButton') private userMenuButton?: ElementRef<HTMLButtonElement>;
   @ViewChild('userMenu') private userMenu?: ElementRef<HTMLElement>;
 
-  readonly navGroups: NavGroup[] = [
-    { label: 'Overview', items: [{ label: 'Dashboard', path: '/home', icon: 'home' }] },
-    {
-      label: 'People',
-      items: [
-        { label: 'Members', path: '/members', icon: 'users', badge: 'members' },
-        { label: 'Trainers', path: '/trainers', icon: 'user-check' },
-        { label: 'Classes', path: '/group-trainings', icon: 'calendar' },
-      ],
-    },
-    {
-      label: 'Equipment',
-      items: [
-        { label: 'Machines', path: '/machines', icon: 'dumbbell' },
-        { label: 'Maintenance', path: '/scheduler', icon: 'wrench', badge: 'maintenance' },
-      ],
-    },
-    {
-      label: 'Shop',
-      items: [
-        { label: 'Products', path: '/products', icon: 'shopping-bag' },
-        { label: 'Catalogs', path: '/catalog', icon: 'send' },
-      ],
-    },
-  ];
+  readonly navGroups: NavGroup[] = NAV_GROUPS;
 
   constructor(
     private authService: AuthenticationService,

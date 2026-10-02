@@ -1,0 +1,80 @@
+<div *ngIf="open" class="studio fixed inset-0 z-[60] flex items-start justify-center md:px-4 md:pt-[12vh]">
+    <div class="absolute inset-0 bg-ink bg-opacity-40" (click)="close()" aria-hidden="true"></div>
+
+    <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+        cdkTrapFocus
+        class="relative flex h-full w-full flex-col overflow-hidden bg-surface shadow-overlay md:h-auto md:max-h-[76vh] md:w-[680px] md:rounded-panel"
+    >
+        <!-- Input -->
+        <div class="flex items-center gap-3 border-b border-solid border-line-soft px-5 py-4">
+            <button *ngIf="mode === 'sell-product'" type="button" appIconButton icon="chevron-left" label="Back to all results" (click)="backToDefault()"></button>
+            <span *ngIf="mode === 'default'" class="flex text-accent"><app-icon name="sparkle" [size]="21"></app-icon></span>
+            <input
+                #searchInput
+                type="text"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded="true"
+                aria-controls="palette-results"
+                [attr.aria-activedescendant]="activeOptionId"
+                [attr.aria-label]="mode === 'sell-product' ? 'Search products to sell' : 'Search or jump to'"
+                [placeholder]="mode === 'sell-product' ? 'Sell product: search by name or code…' : 'Search members, pages and actions…'"
+                autocomplete="off"
+                spellcheck="false"
+                [value]="query"
+                (input)="onQueryChange(searchInput.value)"
+                (keydown)="onKeydown($event)"
+                class="min-w-0 flex-grow border-0 bg-transparent p-0 text-lg font-semibold text-ink placeholder-ink-4 outline-none"
+            />
+            <button type="button" (click)="close()" class="hidden rounded-lg border border-solid border-line bg-transparent px-2 py-0.5 text-xs font-bold text-ink-3 hover:text-ink md:inline-flex" aria-label="Close command palette">Esc</button>
+            <button type="button" appIconButton icon="x" label="Close command palette" class="md:hidden" (click)="close()"></button>
+        </div>
+
+        <!-- Results -->
+        <div #resultsList id="palette-results" role="listbox" aria-label="Results" class="flex-1 overflow-y-auto px-2.5 pb-3 pt-2">
+            <div *ngFor="let group of groups; trackBy: trackByKey" role="group" [attr.aria-labelledby]="'palette-group-' + group.key">
+                <div [id]="'palette-group-' + group.key" class="px-3 pb-1 pt-2.5 text-[11px] font-bold uppercase tracking-label text-ink-4" role="presentation">{{ group.label }}</div>
+
+                <div *ngIf="group.note" class="px-3 py-2.5 text-sm text-ink-3" role="presentation">{{ group.note }}</div>
+
+                <div
+                    *ngFor="let item of group.items; trackBy: trackById"
+                    [id]="optionId(item)"
+                    role="option"
+                    [attr.aria-selected]="isActive(item)"
+                    [attr.aria-disabled]="item.disabled ? 'true' : null"
+                    (mousemove)="hover(item)"
+                    (click)="activate(item)"
+                    class="flex items-center gap-3 rounded-[14px] px-3 py-2.5"
+                    [ngClass]="item.disabled ? 'cursor-default opacity-60' : (isActive(item) ? 'cursor-pointer bg-accent-soft' : 'cursor-pointer')"
+                >
+                    <app-avatar *ngIf="item.avatar; else iconTile" [name]="item.avatar.name" [id]="item.avatar.id" [imageUrl]="item.avatar.imageUrl" [size]="34"></app-avatar>
+                    <ng-template #iconTile>
+                        <span class="flex h-[34px] w-[34px] flex-shrink-0 items-center justify-center rounded-[10px]"
+                            [ngClass]="group.key === 'ask-ai' ? 'bg-accent-soft text-accent' : (isActive(item) ? 'bg-surface text-accent' : 'bg-surface-muted text-ink-2')">
+                            <app-icon [name]="item.icon" [size]="17"></app-icon>
+                        </span>
+                    </ng-template>
+                    <span class="min-w-0 flex-grow truncate text-sm text-ink">
+                        <span class="font-semibold" dir="auto">{{ item.label }}</span>
+                        <span *ngIf="item.detail" class="text-ink-3"> · {{ item.detail }}</span>
+                    </span>
+                    <span *ngIf="item.meta" class="flex-shrink-0 text-xs font-semibold"
+                        [ngClass]="item.meta === 'Coming soon' ? 'rounded-full bg-surface-muted px-2 py-0.5 text-neutral' : (item.meta === 'Expiring' ? 'text-warning-text' : 'text-ink-3')">{{ item.meta }}</span>
+                    <span *ngIf="!item.disabled && isActive(item) && !item.meta" class="flex-shrink-0 text-xs font-semibold text-ink-3" aria-hidden="true">↵</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer hints -->
+        <div class="hidden flex-wrap gap-x-[18px] gap-y-1 border-t border-solid border-line-soft bg-surface-subtle px-5 py-3 text-xs text-ink-3 md:flex" aria-hidden="true">
+            <span>↑↓ to move</span>
+            <span>↵ to open</span>
+            <span>Tab to ask AI <span class="text-ink-4">(coming soon)</span></span>
+            <span>Esc to {{ mode === 'sell-product' ? 'go back' : 'close' }}</span>
+        </div>
+    </div>
+</div>

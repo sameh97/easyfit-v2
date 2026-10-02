@@ -68,6 +68,7 @@ export const ICONS = {
   'panel-left': [r(3, 3, 18, 18, 2), p('M9 3v18')],
   'chevron-down': [p('m6 9 6 6 6-6')],
   'chevron-right': [p('m9 18 6-6-6-6')],
+  'chevron-left': [p('m15 18-6-6 6-6')],
   plus: [p('M12 5v14M5 12h14')],
   x: [p('M18 6 6 18M6 6l12 12')],
   menu: [p('M4 6h16M4 12h16M4 18h16')],
