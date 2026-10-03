@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { IconName } from '../icon/icons';
 
-export type IconButtonVariant = 'ghost' | 'outline' | 'soft';
+export type IconButtonVariant = 'ghost' | 'outline' | 'soft' | 'accent';
 export type IconButtonSize = 'sm' | 'md' | 'lg';
 
 const VARIANTS: Record<IconButtonVariant, string> = {
   ghost: 'border-0 bg-transparent text-ink-3 hover:bg-surface-muted hover:text-ink',
   outline: 'border border-solid border-line bg-surface text-ink hover:bg-surface-subtle',
   soft: 'border-0 bg-surface-muted text-ink hover:bg-line',
+  /** An outline button whose popup is open (e.g. the bell). */
+  accent: 'border border-solid border-accent bg-accent-soft text-accent',
 };
 
 const SIZES: Record<IconButtonSize, string> = {

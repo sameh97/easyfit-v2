@@ -139,9 +139,13 @@
 
                 <span class="hidden flex-1 md:block"></span>
 
-                <button appIconButton variant="outline" size="md" icon="bell" [label]="notificationsLabel" (click)="openNotificationsDialog()">
-                    <span *ngIf="notificationNumber > 0" class="absolute end-2.5 top-[9px] h-[9px] w-[9px] rounded-full border-2 border-solid border-white bg-danger-dot" aria-hidden="true"></span>
-                </button>
+                <div class="relative flex-shrink-0">
+                    <button #bellButton appIconButton [variant]="notificationsOpen ? 'accent' : 'outline'" size="md" icon="bell" [label]="notificationsLabel"
+                        aria-haspopup="dialog" [attr.aria-expanded]="notificationsOpen" aria-controls="notifications-panel" (click)="toggleNotifications()">
+                        <span *ngIf="notificationNumber > 0" class="absolute end-2.5 top-[9px] h-[9px] w-[9px] rounded-full border-2 border-solid border-white bg-danger-dot" aria-hidden="true"></span>
+                    </button>
+                    <app-notifications-panel *ngIf="notificationsOpen" [anchor]="bellElement" (closed)="closeNotifications($event)"></app-notifications-panel>
+                </div>
             </div>
 
             <!-- Legacy (not yet redesigned) pages stay English and LTR until their phase (§7.8). -->

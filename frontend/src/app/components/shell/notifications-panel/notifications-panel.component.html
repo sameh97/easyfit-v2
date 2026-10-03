@@ -1,0 +1,75 @@
+<section id="notifications-panel" role="dialog" aria-labelledby="notifications-panel-title" cdkTrapFocus [cdkTrapFocusAutoCapture]="true"
+    (keydown.escape)="onEscape($event)"
+    class="studio fixed inset-x-0 top-0 z-40 flex max-h-screen flex-col overflow-hidden rounded-b-panel bg-surface shadow-overlay md:absolute md:inset-x-auto md:end-0 md:top-[54px] md:max-h-[min(600px,calc(100vh-96px))] md:w-[384px] md:rounded-card">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between gap-3 pb-3 pe-3 ps-[18px] pt-4">
+        <div class="flex min-w-0 flex-wrap items-baseline gap-x-2">
+            <h2 id="notifications-panel-title" tabindex="-1" class="text-[17px] font-extrabold tracking-card text-ink outline-none">{{ 'shell.notifications.panel.title' | translate }}</h2>
+            <span *ngIf="state === 'ready' && groups.length" class="text-[13px] text-ink-3">{{ summary }}</span>
+        </div>
+        <div class="flex flex-shrink-0 items-center gap-1">
+            <button *ngIf="groups.length" type="button" [disabled]="clearing" (click)="clearAll()"
+                class="h-9 rounded-full border-0 bg-transparent px-2.5 text-[13px] font-bold text-accent hover:bg-accent-soft disabled:opacity-50">
+                {{ 'shell.notifications.panel.clearAll' | translate }}
+            </button>
+            <button type="button" appIconButton icon="x" [label]="'shell.notifications.panel.close' | translate" (click)="closed.emit(true)"></button>
+        </div>
+    </div>
+
+    <div class="min-h-0 flex-1 overflow-y-auto">
+        <!-- Loading -->
+        <div *ngIf="state === 'loading' && !groups.length" class="flex flex-col gap-3 border-t border-solid border-line-soft px-[18px] py-4" aria-busy="true">
+            <div *ngFor="let i of [1, 2]" class="flex gap-3">
+                <app-skeleton width="40px" height="40px" shape="block"></app-skeleton>
+                <div class="flex flex-1 flex-col gap-2"><app-skeleton width="60%" height="14px"></app-skeleton><app-skeleton width="80%" height="12px"></app-skeleton></div>
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="state === 'error' && !groups.length" class="border-t border-solid border-line-soft">
+            <app-empty-state icon="alert-circle" tone="danger" [compact]="true" [title]="'shell.notifications.panel.error' | translate">
+                <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="retry()">{{ 'common.actions.retry' | translate }}</button>
+            </app-empty-state>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="state === 'ready' && !groups.length" class="border-t border-solid border-line-soft">
+            <app-empty-state icon="check" tone="accent" [compact]="true" [title]="'shell.notifications.panel.emptyTitle' | translate" [message]="'shell.notifications.panel.emptyBody' | translate"></app-empty-state>
+        </div>
+
+        <!-- Machines with open alerts -->
+        <ul *ngIf="groups.length" class="m-0 list-none p-0" aria-live="polite">
+            <li *ngFor="let group of groups; trackBy: trackBySerial" class="flex gap-3 border-t border-solid border-line-soft px-[18px] py-3.5">
+                <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-tile bg-danger-bg text-danger" aria-hidden="true">
+                    <app-icon name="wrench" [size]="18"></app-icon>
+                </span>
+                <div class="flex min-w-0 flex-grow flex-col gap-1">
+                    <div class="flex items-baseline justify-between gap-2">
+                        <span class="truncate text-[15px] font-bold text-ink" dir="auto">{{ name(group) }}</span>
+                        <span class="whitespace-nowrap text-xs text-ink-3">{{ time(group) }}</span>
+                    </div>
+                    <span class="text-[13px] text-ink-2">{{ detail(group) }} · <bdi dir="ltr">{{ group.serialNumber }}</bdi></span>
+                    <div class="flex gap-1.5 pt-1.5">
+                        <button *ngIf="group.machineId !== null" type="button" (click)="view(group)"
+                            class="flex h-8 items-center rounded-full border border-solid border-line-strong bg-surface px-3 text-[13px] font-bold text-ink hover:bg-surface-subtle">
+                            {{ 'shell.notifications.panel.view' | translate }}
+                        </button>
+                        <button type="button" [disabled]="busySerial === group.serialNumber" (click)="done(group)"
+                            [attr.aria-label]="'shell.notifications.panel.doneFor' | translate: { name: name(group) }"
+                            class="flex h-8 items-center gap-1.5 rounded-full border-0 bg-ink px-3 text-[13px] font-bold text-white hover:bg-ink-2 disabled:opacity-60">
+                            <app-icon name="check" [size]="14"></app-icon>{{ 'shell.notifications.panel.done' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Footer -->
+    <a routerLink="/scheduler" (click)="openMaintenance()"
+        class="flex h-12 flex-shrink-0 items-center justify-center gap-1.5 border-t border-solid border-line-soft bg-surface-subtle text-sm font-bold text-accent hover:text-accent hover:underline">
+        {{ 'shell.notifications.panel.openMaintenance' | translate }}
+        <app-icon name="arrow-right" [size]="15" class="flip-rtl"></app-icon>
+    </a>
+</section>

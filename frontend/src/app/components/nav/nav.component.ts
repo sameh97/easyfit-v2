@@ -1,16 +1,11 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ActivatedRouteSnapshot, NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
+import { merge, Observable, Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { NavigationHelperService } from 'src/app/shared/services/navigation-helper.service';
 import { AppUtil } from 'src/app/common/app-util';
-import { NotificationsDropdownComponent } from '../notifications/notifications-dropdown.component';
-import { AppNotificationMessage } from 'src/app/model/app-notification-message';
-import { WebSocketService } from 'src/app/services/web-socket.service';
-import { SocketTopics } from 'src/app/shared/util/socket-util';
-import { UserNotificationsService } from 'src/app/services/user-notifications.service';
+import { MaintenanceAlertsService } from 'src/app/services/maintenance-alerts.service';
 import { User } from 'src/app/model/user';
 import { NavBadge, NavGroup, NAV_GROUPS } from '../shell/shell-nav';
 import { ShellStateService } from 'src/app/services/shell-state.service';
@@ -32,6 +27,7 @@ const ROLE_KEYS: Record<number, string> = { 1: 'shell.user.roles.manager', 2: 's
 })
 export class NavComponent implements OnInit, OnDestroy {
   notificationNumber: number = 0;
+  notificationsOpen: boolean = false;
   currentUser: User | null = null;
   context: ShellContext = { gymName: null, memberCount: null, maintenanceDue: null };
   viewport: Viewport = 'desktop';
@@ -45,20 +41,17 @@ export class NavComponent implements OnInit, OnDestroy {
   readonly languageNames: Record<Lang, string> = LANGUAGE_NAMES;
   private userCollapsed: boolean = false;
   private subscriptions: Subscription[] = [];
-  /** Job alerts can arrive in bursts; refresh the badge once things settle. */
-  private readonly alertArrived = new Subject<void>();
 
   @ViewChild('drawerCloseButton') private drawerCloseButton?: ElementRef<HTMLButtonElement>;
   @ViewChild('userMenuButton') private userMenuButton?: ElementRef<HTMLButtonElement>;
   @ViewChild('userMenu') private userMenu?: ElementRef<HTMLElement>;
+  @ViewChild('bellButton', { read: ElementRef }) private bellButton?: ElementRef<HTMLButtonElement>;
 
   readonly navGroups: NavGroup[] = NAV_GROUPS;
 
   constructor(
     private authService: AuthenticationService,
-    private navigationService: NavigationHelperService,
-    private webSocketService: WebSocketService,
-    private userNotificationsService: UserNotificationsService,
+    private alerts: MaintenanceAlertsService,
     private breakpointObserver: BreakpointObserver,
     private router: Router,
     private shellContextService: ShellContextService,
@@ -117,49 +110,13 @@ export class NavComponent implements OnInit, OnDestroy {
         })
     );
 
+    this.subscriptions.push(this.alerts.count$.subscribe((count: number) => (this.notificationNumber = count)));
+
+    // A job fired, or alerts were cleared: the due/overdue count behind the Maintenance badge changed.
     this.subscriptions.push(
-      this.userNotificationsService.getAll().subscribe(
-        (notifications: AppNotificationMessage[]) => {
-          this.notificationNumber = this.getNotSeenNotificationsCount(notifications);
-          // TODO: make a function that retreves only the count of the notifications
-        },
-        (error: Error) => {
-          AppUtil.showError(error);
-        }
-      )
+      merge(this.alerts.arrived$, this.alerts.cleared$)
+        .subscribe(() => this.dashboardService.load().subscribe({ error: () => undefined }))
     );
-
-    this.subscriptions.push(this.refreshOnAlerts());
-
-    this.subscriptions.push(
-      this.webSocketService
-        .onMessage(SocketTopics.TOPIC_GROUPED_NOTIFICATION)
-        .subscribe((notificationFromServer: AppNotificationMessage) => {
-          let sum = 0;
-          for (let notification of notificationFromServer.content) {
-            sum += notification.notificationsCount;
-          }
-          this.notificationNumber = sum;
-          // A job just fired: refresh the due/overdue count behind the Maintenance badge.
-          this.alertArrived.next();
-        })
-    );
-  }
-
-  private getNotSeenNotificationsCount = (notifications: AppNotificationMessage[]): number => {
-    let count = 0;
-    for (let i = 0; i < notifications.length; i++) {
-      if (!notifications[i].seen) {
-        count++;
-      }
-    }
-    return count;
-  };
-
-  private refreshOnAlerts(): Subscription {
-    return this.alertArrived
-      .pipe(debounceTime(2000))
-      .subscribe(() => this.dashboardService.load().subscribe({ error: () => undefined }));
   }
 
   // ---- Layout ----------------------------------------------------------
@@ -357,8 +314,26 @@ export class NavComponent implements OnInit, OnDestroy {
     }
   }
 
-  public openNotificationsDialog(): void {
-    this.subscriptions.push(this.navigationService.openDialog(NotificationsDropdownComponent).subscribe());
+  // ---- Notifications ---------------------------------------------------
+
+  /** The bell's element (a template ref on an appIconButton is the component). */
+  get bellElement(): HTMLElement | null {
+    return this.bellButton?.nativeElement ?? null;
+  }
+
+  toggleNotifications(): void {
+    if (this.notificationsOpen) {
+      this.closeNotifications(true);
+    } else {
+      this.notificationsOpen = true;
+    }
+  }
+
+  closeNotifications(returnFocus: boolean): void {
+    this.notificationsOpen = false;
+    if (returnFocus) {
+      this.bellButton?.nativeElement.focus();
+    }
   }
 
   ngOnDestroy(): void {

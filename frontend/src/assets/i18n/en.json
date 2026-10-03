@@ -140,6 +140,48 @@
         "one": "Notifications, {{count}} unread",
         "two": "Notifications, {{count}} unread",
         "other": "Notifications, {{count}} unread"
+      },
+      "panel": {
+        "title": "Notifications",
+        "summary": "{{alerts}} {{machines}}",
+        "alerts": {
+          "one": "{{count}} alert",
+          "two": "{{count}} alerts",
+          "other": "{{count}} alerts"
+        },
+        "onMachines": {
+          "one": "on {{count}} machine",
+          "two": "on {{count}} machines",
+          "other": "on {{count}} machines"
+        },
+        "types": {
+          "clean": "Clean",
+          "service": "Service",
+          "both": "Clean and service"
+        },
+        "due": "{{type}} due",
+        "overdue": "{{type}} overdue",
+        "today": "Today, {{time}}",
+        "yesterday": "Yesterday, {{time}}",
+        "unknownMachine": "Unknown machine",
+        "view": "View machine",
+        "done": "Done",
+        "doneFor": "Mark the alerts for {{name}} done",
+        "clearAll": "Clear all",
+        "close": "Close notifications",
+        "openMaintenance": "Open Maintenance",
+        "emptyTitle": "You're all caught up",
+        "emptyBody": "Maintenance alerts show up here when a job is due.",
+        "error": "Couldn't load the notifications.",
+        "confirm": {
+          "title": "Clear all alerts?",
+          "body": "This marks every open maintenance alert as done, on all machines."
+        },
+        "toast": {
+          "done": "Alerts for {{name}} cleared",
+          "clearedAll": "All alerts cleared",
+          "error": "Couldn't clear the alerts. Try again."
+        }
       }
     },
     "palette": {

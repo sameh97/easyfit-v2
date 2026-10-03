@@ -80,6 +80,7 @@ import { UsersPageComponent } from './components/registration-components/users-c
 import { AddUserComponent } from './components/registration-components/users-components/add-user/add-user.component';
 import { UpdateUserComponent } from './components/registration-components/users-components/update-user/update-user.component';
 import { NotificationsDropdownComponent } from './components/notifications/notifications-dropdown.component';
+import { NotificationsPanelComponent } from './components/shell/notifications-panel/notifications-panel.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
@@ -202,6 +203,7 @@ const routes: Routes = [
     AddUserComponent,
     UpdateUserComponent,
     NotificationsDropdownComponent,
+    NotificationsPanelComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,
