@@ -204,4 +204,17 @@ export class AppNotificationRepository {
       where: { [Op.and]: [{ seen: false, gymId: gymId }] },
     });
   };
+
+  /** Moves a machine's alerts to its new serial number (the machine's serial was edited). */
+  public moveToTargetObjectId = async (
+    oldTargetObjectId: string,
+    newTargetObjectId: string,
+    gymId: number,
+    transaction?: Transaction
+  ): Promise<void> => {
+    await AppNotification.update(
+      { targetObjectId: newTargetObjectId },
+      { where: { targetObjectId: oldTargetObjectId, gymId: gymId }, transaction: transaction }
+    );
+  };
 }

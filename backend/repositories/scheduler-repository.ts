@@ -133,4 +133,18 @@ export class MachineSchedulerRepository {
       transaction: transaction,
     });
   };
+
+  /** Points every job of a machine at its new serial number (the machine's serial was edited). Returns the moved jobs. */
+  public moveToSerialNumber = async (
+    oldSerialNumber: string,
+    newSerialNumber: string,
+    gymId: number,
+    transaction?: Transaction
+  ): Promise<MachineScheduledJob[]> => {
+    await MachineScheduledJob.update(
+      { machineSerialNumber: newSerialNumber },
+      { where: { machineSerialNumber: oldSerialNumber, gymId: gymId }, transaction: transaction }
+    );
+    return await this.getScheduledJobsByMachineSerial(newSerialNumber, gymId, transaction);
+  };
 }

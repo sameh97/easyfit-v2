@@ -854,7 +854,6 @@
       "name": "שם",
       "namePlaceholder": "Treadmill Pro",
       "serial": "מספר סידורי",
-      "serialLinked": "המשימות וההתראות מקושרות למספר הסידורי. שינוי שלו עלול לנתק אותן.",
       "description": "תיאור",
       "purchase": "רכישה",
       "year": "שנת ייצור",

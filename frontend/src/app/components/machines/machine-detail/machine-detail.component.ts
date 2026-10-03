@@ -67,7 +67,7 @@ export class MachineDetailComponent {
 
   edit(): void {
     this.shellActions
-      .editMachine(this.view.machine, this.view.jobs.length > 0 || this.view.openAlerts > 0)
+      .editMachine(this.view.machine)
       .subscribe((saved: Machine | undefined) => saved && this.actions.refreshMaintenance());
   }
 

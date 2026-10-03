@@ -68,6 +68,19 @@ export class MachinesRepository {
       );
     }
 
+    // Serial numbers are unique, as on create: jobs and alerts find their machine by it.
+    if (machine.serialNumber !== undefined && machine.serialNumber !== machineInDB.serialNumber) {
+      const taken: Machine | null = await Machine.findOne({
+        where: { serialNumber: machine.serialNumber },
+        transaction: transaction,
+      });
+      if (AppUtils.hasValue(taken)) {
+        throw new AlreadyExistError(
+          `cannot change the serial number of machine ${machineInDB.id} because a machine with serial number ${machine.serialNumber} already exists`
+        );
+      }
+    }
+
     const updatedMachine = await machineInDB.update(machine, {
       transaction: transaction,
     });

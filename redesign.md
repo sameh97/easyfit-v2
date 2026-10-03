@@ -647,7 +647,7 @@ Branch `redesign/phase-3` (from master, after Phase 2 is merged). Mockups: the `
 - **Maintenance groups:** This week = from tomorrow to the end of Saturday (Sunday–Saturday weeks, like Classes); Later after that; Inactive = paused, or active with no run left.
 - **Bell panel** groups the alerts of `GET /api/notifications` on the client (the grouped endpoint has no times). An alert from today reads "due", an older one "overdue". One store (`MaintenanceAlertsService`) feeds the bell, the panel and the machine panel.
 - **Done on a single alert** (machine panel) uses `PUT /api/notification` with `seen = true`, as the legacy dialog did; Done on a machine and Mark done use `DELETE /api/machine-notifications`.
-- **Machine serial numbers stay editable** (legacy rule), but jobs and alerts reference the serial, so changing it orphans them; the edit form warns when the machine has jobs or alerts. A real fix needs a backend change (cascade or lock).
+- **Changing a machine's serial number** (`PUT /api/machine`, same request and response) also moves its jobs and open alerts to the new serial in the same transaction and re-arms the jobs' timers; a serial already used by another machine is refused, as on create. (Before, the jobs were orphaned on the old serial.)
 - **Machine name rule** (legacy `validateMachineName`) still requires an English first letter; Hebrew machine names are refused.
 - Deep links: `/group-trainings?day=YYYY-MM-DD&class=<id>`, `/machines?machine=<id>` (also `?serial=<serial>`), `/scheduler?machine=<serial>` (prefills the search).
 - New kit pieces: `TimeField`, `MultiSelect`, `Switch`, `Tabs`, `WeekStrip`; the machine badge and job-type pill live in `components/machines/machine-badges.component.ts`.
