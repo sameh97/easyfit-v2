@@ -90,6 +90,11 @@ import { CatalogFormComponent } from './components/catalogs/catalog-form/catalog
 import { CatalogShareComponent } from './components/catalogs/catalog-share/catalog-share.component';
 import { ProfilePageComponent } from './components/profile/profile-page/profile-page.component';
 import { ProfileFormComponent } from './components/profile/profile-form/profile-form.component';
+import { GymsPageComponent } from './components/admin/gyms-page/gyms-page.component';
+import { UsersPageComponent as StudioUsersPageComponent } from './components/admin/users-page/users-page.component';
+import { GymFormComponent } from './components/admin/gym-form/gym-form.component';
+import { UserFormComponent } from './components/admin/user-form/user-form.component';
+import { AdminGuardService as AdminGuard } from './services/admin-guard.service';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
@@ -150,13 +155,15 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminPageComponent,
-    canActivate: [AuthGuard], //TODO: add admin guard
+    component: GymsPageComponent,
+    canActivate: [AuthGuard, AdminGuard],
+    data: { studio: true },
   },
   {
     path: 'users',
-    component: UsersPageComponent,
-    canActivate: [AuthGuard], //TODO: add admin guard
+    component: StudioUsersPageComponent,
+    canActivate: [AuthGuard, AdminGuard],
+    data: { studio: true },
   },
   {
     path: 'group-trainings',
@@ -224,6 +231,10 @@ const routes: Routes = [
     CatalogShareComponent,
     ProfilePageComponent,
     ProfileFormComponent,
+    GymsPageComponent,
+    StudioUsersPageComponent,
+    GymFormComponent,
+    UserFormComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,

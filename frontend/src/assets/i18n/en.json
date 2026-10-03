@@ -109,7 +109,8 @@
         "overview": "Overview",
         "people": "People",
         "equipment": "Equipment",
-        "shop": "Shop"
+        "shop": "Shop",
+        "admin": "Admin"
       },
       "items": {
         "dashboard": "Dashboard",
@@ -120,7 +121,9 @@
         "maintenance": "Maintenance",
         "products": "Products",
         "catalogs": "Catalogs",
-        "profile": "Profile & settings"
+        "profile": "Profile & settings",
+        "gyms": "Gyms",
+        "users": "Users"
       }
     },
     "user": {
@@ -217,7 +220,9 @@
         "newClass": "New class",
         "addTrainer": "Add trainer",
         "addProduct": "Add product",
-        "scheduleMaintenance": "Schedule maintenance"
+        "scheduleMaintenance": "Schedule maintenance",
+        "addGym": "Add gym",
+        "addUser": "Add user"
       },
       "membersError": "Could not load members.",
       "membersLoading": "Loading members…",
@@ -449,7 +454,10 @@
     "quantityStock": "Only {{max}} in stock.",
     "productsRequired": "Add at least one product.",
     "daysRange": "Enter a number of days from 1 to 100.",
-    "israeliPhone": "Enter a valid Israeli phone number, digits only (e.g. 0541234567)."
+    "israeliPhone": "Enter a valid Israeli phone number, digits only (e.g. 0541234567).",
+    "gymName": "Start with a letter (English or Hebrew); then letters, digits, spaces, _ or .",
+    "password": "Use 8+ characters with upper and lower case letters, a digit and a symbol (#?!@$%^&*-).",
+    "passwordsMatch": "The passwords don't match."
   },
   "members": {
     "page": {
@@ -1277,6 +1285,118 @@
     "toast": {
       "updated": "Profile saved",
       "saveError": "Couldn't save your profile. Try again."
+    }
+  },
+  "admin": {
+    "gyms": {
+      "page": {
+        "title": "Gyms",
+        "count": {
+          "one": "{{count}} gym",
+          "two": "{{count}} gyms",
+          "other": "{{count}} gyms"
+        },
+        "inGyms": {
+          "one": "in {{count}} gym",
+          "two": "in {{count}} gyms",
+          "other": "in {{count}} gyms"
+        },
+        "searchLabel": "Search gyms",
+        "searchPlaceholder": "Name, address or phone"
+      },
+      "table": {
+        "gym": "Gym",
+        "phone": "Phone",
+        "address": "Address",
+        "users": "Users"
+      },
+      "actions": {
+        "add": "Add gym",
+        "editName": "Edit {{name}}"
+      },
+      "empty": {
+        "title": "No gyms yet",
+        "body": "Add a gym, then add its users.",
+        "noMatchTitle": "No gyms match"
+      },
+      "form": {
+        "addTitle": "Add gym",
+        "editTitle": "Edit gym",
+        "section": "Gym",
+        "name": "Name",
+        "phone": "Phone",
+        "address": "Address"
+      },
+      "toast": {
+        "added": "{{name}} was added",
+        "updated": "Changes to {{name}} saved",
+        "saveError": "Couldn't save {{name}}. Try again.",
+        "deleted": "{{name}} was deleted",
+        "deleteError": "Couldn't delete {{name}}. It may still have users or data."
+      },
+      "confirm": {
+        "deleteTitle": "Delete {{name}}?",
+        "deleteBody": "This removes the gym for good. It can't be undone.",
+        "deleteBodyUsers": {
+          "one": "It still has {{count}} user, who won't be able to work in it. It can't be undone.",
+          "two": "It still has {{count}} users, who won't be able to work in it. It can't be undone.",
+          "other": "It still has {{count}} users, who won't be able to work in it. It can't be undone."
+        }
+      }
+    },
+    "users": {
+      "page": {
+        "title": "Users",
+        "subtitle": "{{users}} {{gyms}}",
+        "count": {
+          "one": "{{count}} user",
+          "two": "{{count}} users",
+          "other": "{{count}} users"
+        },
+        "gymFilter": "Gym: {{name}}",
+        "gymAll": "All",
+        "gymFilterLabel": "Filter by gym",
+        "searchLabel": "Search users",
+        "searchPlaceholder": "Name, email or phone"
+      },
+      "table": {
+        "user": "User",
+        "phone": "Phone",
+        "gym": "Gym",
+        "role": "Role"
+      },
+      "actions": {
+        "add": "Add user",
+        "editName": "Edit {{name}}"
+      },
+      "empty": {
+        "title": "No users yet",
+        "body": "Add the managers who run each gym.",
+        "noMatchTitle": "No users match"
+      },
+      "form": {
+        "addTitle": "Add user",
+        "editTitle": "Edit user",
+        "account": "Account",
+        "gym": "Gym",
+        "gymPlaceholder": "Choose a gym",
+        "email": "Email (sign-in)",
+        "password": "Password",
+        "passwordHelp": "8+ characters: upper and lower case letters, a digit and a symbol.",
+        "passwordKeep": "Leave empty to keep the current password.",
+        "confirmPassword": "Confirm password"
+      },
+      "toast": {
+        "added": "{{name}} was added",
+        "updated": "Changes to {{name}} saved",
+        "saveError": "Couldn't save {{name}}. The email may already be in use.",
+        "deleted": "{{name}} was deleted",
+        "deleteError": "Couldn't delete {{name}}. Try again."
+      },
+      "confirm": {
+        "deleteTitle": "Delete {{name}}?",
+        "deleteBody": "They won't be able to sign in anymore. It can't be undone."
+      }
     }
   }
 }

@@ -1,0 +1,34 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="user-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-image-upload [currentUrl]="currentPhoto" (fileChange)="onPhoto($event)"></app-image-upload>
+
+        <app-form-section [title]="'members.form.personal' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="firstName" [label]="'members.form.firstName' | translate" [required]="true" autocomplete="off" name="firstName"></app-text-field>
+                <app-text-field [control]="lastName" [label]="'members.form.lastName' | translate" [required]="true" autocomplete="off" name="lastName"></app-text-field>
+            </div>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="phone" type="tel" inputmode="tel" [ltr]="true" [label]="'members.form.phone' | translate" [required]="true" placeholder="05XXXXXXXX" name="phone"></app-text-field>
+                <app-date-field [control]="birthDay" [label]="'members.form.birthday' | translate" [required]="true"></app-date-field>
+            </div>
+            <app-text-field [control]="address" [label]="'members.form.address' | translate" [required]="true" name="address" [placeholder]="'members.form.addressPlaceholder' | translate"></app-text-field>
+        </app-form-section>
+
+        <app-form-section [title]="'admin.users.form.account' | translate">
+            <app-select [control]="gymId" [options]="gymOptions" [label]="'admin.users.form.gym' | translate" [required]="true" [placeholder]="'admin.users.form.gymPlaceholder' | translate"></app-select>
+            <app-text-field [control]="email" type="email" [ltr]="true" [label]="'admin.users.form.email' | translate" [required]="true" autocomplete="off" name="email" placeholder="name@example.com"></app-text-field>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="password" type="password" [ltr]="true" [label]="'admin.users.form.password' | translate" [required]="!isEdit" autocomplete="new-password" name="password"
+                    [help]="(isEdit ? 'admin.users.form.passwordKeep' : 'admin.users.form.passwordHelp') | translate"></app-text-field>
+                <app-text-field [control]="confirmPassword" type="password" [ltr]="true" [label]="'admin.users.form.confirmPassword' | translate" [required]="!isEdit" autocomplete="new-password" name="confirmPassword"></app-text-field>
+            </div>
+        </app-form-section>
+    </form>
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="user-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'admin.users.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

@@ -6,8 +6,8 @@ import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { AppUtil } from 'src/app/common/app-util';
 import { MaintenanceAlertsService } from 'src/app/services/maintenance-alerts.service';
-import { User } from 'src/app/model/user';
-import { NavBadge, NavGroup, NAV_GROUPS } from '../shell/shell-nav';
+import { ADMIN_ROLE_ID, User } from 'src/app/model/user';
+import { ADMIN_NAV_GROUPS, NavBadge, NavGroup, NAV_GROUPS } from '../shell/shell-nav';
 import { ShellStateService } from 'src/app/services/shell-state.service';
 import { ShellContext, ShellContextService } from 'src/app/services/shell-context.service';
 import { initialsOf } from 'src/app/shared/ui/avatar/avatar.component';
@@ -47,7 +47,18 @@ export class NavComponent implements OnInit, OnDestroy {
   @ViewChild('userMenu') private userMenu?: ElementRef<HTMLElement>;
   @ViewChild('bellButton', { read: ElementRef }) private bellButton?: ElementRef<HTMLButtonElement>;
 
-  readonly navGroups: NavGroup[] = NAV_GROUPS;
+  /** The admin area has its own nav and no gym, AI or alerts (§5.11). */
+  get isAdmin(): boolean {
+    return this.currentUser?.roleId === ADMIN_ROLE_ID;
+  }
+
+  get navGroups(): NavGroup[] {
+    return this.isAdmin ? ADMIN_NAV_GROUPS : NAV_GROUPS;
+  }
+
+  get homePath(): string {
+    return this.isAdmin ? '/admin' : '/home';
+  }
 
   constructor(
     private authService: AuthenticationService,
@@ -306,7 +317,7 @@ export class NavComponent implements OnInit, OnDestroy {
     if (mod && !event.altKey && !event.shiftKey && key === 'k') {
       event.preventDefault();
       this.shell.togglePalette();
-    } else if (mod && !event.altKey && !event.shiftKey && key === 'j') {
+    } else if (mod && !event.altKey && !event.shiftKey && key === 'j' && !this.isAdmin) {
       event.preventDefault();
       this.shell.toggleAiPanel();
     } else if (key === 'escape' && this.drawerOpen && !this.shell.paletteOpen) {

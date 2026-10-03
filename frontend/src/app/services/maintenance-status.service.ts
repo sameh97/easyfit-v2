@@ -6,7 +6,7 @@ import { AppUtil } from '../common/app-util';
 import { AppConsts } from '../common/consts';
 import { CoreUtil } from '../common/core-util';
 import { MaintenanceJobStatus, MaintenanceStatus } from '../model/maintenance-status';
-import { User } from '../model/user';
+import { ADMIN_ROLE_ID, User } from '../model/user';
 import { AuthenticationService } from './authentication.service';
 import { MaintenanceAlertsService } from './maintenance-alerts.service';
 
@@ -42,7 +42,8 @@ export class MaintenanceStatusService implements OnDestroy {
       })
     );
     this.subscriptions.push(
-      this.auth.currentUser$.pipe(filter((user: User | null) => AppUtil.hasValue(user))).subscribe(() => this.reload())
+      // The admin has no gym: nothing to load.
+      this.auth.currentUser$.pipe(filter((user: User | null) => AppUtil.hasValue(user) && user?.roleId !== ADMIN_ROLE_ID)).subscribe(() => this.reload())
     );
     this.subscriptions.push(merge(alerts.arrived$, alerts.cleared$).pipe(debounceTime(300)).subscribe(() => this.reload()));
   }

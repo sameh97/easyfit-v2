@@ -6,7 +6,7 @@ import { AppUtil } from '../common/app-util';
 import { AppConsts } from '../common/consts';
 import { CoreUtil } from '../common/core-util';
 import { Machine } from '../model/machine';
-import { User } from '../model/user';
+import { ADMIN_ROLE_ID, User } from '../model/user';
 import { SocketTopics } from '../shared/util/socket-util';
 import { AuthenticationService } from './authentication.service';
 import { WebSocketService } from './web-socket.service';
@@ -91,7 +91,8 @@ export class MaintenanceAlertsService implements OnDestroy {
       })
     );
     this.subscriptions.push(
-      this.auth.currentUser$.pipe(filter((user: User | null) => AppUtil.hasValue(user))).subscribe(() => this.reload())
+      // The admin has no gym: nothing to load.
+      this.auth.currentUser$.pipe(filter((user: User | null) => AppUtil.hasValue(user) && user?.roleId !== ADMIN_ROLE_ID)).subscribe(() => this.reload())
     );
     const topics: string[] = [SocketTopics.TOPIC_GROUPED_NOTIFICATION, SocketTopics.TOPIC_CLEAN_MACHINE, SocketTopics.TOPIC_MACHINE_SERVICE];
     this.subscriptions.push(

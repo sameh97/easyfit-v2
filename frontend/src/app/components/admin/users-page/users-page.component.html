@@ -1,0 +1,58 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'admin.users.page.title' | translate" [subtitle]="state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'admin.users.actions.add' | translate }}</button>
+            </ng-container>
+        </app-page-header>
+
+        <div class="flex flex-wrap items-center gap-2.5">
+            <button type="button" aria-haspopup="menu" aria-expanded="false" (click)="openGymMenu($event)"
+                class="flex h-11 items-center gap-2 rounded-full border border-solid bg-surface px-4 text-sm font-semibold text-ink-2 hover:border-line-strong"
+                [ngClass]="gymFilter !== null ? 'border-accent text-accent' : 'border-line'">
+                <span class="max-w-[220px] truncate">{{ gymFilterLabel }}</span>
+                <app-icon name="chevron-down" [size]="15"></app-icon>
+            </button>
+            <span class="hidden flex-1 md:block"></span>
+            <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[260px]">
+                <app-icon name="search" [size]="17"></app-icon>
+                <span class="sr-only">{{ 'admin.users.page.searchLabel' | translate }}</span>
+                <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'admin.users.page.searchPlaceholder' | translate"
+                    class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+            </label>
+        </div>
+
+        <app-data-table [rows]="filtered" [columns]="columns" [state]="state" [sort]="sort" (sortChange)="sort = $event"
+            [rowId]="rowId" [rowLabel]="rowLabel" [label]="'admin.users.page.title' | translate" [resetPageOn]="filterKey" (rowClick)="edit($event)" (retry)="load()">
+            <ng-template appCell="user" let-row>
+                <div class="flex min-w-0 items-center gap-3">
+                    <app-avatar [name]="name(row)" [id]="avatarId(row)" [imageUrl]="photo(row)" [size]="36"></app-avatar>
+                    <div class="flex min-w-0 flex-col">
+                        <span class="truncate font-bold text-ink" dir="auto">{{ name(row) }}</span>
+                        <span class="truncate text-[13px] text-ink-3"><bdi dir="ltr">{{ row.email }}</bdi></span>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template appCell="phone" let-row><bdi dir="ltr">{{ row.phone }}</bdi></ng-template>
+            <ng-template appCell="gym" let-row><span class="truncate font-semibold" dir="auto">{{ gymName(row) }}</span></ng-template>
+            <ng-template appCell="role" let-row>
+                <span class="rounded-full px-[9px] py-[3px] text-xs font-bold" [ngClass]="isAdmin(row) ? 'bg-accent-soft text-accent' : 'bg-neutral-bg text-neutral'">
+                    {{ (isAdmin(row) ? 'shell.user.roles.admin' : 'shell.user.roles.manager') | translate }}
+                </span>
+            </ng-template>
+            <ng-template appCell="edit" let-row>
+                <button type="button" appIconButton icon="pen" [label]="'admin.users.actions.editName' | translate: { name: name(row) }" (click)="$event.stopPropagation(); edit(row)" (keydown.enter)="$event.stopPropagation()"></button>
+            </ng-template>
+            <ng-template appCell="more" let-row>
+                <button type="button" appIconButton icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'members.actions.moreFor' | translate: { name: name(row) }"
+                    (click)="openMoreMenu($event, row)" (keydown.enter)="$event.stopPropagation()"></button>
+            </ng-template>
+            <div tableEmpty>
+                <app-empty-state *ngIf="!users.length; else noMatches" icon="users" tone="accent" [title]="'admin.users.empty.title' | translate" [message]="'admin.users.empty.body' | translate">
+                    <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'admin.users.actions.add' | translate }}</button>
+                </app-empty-state>
+                <ng-template #noMatches><app-empty-state icon="search" [title]="'admin.users.empty.noMatchTitle' | translate" [message]="'members.empty.noMatchBody' | translate"></app-empty-state></ng-template>
+            </div>
+        </app-data-table>
+    </div>
+</app-nav>

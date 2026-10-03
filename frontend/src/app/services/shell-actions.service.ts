@@ -18,6 +18,9 @@ import { CatalogShareComponent, CatalogShareData } from '../components/catalogs/
 import { Catalog } from '../model/catalog';
 import { ProfileFormComponent, ProfileFormData } from '../components/profile/profile-form/profile-form.component';
 import { User } from '../model/user';
+import { GymFormComponent, GymFormData } from '../components/admin/gym-form/gym-form.component';
+import { UserFormComponent, UserFormData } from '../components/admin/user-form/user-form.component';
+import { Gym } from '../model/gym';
 import { Member } from '../model/member';
 import { Product } from '../model/product';
 import { DashboardService } from './dashboard-service/dashboard.service';
@@ -25,7 +28,7 @@ import { SidePanelService } from '../shared/ui/overlay/side-panel.service';
 import { LanguageService } from './language.service';
 
 /** Actions that open a create panel without extra input. */
-export type CreateAction = 'add-member' | 'add-trainer' | 'new-class' | 'add-product' | 'schedule-maintenance';
+export type CreateAction = 'add-member' | 'add-trainer' | 'new-class' | 'add-product' | 'schedule-maintenance' | 'add-gym' | 'add-user';
 
 /**
  * Opens the Studio create/edit side panels from the shell, palette, dashboard and pages
@@ -54,6 +57,12 @@ export class ShellActionsService {
     }
     if (action === 'schedule-maintenance') {
       return this.scheduleMaintenance();
+    }
+    if (action === 'add-gym') {
+      return this.addGym();
+    }
+    if (action === 'add-user') {
+      return this.addUser();
     }
     return this.addProduct();
   }
@@ -197,6 +206,38 @@ export class ShellActionsService {
     return this.sidePanel.open<ProfileFormComponent, ProfileFormData, User>(ProfileFormComponent, {
       data: { user },
       ariaLabel: this.language.t('profile.form.title'),
+    }).afterClosed$;
+  }
+
+  /** Admin: "Add gym" side panel. */
+  addGym(): Observable<Gym | undefined> {
+    return this.openGymForm(null);
+  }
+
+  editGym(gym: Gym): Observable<Gym | undefined> {
+    return this.openGymForm(gym);
+  }
+
+  private openGymForm(gym: Gym | null): Observable<Gym | undefined> {
+    return this.sidePanel.open<GymFormComponent, GymFormData, Gym>(GymFormComponent, {
+      data: { gym },
+      ariaLabel: this.language.t(gym ? 'admin.gyms.form.editTitle' : 'admin.gyms.form.addTitle'),
+    }).afterClosed$;
+  }
+
+  /** Admin: "Add user" side panel. */
+  addUser(): Observable<User | undefined> {
+    return this.openUserForm(null);
+  }
+
+  editUser(user: User): Observable<User | undefined> {
+    return this.openUserForm(user);
+  }
+
+  private openUserForm(user: User | null): Observable<User | undefined> {
+    return this.sidePanel.open<UserFormComponent, UserFormData, User>(UserFormComponent, {
+      data: { user },
+      ariaLabel: this.language.t(user ? 'admin.users.form.editTitle' : 'admin.users.form.addTitle'),
     }).afterClosed$;
   }
 }

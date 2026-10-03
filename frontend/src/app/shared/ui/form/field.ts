@@ -25,6 +25,10 @@ export const DEFAULT_FIELD_MESSAGES: FieldMessages = {
   productNameNotValid: 'validation.productName',
   productCodeNotValid: 'validation.productCode',
   idNotValid: 'validation.israeliId',
+  gymNotValid: 'validation.gymName',
+  gymPhoneNotValid: 'validation.israeliPhone',
+  passwordNotValid: 'validation.password',
+  notSame: 'validation.passwordsMatch',
 };
 
 let nextFieldId: number = 0;

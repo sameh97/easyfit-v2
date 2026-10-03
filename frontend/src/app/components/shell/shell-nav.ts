@@ -43,4 +43,15 @@ export const NAV_GROUPS: NavGroup[] = [
   },
 ];
 
+/** The admin area's nav (redesign.md §5.11): gyms and the users of every gym. */
+export const ADMIN_NAV_GROUPS: NavGroup[] = [
+  {
+    labelKey: 'shell.nav.groups.admin',
+    items: [
+      { labelKey: 'shell.nav.items.gyms', path: '/admin', icon: 'building' },
+      { labelKey: 'shell.nav.items.users', path: '/users', icon: 'users' },
+    ],
+  },
+];
+
 export const PROFILE_PAGE: NavItem = { labelKey: 'shell.nav.items.profile', path: '/profile', icon: 'settings' };

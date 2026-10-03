@@ -1,3 +1,6 @@
+/** roleId of the EasyFit admin (gym users are 1). */
+export const ADMIN_ROLE_ID: number = 2;
+
 export class User {
   public id: string;
   public firstName: string;

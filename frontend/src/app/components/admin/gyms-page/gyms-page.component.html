@@ -1,0 +1,44 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'admin.gyms.page.title' | translate" [subtitle]="state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'admin.gyms.actions.add' | translate }}</button>
+            </ng-container>
+        </app-page-header>
+
+        <div class="flex items-center">
+            <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[260px]">
+                <app-icon name="search" [size]="17"></app-icon>
+                <span class="sr-only">{{ 'admin.gyms.page.searchLabel' | translate }}</span>
+                <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'admin.gyms.page.searchPlaceholder' | translate"
+                    class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+            </label>
+        </div>
+
+        <app-data-table [rows]="filtered" [columns]="columns" [state]="state" [sort]="sort" (sortChange)="sort = $event"
+            [rowId]="rowId" [rowLabel]="rowLabel" [label]="'admin.gyms.page.title' | translate" [resetPageOn]="query" (rowClick)="edit($event)" (retry)="load()">
+            <ng-template appCell="gym" let-row>
+                <div class="flex min-w-0 items-center gap-3">
+                    <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-ink text-[13px] font-extrabold text-white" aria-hidden="true">{{ initials(row) }}</span>
+                    <span class="truncate font-bold text-ink" dir="auto">{{ row.name }}</span>
+                </div>
+            </ng-template>
+            <ng-template appCell="phone" let-row><bdi dir="ltr">{{ row.phone }}</bdi></ng-template>
+            <ng-template appCell="address" let-row><span class="truncate" dir="auto">{{ row.address }}</span></ng-template>
+            <ng-template appCell="users" let-row><span class="tabular-nums">{{ userCount(row) }}</span></ng-template>
+            <ng-template appCell="edit" let-row>
+                <button type="button" appIconButton icon="pen" [label]="'admin.gyms.actions.editName' | translate: { name: row.name }" (click)="$event.stopPropagation(); edit(row)" (keydown.enter)="$event.stopPropagation()"></button>
+            </ng-template>
+            <ng-template appCell="more" let-row>
+                <button type="button" appIconButton icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'members.actions.moreFor' | translate: { name: row.name }"
+                    (click)="openMoreMenu($event, row)" (keydown.enter)="$event.stopPropagation()"></button>
+            </ng-template>
+            <div tableEmpty>
+                <app-empty-state *ngIf="!gyms.length; else noMatches" icon="building" tone="accent" [title]="'admin.gyms.empty.title' | translate" [message]="'admin.gyms.empty.body' | translate">
+                    <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'admin.gyms.actions.add' | translate }}</button>
+                </app-empty-state>
+                <ng-template #noMatches><app-empty-state icon="search" [title]="'admin.gyms.empty.noMatchTitle' | translate" [message]="'members.empty.noMatchBody' | translate"></app-empty-state></ng-template>
+            </div>
+        </app-data-table>
+    </div>
+</app-nav>

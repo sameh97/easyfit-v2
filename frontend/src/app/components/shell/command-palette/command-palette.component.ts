@@ -12,7 +12,8 @@ import { IconName } from 'src/app/shared/ui/icon/icons';
 import { productCategoryKey } from 'src/app/common/product-categories';
 import { Lang, LanguageService } from 'src/app/services/language.service';
 import { AppUtil } from 'src/app/common/app-util';
-import { NAV_GROUPS, NavItem, PROFILE_PAGE } from '../shell-nav';
+import { ADMIN_NAV_GROUPS, NAV_GROUPS, NavItem, PROFILE_PAGE } from '../shell-nav';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { realPhotoUrl } from 'src/app/shared/ui/avatar/photo';
 import { memberStatus as deriveStatus } from '../../members-components/member-status';
 
@@ -62,6 +63,12 @@ const ACTIONS: ActionDefinition[] = [
   { labelKey: 'shell.palette.actions.scheduleMaintenance', icon: 'wrench', keywords: 'clean service machine job', action: 'schedule-maintenance' },
 ];
 
+/** The admin area has no members or products to search (§5.11): pages and these actions only. */
+const ADMIN_ACTIONS: ActionDefinition[] = [
+  { labelKey: 'shell.palette.actions.addGym', icon: 'building', keywords: 'new gym create', action: 'add-gym' },
+  { labelKey: 'shell.palette.actions.addUser', icon: 'user-plus', keywords: 'new user manager account create', action: 'add-user' },
+];
+
 const MAX_MEMBER_RESULTS = 6;
 const MAX_PRODUCT_RESULTS = 8;
 
@@ -94,8 +101,13 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     private membersService: MembersService,
     private productsService: ProductsService,
     private actions: ShellActionsService,
-    private language: LanguageService
+    private language: LanguageService,
+    private auth: AuthenticationService
   ) {}
+
+  private get isAdmin(): boolean {
+    return this.auth.isAuthenticated() && this.auth.isAdmin();
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -159,6 +171,9 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
   }
 
   private loadData(): void {
+    if (this.isAdmin) {
+      return;
+    }
     this.membersError = false;
     this.productsError = false;
     this.dataSubscriptions.push(
@@ -210,7 +225,8 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
   }
 
   private buildDefaultGroups(q: string): PaletteGroup[] {
-    const groups: PaletteGroup[] = [
+    const admin: boolean = this.isAdmin;
+    const groups: PaletteGroup[] = admin ? [] : [
       {
         key: 'ask-ai',
         label: this.t('shell.palette.groups.askAi'),
@@ -227,7 +243,7 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
       },
     ];
 
-    if (q) {
+    if (q && !admin) {
       groups.push(this.buildMembersGroup(q));
     }
 
@@ -246,7 +262,7 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
       groups.push({ key: 'pages', label: this.t('shell.palette.groups.pages'), items: pages });
     }
 
-    const actions: PaletteItem[] = ACTIONS.filter(
+    const actions: PaletteItem[] = (admin ? ADMIN_ACTIONS : ACTIONS).filter(
       (action: ActionDefinition) => !q || `${this.t(action.labelKey)} ${action.keywords}`.toLowerCase().includes(q)
     ).map((action: ActionDefinition) => ({
       id: `action:${action.action}`,
@@ -336,6 +352,9 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
   }
 
   private allPages(): NavItem[] {
+    if (this.isAdmin) {
+      return ADMIN_NAV_GROUPS.reduce((all: NavItem[], group) => all.concat(group.items), [] as NavItem[]);
+    }
     return NAV_GROUPS.reduce((all: NavItem[], group) => all.concat(group.items), [] as NavItem[]).concat(PROFILE_PAGE);
   }
 

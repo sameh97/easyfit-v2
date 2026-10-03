@@ -4,7 +4,7 @@ import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { DashboardSummary } from '../model/dashboard-summary';
 import { MaintenanceStatus } from '../model/maintenance-status';
 import { MaintenanceStatusService } from './maintenance-status.service';
-import { User } from '../model/user';
+import { ADMIN_ROLE_ID, User } from '../model/user';
 import { AuthenticationService } from './authentication.service';
 import { DashboardService } from './dashboard-service/dashboard.service';
 
@@ -24,7 +24,8 @@ const EMPTY_CONTEXT: ShellContext = { gymName: null, memberCount: null, maintena
 export class ShellContextService {
   readonly context$: Observable<ShellContext> = this.authService.currentUser$.pipe(
     switchMap((user: User | null) => {
-      if (!user) {
+      // Signed out, or the admin (no gym): no gym card, no badges.
+      if (!user || user.roleId === ADMIN_ROLE_ID) {
         return of(EMPTY_CONTEXT);
       }
       this.dashboardService.ensureLoaded();
