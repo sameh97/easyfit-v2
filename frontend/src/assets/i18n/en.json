@@ -554,5 +554,78 @@
       "deleteTitle": "Delete {{name}}?",
       "deleteBody": "This removes the member for good. It can't be undone."
     }
+  },
+  "trainers": {
+    "page": {
+      "title": "Trainers",
+      "count": {
+        "one": "{{count}} trainer",
+        "two": "{{count}} trainers",
+        "other": "{{count}} trainers"
+      },
+      "active": {
+        "one": "{{count}} active",
+        "two": "{{count}} active",
+        "other": "{{count}} active"
+      },
+      "searchLabel": "Search trainers"
+    },
+    "actions": {
+      "add": "Add trainer",
+      "edit": "Edit trainer",
+      "deactivate": "Deactivate",
+      "activate": "Activate"
+    },
+    "card": {
+      "certified": "Certified {{date}}",
+      "thisWeek": {
+        "one": "{{count}} class this week",
+        "two": "{{count}} classes this week",
+        "other": "{{count}} classes this week"
+      },
+      "next": "next: {{name}} {{when}}",
+      "noNext": "no upcoming classes"
+    },
+    "empty": {
+      "title": "No trainers yet",
+      "body": "Add your trainers to assign them to group classes.",
+      "noMatchTitle": "No trainers match"
+    },
+    "detail": {
+      "label": "Trainer details",
+      "eyebrow": "Trainer",
+      "certified": "Certified",
+      "tabsLabel": "Trainer details",
+      "tabs": {
+        "overview": "Overview",
+        "classes": "Classes"
+      },
+      "scheduleError": "Couldn't load classes.",
+      "noClassesTitle": "No classes yet",
+      "noClassesBody": "Group trainings this trainer leads will show up here."
+    },
+    "form": {
+      "addTitle": "Add trainer",
+      "editTitle": "Edit trainer",
+      "work": "Work",
+      "certificationDate": "Certification date"
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "activated": "{{name}} is active again",
+      "deactivated": "{{name}} was deactivated",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "emailChangeError": "The email can't be changed: trainers are matched by email when saving.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. They may still lead group classes.",
+      "notFound": "That trainer wasn't found. They may have been deleted."
+    },
+    "confirm": {
+      "deactivateTitle": "Deactivate {{name}}?",
+      "deactivateBody": "They'll show as inactive until you activate them again.",
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the trainer for good. It can't be undone."
+    }
   }
 }

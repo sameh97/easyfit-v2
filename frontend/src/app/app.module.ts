@@ -81,10 +81,9 @@ import { AddUserComponent } from './components/registration-components/users-com
 import { UpdateUserComponent } from './components/registration-components/users-components/update-user/update-user.component';
 import { NotificationsDropdownComponent } from './components/notifications/notifications-dropdown.component';
 import { MatBadgeModule } from '@angular/material/badge';
-import { AddTrainerComponent } from './components/trainers-components/add-trainer/add-trainer.component';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
-import { UpdateTrainerComponent } from './components/trainers-components/update-trainer/update-trainer.component';
-import { TrainersTableComponent } from './components/trainers-components/trainers-table/trainers-table.component';
+import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
+import { TrainerFormComponent } from './components/trainers-components/trainer-form/trainer-form.component';
 import { DoughnutChartComponent } from './components/members-components/doughnut-chart/doughnut-chart.component';
 import { DisplayTrainingsComponent } from './components/group-training-components/display-trainings/display-trainings.component';
 import { AddGroupTrainingComponent } from './components/group-training-components/add-group-training/add-group-training.component';
@@ -128,6 +127,7 @@ const routes: Routes = [
     path: 'trainers',
     component: TrainersPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'scheduler',
@@ -202,10 +202,9 @@ const routes: Routes = [
     AddUserComponent,
     UpdateUserComponent,
     NotificationsDropdownComponent,
-    AddTrainerComponent,
     TrainersPageComponent,
-    UpdateTrainerComponent,
-    TrainersTableComponent,
+    TrainerDetailComponent,
+    TrainerFormComponent,
     DoughnutChartComponent,
     DisplayTrainingsComponent,
     AddGroupTrainingComponent,

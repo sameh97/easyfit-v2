@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { NavigationHelperService } from '../shared/services/navigation-helper.service';
 import { MemberFormComponent, MemberFormData } from '../components/members-components/member-form/member-form.component';
-import { AddTrainerComponent } from '../components/trainers-components/add-trainer/add-trainer.component';
+import { TrainerFormComponent, TrainerFormData } from '../components/trainers-components/trainer-form/trainer-form.component';
+import { Trainer } from '../model/trainer';
 import { AddGroupTrainingComponent } from '../components/group-training-components/add-group-training/add-group-training.component';
 import { AddProductComponent } from '../components/products-components/add-product/add-product.component';
 import { SellProductComponent } from '../components/products-components/sell-product/sell-product.component';
@@ -18,9 +19,8 @@ import { LanguageService } from './language.service';
 /** Actions that open an existing create dialog without extra input. */
 export type CreateAction = 'add-member' | 'add-trainer' | 'new-class' | 'add-product' | 'schedule-maintenance';
 
-/** Legacy Material create dialogs; members (and trainers) use Studio side panels instead. */
-const CREATE_DIALOGS: Record<Exclude<CreateAction, 'add-member'>, ComponentType<object>> = {
-  'add-trainer': AddTrainerComponent,
+/** Legacy Material create dialogs; members and trainers use Studio side panels instead. */
+const CREATE_DIALOGS: Record<Exclude<CreateAction, 'add-member' | 'add-trainer'>, ComponentType<object>> = {
   'new-class': AddGroupTrainingComponent,
   'add-product': AddProductComponent,
   'schedule-maintenance': AddScheduledJobPageComponent,
@@ -28,7 +28,7 @@ const CREATE_DIALOGS: Record<Exclude<CreateAction, 'add-member'>, ComponentType<
 
 /**
  * Opens the create/edit UIs from the shell, palette and dashboard: Studio side panels for
- * members, the existing (Material) dialogs for pages not redesigned yet,
+ * members and trainers, the existing (Material) dialogs for pages not redesigned yet,
  * with the same options the owning pages use. Each method emits once when the dialog closes,
  * after which the dashboard summary (KPIs, gym card counts) is refreshed.
  */
@@ -47,6 +47,9 @@ export class ShellActionsService {
     if (action === 'add-member') {
       return this.addMember();
     }
+    if (action === 'add-trainer') {
+      return this.addTrainer();
+    }
     return this.afterClose(this.navigationService.openDialog(CREATE_DIALOGS[action], null, null, true));
   }
 
@@ -58,6 +61,22 @@ export class ShellActionsService {
   /** Studio "Edit member" side panel. Emits the saved member, or undefined when cancelled. */
   editMember(member: Member): Observable<Member | undefined> {
     return this.openMemberForm(member);
+  }
+
+  /** Studio "Add trainer" side panel. Emits the new trainer, or undefined when cancelled. */
+  addTrainer(): Observable<Trainer | undefined> {
+    return this.openTrainerForm(null);
+  }
+
+  editTrainer(trainer: Trainer): Observable<Trainer | undefined> {
+    return this.openTrainerForm(trainer);
+  }
+
+  private openTrainerForm(trainer: Trainer | null): Observable<Trainer | undefined> {
+    return this.sidePanel.open<TrainerFormComponent, TrainerFormData, Trainer>(TrainerFormComponent, {
+      data: { trainer },
+      ariaLabel: this.language.t(trainer ? 'trainers.form.editTitle' : 'trainers.form.addTitle'),
+    }).afterClosed$;
   }
 
   private openMemberForm(member: Member | null): Observable<Member | undefined> {

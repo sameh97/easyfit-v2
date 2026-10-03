@@ -1,0 +1,90 @@
+<!-- Header -->
+<div class="flex items-center gap-3.5 px-5 pt-2.5">
+    <app-avatar [name]="name" [id]="trainer.id" [imageUrl]="photo" [size]="64"></app-avatar>
+    <div class="flex min-w-0 flex-col items-start gap-1.5">
+        <h2 class="max-w-full truncate text-[22px] font-extrabold tracking-card text-ink" dir="auto">{{ name }}</h2>
+        <app-status-pill [status]="trainer.isActive ? 'active' : 'inactive'"></app-status-pill>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="flex gap-2 px-5 pt-4">
+    <button appButton variant="primary" type="button" icon="pen" class="flex-grow" (click)="edit()">{{ 'trainers.actions.edit' | translate }}</button>
+    <button type="button" appIconButton variant="outline" size="md" icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'common.actions.moreActions' | translate" (click)="openMoreMenu($event)"></button>
+</div>
+
+<!-- Tabs -->
+<div class="px-5 pt-4">
+    <div role="tablist" [attr.aria-label]="'trainers.detail.tabsLabel' | translate" class="flex gap-0.5 rounded-full bg-surface-muted p-1" (keydown)="onTabKeydown($event)">
+        <button *ngFor="let t of tabs" type="button" role="tab" [id]="'trainer-tab-' + t" [attr.aria-selected]="tab === t" [attr.aria-controls]="'trainer-tabpanel-' + t" [attr.tabindex]="tab === t ? 0 : -1"
+            (click)="tab = t"
+            class="flex-1 whitespace-nowrap rounded-full border-0 px-2 py-2 text-[13px] transition-colors"
+            [ngClass]="tab === t ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-neutral hover:text-ink'">
+            {{ tabLabel(t) }}
+        </button>
+    </div>
+</div>
+
+<div class="flex flex-col gap-4 px-5 pb-5 pt-4" role="tabpanel" [id]="'trainer-tabpanel-' + tab" [attr.aria-labelledby]="'trainer-tab-' + tab" tabindex="0">
+    <!-- Overview -->
+    <ng-container *ngIf="tab === 'overview'">
+        <dl class="m-0 flex flex-col">
+            <div *ngFor="let row of infoRows" class="flex items-center gap-3 border-b border-solid border-line-soft py-[9px]">
+                <span class="flex text-ink-4" aria-hidden="true"><app-icon [name]="row.icon" [size]="16"></app-icon></span>
+                <dt class="w-[92px] flex-shrink-0 text-[13px] text-ink-3">{{ row.labelKey | translate }}</dt>
+                <dd class="m-0 min-w-0 flex-grow truncate text-sm font-semibold text-ink">
+                    <bdi *ngIf="row.ltr; else plain" dir="ltr">{{ row.value }}</bdi>
+                    <ng-template #plain><span dir="auto">{{ row.value }}</span></ng-template>
+                </dd>
+            </div>
+        </dl>
+        <section class="flex flex-col gap-2" [attr.aria-label]="'members.detail.comingUp' | translate">
+            <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.comingUp' | translate }}</h3>
+            <ng-container [ngSwitch]="scheduleState">
+                <app-skeleton *ngSwitchCase="'loading'" width="100%" height="56px" shape="block"></app-skeleton>
+                <p *ngSwitchCase="'error'" class="text-[13px] text-danger">{{ 'trainers.detail.scheduleError' | translate }}
+                    <button type="button" class="border-0 bg-transparent p-0 font-bold text-accent underline" (click)="retrySchedule.emit()">{{ 'common.actions.retry' | translate }}</button></p>
+                <ng-container *ngSwitchDefault>
+                    <p *ngIf="!comingUp.length" class="text-[13px] text-ink-3">{{ 'members.detail.noUpcoming' | translate }}</p>
+                    <div *ngFor="let c of comingUp; let first = first; trackBy: trackById" class="flex items-center gap-3 rounded-[14px] px-3 py-2.5" [ngClass]="first ? 'bg-accent-soft' : 'bg-surface-subtle'">
+                        <span class="w-11 flex-shrink-0 text-sm font-extrabold text-ink">{{ c.startTime | localDate: 'time' }}</span>
+                        <span class="min-w-0 truncate text-sm font-bold text-ink"><span dir="auto">{{ title(c) }}</span> · {{ day(c) }}</span>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </section>
+    </ng-container>
+
+    <!-- Classes -->
+    <ng-container *ngIf="tab === 'classes'">
+        <ng-container [ngSwitch]="scheduleState">
+            <ng-container *ngSwitchCase="'loading'"><app-skeleton *ngFor="let i of [1, 2, 3]" width="100%" height="56px" shape="block"></app-skeleton></ng-container>
+            <app-empty-state *ngSwitchCase="'error'" icon="alert-circle" tone="danger" [compact]="true" [title]="'trainers.detail.scheduleError' | translate">
+                <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="retrySchedule.emit()">{{ 'common.actions.retry' | translate }}</button>
+            </app-empty-state>
+            <ng-container *ngSwitchDefault>
+                <app-empty-state *ngIf="!classCount" icon="calendar" [compact]="true" [title]="'trainers.detail.noClassesTitle' | translate" [message]="'trainers.detail.noClassesBody' | translate"></app-empty-state>
+                <section *ngIf="schedule.upcoming.length" class="flex flex-col gap-2">
+                    <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.upcoming' | translate }}</h3>
+                    <ng-container *ngTemplateOutlet="list; context: { $implicit: schedule.upcoming, past: false }"></ng-container>
+                </section>
+                <section *ngIf="schedule.past.length" class="flex flex-col gap-2">
+                    <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.past' | translate }}</h3>
+                    <ng-container *ngTemplateOutlet="list; context: { $implicit: schedule.past, past: true }"></ng-container>
+                </section>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-template #list let-items let-past="past">
+        <ul class="flex flex-col gap-1.5">
+            <li *ngFor="let c of items; trackBy: trackById" class="flex items-center gap-3 rounded-[14px] bg-surface-subtle px-3 py-2.5" [ngClass]="past ? 'opacity-70' : ''">
+                <span class="flex w-[88px] flex-shrink-0 flex-col">
+                    <span class="text-sm font-extrabold text-ink">{{ c.startTime | localDate: 'time' }}</span>
+                    <span class="text-xs text-ink-3">{{ day(c) }}</span>
+                </span>
+                <span class="min-w-0 truncate text-sm font-bold text-ink" dir="auto">{{ title(c) }}</span>
+            </li>
+        </ul>
+    </ng-template>
+</div>

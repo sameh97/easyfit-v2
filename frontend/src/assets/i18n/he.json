@@ -554,5 +554,78 @@
       "deleteTitle": "למחוק את {{name}}?",
       "deleteBody": "המנוי יימחק לצמיתות. אי אפשר לבטל את הפעולה."
     }
+  },
+  "trainers": {
+    "page": {
+      "title": "מאמנים",
+      "count": {
+        "one": "מאמן אחד",
+        "two": "{{count}} מאמנים",
+        "other": "{{count}} מאמנים"
+      },
+      "active": {
+        "one": "אחד פעיל",
+        "two": "{{count}} פעילים",
+        "other": "{{count}} פעילים"
+      },
+      "searchLabel": "חיפוש מאמנים"
+    },
+    "actions": {
+      "add": "הוספת מאמן",
+      "edit": "עריכת מאמן",
+      "deactivate": "השבתה",
+      "activate": "הפעלה"
+    },
+    "card": {
+      "certified": "הוסמך ב-{{date}}",
+      "thisWeek": {
+        "one": "שיעור אחד השבוע",
+        "two": "{{count}} שיעורים השבוע",
+        "other": "{{count}} שיעורים השבוע"
+      },
+      "next": "הבא: {{name}} {{when}}",
+      "noNext": "אין שיעורים קרובים"
+    },
+    "empty": {
+      "title": "עדיין אין מאמנים",
+      "body": "הוסיפו מאמנים כדי לשבץ אותם לשיעורים קבוצתיים.",
+      "noMatchTitle": "אין מאמנים מתאימים"
+    },
+    "detail": {
+      "label": "פרטי המאמן",
+      "eyebrow": "מאמן",
+      "certified": "הסמכה",
+      "tabsLabel": "פרטי המאמן",
+      "tabs": {
+        "overview": "סקירה",
+        "classes": "שיעורים"
+      },
+      "scheduleError": "לא הצלחנו לטעון את השיעורים.",
+      "noClassesTitle": "עדיין אין שיעורים",
+      "noClassesBody": "שיעורים קבוצתיים שהמאמן מעביר יופיעו כאן."
+    },
+    "form": {
+      "addTitle": "הוספת מאמן",
+      "editTitle": "עריכת מאמן",
+      "work": "עבודה",
+      "certificationDate": "תאריך הסמכה"
+    },
+    "toast": {
+      "added": "{{name}} נוסף/ה",
+      "updated": "השינויים של {{name}} נשמרו",
+      "activated": "{{name}} פעיל/ה שוב",
+      "deactivated": "{{name}} הושבת/ה",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "emailChangeError": "אי אפשר לשנות את האימייל: המאמן מזוהה לפי האימייל בשמירה.",
+      "deleted": "{{name}} נמחק/ה",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. ייתכן שהמאמן עדיין מעביר שיעורים.",
+      "notFound": "המאמן לא נמצא. ייתכן שנמחק."
+    },
+    "confirm": {
+      "deactivateTitle": "להשבית את {{name}}?",
+      "deactivateBody": "המאמן יופיע כלא פעיל עד שתפעילו אותו שוב.",
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "המאמן יימחק לצמיתות. אי אפשר לבטל את הפעולה."
+    }
   }
 }
