@@ -20,6 +20,7 @@ import { UploadFilesApi } from "./routes/upload-file";
 import { GroupTrainingApi } from "./routes/group-training-api";
 import { PasswordManagerService } from "./services/password-manager-service";
 import { DashboardApi } from "./routes/dashboard.api";
+import { MaintenanceApi } from "./routes/maintenance.api";
 
 // make a new instance of EasyFitApp (the server) and call start function
 const app = new EasyFitApp(
@@ -41,7 +42,8 @@ const app = new EasyFitApp(
   container.get(UploadFilesApi),
   container.get(GroupTrainingApi),
   container.get(PasswordManagerService),
-  container.get(DashboardApi)
+  container.get(DashboardApi),
+  container.get(MaintenanceApi)
 );
 
 app.start();

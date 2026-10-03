@@ -19,10 +19,6 @@ import { MatDialogConfig, MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@a
 import { SharedModule } from './shared/shared.module';
 import { UiModule } from './shared/ui/ui.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MachinesComponent } from './components/machines-components/machines/machines.component';
-import { CreateMachineComponent } from './components/machines-components/create-machine/create-machine.component';
-import { EditMachineComponent } from './components/machines-components/edit-machine/edit-machine.component';
-import { MachinesTableComponent } from './components/machines-components/machines-table/machines-table.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -47,10 +43,7 @@ import { MemberDetailComponent } from './components/members-components/member-de
 import { MemberFormComponent } from './components/members-components/member-form/member-form.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatRadioModule } from '@angular/material/radio';
-import { SchedulerPageComponent } from './components/scheduler-components/scheduler-page/scheduler-page.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MachineDetailsComponent } from './components/scheduler-components/machine-details/machine-details.component';
-import { UpdateScheduledJobComponent } from './components/scheduler-components/update-scheduled-job/update-scheduled-job.component';
 import { MatDividerModule } from '@angular/material/divider';
 import {
   NgxMatDatetimePickerModule,
@@ -58,12 +51,10 @@ import {
   NgxMatNativeDateModule,
 } from '@angular-material-components/datetime-picker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { AddScheduledJobPageComponent } from './components/scheduler-components/add-scheduled-job-page/add-scheduled-job-page.component';
 import { ProductsPageComponent } from './components/products-components/products-page/products-page.component';
 import { AddProductComponent } from './components/products-components/add-product/add-product.component';
 import { UpdateProductPageComponent } from './components/products-components/update-product-page/update-product-page.component';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MachineNotificationsComponent } from './components/machines-components/machine-notifications/machine-notifications.component';
 import { MatInputModule } from '@angular/material/input';
 import { CatalogPageComponent } from './components/catalog-components/catalog-page/catalog-page.component';
 import { AddCatalogComponent } from './components/catalog-components/add-catalog/add-catalog.component';
@@ -79,16 +70,21 @@ import { UpdateGymComponent } from './components/registration-components/update-
 import { UsersPageComponent } from './components/registration-components/users-components/users-page/users-page.component';
 import { AddUserComponent } from './components/registration-components/users-components/add-user/add-user.component';
 import { UpdateUserComponent } from './components/registration-components/users-components/update-user/update-user.component';
-import { NotificationsDropdownComponent } from './components/notifications/notifications-dropdown.component';
+import { NotificationsPanelComponent } from './components/shell/notifications-panel/notifications-panel.component';
+import { ClassesPageComponent } from './components/classes/classes-page/classes-page.component';
+import { ClassDetailComponent } from './components/classes/class-detail/class-detail.component';
+import { ClassFormComponent } from './components/classes/class-form/class-form.component';
+import { MachinesPageComponent } from './components/machines/machines-page/machines-page.component';
+import { MachineDetailComponent } from './components/machines/machine-detail/machine-detail.component';
+import { MachineFormComponent } from './components/machines/machine-form/machine-form.component';
+import { JobTypePillComponent, MachineBadgeComponent } from './components/machines/machine-badges.component';
+import { MaintenancePageComponent } from './components/maintenance/maintenance-page/maintenance-page.component';
+import { JobFormComponent } from './components/maintenance/job-form/job-form.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
 import { TrainerFormComponent } from './components/trainers-components/trainer-form/trainer-form.component';
 import { DoughnutChartComponent } from './components/members-components/doughnut-chart/doughnut-chart.component';
-import { DisplayTrainingsComponent } from './components/group-training-components/display-trainings/display-trainings.component';
-import { AddGroupTrainingComponent } from './components/group-training-components/add-group-training/add-group-training.component';
-import { EditGroupTrainingComponent } from './components/group-training-components/edit-group-training/edit-group-training.component';
-import { ShowSingleTrainingComponent } from './components/group-training-components/show-single-training/show-single-training.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { UserProfileComponent } from './components/profile-components/user-profile/user-profile.component';
 import { EditProfileUserComponent } from './components/profile-components/edit-profile-user/edit-profile-user.component';
@@ -117,7 +113,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { studio: true },
   },
-  { path: 'machines', component: MachinesComponent, canActivate: [AuthGuard] },
+  { path: 'machines', component: MachinesPageComponent, canActivate: [AuthGuard], data: { studio: true } },
   {
     path: 'products',
     component: ProductsPageComponent,
@@ -131,8 +127,9 @@ const routes: Routes = [
   },
   {
     path: 'scheduler',
-    component: SchedulerPageComponent,
+    component: MaintenancePageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'catalog',
@@ -151,8 +148,9 @@ const routes: Routes = [
   },
   {
     path: 'group-trainings',
-    component: DisplayTrainingsComponent,
+    component: ClassesPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'profile',
@@ -169,10 +167,6 @@ const routes: Routes = [
     LoginComponent,
     RegisterPageComponent,
     SearchfilterPipe,
-    MachinesComponent,
-    CreateMachineComponent,
-    EditMachineComponent,
-    MachinesTableComponent,
     NavComponent,
     CommandPaletteComponent,
     AiPanelComponent,
@@ -181,14 +175,9 @@ const routes: Routes = [
     MembersPageComponent,
     MemberDetailComponent,
     MemberFormComponent,
-    SchedulerPageComponent,
-    MachineDetailsComponent,
-    UpdateScheduledJobComponent,
-    AddScheduledJobPageComponent,
     ProductsPageComponent,
     AddProductComponent,
     UpdateProductPageComponent,
-    MachineNotificationsComponent,
     CatalogPageComponent,
     AddCatalogComponent,
     UpdateCatalogComponent,
@@ -201,15 +190,21 @@ const routes: Routes = [
     UsersPageComponent,
     AddUserComponent,
     UpdateUserComponent,
-    NotificationsDropdownComponent,
+    NotificationsPanelComponent,
+    ClassesPageComponent,
+    ClassDetailComponent,
+    ClassFormComponent,
+    MachinesPageComponent,
+    MachineDetailComponent,
+    MachineFormComponent,
+    MachineBadgeComponent,
+    JobTypePillComponent,
+    MaintenancePageComponent,
+    JobFormComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,
     DoughnutChartComponent,
-    DisplayTrainingsComponent,
-    AddGroupTrainingComponent,
-    EditGroupTrainingComponent,
-    ShowSingleTrainingComponent,
     UserProfileComponent,
     EditProfileUserComponent,
     ProductsChartComponent,

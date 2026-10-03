@@ -1,0 +1,78 @@
+<!-- Header -->
+<div class="flex items-center gap-3.5 px-5 pt-2.5">
+    <span class="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-surface-muted text-ink-4">
+        <img *ngIf="photo; else iconTile" [src]="photo" alt="" class="h-full w-full object-cover" />
+        <ng-template #iconTile><app-icon name="dumbbell" [size]="26"></app-icon></ng-template>
+    </span>
+    <div class="flex min-w-0 flex-col items-start gap-1.5">
+        <h2 class="max-w-full truncate text-[22px] font-extrabold tracking-card text-ink" dir="auto">{{ view.machine.name }}</h2>
+        <app-machine-badge [view]="view"></app-machine-badge>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="flex gap-2 px-5 pt-4">
+    <button appButton variant="secondary" type="button" icon="pen" class="flex-grow" (click)="edit()">{{ 'common.actions.edit' | translate }}</button>
+    <button appButton variant="primary" type="button" icon="plus" class="flex-grow" (click)="scheduleJob()">{{ 'machines.actions.scheduleJob' | translate }}</button>
+    <button type="button" appIconButton variant="outline" size="md" icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'common.actions.moreActions' | translate" (click)="openMoreMenu($event)"></button>
+</div>
+
+<!-- Open alerts -->
+<section *ngIf="alertGroup" class="px-5 pt-4" [attr.aria-label]="'machines.detail.openAlerts' | translate: { count: alertGroup.alerts.length }">
+    <div class="flex flex-col gap-2 rounded-2xl bg-[#FDF4F2] p-3.5">
+        <div class="flex items-center justify-between">
+            <h3 class="text-[13px] font-bold text-danger-text">{{ 'machines.detail.openAlerts' | translate: { count: alertGroup.alerts.length } }}</h3>
+            <button type="button" [disabled]="clearing" (click)="clearAll()" class="border-0 bg-transparent p-0 text-[13px] font-bold text-danger-text hover:underline disabled:opacity-50">
+                {{ 'shell.notifications.panel.clearAll' | translate }}
+            </button>
+        </div>
+        <ul class="m-0 flex list-none flex-col gap-2 p-0" aria-live="polite">
+            <li *ngFor="let alert of alertGroup.alerts; trackBy: trackByAlert" class="flex items-center gap-2.5 rounded-tile bg-surface py-2 pe-2 ps-3">
+                <span class="flex-grow text-sm font-semibold text-ink">{{ alertLabel(alert) }}</span>
+                <button type="button" [disabled]="busyAlertId === alert.id" (click)="done(alert)"
+                    [attr.aria-label]="'machines.detail.doneFor' | translate: { alert: alertLabel(alert) }"
+                    class="h-8 rounded-full border border-solid border-line-strong bg-surface px-3 text-[13px] font-bold text-ink hover:bg-surface-subtle disabled:opacity-50">
+                    {{ 'shell.notifications.panel.done' | translate }}
+                </button>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<!-- Maintenance jobs -->
+<section class="flex flex-col gap-2 px-5 pt-3.5">
+    <div class="flex items-baseline justify-between">
+        <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'machines.detail.jobs' | translate }}</h3>
+        <a routerLink="/scheduler" [queryParams]="{ machine: view.machine.serialNumber }" class="text-[13px] font-bold text-accent hover:text-accent hover:underline">{{ 'machines.detail.openMaintenance' | translate }}</a>
+    </div>
+    <p *ngIf="!view.jobs.length" class="text-sm text-ink-3">{{ 'machines.detail.noJobs' | translate }}</p>
+    <div *ngFor="let job of view.jobs; trackBy: trackByJob" class="flex items-center gap-3 rounded-[14px] bg-surface-subtle px-3 py-2.5" [ngClass]="job.job.isActive ? '' : 'opacity-60'">
+        <app-job-type-pill [type]="job.type"></app-job-type-pill>
+        <span class="flex min-w-0 flex-grow flex-col">
+            <span class="text-sm font-bold text-ink">{{ every(job) }}</span>
+            <span class="text-xs text-ink-3">{{ nextLabel(job) }}</span>
+        </span>
+        <span *ngIf="job.status?.overdue" class="text-xs font-bold text-danger">{{ 'machines.badge.overdue' | translate }}</span>
+        <span *ngIf="!job.status?.overdue && job.status?.dueToday" class="text-xs font-bold text-danger">{{ 'machines.badge.due' | translate }}</span>
+    </div>
+</section>
+
+<!-- Details -->
+<dl class="m-0 flex flex-col px-5 pb-5 pt-3.5">
+    <div class="flex gap-3 border-b border-solid border-line-soft py-2">
+        <dt class="w-[110px] flex-shrink-0 text-[13px] text-ink-3">{{ 'machines.detail.serial' | translate }}</dt>
+        <dd class="m-0 min-w-0 text-sm font-semibold text-ink"><bdi dir="ltr">{{ view.machine.serialNumber }}</bdi></dd>
+    </div>
+    <div class="flex gap-3 border-b border-solid border-line-soft py-2">
+        <dt class="w-[110px] flex-shrink-0 text-[13px] text-ink-3">{{ 'machines.detail.year' | translate }}</dt>
+        <dd class="m-0 text-sm font-semibold text-ink">{{ view.machine.productionYear }}</dd>
+    </div>
+    <div class="flex gap-3 border-b border-solid border-line-soft py-2">
+        <dt class="w-[110px] flex-shrink-0 text-[13px] text-ink-3">{{ 'machines.detail.price' | translate }}</dt>
+        <dd class="m-0 text-sm font-semibold text-ink"><bdi dir="ltr">{{ price }}</bdi></dd>
+    </div>
+    <div class="flex gap-3 py-2">
+        <dt class="w-[110px] flex-shrink-0 text-[13px] text-ink-3">{{ 'machines.detail.description' | translate }}</dt>
+        <dd class="m-0 min-w-0 text-sm font-semibold text-ink" dir="auto">{{ view.machine.description }}</dd>
+    </div>
+</dl>

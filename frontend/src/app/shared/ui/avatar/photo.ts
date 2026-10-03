@@ -7,6 +7,8 @@ const DEFAULT_IMAGES: ReadonlySet<string> = new Set<string>([
   AppConsts.TRAINER_FEMALE_DEFULT_IMAGE,
   AppConsts.MALE_MEMBER_DEFULT_IMAGE,
   AppConsts.FEMALE_MEMBER_DEFULT_IMAGE,
+  AppConsts.MACHINE_DEFULT_IMAGE,
+  AppConsts.PRODUCT_DEFULT_IMAGE,
 ]);
 
 /** A real uploaded photo, or null for none / a legacy default image (initials are shown instead). */

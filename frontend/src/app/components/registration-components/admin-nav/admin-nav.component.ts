@@ -4,7 +4,6 @@ import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { NavigationHelperService } from 'src/app/shared/services/navigation-helper.service';
-import { NotificationsDropdownComponent } from '../../notifications/notifications-dropdown.component';
 import { AppUtil } from 'src/app/common/app-util';
 import { User } from 'src/app/model/user';
 

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Machines: cards and detail panel</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans','Rubik',sans-serif;color:#1b1c20;background:#f5f4f0}
+a{color:#2F4BF0;text-decoration:none}a:hover{color:#1f36c4}
+button,input{font-family:inherit}button{cursor:pointer}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; display: flex; gap: 16px; padding: 16px; background: #F5F4F0; overflow: hidden; font-family: 'Plus Jakarta Sans', 'Rubik', sans-serif; color: #1B1C20; box-sizing: border-box">
+<dc-import name="P3-Sidebar" active="machines" hint-size="256px,968px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 6px 4px">
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; width: 380px; height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #6B6E76; font-size: 14px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg>Search or jump to…<span dir="ltr" style="margin-inline-start: auto; font-size: 12px; font-weight: 700; border: 1px solid #E7E5DF; border-radius: 8px; padding: 2px 8px">Ctrl K</span></button>
+<span style="flex-grow: 1"></span>
+<button type="button" aria-label="Notifications, 3 unread" style="position: relative; width: 44px; height: 44px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 9px; inset-inline-end: 10px; width: 9px; height: 9px; border-radius: 5px; background: #D9362B; border: 2px solid #FFFFFF"></span></button>
+</div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1">Machines</h1><p style="margin: 0; font-size: 15px; color: #6B6E76">12 machines · 3 need attention</p></div>
+<button type="button" style="height: 46px; padding: 0 20px; border: 0; border-radius: 23px; background: #2F4BF0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add machine</button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+<div role="group" aria-label="Filter by status" style="display: flex; gap: 2px; padding: 4px; background: #FFFFFF; border-radius: 999px; box-shadow: 0 1px 2px rgba(27,28,32,0.05)">
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 700; background: #1B1C20; color: #FFFFFF">All <span style="opacity: 0.7">12</span></button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 600; background: transparent; color: #55585F">Needs attention <span style="color: #A6321D">3</span></button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 600; background: transparent; color: #55585F">OK <span>9</span></button>
+</div>
+<span style="flex-grow: 1"></span>
+<div style="display: flex; align-items: center; gap: 8px; width: 240px; height: 44px; padding: 0 16px; background: #FFFFFF; border: 1px solid #E7E5DF; border-radius: 22px; color: #6B6E76; box-sizing: border-box"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg><input type="search" aria-label="Search machines" placeholder="Name or serial number" style="border: 0; outline: none; flex-grow: 1; min-width: 0; font-size: 14px; background: transparent"></div>
+</div>
+<ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{machines}}" as="m" hint-placeholder-count="6">
+<li>
+<article style="{{m.cardStyle}}">
+<span style="width: 72px; height: 72px; flex-shrink: 0; border-radius: 14px; background: #F1F0EC; color: #8A8D94; display: flex; align-items: center; justify-content: center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11 M17.5 6.5v11 M3.5 9v6 M20.5 9v6 M6.5 12h11"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1; min-width: 0">
+<div style="display: flex; align-items: center; gap: 8px"><a href="#" style="font-size: 16px; font-weight: 800; color: #1B1C20">{{m.name}}</a><sc-if value="{{m.alerts}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; font-weight: 700; color: #B4351F">{{m.alerts}}</span></sc-if></div>
+<span dir="ltr" style="font-size: 13px; color: #6B6E76; text-align: start">{{m.serial}}</span>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 6px"><span style="{{m.badgeStyle}}">{{m.badge}}</span><span style="font-size: 13px; color: #44464C">{{m.meta}}</span></div>
+</div>
+</article>
+</li>
+</sc-for>
+</ul>
+</main>
+
+<aside aria-label="Machine details" style="width: 420px; flex-shrink: 0; background: #FFFFFF; border-radius: 24px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); display: flex; flex-direction: column; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 0 20px">
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #8A8D94">Machine</span>
+<button type="button" aria-label="Close" style="width: 36px; height: 36px; border: 0; border-radius: 18px; background: #F1F0EC; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+</div>
+<div style="padding: 10px 20px 0; display: flex; align-items: center; gap: 14px">
+<span style="width: 64px; height: 64px; border-radius: 16px; background: #F1F0EC; color: #8A8D94; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6.5 6.5v11 M17.5 6.5v11 M3.5 9v6 M20.5 9v6 M6.5 12h11"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px">Treadmill Pro</span><span style="align-self: flex-start; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #FBE4DF; color: #A6321D">Due today</span></div>
+</div>
+<div style="padding: 16px 20px 0; display: flex; gap: 8px">
+<button type="button" style="flex-grow: 1; height: 44px; border: 1px solid #D9D6CE; border-radius: 22px; background: #FFFFFF; color: #1B1C20; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>Edit</button>
+<button type="button" style="flex-grow: 1; height: 44px; border: 0; border-radius: 22px; background: #2F4BF0; color: #FFFFFF; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Schedule job</button>
+<button type="button" aria-label="More actions" style="width: 44px; height: 44px; border: 1px solid #D9D6CE; border-radius: 22px; background: #FFFFFF; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M19 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M5 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2"></path></svg></button>
+</div>
+<div style="padding: 16px 20px 0; display: flex; flex-direction: column; gap: 10px">
+<div style="padding: 14px; border-radius: 16px; background: #FDF4F2; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between"><span style="font-size: 13px; font-weight: 700; color: #A6321D">Open alerts · 2</span><button type="button" style="border: 0; background: transparent; padding: 0; font-size: 13px; font-weight: 700; color: #A6321D">Clear all</button></div>
+<div style="display: flex; align-items: center; gap: 10px; background: #FFFFFF; border-radius: 12px; padding: 8px 8px 8px 12px"><span style="font-size: 14px; font-weight: 600; flex-grow: 1">Clean · today 06:00</span><button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #D9D6CE; border-radius: 16px; background: #FFFFFF; font-size: 13px; font-weight: 700">Done</button></div>
+<div style="display: flex; align-items: center; gap: 10px; background: #FFFFFF; border-radius: 12px; padding: 8px 8px 8px 12px"><span style="font-size: 14px; font-weight: 600; flex-grow: 1">Clean · Wed, 23 Sep 06:00</span><button type="button" style="height: 32px; padding: 0 12px; border: 1px solid #D9D6CE; border-radius: 16px; background: #FFFFFF; font-size: 13px; font-weight: 700">Done</button></div>
+</div>
+</div>
+<div style="padding: 14px 20px 0; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: baseline; justify-content: space-between"><span style="font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #8A8D94">Maintenance jobs</span><a href="P3-Maintenance.dc.html" style="font-size: 13px; font-weight: 700">Open Maintenance</a></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: #FAF9F6"><span style="font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #E2F3F7; color: #0E6A80">Clean</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span style="font-size: 14px; font-weight: 700">Every 7 days</span><span style="font-size: 12px; color: #6B6E76">Next run today, 06:00</span></span><span style="font-size: 12px; font-weight: 700; color: #B4351F">Due today</span></div>
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: #FAF9F6"><span style="font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: #EFE7FD; color: #6D3BD8">Service</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span style="font-size: 14px; font-weight: 700">Every 90 days</span><span style="font-size: 12px; color: #6B6E76">Next run Sat, 12 Dec, 08:00</span></span></div>
+</div>
+<dl style="margin: 0; padding: 14px 20px 20px; display: flex; flex-direction: column">
+<div style="display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F3F2EE"><dt style="width: 110px; font-size: 13px; color: #6B6E76">Serial number</dt><dd style="margin: 0; font-size: 14px; font-weight: 600"><bdi dir="ltr">G1-SN-1001</bdi></dd></div>
+<div style="display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F3F2EE"><dt style="width: 110px; font-size: 13px; color: #6B6E76">Year</dt><dd style="margin: 0; font-size: 14px; font-weight: 600">2024</dd></div>
+<div style="display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F3F2EE"><dt style="width: 110px; font-size: 13px; color: #6B6E76">Price</dt><dd style="margin: 0; font-size: 14px; font-weight: 600">₪18,500</dd></div>
+<div style="display: flex; gap: 12px; padding: 8px 0"><dt style="width: 110px; font-size: 13px; color: #6B6E76">Description</dt><dd style="margin: 0; font-size: 14px; font-weight: 600">Commercial treadmill, 0–20 km/h, 15% incline</dd></div>
+</dl>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+var BADGES = {
+  due: ['Due today', 'background: #FBE4DF; color: #A6321D'],
+  overdue: ['Overdue', 'background: #FBE4DF; color: #A6321D'],
+  next: ['', 'background: #ECEBE6; color: #55585F'],
+  none: ['No jobs', 'background: #ECEBE6; color: #55585F']
+};
+var MACHINES = [
+  { name: 'Treadmill Pro', serial: 'G1-SN-1001', meta: '2024 · ₪18,500', status: 'due', alerts: '2 alerts', selected: true },
+  { name: 'Treadmill Pro', serial: 'G1-SN-1002', meta: '2025 · ₪18,500', status: 'overdue', alerts: '1 alert' },
+  { name: 'Spin Bike', serial: 'G1-SN-1004', meta: '2023 · ₪6,200', status: 'due', alerts: '' },
+  { name: 'Rowing Machine', serial: 'G1-SN-1007', meta: '2022 · ₪9,800', status: 'next', next: 'Next: Fri, 2 Oct', alerts: '' },
+  { name: 'Leg Press', serial: 'G1-SN-1010', meta: '2021 · ₪14,000', status: 'next', next: 'Next: Wed, 14 Oct', alerts: '' },
+  { name: 'Cable Crossover', serial: 'G1-SN-1012', meta: '2020 · ₪11,300', status: 'none', alerts: '' }
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      machines: MACHINES.map(function (m) {
+        var b = BADGES[m.status];
+        return Object.assign({}, m, {
+          badge: m.status === 'next' ? m.next : b[0],
+          badgeStyle: 'font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; ' + b[1],
+          cardStyle: 'display: flex; gap: 14px; padding: 16px; border-radius: 20px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); ' + (m.selected ? 'outline: 2px solid #2F4BF0' : '')
+        });
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

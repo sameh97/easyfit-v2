@@ -1,0 +1,48 @@
+<!-- Header -->
+<div class="flex flex-col gap-1.5 px-5 pt-2">
+    <h2 class="text-2xl font-extrabold tracking-card text-ink" dir="auto">{{ title }}</h2>
+    <span class="text-[15px] font-semibold text-ink-2">{{ when }}</span>
+    <span *ngIf="note" class="text-sm text-ink-3" dir="auto">{{ note }}</span>
+</div>
+
+<!-- Actions -->
+<div class="flex gap-2 px-5 pt-4">
+    <button appButton variant="primary" type="button" icon="pen" class="flex-grow" (click)="edit()">{{ 'classes.actions.edit' | translate }}</button>
+    <button type="button" appIconButton variant="outline" size="md" icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'common.actions.moreActions' | translate" (click)="openMoreMenu($event)"></button>
+</div>
+
+<!-- Trainer -->
+<section class="flex flex-col gap-2 px-5 pt-[18px]">
+    <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'classes.detail.trainer' | translate }}</h3>
+    <a *ngIf="trainer; else unknownTrainer" routerLink="/trainers" [queryParams]="{ trainer: trainer.id }"
+        class="flex items-center gap-3 rounded-[14px] bg-surface-subtle px-3 py-2.5 text-ink hover:bg-surface-muted hover:text-ink">
+        <app-avatar [name]="name(trainer)" [id]="trainer.id" [imageUrl]="photo(trainer)" [size]="40"></app-avatar>
+        <span class="flex min-w-0 flex-grow flex-col">
+            <span class="truncate text-[15px] font-bold" dir="auto">{{ name(trainer) }}</span>
+            <span class="text-[13px] text-ink-3"><bdi dir="ltr">{{ trainer.phone }}</bdi></span>
+        </span>
+        <app-icon name="chevron-right" [size]="16" class="flip-rtl text-ink-4"></app-icon>
+    </a>
+    <ng-template #unknownTrainer><p class="text-sm text-ink-3">{{ 'classes.detail.unknownTrainer' | translate }}</p></ng-template>
+</section>
+
+<!-- Participants -->
+<section class="flex flex-col gap-1.5 px-5 pb-5 pt-[18px]">
+    <div class="flex items-baseline justify-between">
+        <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'classes.detail.participants' | translate: { count: participants.length } }}</h3>
+        <button *ngIf="hasMore" type="button" class="border-0 bg-transparent p-0 text-[13px] font-bold text-accent hover:underline" [attr.aria-expanded]="showAll" (click)="showAll = !showAll">
+            {{ (showAll ? 'classes.detail.showLess' : 'classes.detail.showAll') | translate }}
+        </button>
+    </div>
+    <p *ngIf="!participants.length" class="text-sm text-ink-3">{{ 'classes.detail.noParticipants' | translate }}</p>
+    <ul class="m-0 flex list-none flex-col p-0">
+        <li *ngFor="let member of visibleParticipants; trackBy: trackById">
+            <a routerLink="/members" [queryParams]="{ member: member.id }"
+                class="flex items-center gap-3 border-b border-solid border-line-soft py-2 text-ink hover:text-accent">
+                <app-avatar [name]="name(member)" [id]="member.id" [imageUrl]="photo(member)" [size]="34"></app-avatar>
+                <span class="min-w-0 flex-grow truncate text-sm font-semibold" dir="auto">{{ name(member) }}</span>
+                <app-status-pill [status]="pill(member)"></app-status-pill>
+            </a>
+        </li>
+    </ul>
+</section>

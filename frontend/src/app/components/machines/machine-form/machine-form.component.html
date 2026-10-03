@@ -1,0 +1,29 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="machine-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-image-upload [currentUrl]="currentPhoto" (fileChange)="onPhoto($event)"></app-image-upload>
+
+        <app-form-section [title]="'machines.form.details' | translate">
+            <app-text-field [control]="name" [label]="'machines.form.name' | translate" [required]="true" autocomplete="off" name="name"
+                [placeholder]="'machines.form.namePlaceholder' | translate"></app-text-field>
+            <app-text-field [control]="serialNumber" [ltr]="true" [label]="'machines.form.serial' | translate" [required]="true" autocomplete="off" name="serialNumber"
+                placeholder="G1-SN-1001" [help]="serialHelp"></app-text-field>
+            <app-text-area [control]="description" [rows]="2" [label]="'machines.form.description' | translate" [required]="true"></app-text-area>
+        </app-form-section>
+
+        <app-form-section [title]="'machines.form.purchase' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="productionYear" inputmode="numeric" [ltr]="true" [label]="'machines.form.year' | translate" [required]="true" placeholder="2024" name="productionYear"></app-text-field>
+                <app-text-field [control]="price" inputmode="decimal" [ltr]="true" [label]="'machines.form.price' | translate" [required]="true" placeholder="18500" name="price" [messages]="{ min: 'validation.price' }"
+                    [help]="'machines.form.priceHelp' | translate"></app-text-field>
+            </div>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="machine-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'machines.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

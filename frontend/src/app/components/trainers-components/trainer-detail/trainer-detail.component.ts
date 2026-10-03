@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { classTitle } from 'src/app/common/class-title';
 import { GroupTraining } from 'src/app/model/group-training';
@@ -13,6 +13,7 @@ import { MenuService } from 'src/app/shared/ui/menu/menu.service';
 import { daysFromToday, fullName } from '../../members-components/member-status';
 import { TrainerActionsService } from '../trainer-actions.service';
 import { TrainerSchedule } from '../trainer-schedule';
+import { TabItem } from 'src/app/shared/ui/tabs/tabs.component';
 
 type DetailTab = 'overview' | 'classes';
 export type ScheduleState = 'loading' | 'ready' | 'error';
@@ -48,8 +49,7 @@ export class TrainerDetailComponent implements OnChanges, OnDestroy {
     private actions: TrainerActionsService,
     private shellActions: ShellActionsService,
     private menu: MenuService,
-    public language: LanguageService,
-    private host: ElementRef<HTMLElement>
+    public language: LanguageService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -98,6 +98,14 @@ export class TrainerDetailComponent implements OnChanges, OnDestroy {
     return this.schedule.upcoming.length + this.schedule.past.length;
   }
 
+  selectTab(id: string): void {
+    this.tab = this.tabs.find((tab: DetailTab) => tab === id) ?? this.tab;
+  }
+
+  get tabItems(): TabItem<DetailTab>[] {
+    return this.tabs.map((tab: DetailTab) => ({ id: tab, label: this.tabLabel(tab) }));
+  }
+
   tabLabel(tab: DetailTab): string {
     const label: string = this.language.t(`trainers.detail.tabs.${tab}`);
     return tab === 'classes' && this.scheduleState === 'ready' ? `${label} · ${this.classCount}` : label;
@@ -121,25 +129,6 @@ export class TrainerDetailComponent implements OnChanges, OnDestroy {
 
   trackById(_index: number, training: GroupTraining): number {
     return training.id;
-  }
-
-  onTabKeydown(event: KeyboardEvent): void {
-    const rtl: boolean = getComputedStyle(this.host.nativeElement).direction === 'rtl';
-    const keys: string[] = rtl ? ['ArrowLeft', 'ArrowRight'] : ['ArrowRight', 'ArrowLeft'];
-    const index: number = this.tabs.indexOf(this.tab);
-    let target: number = -1;
-    if (event.key === keys[0] || event.key === keys[1]) {
-      target = (index + 1) % this.tabs.length; // two tabs: either arrow switches
-    } else if (event.key === 'Home') {
-      target = 0;
-    } else if (event.key === 'End') {
-      target = this.tabs.length - 1;
-    }
-    if (target >= 0) {
-      event.preventDefault();
-      this.tab = this.tabs[target];
-      setTimeout(() => this.host.nativeElement.querySelector<HTMLElement>(`#trainer-tab-${this.tab}`)?.focus());
-    }
   }
 
   edit(): void {

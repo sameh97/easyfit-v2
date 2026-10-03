@@ -9,6 +9,8 @@ export type DateFormatName =
   | 'longDay' // Wednesday, 30 September
   | 'shortDay' // Wed, 30 Sep
   | 'monthShort' // Mar
+  | 'weekday' // Wed · ד׳
+  | 'dayMonth' // 30 Sep · 30 בספט׳
   | 'monthLong'; // March
 
 /** Hebrew puts ב before the month name, as in CLDR's own `d בMMM y`. */
@@ -19,6 +21,8 @@ const PATTERNS: Record<Lang, Record<DateFormatName, string>> = {
     dateTime: 'd MMM y, HH:mm',
     longDay: 'EEEE, d MMMM',
     shortDay: 'EEE, d MMM',
+    weekday: 'EEE',
+    dayMonth: 'd MMM',
     monthShort: 'MMM',
     monthLong: 'MMMM',
   },
@@ -28,6 +32,8 @@ const PATTERNS: Record<Lang, Record<DateFormatName, string>> = {
     dateTime: 'd בMMM y, HH:mm',
     longDay: 'EEEE, d בMMMM',
     shortDay: 'EEE, d בMMM',
+    weekday: 'EEEEEE',
+    dayMonth: 'd בMMM',
     monthShort: 'MMM',
     monthLong: 'MMMM',
   },

@@ -53,7 +53,8 @@
       "uploadPhoto": "העלאת תמונה",
       "changePhoto": "החלפת תמונה",
       "removePhoto": "הסרה",
-      "photoHelp": "JPG או PNG. לא חובה."
+      "photoHelp": "JPG או PNG. לא חובה.",
+      "pickTime": "בחירת שעה"
     },
     "table": {
       "showing": "מציג <strong>{{from}}–{{to}}</strong> מתוך {{total}}",
@@ -64,6 +65,23 @@
       "page": "עמוד {{page}}",
       "errorTitle": "לא הצלחנו לטעון את הרשימה",
       "errorBody": "בדקו את החיבור ונסו שוב."
+    },
+    "multiSelect": {
+      "noResults": "לא נמצאו התאמות",
+      "typeToNarrow": "הקלידו כדי לראות עוד",
+      "selected": "{{label}}: נבחרו",
+      "remove": "הסרת {{name}}",
+      "more": "+{{count}} נוספים",
+      "less": "הצגת פחות"
+    },
+    "weekStrip": {
+      "today": "היום"
+    },
+    "when": {
+      "today": "היום, {{time}}",
+      "tomorrow": "מחר, {{time}}",
+      "yesterday": "אתמול, {{time}}",
+      "other": "{{day}}, {{time}}"
     }
   },
   "shell": {
@@ -128,6 +146,48 @@
         "one": "התראות, אחת שלא נקראה",
         "two": "התראות, {{count}} שלא נקראו",
         "other": "התראות, {{count}} שלא נקראו"
+      },
+      "panel": {
+        "title": "התראות",
+        "summary": "{{alerts}} {{machines}}",
+        "alerts": {
+          "one": "התראה אחת",
+          "two": "{{count}} התראות",
+          "other": "{{count}} התראות"
+        },
+        "onMachines": {
+          "one": "במכשיר אחד",
+          "two": "בשני מכשירים",
+          "other": "ב-{{count}} מכשירים"
+        },
+        "types": {
+          "clean": "ניקוי",
+          "service": "שירות",
+          "both": "ניקוי ושירות"
+        },
+        "due": "{{type}} להיום",
+        "overdue": "{{type}} באיחור",
+        "today": "היום, {{time}}",
+        "yesterday": "אתמול, {{time}}",
+        "unknownMachine": "מכשיר לא ידוע",
+        "view": "הצגת המכשיר",
+        "done": "בוצע",
+        "doneFor": "סימון ההתראות של {{name}} כבוצעו",
+        "clearAll": "ניקוי הכל",
+        "close": "סגירת ההתראות",
+        "openMaintenance": "מעבר לתחזוקה",
+        "emptyTitle": "אין התראות פתוחות",
+        "emptyBody": "התראות תחזוקה יופיעו כאן כשמגיע מועד של משימה.",
+        "error": "לא הצלחנו לטעון את ההתראות.",
+        "confirm": {
+          "title": "לנקות את כל ההתראות?",
+          "body": "כל התראות התחזוקה הפתוחות יסומנו כבוצעו, בכל המכשירים."
+        },
+        "toast": {
+          "done": "ההתראות של {{name}} נוקו",
+          "clearedAll": "כל ההתראות נוקו",
+          "error": "לא הצלחנו לנקות את ההתראות. נסו שוב."
+        }
       }
     },
     "palette": {
@@ -368,7 +428,20 @@
     "endBeforeJoin": "התאריך חייב להיות אחרי תאריך ההצטרפות.",
     "dateFormat": "יש להזין תאריך כמו 14/03/2027.",
     "imageType": "יש לבחור תמונה בפורמט JPG או PNG.",
-    "invalid": "הערך אינו תקין."
+    "invalid": "הערך אינו תקין.",
+    "timeFormat": "יש להזין שעה בפורמט 24 שעות, למשל 17:30.",
+    "startInPast": "יש לבחור שעת התחלה מאוחרת מעכשיו.",
+    "trainerBusy": "למאמן הזה כבר יש שיעור ב-{{time}}, פחות משעה לפני כן.",
+    "membersRequired": "יש להוסיף לפחות מנוי אחד.",
+    "maxlength": "יש להזין עד {{requiredLength}} תווים.",
+    "machineName": "יש להתחיל באות באנגלית; אחר כך אותיות, ספרות, רווחים, _ או .",
+    "serialNumber": "יש להשתמש רק באותיות באנגלית, ספרות, - _ או .",
+    "year": "יש להזין שנה בין 1980 ל-2030.",
+    "price": "יש להזין מחיר של 0 ומעלה.",
+    "endInPast": "יש לבחור מועד סיום מאוחר מעכשיו.",
+    "endBeforeStart": "מועד הסיום חייב להיות אחרי מועד ההתחלה.",
+    "frequencyMin": "יש להזין לפחות יום אחד.",
+    "frequencyTooLong": "זה ארוך מהזמן שבין ההתחלה לסיום."
   },
   "members": {
     "page": {
@@ -626,6 +699,292 @@
       "deactivateBody": "המאמן יופיע כלא פעיל עד שתפעילו אותו שוב.",
       "deleteTitle": "למחוק את {{name}}?",
       "deleteBody": "המאמן יימחק לצמיתות. אי אפשר לבטל את הפעולה."
+    }
+  },
+  "classes": {
+    "page": {
+      "title": "שיעורים",
+      "weekCount": {
+        "one": "שיעור אחד השבוע",
+        "two": "{{count}} שיעורים השבוע",
+        "other": "{{count}} שיעורים השבוע"
+      },
+      "todayCount": {
+        "one": "אחד היום",
+        "two": "{{count}} היום",
+        "other": "{{count}} היום"
+      },
+      "dayCount": {
+        "one": "שיעור אחד",
+        "two": "{{count}} שיעורים",
+        "other": "{{count}} שיעורים"
+      },
+      "doneCount": {
+        "one": "אחד הסתיים",
+        "two": "{{count}} הסתיימו",
+        "other": "{{count}} הסתיימו"
+      },
+      "weekLabel": "ימי השבוע",
+      "prevWeek": "השבוע הקודם",
+      "nextWeek": "השבוע הבא",
+      "today": "היום",
+      "trainerFilter": "מאמן: {{name}}",
+      "trainerAll": "הכל",
+      "trainerFilterLabel": "סינון לפי מאמן",
+      "searchLabel": "חיפוש שיעורים",
+      "searchPlaceholder": "שם השיעור"
+    },
+    "row": {
+      "done": "הסתיים",
+      "upNext": "הבא בתור",
+      "members": {
+        "one": "משתתף אחד",
+        "two": "{{count}} משתתפים",
+        "other": "{{count}} משתתפים"
+      }
+    },
+    "actions": {
+      "new": "שיעור חדש",
+      "add": "הוספת שיעור",
+      "edit": "עריכת שיעור"
+    },
+    "empty": {
+      "dayTitle": "אין שיעורים ביום הזה",
+      "dayBody": "בחרו יום אחר, או הוסיפו שיעור.",
+      "noMatchTitle": "אין שיעורים מתאימים",
+      "noMatchBody": "נסו מאמן או חיפוש אחר."
+    },
+    "detail": {
+      "label": "פרטי השיעור",
+      "eyebrow": "שיעור",
+      "trainer": "מאמן",
+      "unknownTrainer": "המאמן של השיעור הזה כבר לא קיים.",
+      "participants": "משתתפים · {{count}}",
+      "showAll": "הצגת כולם",
+      "showLess": "הצגת פחות",
+      "noParticipants": "אין מנויים בשיעור הזה."
+    },
+    "form": {
+      "addTitle": "שיעור חדש",
+      "editTitle": "עריכת שיעור",
+      "when": "מתי",
+      "date": "תאריך",
+      "time": "שעת התחלה",
+      "timeHelp": "בפורמט 24 שעות, למשל 17:30",
+      "class": "שיעור",
+      "description": "תיאור",
+      "descriptionHelp": "החלק שלפני הנקודתיים מוצג כשם השיעור.",
+      "descriptionPlaceholder": "פילאטיס ליבה: להביא מגבת ומים",
+      "trainer": "מאמן",
+      "trainerPlaceholder": "בחירת מאמן",
+      "membersSection": "משתתפים · {{count}}",
+      "members": "הוספת משתתפים",
+      "membersPlaceholder": "הוספת מנויים לפי שם או טלפון"
+    },
+    "toast": {
+      "added": "{{name}} נוסף",
+      "updated": "השינויים ב{{name}} נשמרו",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "busyError": "למאמן כבר יש שיעור פחות משעה לפני השיעור הזה.",
+      "deleted": "{{name}} נמחק",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. נסו שוב.",
+      "notFound": "השיעור לא נמצא. ייתכן שנמחק."
+    },
+    "confirm": {
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "השיעור ורשימת המשתתפים שלו יימחקו. אי אפשר לבטל את הפעולה."
+    }
+  },
+  "machines": {
+    "page": {
+      "title": "מכשירים",
+      "count": {
+        "one": "מכשיר אחד",
+        "two": "שני מכשירים",
+        "other": "{{count}} מכשירים"
+      },
+      "attention": {
+        "one": "אחד דורש טיפול",
+        "two": "{{count}} דורשים טיפול",
+        "other": "{{count}} דורשים טיפול"
+      },
+      "searchLabel": "חיפוש מכשירים",
+      "searchPlaceholder": "שם או מספר סידורי"
+    },
+    "filters": {
+      "label": "סינון לפי סטטוס",
+      "all": "הכל",
+      "attention": "דורשים טיפול",
+      "ok": "תקינים"
+    },
+    "badge": {
+      "overdue": "באיחור",
+      "due": "להיום",
+      "next": "הבא: {{date}}",
+      "none": "אין משימות",
+      "noUpcoming": "אין הפעלות קרובות"
+    },
+    "actions": {
+      "add": "הוספת מכשיר",
+      "scheduleJob": "תזמון משימה"
+    },
+    "empty": {
+      "title": "עדיין אין מכשירים",
+      "body": "הוסיפו את המכשירים של חדר הכושר כדי לתזמן ניקוי ושירות.",
+      "noMatchTitle": "אין מכשירים מתאימים",
+      "noMatchBody": "נסו חיפוש או סינון אחר."
+    },
+    "detail": {
+      "label": "פרטי המכשיר",
+      "eyebrow": "מכשיר",
+      "openAlerts": "התראות פתוחות · {{count}}",
+      "doneFor": "סימון כבוצע: {{alert}}",
+      "jobs": "משימות תחזוקה",
+      "openMaintenance": "מעבר לתחזוקה",
+      "noJobs": "אין משימות תחזוקה למכשיר הזה.",
+      "serial": "מספר סידורי",
+      "year": "שנה",
+      "price": "מחיר",
+      "description": "תיאור"
+    },
+    "form": {
+      "addTitle": "הוספת מכשיר",
+      "editTitle": "עריכת מכשיר",
+      "details": "מכשיר",
+      "name": "שם",
+      "namePlaceholder": "Treadmill Pro",
+      "serial": "מספר סידורי",
+      "serialLinked": "המשימות וההתראות מקושרות למספר הסידורי. שינוי שלו עלול לנתק אותן.",
+      "description": "תיאור",
+      "purchase": "רכישה",
+      "year": "שנת ייצור",
+      "price": "מחיר (₪)",
+      "priceHelp": "מספרים בלבד, למשל 18500"
+    },
+    "toast": {
+      "added": "{{name}} נוסף",
+      "updated": "השינויים ב{{name}} נשמרו",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "duplicateSerial": "כבר קיים מכשיר עם המספר הסידורי {{serial}}.",
+      "deleted": "{{name}} נמחק",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. נסו שוב.",
+      "notFound": "המכשיר לא נמצא. ייתכן שנמחק.",
+      "alertDone": "ההתראה סומנה כבוצעה"
+    },
+    "confirm": {
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "גם משימות התחזוקה וההתראות שלו יימחקו. אי אפשר לבטל את הפעולה."
+    }
+  },
+  "maintenance": {
+    "types": {
+      "clean": "ניקוי",
+      "service": "שירות"
+    },
+    "row": {
+      "every": {
+        "one": "כל יום",
+        "two": "כל יומיים",
+        "other": "כל {{count}} ימים"
+      },
+      "nextRun": "ההפעלה הבאה: {{when}}",
+      "paused": "מושהה",
+      "noRunsLeft": "אין עוד הפעלות",
+      "ended": "הסתיימה",
+      "endedOn": "הסתיימה ב-{{date}}",
+      "endsOn": "מסתיימת ב-{{date}}",
+      "daysAgo": {
+        "one": "אתמול",
+        "two": "לפני יומיים",
+        "other": "לפני {{count}} ימים"
+      },
+      "alertOpen": "ההתראה עדיין פתוחה",
+      "alertSent": "נשלחה התראה",
+      "dueNow": "עכשיו",
+      "inHours": {
+        "one": "בעוד שעה",
+        "two": "בעוד שעתיים",
+        "other": "בעוד {{count}} שעות"
+      },
+      "inDays": {
+        "one": "מחר",
+        "two": "בעוד יומיים",
+        "other": "בעוד {{count}} ימים"
+      }
+    },
+    "page": {
+      "title": "תחזוקה",
+      "summary": "{{jobs}} {{machines}}",
+      "jobs": {
+        "one": "משימה אחת",
+        "two": "שתי משימות",
+        "other": "{{count}} משימות"
+      },
+      "onMachines": {
+        "one": "במכשיר אחד",
+        "two": "בשני מכשירים",
+        "other": "ב-{{count}} מכשירים"
+      },
+      "searchLabel": "חיפוש משימות",
+      "searchPlaceholder": "מכשיר או מספר סידורי",
+      "listLabel": "משימות תחזוקה"
+    },
+    "filters": {
+      "label": "סוג משימה"
+    },
+    "groups": {
+      "overdue": "באיחור",
+      "today": "היום",
+      "week": "השבוע",
+      "later": "בהמשך",
+      "inactive": "לא פעילות"
+    },
+    "actions": {
+      "schedule": "תזמון תחזוקה",
+      "add": "תזמון משימה",
+      "markDone": "סימון כבוצע",
+      "markDoneFor": "סימון ההתראות של {{name}} כבוצעו",
+      "editFor": "עריכת המשימה של {{name}}",
+      "deactivate": "השבתה",
+      "activate": "הפעלה"
+    },
+    "empty": {
+      "title": "עדיין אין משימות תחזוקה",
+      "body": "תזמנו ניקוי ושירות למכשירים וקבלו התראה כשמגיע המועד.",
+      "noMatchTitle": "אין משימות מתאימות",
+      "noMatchBody": "נסו סוג או חיפוש אחר."
+    },
+    "form": {
+      "addTitle": "תזמון תחזוקה",
+      "editTitle": "עריכת משימת תחזוקה",
+      "job": "משימה",
+      "machine": "מכשיר",
+      "machinePlaceholder": "בחירת מכשיר",
+      "type": "סוג משימה",
+      "when": "מתי",
+      "startDate": "תאריך התחלה",
+      "startTime": "שעת התחלה",
+      "endDate": "תאריך סיום",
+      "endTime": "שעת סיום",
+      "every": "כל (ימים)",
+      "everyHelp": "כל כמה ימים המשימה חוזרת, למשל 7 לשבועי.",
+      "active": "פעילה",
+      "activeHelp": "משימה מושהית לא שולחת התראות."
+    },
+    "toast": {
+      "added": "{{name}} תוזמנה",
+      "updated": "השינויים ב{{name}} נשמרו",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "activated": "{{name}} פעילה שוב",
+      "deactivated": "{{name}} הושהתה",
+      "deleted": "{{name}} נמחקה",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. נסו שוב."
+    },
+    "confirm": {
+      "deactivateTitle": "להשבית את {{name}}?",
+      "deactivateBody": "המשימה תפסיק לשלוח התראות עד שתפעילו אותה שוב.",
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "המשימה תימחק לצמיתות. אי אפשר לבטל את הפעולה."
     }
   }
 }

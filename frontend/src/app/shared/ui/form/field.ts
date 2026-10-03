@@ -16,6 +16,12 @@ export const DEFAULT_FIELD_MESSAGES: FieldMessages = {
   dateNotValid: 'validation.dateInFuture',
   dateShouldBeInPresent: 'validation.dateInFuture',
   matDatepickerParse: 'validation.dateFormat',
+  timeFormat: 'validation.timeFormat',
+  maxlength: 'validation.maxlength',
+  machineNameNotValid: 'validation.machineName',
+  serialNumberNotValid: 'validation.serialNumber',
+  yearNotValid: 'validation.year',
+  priceNotValid: 'validation.price',
 };
 
 let nextFieldId: number = 0;

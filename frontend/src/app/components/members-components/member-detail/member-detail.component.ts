@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { classTitle } from 'src/app/common/class-title';
 import { Member } from 'src/app/model/member';
@@ -21,6 +21,7 @@ import {
   membershipEnd,
   STATUS_PILL,
 } from '../member-status';
+import { TabItem } from 'src/app/shared/ui/tabs/tabs.component';
 
 type DetailTab = 'overview' | 'classes' | 'purchases';
 type LoadState = 'loading' | 'ready' | 'error';
@@ -64,8 +65,7 @@ export class MemberDetailComponent implements OnChanges, OnDestroy {
     private actions: MemberActionsService,
     private shellActions: ShellActionsService,
     private menu: MenuService,
-    public language: LanguageService,
-    private host: ElementRef<HTMLElement>
+    public language: LanguageService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -192,6 +192,10 @@ export class MemberDetailComponent implements OnChanges, OnDestroy {
     return this.activity?.purchases.totalCount ?? 0;
   }
 
+  get tabItems(): TabItem<DetailTab>[] {
+    return this.tabs.map((tab: DetailTab) => ({ id: tab, label: this.tabLabel(tab) }));
+  }
+
   tabLabel(tab: DetailTab): string {
     const label: string = this.language.t(`members.detail.tabs.${tab}`);
     if (tab === 'overview' || !this.activity) {
@@ -230,30 +234,8 @@ export class MemberDetailComponent implements OnChanges, OnDestroy {
 
   // ---- Tabs ----------------------------------------------------------------
 
-  selectTab(tab: DetailTab): void {
-    this.tab = tab;
-  }
-
-  onTabKeydown(event: KeyboardEvent): void {
-    const rtl: boolean = getComputedStyle(this.host.nativeElement).direction === 'rtl';
-    const next: string = rtl ? 'ArrowLeft' : 'ArrowRight';
-    const previous: string = rtl ? 'ArrowRight' : 'ArrowLeft';
-    const index: number = this.tabs.indexOf(this.tab);
-    let target: number = -1;
-    if (event.key === next) {
-      target = (index + 1) % this.tabs.length;
-    } else if (event.key === previous) {
-      target = (index - 1 + this.tabs.length) % this.tabs.length;
-    } else if (event.key === 'Home') {
-      target = 0;
-    } else if (event.key === 'End') {
-      target = this.tabs.length - 1;
-    }
-    if (target >= 0) {
-      event.preventDefault();
-      this.tab = this.tabs[target];
-      setTimeout(() => this.host.nativeElement.querySelector<HTMLElement>(`#member-tab-${this.tab}`)?.focus());
-    }
+  selectTab(id: string): void {
+    this.tab = this.tabs.find((tab: DetailTab) => tab === id) ?? this.tab;
   }
 
   // ---- Actions ---------------------------------------------------------------

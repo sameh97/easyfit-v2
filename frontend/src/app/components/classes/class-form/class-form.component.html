@@ -1,0 +1,31 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="class-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-form-section [title]="'classes.form.when' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-date-field [control]="date" [label]="'classes.form.date' | translate" [required]="true" [min]="today"
+                    [messages]="{ matDatepickerMin: 'validation.startInPast' }"></app-date-field>
+                <app-time-field [control]="time" [label]="'classes.form.time' | translate" [required]="true" [help]="'classes.form.timeHelp' | translate"
+                    [messages]="{ dateNotValid: 'validation.startInPast', trainerBusy: 'validation.trainerBusy' }"></app-time-field>
+            </div>
+        </app-form-section>
+
+        <app-form-section [title]="'classes.form.class' | translate">
+            <app-text-area [control]="description" [rows]="2" [label]="'classes.form.description' | translate" [required]="true" [help]="'classes.form.descriptionHelp' | translate"
+                [placeholder]="'classes.form.descriptionPlaceholder' | translate"></app-text-area>
+            <app-select [control]="trainerId" [options]="trainerOptions" [label]="'classes.form.trainer' | translate" [required]="true" [placeholder]="'classes.form.trainerPlaceholder' | translate"></app-select>
+        </app-form-section>
+
+        <app-form-section [title]="'classes.form.membersSection' | translate: { count: memberCount }">
+            <app-multi-select [control]="members" [options]="memberOptions" [label]="'classes.form.members' | translate" [hideLabel]="true" [required]="true"
+                [placeholder]="'classes.form.membersPlaceholder' | translate" [messages]="{ required: 'validation.membersRequired' }"></app-multi-select>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="class-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'classes.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

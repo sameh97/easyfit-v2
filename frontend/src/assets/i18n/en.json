@@ -53,7 +53,8 @@
       "uploadPhoto": "Upload photo",
       "changePhoto": "Change photo",
       "removePhoto": "Remove",
-      "photoHelp": "JPG or PNG. Optional."
+      "photoHelp": "JPG or PNG. Optional.",
+      "pickTime": "Pick a time"
     },
     "table": {
       "showing": "Showing <strong>{{from}}–{{to}}</strong> of {{total}}",
@@ -64,6 +65,23 @@
       "page": "Page {{page}}",
       "errorTitle": "We couldn't load this list",
       "errorBody": "Check your connection and try again."
+    },
+    "multiSelect": {
+      "noResults": "No matches",
+      "typeToNarrow": "Type to see more",
+      "selected": "{{label}}: selected",
+      "remove": "Remove {{name}}",
+      "more": "+{{count}} more",
+      "less": "Show less"
+    },
+    "weekStrip": {
+      "today": "Today"
+    },
+    "when": {
+      "today": "Today, {{time}}",
+      "tomorrow": "Tomorrow, {{time}}",
+      "yesterday": "Yesterday, {{time}}",
+      "other": "{{day}}, {{time}}"
     }
   },
   "shell": {
@@ -128,6 +146,48 @@
         "one": "Notifications, {{count}} unread",
         "two": "Notifications, {{count}} unread",
         "other": "Notifications, {{count}} unread"
+      },
+      "panel": {
+        "title": "Notifications",
+        "summary": "{{alerts}} {{machines}}",
+        "alerts": {
+          "one": "{{count}} alert",
+          "two": "{{count}} alerts",
+          "other": "{{count}} alerts"
+        },
+        "onMachines": {
+          "one": "on {{count}} machine",
+          "two": "on {{count}} machines",
+          "other": "on {{count}} machines"
+        },
+        "types": {
+          "clean": "Clean",
+          "service": "Service",
+          "both": "Clean and service"
+        },
+        "due": "{{type}} due",
+        "overdue": "{{type}} overdue",
+        "today": "Today, {{time}}",
+        "yesterday": "Yesterday, {{time}}",
+        "unknownMachine": "Unknown machine",
+        "view": "View machine",
+        "done": "Done",
+        "doneFor": "Mark the alerts for {{name}} done",
+        "clearAll": "Clear all",
+        "close": "Close notifications",
+        "openMaintenance": "Open Maintenance",
+        "emptyTitle": "You're all caught up",
+        "emptyBody": "Maintenance alerts show up here when a job is due.",
+        "error": "Couldn't load the notifications.",
+        "confirm": {
+          "title": "Clear all alerts?",
+          "body": "This marks every open maintenance alert as done, on all machines."
+        },
+        "toast": {
+          "done": "Alerts for {{name}} cleared",
+          "clearedAll": "All alerts cleared",
+          "error": "Couldn't clear the alerts. Try again."
+        }
       }
     },
     "palette": {
@@ -368,7 +428,20 @@
     "endBeforeJoin": "Must be after the join date.",
     "dateFormat": "Enter a date like 14/03/2027.",
     "imageType": "Choose a JPG or PNG image.",
-    "invalid": "This value isn't valid."
+    "invalid": "This value isn't valid.",
+    "timeFormat": "Enter a 24-hour time like 17:30.",
+    "startInPast": "Pick a start time after now.",
+    "trainerBusy": "This trainer already has a class at {{time}}, less than an hour before.",
+    "membersRequired": "Add at least one member.",
+    "maxlength": "Use at most {{requiredLength}} characters.",
+    "machineName": "Start with an English letter; then letters, digits, spaces, _ or .",
+    "serialNumber": "Use English letters, digits, - _ or . only.",
+    "year": "Enter a year between 1980 and 2030.",
+    "price": "Enter a price of 0 or more.",
+    "endInPast": "Pick an end after now.",
+    "endBeforeStart": "The end must be after the start.",
+    "frequencyMin": "Enter at least 1 day.",
+    "frequencyTooLong": "That's longer than the time from start to end."
   },
   "members": {
     "page": {
@@ -626,6 +699,292 @@
       "deactivateBody": "They'll show as inactive until you activate them again.",
       "deleteTitle": "Delete {{name}}?",
       "deleteBody": "This removes the trainer for good. It can't be undone."
+    }
+  },
+  "classes": {
+    "page": {
+      "title": "Classes",
+      "weekCount": {
+        "one": "{{count}} class this week",
+        "two": "{{count}} classes this week",
+        "other": "{{count}} classes this week"
+      },
+      "todayCount": {
+        "one": "{{count}} today",
+        "two": "{{count}} today",
+        "other": "{{count}} today"
+      },
+      "dayCount": {
+        "one": "{{count}} class",
+        "two": "{{count}} classes",
+        "other": "{{count}} classes"
+      },
+      "doneCount": {
+        "one": "{{count}} done",
+        "two": "{{count}} done",
+        "other": "{{count}} done"
+      },
+      "weekLabel": "Days of the week",
+      "prevWeek": "Previous week",
+      "nextWeek": "Next week",
+      "today": "Today",
+      "trainerFilter": "Trainer: {{name}}",
+      "trainerAll": "All",
+      "trainerFilterLabel": "Filter by trainer",
+      "searchLabel": "Search classes",
+      "searchPlaceholder": "Class name"
+    },
+    "row": {
+      "done": "Done",
+      "upNext": "Up next",
+      "members": {
+        "one": "{{count}} member",
+        "two": "{{count}} members",
+        "other": "{{count}} members"
+      }
+    },
+    "actions": {
+      "new": "New class",
+      "add": "Add class",
+      "edit": "Edit class"
+    },
+    "empty": {
+      "dayTitle": "No classes on this day",
+      "dayBody": "Pick another day, or add a class.",
+      "noMatchTitle": "No classes match",
+      "noMatchBody": "Try another trainer or search."
+    },
+    "detail": {
+      "label": "Class details",
+      "eyebrow": "Class",
+      "trainer": "Trainer",
+      "unknownTrainer": "This class's trainer no longer exists.",
+      "participants": "Participants · {{count}}",
+      "showAll": "Show all",
+      "showLess": "Show less",
+      "noParticipants": "No members in this class."
+    },
+    "form": {
+      "addTitle": "New class",
+      "editTitle": "Edit class",
+      "when": "When",
+      "date": "Date",
+      "time": "Start time",
+      "timeHelp": "24-hour, e.g. 17:30",
+      "class": "Class",
+      "description": "Description",
+      "descriptionHelp": "The part before a colon is shown as the class name.",
+      "descriptionPlaceholder": "Pilates Core: bring a towel and water",
+      "trainer": "Trainer",
+      "trainerPlaceholder": "Choose a trainer",
+      "membersSection": "Members · {{count}}",
+      "members": "Add members",
+      "membersPlaceholder": "Add members by name or phone"
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "busyError": "The trainer already has a class less than an hour before this one.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again.",
+      "notFound": "That class wasn't found. It may have been deleted."
+    },
+    "confirm": {
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the class and its participant list. It can't be undone."
+    }
+  },
+  "machines": {
+    "page": {
+      "title": "Machines",
+      "count": {
+        "one": "{{count}} machine",
+        "two": "{{count}} machines",
+        "other": "{{count}} machines"
+      },
+      "attention": {
+        "one": "{{count}} needs attention",
+        "two": "{{count}} need attention",
+        "other": "{{count}} need attention"
+      },
+      "searchLabel": "Search machines",
+      "searchPlaceholder": "Name or serial number"
+    },
+    "filters": {
+      "label": "Filter by status",
+      "all": "All",
+      "attention": "Needs attention",
+      "ok": "OK"
+    },
+    "badge": {
+      "overdue": "Overdue",
+      "due": "Due today",
+      "next": "Next: {{date}}",
+      "none": "No jobs",
+      "noUpcoming": "No upcoming runs"
+    },
+    "actions": {
+      "add": "Add machine",
+      "scheduleJob": "Schedule job"
+    },
+    "empty": {
+      "title": "No machines yet",
+      "body": "Add your gym's machines to schedule cleaning and service.",
+      "noMatchTitle": "No machines match",
+      "noMatchBody": "Try another search or filter."
+    },
+    "detail": {
+      "label": "Machine details",
+      "eyebrow": "Machine",
+      "openAlerts": "Open alerts · {{count}}",
+      "doneFor": "Mark done: {{alert}}",
+      "jobs": "Maintenance jobs",
+      "openMaintenance": "Open Maintenance",
+      "noJobs": "No maintenance jobs for this machine.",
+      "serial": "Serial number",
+      "year": "Year",
+      "price": "Price",
+      "description": "Description"
+    },
+    "form": {
+      "addTitle": "Add machine",
+      "editTitle": "Edit machine",
+      "details": "Machine",
+      "name": "Name",
+      "namePlaceholder": "Treadmill Pro",
+      "serial": "Serial number",
+      "serialLinked": "Jobs and alerts are linked to the serial number. Changing it can unlink them.",
+      "description": "Description",
+      "purchase": "Purchase",
+      "year": "Production year",
+      "price": "Price (₪)",
+      "priceHelp": "Numbers only, e.g. 18500"
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "duplicateSerial": "A machine with serial number {{serial}} already exists.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again.",
+      "notFound": "That machine wasn't found. It may have been deleted.",
+      "alertDone": "Alert marked done"
+    },
+    "confirm": {
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This also deletes its maintenance jobs and alerts. It can't be undone."
+    }
+  },
+  "maintenance": {
+    "types": {
+      "clean": "Clean",
+      "service": "Service"
+    },
+    "row": {
+      "every": {
+        "one": "Every day",
+        "two": "Every {{count}} days",
+        "other": "Every {{count}} days"
+      },
+      "nextRun": "Next run {{when}}",
+      "paused": "Paused",
+      "noRunsLeft": "No runs left",
+      "ended": "Ended",
+      "endedOn": "Ended {{date}}",
+      "endsOn": "Ends {{date}}",
+      "daysAgo": {
+        "one": "Yesterday",
+        "two": "{{count}} days ago",
+        "other": "{{count}} days ago"
+      },
+      "alertOpen": "alert still open",
+      "alertSent": "Alert sent",
+      "dueNow": "Due now",
+      "inHours": {
+        "one": "In 1 hour",
+        "two": "In {{count}} hours",
+        "other": "In {{count}} hours"
+      },
+      "inDays": {
+        "one": "Tomorrow",
+        "two": "In {{count}} days",
+        "other": "In {{count}} days"
+      }
+    },
+    "page": {
+      "title": "Maintenance",
+      "summary": "{{jobs}} {{machines}}",
+      "jobs": {
+        "one": "{{count}} job",
+        "two": "{{count}} jobs",
+        "other": "{{count}} jobs"
+      },
+      "onMachines": {
+        "one": "on {{count}} machine",
+        "two": "on {{count}} machines",
+        "other": "on {{count}} machines"
+      },
+      "searchLabel": "Search jobs",
+      "searchPlaceholder": "Machine or serial number",
+      "listLabel": "Maintenance jobs"
+    },
+    "filters": {
+      "label": "Job type"
+    },
+    "groups": {
+      "overdue": "Overdue",
+      "today": "Today",
+      "week": "This week",
+      "later": "Later",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "schedule": "Schedule maintenance",
+      "add": "Schedule job",
+      "markDone": "Mark done",
+      "markDoneFor": "Mark the alerts for {{name}} done",
+      "editFor": "Edit job for {{name}}",
+      "deactivate": "Deactivate",
+      "activate": "Activate"
+    },
+    "empty": {
+      "title": "No maintenance jobs yet",
+      "body": "Schedule cleaning and service for your machines and get alerts when they're due.",
+      "noMatchTitle": "No jobs match",
+      "noMatchBody": "Try another type or search."
+    },
+    "form": {
+      "addTitle": "Schedule maintenance",
+      "editTitle": "Edit maintenance job",
+      "job": "Job",
+      "machine": "Machine",
+      "machinePlaceholder": "Choose a machine",
+      "type": "Job type",
+      "when": "When",
+      "startDate": "Start date",
+      "startTime": "Start time",
+      "endDate": "End date",
+      "endTime": "End time",
+      "every": "Every (days)",
+      "everyHelp": "How often the job repeats, e.g. 7 for weekly.",
+      "active": "Active",
+      "activeHelp": "Paused jobs send no alerts."
+    },
+    "toast": {
+      "added": "{{name}} scheduled",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "activated": "{{name}} is active again",
+      "deactivated": "{{name}} was paused",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again."
+    },
+    "confirm": {
+      "deactivateTitle": "Deactivate {{name}}?",
+      "deactivateBody": "It stops sending alerts until you activate it again.",
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the job for good. It can't be undone."
     }
   }
 }
