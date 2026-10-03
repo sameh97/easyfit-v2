@@ -99,13 +99,13 @@ The first redesign pass is done for **Login**, the **app shell** (sidebar and to
 | `/group-trainings` | `ClassesPageComponent` | gym user | `app-nav` | ✅ Phase 3 |
 | `/machines` | `MachinesPageComponent` | gym user | `app-nav` | ✅ Phase 3 |
 | `/scheduler` | `MaintenancePageComponent` (machine maintenance) | gym user | `app-nav` | ✅ Phase 3 |
-| `/products` | `ProductsPageComponent` (+ bills tab) | gym user | `app-nav` | ❌ (Phase 4) |
-| `/catalog` | `CatalogPageComponent` | gym user | `app-nav` | ❌ |
-| `/profile` | `UserProfileComponent` | gym user | `app-nav` | ❌ |
-| `/admin` | `AdminPageComponent` (gyms) | admin | `app-admin-nav` | ❌ |
-| `/users` | `UsersPageComponent` | admin | `app-admin-nav` | ❌ |
-| – | `RegisterPageComponent` | declared but **not routed** (Bootstrap form) | – | ❌ |
-| *(no route)* | 404 page | – | – | missing (a TODO in the code) |
+| `/products` | `ProductsPageComponent` (+ Sales tab) | gym user | `app-nav` | ✅ Phase 4 |
+| `/catalog` | `CatalogsPageComponent` | gym user | `app-nav` | ✅ Phase 4 |
+| `/profile` | `ProfilePageComponent` | gym user | `app-nav` | ✅ Phase 4 |
+| `/admin` | `GymsPageComponent` | admin | `app-nav` (admin mode) | ✅ Phase 4 |
+| `/users` | `UsersPageComponent` | admin | `app-nav` (admin mode) | ✅ Phase 4 |
+| – | `RegisterPageComponent` | deleted in Phase 4 | – | – |
+| `**` | `NotFoundComponent` | everyone | `app-nav` when signed in | ✅ Phase 4 |
 
 After login, admins go to `/admin` and everyone else goes to `/home`. The admin routes only have `AuthGuard`, **with no admin role check** (another TODO).
 
@@ -700,5 +700,16 @@ Branch `redesign/phase-4` (from `redesign/phase-1`, after Phase 3 is merged). Mo
 - `npm run check:studio` passes; screenshots at 1440, 1024 and 390 in English and Hebrew broadly match the P4 mockups.
 - Keyboard: panels and dialogs trap focus, close on Esc and return focus; every icon button has a translated `aria-label`.
 - **Report:** the new Hebrew strings, for the owner to review.
+
+#### Done in Phase 4 (decisions made while building it)
+- **Deleting a sale restores stock** (`DELETE /api/delete-bill`, same request and response): the product's quantity goes back up by the sale's quantity, in the same transaction.
+- **Sell panel** limits the quantity to the stock (the backend refuses more too); picking a member fills in the name and phone; the ID number is always typed (members have no ID field).
+- **Low stock** uses the dashboard's rule: ≤ 5 "N left" (warning), ≤ 2 in danger, 0 "Out of stock".
+- **Catalog sharing** is `wa.me` links per active member with a mobile number (opens WhatsApp with the message and link), plus Copy link / Copy message. The `wbm` endpoint is unused. The create response has no products, so the form passes on the ones it sent.
+- **Public catalog page** (`backend/services/easyfit-catalog-template.ts`): Studio look, Hebrew when the browser's Accept-Language prefers it, gym name and phone, expiry date; every value HTML-escaped (the old page inserted product text raw). Expired and not-found links get matching pages. The old `templates/` files are deleted; `node-html-parser` is now unused (remove in Phase 5).
+- **Profile edit never sends the password** (an empty one keeps the stored one; the JWT carries the stored hash, which would have been re-hashed) and keeps the token the server re-issues, so the new name survives a reload. A gym user can't read gym phone/address (`GET /api/gym` is admin-only), so the Gym card shows name, members and trainers.
+- **Admin mode of the shell**: admin nav (Gyms, Users), no gym card, AI, bell or profile; ⌘K has pages and Add gym / Add user only. `AdminGuard` sends gym users to `/home`. Gym-only loads (dashboard summary, alerts, maintenance status) are skipped for the admin.
+- **User passwords**: required for a new user; on edit optional, empty keeps the current one (the user list has no passwords, so the legacy edit forced a new password on every edit).
+- Deleted: the legacy Products, Catalog, Profile, Admin (incl. `app-admin-nav`) and Register components, and the unused Phase 1 chart components. `NavigationHelperService` and `ConfirmationDialogComponent` are now unused; they go with Material in Phase 5.
 
 **Phase 5+:** clean-up (§7.5), then the AI backend.

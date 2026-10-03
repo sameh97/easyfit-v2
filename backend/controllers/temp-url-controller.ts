@@ -7,6 +7,7 @@ import { TempUrlDto } from "../models/dto/temp-url-dto";
 import { Product } from "../models/product";
 import { TempUrl } from "../models/temp-url";
 import { TempUrlService } from "../services/temp-url-service";
+import { CatalogLang, CatalogPageView, catalogLanguage } from "../services/easyfit-catalog-template";
 
 @injectable()
 export class TempUrlController {
@@ -32,31 +33,26 @@ export class TempUrlController {
   };
 
   public getByUUID = async (req: any, res: any, next: any) => {
+    // The page members open: Hebrew when their browser prefers it, else English.
+    const lang: CatalogLang = catalogLanguage(req.headers["accept-language"]);
     try {
-      // get catalog by uuid 
-      const catalogUrlProducts: Product[] = await this.tempUrlService.getByUUID(
-        req.params.uuid
-      );
-
-      const htmlContent: string = await this.tempUrlService.buildCatalogHtml(
-        catalogUrlProducts
-      );
+      const view: CatalogPageView = await this.tempUrlService.getPublicCatalog(req.params.uuid);
+      const htmlContent: string = await this.tempUrlService.buildCatalogHtml(view, lang);
 
       res.type(".html");
       res.send(htmlContent);
     } catch (err) {
       if (err instanceof NotFound) {
         // if the catalog is not found, display not found html template
-        const htmlContent: string =
-          await this.tempUrlService.buildCatalogNotFoundHtml();
         res.type(".html");
-        res.send(htmlContent);
-      } else if (err instanceof OutOfDateError) {
-          // if the catalog is out of date display out of date html template
-        const htmlContent: string =
-          await this.tempUrlService.buildCatalogOutOfDateHtml();
+        res.send(await this.tempUrlService.buildCatalogNotFoundHtml(lang));
+        return;
+      }
+      if (err instanceof OutOfDateError) {
+        // if the catalog is out of date display out of date html template
         res.type(".html");
-        res.send(htmlContent);
+        res.send(await this.tempUrlService.buildCatalogOutOfDateHtml(lang));
+        return;
       }
       this.logger.error(`cannot get Temporary URL`, err);
       next(err);
