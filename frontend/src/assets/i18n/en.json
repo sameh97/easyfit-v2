@@ -854,7 +854,6 @@
       "name": "Name",
       "namePlaceholder": "Treadmill Pro",
       "serial": "Serial number",
-      "serialLinked": "Jobs and alerts are linked to the serial number. Changing it can unlink them.",
       "description": "Description",
       "purchase": "Purchase",
       "year": "Production year",

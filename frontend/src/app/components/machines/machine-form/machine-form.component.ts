@@ -16,8 +16,6 @@ import { ToastService } from 'src/app/shared/ui/overlay/toast.service';
 export interface MachineFormData {
   /** null = a new machine. */
   machine: Machine | null;
-  /** Edit: whether jobs or alerts are linked to the current serial number. */
-  hasMaintenance?: boolean;
 }
 
 /**
@@ -32,7 +30,6 @@ export interface MachineFormData {
 export class MachineFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Machine | null;
   readonly isEdit: boolean;
-  readonly hasMaintenance: boolean;
 
   readonly name: FormControl;
   readonly serialNumber: FormControl;
@@ -59,7 +56,6 @@ export class MachineFormComponent extends FormInputComponent implements CloseGua
     super();
     this.original = data?.machine ?? null;
     this.isEdit = !!this.original;
-    this.hasMaintenance = !!data?.hasMaintenance;
     const m: Machine | null = this.original;
 
     // Same validators as the legacy create/edit machine dialogs.
@@ -85,11 +81,6 @@ export class MachineFormComponent extends FormInputComponent implements CloseGua
 
   get title(): string {
     return this.language.t(this.isEdit ? 'machines.form.editTitle' : 'machines.form.addTitle');
-  }
-
-  /** On edit, warn that jobs and alerts follow the serial number. */
-  get serialHelp(): string | null {
-    return this.isEdit && this.hasMaintenance ? this.language.t('machines.form.serialLinked') : null;
   }
 
   isDirty(): boolean {

@@ -79,14 +79,45 @@ export class MachinesService {
     try {
       transaction = await this.appDBConnection.createTransaction();
 
+      const before: Machine | null = await Machine.findOne({
+        where: { id: machine.id },
+        attributes: ["id", "serialNumber", "gymId"],
+        transaction: transaction,
+      });
+
       const updatedMachine = await this.machinesRepository.update(
         machine,
         transaction
       );
 
+      // Jobs and alerts reference the machine by serial number: move them along with it.
+      let movedJobs: MachineScheduledJob[] = [];
+      if (before && before.serialNumber !== updatedMachine.serialNumber) {
+        movedJobs = await this.machineSchedulerRepository.moveToSerialNumber(
+          before.serialNumber,
+          updatedMachine.serialNumber,
+          before.gymId,
+          transaction
+        );
+        await this.appNotificationRepository.moveToTargetObjectId(
+          before.serialNumber,
+          updatedMachine.serialNumber,
+          before.gymId,
+          transaction
+        );
+      }
+
       await transaction.commit();
 
-      this.logger.info(`updated machine with name ${updatedMachine.name}`);
+      // Running timers hold the job as it was; re-arm them so new alerts carry the new serial.
+      for (const job of movedJobs) {
+        await this.jobScheduleManager.updateRunningJob(job);
+      }
+
+      this.logger.info(
+        `updated machine with name ${updatedMachine.name}` +
+          (movedJobs.length ? `, moved ${movedJobs.length} jobs to serial number ${updatedMachine.serialNumber}` : "")
+      );
 
       return updatedMachine;
     } catch (error) {
@@ -95,7 +126,7 @@ export class MachinesService {
       }
 
       this.logger.error(
-        `cannot update member, error ${AppUtils.getFullException(error)}`,
+        `cannot update machine, error ${AppUtils.getFullException(error)}`,
         error
       );
       throw error;

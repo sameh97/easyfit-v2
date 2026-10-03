@@ -115,17 +115,17 @@ export class ShellActionsService {
 
   /** Studio "Add machine" side panel. Emits the new machine, or undefined when cancelled. */
   addMachine(): Observable<Machine | undefined> {
-    return this.openMachineForm(null, false);
+    return this.openMachineForm(null);
   }
 
-  /** `hasMaintenance`: jobs or alerts are linked to its serial number (the form warns before it changes). */
-  editMachine(machine: Machine, hasMaintenance: boolean): Observable<Machine | undefined> {
-    return this.openMachineForm(machine, hasMaintenance);
+  /** Changing the serial number also moves the machine's jobs and alerts (backend). */
+  editMachine(machine: Machine): Observable<Machine | undefined> {
+    return this.openMachineForm(machine);
   }
 
-  private openMachineForm(machine: Machine | null, hasMaintenance: boolean): Observable<Machine | undefined> {
+  private openMachineForm(machine: Machine | null): Observable<Machine | undefined> {
     return this.sidePanel.open<MachineFormComponent, MachineFormData, Machine>(MachineFormComponent, {
-      data: { machine, hasMaintenance },
+      data: { machine },
       ariaLabel: this.language.t(machine ? 'machines.form.editTitle' : 'machines.form.addTitle'),
     }).afterClosed$;
   }
