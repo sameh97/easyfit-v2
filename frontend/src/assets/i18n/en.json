@@ -53,7 +53,8 @@
       "uploadPhoto": "Upload photo",
       "changePhoto": "Change photo",
       "removePhoto": "Remove",
-      "photoHelp": "JPG or PNG. Optional."
+      "photoHelp": "JPG or PNG. Optional.",
+      "pickTime": "Pick a time"
     },
     "table": {
       "showing": "Showing <strong>{{from}}–{{to}}</strong> of {{total}}",
@@ -64,6 +65,17 @@
       "page": "Page {{page}}",
       "errorTitle": "We couldn't load this list",
       "errorBody": "Check your connection and try again."
+    },
+    "multiSelect": {
+      "noResults": "No matches",
+      "typeToNarrow": "Type to see more",
+      "selected": "{{label}}: selected",
+      "remove": "Remove {{name}}",
+      "more": "+{{count}} more",
+      "less": "Show less"
+    },
+    "weekStrip": {
+      "today": "Today"
     }
   },
   "shell": {
@@ -368,7 +380,8 @@
     "endBeforeJoin": "Must be after the join date.",
     "dateFormat": "Enter a date like 14/03/2027.",
     "imageType": "Choose a JPG or PNG image.",
-    "invalid": "This value isn't valid."
+    "invalid": "This value isn't valid.",
+    "timeFormat": "Enter a 24-hour time like 17:30."
   },
   "members": {
     "page": {

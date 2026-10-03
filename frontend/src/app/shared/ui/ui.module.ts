@@ -34,6 +34,11 @@ import { DataTableComponent } from './data-table/data-table.component';
 import { CellDefDirective } from './data-table/data-table.types';
 import { MenuComponent } from './menu/menu.component';
 import { LanguageSwitchComponent } from './language-switch/language-switch.component';
+import { TimeFieldComponent } from './form/time-field.component';
+import { MultiSelectComponent } from './form/multi-select.component';
+import { SwitchComponent } from './form/switch.component';
+import { TabsComponent } from './tabs/tabs.component';
+import { WeekStripComponent } from './week-strip/week-strip.component';
 
 const COMPONENTS = [
   IconComponent,
@@ -64,6 +69,11 @@ const COMPONENTS = [
   CellDefDirective,
   MenuComponent,
   LanguageSwitchComponent,
+  TimeFieldComponent,
+  MultiSelectComponent,
+  SwitchComponent,
+  TabsComponent,
+  WeekStripComponent,
 ];
 
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */

@@ -16,6 +16,7 @@ export const DEFAULT_FIELD_MESSAGES: FieldMessages = {
   dateNotValid: 'validation.dateInFuture',
   dateShouldBeInPresent: 'validation.dateInFuture',
   matDatepickerParse: 'validation.dateFormat',
+  timeFormat: 'validation.timeFormat',
 };
 
 let nextFieldId: number = 0;

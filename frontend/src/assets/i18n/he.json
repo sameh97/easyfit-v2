@@ -53,7 +53,8 @@
       "uploadPhoto": "העלאת תמונה",
       "changePhoto": "החלפת תמונה",
       "removePhoto": "הסרה",
-      "photoHelp": "JPG או PNG. לא חובה."
+      "photoHelp": "JPG או PNG. לא חובה.",
+      "pickTime": "בחירת שעה"
     },
     "table": {
       "showing": "מציג <strong>{{from}}–{{to}}</strong> מתוך {{total}}",
@@ -64,6 +65,17 @@
       "page": "עמוד {{page}}",
       "errorTitle": "לא הצלחנו לטעון את הרשימה",
       "errorBody": "בדקו את החיבור ונסו שוב."
+    },
+    "multiSelect": {
+      "noResults": "לא נמצאו התאמות",
+      "typeToNarrow": "הקלידו כדי לראות עוד",
+      "selected": "{{label}}: נבחרו",
+      "remove": "הסרת {{name}}",
+      "more": "+{{count}} נוספים",
+      "less": "הצגת פחות"
+    },
+    "weekStrip": {
+      "today": "היום"
     }
   },
   "shell": {
@@ -368,7 +380,8 @@
     "endBeforeJoin": "התאריך חייב להיות אחרי תאריך ההצטרפות.",
     "dateFormat": "יש להזין תאריך כמו 14/03/2027.",
     "imageType": "יש לבחור תמונה בפורמט JPG או PNG.",
-    "invalid": "הערך אינו תקין."
+    "invalid": "הערך אינו תקין.",
+    "timeFormat": "יש להזין שעה בפורמט 24 שעות, למשל 17:30."
   },
   "members": {
     "page": {
