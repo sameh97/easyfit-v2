@@ -33,6 +33,7 @@ import { FormSectionComponent } from './form/form-section.component';
 import { DataTableComponent } from './data-table/data-table.component';
 import { CellDefDirective } from './data-table/data-table.types';
 import { MenuComponent } from './menu/menu.component';
+import { LanguageSwitchComponent } from './language-switch/language-switch.component';
 
 const COMPONENTS = [
   IconComponent,
@@ -62,6 +63,7 @@ const COMPONENTS = [
   DataTableComponent,
   CellDefDirective,
   MenuComponent,
+  LanguageSwitchComponent,
 ];
 
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */

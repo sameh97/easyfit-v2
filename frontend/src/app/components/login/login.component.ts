@@ -7,7 +7,6 @@ import { User } from 'src/app/model/user';
 import { AccessDeniedError } from 'src/app/exceptions/access-denied-error';
 import { NotFoundError } from 'src/app/exceptions/not-found-error';
 import { FormInputComponent } from 'src/app/shared/components/form-input/form-input.component';
-import { Lang, LANGUAGES, LANGUAGE_NAMES, LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +17,6 @@ export class LoginComponent extends FormInputComponent implements OnInit {
   showSpinner: boolean = false;
   hide: boolean = true;
   invalidLogin: boolean;
-  readonly languages: readonly Lang[] = LANGUAGES;
-  readonly languageNames: Record<Lang, string> = LANGUAGE_NAMES;
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -29,18 +26,9 @@ export class LoginComponent extends FormInputComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private fb: FormBuilder,
-    private language: LanguageService
+    private fb: FormBuilder
   ) {
     super();
-  }
-
-  get lang(): Lang {
-    return this.language.current;
-  }
-
-  setLanguage(lang: Lang): void {
-    this.language.use(lang);
   }
 
   ngOnInit(): void {
