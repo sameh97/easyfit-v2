@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { IconName } from '../icon/icons';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'dark' | 'ghost';
+export type ButtonVariant = 'primary' | 'secondary' | 'dark' | 'ghost' | 'danger';
 export type ButtonSize = 'sm' | 'md';
 
 const BASE =
@@ -13,6 +13,7 @@ const VARIANTS: Record<ButtonVariant, string> = {
   secondary: 'border border-solid border-line-strong bg-surface text-ink hover:bg-surface-subtle hover:text-ink',
   dark: 'border-0 bg-ink text-white hover:bg-ink-2 hover:text-white',
   ghost: 'border-0 bg-transparent text-ink-2 hover:bg-surface-muted hover:text-ink',
+  danger: 'border-0 bg-danger text-white hover:bg-opacity-90 hover:text-white',
 };
 
 const SIZES: Record<ButtonSize, string> = {

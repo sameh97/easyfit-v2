@@ -3,9 +3,9 @@ import { ComponentType } from '@angular/cdk/portal';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { NavigationHelperService } from '../shared/services/navigation-helper.service';
-import { AddMemberComponent } from '../components/members-components/add-member/add-member.component';
-import { UpdateMemberComponent } from '../components/members-components/update-member/update-member.component';
-import { AddTrainerComponent } from '../components/trainers-components/add-trainer/add-trainer.component';
+import { MemberFormComponent, MemberFormData } from '../components/members-components/member-form/member-form.component';
+import { TrainerFormComponent, TrainerFormData } from '../components/trainers-components/trainer-form/trainer-form.component';
+import { Trainer } from '../model/trainer';
 import { AddGroupTrainingComponent } from '../components/group-training-components/add-group-training/add-group-training.component';
 import { AddProductComponent } from '../components/products-components/add-product/add-product.component';
 import { SellProductComponent } from '../components/products-components/sell-product/sell-product.component';
@@ -13,20 +13,22 @@ import { AddScheduledJobPageComponent } from '../components/scheduler-components
 import { Member } from '../model/member';
 import { Product } from '../model/product';
 import { DashboardService } from './dashboard-service/dashboard.service';
+import { SidePanelService } from '../shared/ui/overlay/side-panel.service';
+import { LanguageService } from './language.service';
 
 /** Actions that open an existing create dialog without extra input. */
 export type CreateAction = 'add-member' | 'add-trainer' | 'new-class' | 'add-product' | 'schedule-maintenance';
 
-const CREATE_DIALOGS: Record<CreateAction, ComponentType<object>> = {
-  'add-member': AddMemberComponent,
-  'add-trainer': AddTrainerComponent,
+/** Legacy Material create dialogs; members and trainers use Studio side panels instead. */
+const CREATE_DIALOGS: Record<Exclude<CreateAction, 'add-member' | 'add-trainer'>, ComponentType<object>> = {
   'new-class': AddGroupTrainingComponent,
   'add-product': AddProductComponent,
   'schedule-maintenance': AddScheduledJobPageComponent,
 };
 
 /**
- * Opens the existing (Material) dialogs from the shell, palette and dashboard,
+ * Opens the create/edit UIs from the shell, palette and dashboard: Studio side panels for
+ * members and trainers, the existing (Material) dialogs for pages not redesigned yet,
  * with the same options the owning pages use. Each method emits once when the dialog closes,
  * after which the dashboard summary (KPIs, gym card counts) is refreshed.
  */
@@ -34,14 +36,54 @@ const CREATE_DIALOGS: Record<CreateAction, ComponentType<object>> = {
   providedIn: 'root',
 })
 export class ShellActionsService {
-  constructor(private navigationService: NavigationHelperService, private dashboardService: DashboardService) {}
+  constructor(
+    private navigationService: NavigationHelperService,
+    private dashboardService: DashboardService,
+    private sidePanel: SidePanelService,
+    private language: LanguageService
+  ) {}
 
   create(action: CreateAction): Observable<unknown> {
+    if (action === 'add-member') {
+      return this.addMember();
+    }
+    if (action === 'add-trainer') {
+      return this.addTrainer();
+    }
     return this.afterClose(this.navigationService.openDialog(CREATE_DIALOGS[action], null, null, true));
   }
 
-  editMember(member: Member): Observable<unknown> {
-    return this.afterClose(this.navigationService.openDialog(UpdateMemberComponent, null, member, true));
+  /** Studio "Add member" side panel. Emits the new member, or undefined when cancelled. */
+  addMember(): Observable<Member | undefined> {
+    return this.openMemberForm(null);
+  }
+
+  /** Studio "Edit member" side panel. Emits the saved member, or undefined when cancelled. */
+  editMember(member: Member): Observable<Member | undefined> {
+    return this.openMemberForm(member);
+  }
+
+  /** Studio "Add trainer" side panel. Emits the new trainer, or undefined when cancelled. */
+  addTrainer(): Observable<Trainer | undefined> {
+    return this.openTrainerForm(null);
+  }
+
+  editTrainer(trainer: Trainer): Observable<Trainer | undefined> {
+    return this.openTrainerForm(trainer);
+  }
+
+  private openTrainerForm(trainer: Trainer | null): Observable<Trainer | undefined> {
+    return this.sidePanel.open<TrainerFormComponent, TrainerFormData, Trainer>(TrainerFormComponent, {
+      data: { trainer },
+      ariaLabel: this.language.t(trainer ? 'trainers.form.editTitle' : 'trainers.form.addTitle'),
+    }).afterClosed$;
+  }
+
+  private openMemberForm(member: Member | null): Observable<Member | undefined> {
+    return this.sidePanel.open<MemberFormComponent, MemberFormData, Member>(MemberFormComponent, {
+      data: { member },
+      ariaLabel: this.language.t(member ? 'members.form.editTitle' : 'members.form.addTitle'),
+    }).afterClosed$;
   }
 
   sellProduct(product: Product): Observable<unknown> {

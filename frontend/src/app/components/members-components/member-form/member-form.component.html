@@ -1,0 +1,42 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="member-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-image-upload [currentUrl]="currentPhoto" (fileChange)="onPhoto($event)"></app-image-upload>
+
+        <app-form-section [title]="'members.form.personal' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="firstName" [label]="'members.form.firstName' | translate" [required]="true" autocomplete="off" name="firstName"></app-text-field>
+                <app-text-field [control]="lastName" [label]="'members.form.lastName' | translate" [required]="true" autocomplete="off" name="lastName"></app-text-field>
+            </div>
+            <app-text-field [control]="phone" type="tel" inputmode="tel" [ltr]="true" [label]="'members.form.phone' | translate" [required]="true" placeholder="05X-XXXXXXX" name="phone"></app-text-field>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="email" type="email" [ltr]="true" [label]="'members.form.email' | translate" [required]="true" placeholder="name@example.com" name="email"></app-text-field>
+                <app-date-field [control]="birthDay" [label]="'members.form.birthday' | translate" [required]="true"></app-date-field>
+            </div>
+            <app-segmented-field [control]="gender" [options]="genderOptions" [label]="'members.form.gender' | translate" [required]="true"></app-segmented-field>
+            <app-text-field [control]="address" [label]="'members.form.address' | translate" [required]="true" [placeholder]="'members.form.addressPlaceholder' | translate" name="address"></app-text-field>
+        </app-form-section>
+
+        <app-form-section [title]="'members.form.membership' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-date-field [control]="joinDate" [label]="'members.form.joinDate' | translate" [required]="true"></app-date-field>
+                <app-date-field [control]="endOfMembershipDate" [label]="'members.form.endDate' | translate" [required]="true" [messages]="endMessages"></app-date-field>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5" role="group" [attr.aria-label]="'members.form.setLength' | translate">
+                <span class="me-1 text-[13px] text-ink-3" aria-hidden="true">{{ 'members.form.setLength' | translate }}</span>
+                <button *ngFor="let months of lengths" type="button" (click)="setLength(months)" [attr.aria-pressed]="isLength(months)"
+                    class="h-[34px] rounded-full border border-solid px-3 text-[13px] font-bold transition-colors"
+                    [ngClass]="isLength(months) ? 'border-accent bg-accent-soft text-accent' : 'border-line-strong bg-surface text-ink hover:bg-surface-subtle'">
+                    {{ 'members.form.months' | plural: months | translate: { count: months } }}
+                </button>
+            </div>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="member-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'members.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

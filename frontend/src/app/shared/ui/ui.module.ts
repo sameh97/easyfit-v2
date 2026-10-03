@@ -12,6 +12,28 @@ import { SegmentedControlComponent } from './segmented-control/segmented-control
 import { EmptyStateComponent } from './empty-state/empty-state.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { I18nModule } from '../i18n/i18n.module';
+import { A11yModule } from '@angular/cdk/a11y';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
+import { ConfirmDialogComponent } from './overlay/confirm-dialog.component';
+import { PanelLayoutComponent } from './overlay/panel-layout.component';
+import { SidePanelComponent } from './overlay/side-panel.component';
+import { ToastHostComponent } from './overlay/toast-host.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FieldErrorComponent } from './form/field-error.component';
+import { TextFieldComponent } from './form/text-field.component';
+import { TextAreaComponent } from './form/text-area.component';
+import { SelectComponent } from './form/select.component';
+import { DateFieldComponent } from './form/date-field.component';
+import { SegmentedFieldComponent } from './form/segmented-field.component';
+import { ImageUploadComponent } from './form/image-upload.component';
+import { FormSectionComponent } from './form/form-section.component';
+import { DataTableComponent } from './data-table/data-table.component';
+import { CellDefDirective } from './data-table/data-table.types';
+import { MenuComponent } from './menu/menu.component';
+import { LanguageSwitchComponent } from './language-switch/language-switch.component';
 
 const COMPONENTS = [
   IconComponent,
@@ -26,12 +48,28 @@ const COMPONENTS = [
   EmptyStateComponent,
   SkeletonComponent,
   BarChartComponent,
+  ConfirmDialogComponent,
+  PanelLayoutComponent,
+  SidePanelComponent,
+  ToastHostComponent,
+  FieldErrorComponent,
+  TextFieldComponent,
+  TextAreaComponent,
+  SelectComponent,
+  DateFieldComponent,
+  SegmentedFieldComponent,
+  ImageUploadComponent,
+  FormSectionComponent,
+  DataTableComponent,
+  CellDefDirective,
+  MenuComponent,
+  LanguageSwitchComponent,
 ];
 
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */
 @NgModule({
   declarations: COMPONENTS,
-  imports: [CommonModule],
-  exports: COMPONENTS,
+  imports: [CommonModule, I18nModule, A11yModule, OverlayModule, PortalModule, ReactiveFormsModule, MatDatepickerModule],
+  exports: [...COMPONENTS, I18nModule],
 })
 export class UiModule {}

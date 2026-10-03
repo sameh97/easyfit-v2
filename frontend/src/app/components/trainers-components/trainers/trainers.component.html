@@ -1,38 +1,86 @@
 <app-nav>
-    <div class="flex-container">
-        <div>
-            <div class="flex-container-header">
-                <div class="header-title">
-                    <h1 class="mat-h1">Trainers Page</h1>
-                </div>
+    <div class="studio flex flex-col gap-5">
+        <app-page-header [title]="'trainers.page.title' | translate" [subtitle]="state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'trainers.actions.add' | translate }}</button>
+            </ng-container>
+        </app-page-header>
 
-                <div class="header-actions"></div>
+        <div class="flex items-center">
+            <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[280px]">
+                <app-icon name="search" [size]="17"></app-icon>
+                <span class="sr-only">{{ 'trainers.page.searchLabel' | translate }}</span>
+                <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'members.filters.searchPlaceholder' | translate"
+                    class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+            </label>
+        </div>
 
+        <div class="flex items-start gap-4">
+            <div class="min-w-0 flex-1">
+                <!-- Error -->
+                <app-card *ngIf="state === 'error'">
+                    <app-empty-state icon="alert-circle" tone="danger" [title]="'common.table.errorTitle' | translate" [message]="'common.table.errorBody' | translate">
+                        <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="load()">{{ 'common.actions.retry' | translate }}</button>
+                    </app-empty-state>
+                </app-card>
+
+                <!-- Loading -->
+                <ul *ngIf="state === 'loading'" class="grid grid-cols-1 gap-4 sm:grid-cols-2" [ngClass]="narrow ? '' : 'xl:grid-cols-3'" aria-busy="true">
+                    <li *ngFor="let i of skeletonCards">
+                        <app-card padding="sm" class="flex flex-col gap-4">
+                            <div class="flex items-center gap-3"><app-skeleton shape="circle" width="56px" height="56px"></app-skeleton><div class="flex flex-1 flex-col gap-2"><app-skeleton width="60%" height="14px"></app-skeleton><app-skeleton width="40%" height="12px"></app-skeleton></div></div>
+                            <app-skeleton width="80%" height="12px"></app-skeleton>
+                        </app-card>
+                    </li>
+                </ul>
+
+                <!-- Empty states -->
+                <app-card *ngIf="state === 'ready' && !filtered.length">
+                    <app-empty-state *ngIf="!trainers.length; else noMatches" icon="user-check" tone="accent" [title]="'trainers.empty.title' | translate" [message]="'trainers.empty.body' | translate">
+                        <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'trainers.actions.add' | translate }}</button>
+                    </app-empty-state>
+                    <ng-template #noMatches>
+                        <app-empty-state icon="search" [title]="'trainers.empty.noMatchTitle' | translate" [message]="'members.empty.noMatchBody' | translate"></app-empty-state>
+                    </ng-template>
+                </app-card>
+
+                <!-- Cards -->
+                <ul *ngIf="state === 'ready' && filtered.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2" [ngClass]="narrow ? '' : 'xl:grid-cols-3'" [attr.aria-label]="'trainers.page.title' | translate">
+                    <li *ngFor="let trainer of filtered; trackBy: trackById">
+                        <article (click)="select(trainer)"
+                            class="flex h-full cursor-pointer flex-col gap-3.5 rounded-card bg-surface p-5 shadow-card transition-shadow hover:shadow-overlay"
+                            [ngClass]="trainer.id === selectedId ? 'ring-2 ring-accent' : ''">
+                            <div class="flex items-center gap-3">
+                                <app-avatar [name]="name(trainer)" [id]="trainer.id" [imageUrl]="photo(trainer)" [size]="56"></app-avatar>
+                                <div class="flex min-w-0 flex-grow flex-col">
+                                    <button type="button" class="truncate border-0 bg-transparent p-0 text-start text-base font-extrabold text-ink hover:text-accent" dir="auto"
+                                        [attr.aria-current]="trainer.id === selectedId ? 'true' : null" (click)="$event.stopPropagation(); select(trainer)">{{ name(trainer) }}</button>
+                                    <span class="truncate text-[13px] text-ink-3"><bdi dir="ltr">{{ trainer.phone }}</bdi></span>
+                                </div>
+                                <button type="button" appIconButton icon="more-horizontal" aria-haspopup="menu" aria-expanded="false"
+                                    [label]="'members.actions.moreFor' | translate: { name: name(trainer) }" (click)="openCardMenu($event, trainer)"></button>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <app-status-pill [status]="trainer.isActive ? 'active' : 'inactive'"></app-status-pill>
+                                <span class="flex items-center gap-1.5 text-[13px] text-ink-3">
+                                    <app-icon name="award" [size]="14"></app-icon>
+                                    {{ 'trainers.card.certified' | translate: { date: (trainer.certificationDate | localDate) } }}
+                                </span>
+                            </div>
+                            <p class="flex items-start gap-1.5 border-t border-solid border-line-soft pt-3 text-[13px] text-ink-2">
+                                <app-icon name="calendar" [size]="14" class="mt-0.5 text-ink-4"></app-icon>
+                                <span *ngIf="scheduleState === 'ready'; else scheduleLoading" class="min-w-0">{{ classesLine(trainer) }}</span>
+                                <ng-template #scheduleLoading><app-skeleton width="70%" height="12px" class="mt-1"></app-skeleton></ng-template>
+                            </p>
+                        </article>
+                    </li>
+                </ul>
             </div>
 
+            <app-side-panel [open]="!!selected" [label]="'trainers.detail.label' | translate" [eyebrow]="'trainers.detail.eyebrow' | translate" (closed)="closeDetail()">
+                <app-trainer-detail *ngIf="selected as trainer" [trainer]="trainer" [schedule]="scheduleOf(trainer)" [scheduleState]="scheduleState"
+                    (deleted)="closeDetail()" (retrySchedule)="loadSchedule()"></app-trainer-detail>
+            </app-side-panel>
         </div>
-        <div>
-            <mat-card class="dashboard-card">
-                <mat-card-header>
-                    <mat-card-title>
-                        <h2>All Trainers</h2>
-                        <button class="add-button" type="button" (click)="openCreateTrainerDialog()" mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon">
-              <mat-icon>add</mat-icon>
-            </button>
-
-                        <mat-menu #menu="matMenu" xPosition="before">
-                            <button mat-menu-item>Expand</button>
-                            <button mat-menu-item>Remove</button>
-                        </mat-menu>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="dashboard-card-content">
-
-                    <app-trainers-table></app-trainers-table>
-                </mat-card-content>
-            </mat-card>
-        </div>
-
     </div>
-
 </app-nav>

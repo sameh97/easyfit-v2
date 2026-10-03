@@ -9,11 +9,17 @@ import { ProductsService } from 'src/app/services/products-service/products.serv
 import { CreateAction, ShellActionsService } from 'src/app/services/shell-actions.service';
 import { PaletteMode, ShellStateService } from 'src/app/services/shell-state.service';
 import { IconName } from 'src/app/shared/ui/icon/icons';
-import { productCategoryLabel } from 'src/app/common/product-categories';
+import { productCategoryKey } from 'src/app/common/product-categories';
+import { Lang, LanguageService } from 'src/app/services/language.service';
 import { AppUtil } from 'src/app/common/app-util';
 import { NAV_GROUPS, NavItem, PROFILE_PAGE } from '../shell-nav';
+import { realPhotoUrl } from 'src/app/shared/ui/avatar/photo';
+import { memberStatus as deriveStatus } from '../../members-components/member-status';
 
 type PaletteGroupKey = 'ask-ai' | 'members' | 'products' | 'pages' | 'actions';
+
+/** How the trailing hint is drawn. */
+type MetaTone = 'muted' | 'warning' | 'pill';
 
 interface PaletteItem {
   id: string;
@@ -21,8 +27,11 @@ interface PaletteItem {
   icon: IconName;
   /** Secondary text after the label (phone, price…). */
   detail?: string;
-  /** Right-aligned hint (status, shortcut…). */
+  /** The detail is a phone number or code and must read left to right (§7.8). */
+  detailLtr?: boolean;
+  /** Trailing hint at the inline end (status, shortcut…). */
   meta?: string;
+  metaTone?: MetaTone;
   avatar?: { name: string; id: number; imageUrl: string | null };
   disabled?: boolean;
   run?: () => void;
@@ -37,19 +46,20 @@ interface PaletteGroup {
 }
 
 interface ActionDefinition {
-  label: string;
+  labelKey: string;
   icon: IconName;
+  /** English search words; the translated label is matched too. */
   keywords: string;
   action: CreateAction | 'sell-product';
 }
 
 const ACTIONS: ActionDefinition[] = [
-  { label: 'Add member', icon: 'user-plus', keywords: 'new member create join', action: 'add-member' },
-  { label: 'Sell product', icon: 'shopping-bag', keywords: 'sale bill shop pos', action: 'sell-product' },
-  { label: 'New class', icon: 'calendar-plus', keywords: 'group training create class', action: 'new-class' },
-  { label: 'Add trainer', icon: 'user-check', keywords: 'new trainer coach create', action: 'add-trainer' },
-  { label: 'Add product', icon: 'package', keywords: 'new product stock create', action: 'add-product' },
-  { label: 'Schedule maintenance', icon: 'wrench', keywords: 'clean service machine job', action: 'schedule-maintenance' },
+  { labelKey: 'shell.palette.actions.addMember', icon: 'user-plus', keywords: 'new member create join', action: 'add-member' },
+  { labelKey: 'shell.palette.actions.sellProduct', icon: 'shopping-bag', keywords: 'sale bill shop pos', action: 'sell-product' },
+  { labelKey: 'shell.palette.actions.newClass', icon: 'calendar-plus', keywords: 'group training create class', action: 'new-class' },
+  { labelKey: 'shell.palette.actions.addTrainer', icon: 'user-check', keywords: 'new trainer coach create', action: 'add-trainer' },
+  { labelKey: 'shell.palette.actions.addProduct', icon: 'package', keywords: 'new product stock create', action: 'add-product' },
+  { labelKey: 'shell.palette.actions.scheduleMaintenance', icon: 'wrench', keywords: 'clean service machine job', action: 'schedule-maintenance' },
 ];
 
 const MAX_MEMBER_RESULTS = 6;
@@ -83,7 +93,8 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     private router: Router,
     private membersService: MembersService,
     private productsService: ProductsService,
-    private actions: ShellActionsService
+    private actions: ShellActionsService,
+    private language: LanguageService
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +108,17 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.shell.paletteOpen$.subscribe((open: boolean) => (open ? this.onOpen() : this.onClose()))
     );
+    this.subscriptions.push(
+      this.language.lang$.subscribe((_lang: Lang) => {
+        if (this.open) {
+          this.rebuild();
+        }
+      })
+    );
+  }
+
+  private t(key: string, params?: Record<string, string | number>): string {
+    return this.language.t(key, params);
   }
 
   // ---- Open / close ------------------------------------------------------
@@ -191,13 +213,14 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     const groups: PaletteGroup[] = [
       {
         key: 'ask-ai',
-        label: 'Ask AI',
+        label: this.t('shell.palette.groups.askAi'),
         items: [
           {
             id: 'ask-ai',
-            label: q ? `Ask EasyFit AI: “${this.query.trim()}”` : 'Ask EasyFit AI anything about your gym',
+            label: q ? this.t('shell.palette.askAiQuery', { query: this.query.trim() }) : this.t('shell.palette.askAiEmpty'),
             icon: 'sparkle',
-            meta: 'Coming soon',
+            meta: this.t('shell.palette.comingSoon'),
+            metaTone: 'pill',
             disabled: true,
           },
         ],
@@ -209,42 +232,45 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     }
 
     const pages: PaletteItem[] = this.allPages()
-      .filter((page: NavItem) => !q || page.label.toLowerCase().includes(q))
-      .map((page: NavItem) => ({
+      .map((page: NavItem) => ({ page, label: this.t(page.labelKey) }))
+      .filter(({ label }: { label: string }) => !q || label.toLowerCase().includes(q))
+      .map(({ page, label }: { page: NavItem; label: string }) => ({
         id: `page:${page.path}`,
-        label: page.label,
+        label,
         icon: page.icon,
-        meta: this.router.isActive(page.path, false) ? 'Current page' : undefined,
+        meta: this.router.isActive(page.path, false) ? this.t('shell.palette.currentPage') : undefined,
+        metaTone: 'muted' as MetaTone,
         run: () => this.goTo(page.path),
       }));
     if (pages.length) {
-      groups.push({ key: 'pages', label: 'Pages', items: pages });
+      groups.push({ key: 'pages', label: this.t('shell.palette.groups.pages'), items: pages });
     }
 
     const actions: PaletteItem[] = ACTIONS.filter(
-      (action: ActionDefinition) => !q || `${action.label} ${action.keywords}`.toLowerCase().includes(q)
+      (action: ActionDefinition) => !q || `${this.t(action.labelKey)} ${action.keywords}`.toLowerCase().includes(q)
     ).map((action: ActionDefinition) => ({
       id: `action:${action.action}`,
-      label: action.label,
+      label: this.t(action.labelKey),
       icon: action.icon,
-      meta: action.action === 'sell-product' ? 'Pick a product' : undefined,
+      meta: action.action === 'sell-product' ? this.t('shell.palette.pickProduct') : undefined,
+      metaTone: 'muted' as MetaTone,
       run: () => this.runAction(action.action),
     }));
     if (actions.length) {
-      groups.push({ key: 'actions', label: 'Actions', items: actions });
+      groups.push({ key: 'actions', label: this.t('shell.palette.groups.actions'), items: actions });
     }
 
     return groups;
   }
 
   private buildMembersGroup(q: string): PaletteGroup {
-    const group: PaletteGroup = { key: 'members', label: 'Members', items: [] };
+    const group: PaletteGroup = { key: 'members', label: this.t('shell.palette.groups.members'), items: [] };
     if (this.membersError) {
-      group.note = 'Could not load members.';
+      group.note = this.t('shell.palette.membersError');
       return group;
     }
     if (this.members === null) {
-      group.note = 'Loading members…';
+      group.note = this.t('shell.palette.membersLoading');
       return group;
     }
     const digits: string = q.replace(/\D/g, '');
@@ -263,23 +289,25 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
         id: `member:${member.id}`,
         label: `${member.firstName} ${member.lastName}`,
         detail: member.phone,
+        detailLtr: true,
         icon: 'user' as IconName,
-        avatar: { name: `${member.firstName} ${member.lastName}`, id: member.id, imageUrl: member.imageURL || null },
-        meta: this.memberStatus(member),
-        run: () => this.editMember(member),
+        avatar: { name: `${member.firstName} ${member.lastName}`, id: member.id, imageUrl: realPhotoUrl(member.imageURL) },
+        meta: this.t(`common.status.${this.memberStatus(member)}`),
+        metaTone: (this.memberStatus(member) === 'expiring' ? 'warning' : 'muted') as MetaTone,
+        run: () => this.openMember(member),
       }));
     if (!group.items.length) {
-      group.note = 'No members match.';
+      group.note = this.t('shell.palette.membersNone');
     }
     return group;
   }
 
   private buildSellGroups(q: string): PaletteGroup[] {
-    const group: PaletteGroup = { key: 'products', label: 'Products', items: [] };
+    const group: PaletteGroup = { key: 'products', label: this.t('shell.palette.groups.products'), items: [] };
     if (this.productsError) {
-      group.note = 'Could not load products.';
+      group.note = this.t('shell.palette.productsError');
     } else if (this.products === null) {
-      group.note = 'Loading products…';
+      group.note = this.t('shell.palette.productsLoading');
     } else {
       group.items = this.products
         .filter(
@@ -290,14 +318,18 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
         .map((product: Product) => ({
           id: `product:${product.id}`,
           label: product.name,
-          detail: `${productCategoryLabel(product.categoryID)} · ₪${product.price.toLocaleString('en-US')}`,
+          detail: `${this.t(productCategoryKey(product.categoryID))} · ₪${product.price.toLocaleString('en-US')}`,
           icon: 'package' as IconName,
-          meta: product.quantity > 0 ? `${product.quantity} in stock` : 'Out of stock',
+          meta:
+            product.quantity > 0
+              ? this.language.tCount('shell.palette.inStock', product.quantity)
+              : this.t('shell.palette.outOfStock'),
+          metaTone: 'muted' as MetaTone,
           disabled: product.quantity <= 0,
           run: () => this.sell(product),
         }));
       if (!group.items.length) {
-        group.note = this.products.length ? 'No products match.' : 'No products yet. Add one first.';
+        group.note = this.products.length ? this.t('shell.palette.productsNone') : this.t('shell.palette.productsEmpty');
       }
     }
     return [group];
@@ -308,16 +340,7 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
   }
 
   private memberStatus(member: Member): string {
-    if (!member.isActive) {
-      return 'Inactive';
-    }
-    if (member.endOfMembershipDate) {
-      const days: number = (new Date(member.endOfMembershipDate).getTime() - Date.now()) / 86400000;
-      if (days >= 0 && days <= 7) {
-        return 'Expiring';
-      }
-    }
-    return 'Active';
+    return deriveStatus(member);
   }
 
   // ---- Running items -----------------------------------------------------
@@ -366,9 +389,10 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     this.actions.create(action).pipe(take(1)).subscribe();
   }
 
-  private editMember(member: Member): void {
+  /** Opens the member's detail panel on the Members page (deep link). */
+  private openMember(member: Member): void {
     this.closeForHandoff();
-    this.actions.editMember(member).pipe(take(1)).subscribe();
+    this.router.navigate(['/members'], { queryParams: { member: member.id } });
   }
 
   private sell(product: Product): void {

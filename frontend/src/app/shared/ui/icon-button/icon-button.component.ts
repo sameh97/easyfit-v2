@@ -1,17 +1,20 @@
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { IconName } from '../icon/icons';
 
-export type IconButtonVariant = 'ghost' | 'outline';
-export type IconButtonSize = 'sm' | 'md';
+export type IconButtonVariant = 'ghost' | 'outline' | 'soft';
+export type IconButtonSize = 'sm' | 'md' | 'lg';
 
 const VARIANTS: Record<IconButtonVariant, string> = {
   ghost: 'border-0 bg-transparent text-ink-3 hover:bg-surface-muted hover:text-ink',
   outline: 'border border-solid border-line bg-surface text-ink hover:bg-surface-subtle',
+  soft: 'border-0 bg-surface-muted text-ink hover:bg-line',
 };
 
 const SIZES: Record<IconButtonSize, string> = {
   sm: 'h-9 w-9 rounded-[10px]',
   md: 'h-11 w-11 rounded-full',
+  /** Panel close buttons. */
+  lg: 'h-10 w-10 rounded-full',
 };
 
 /** Icon-only button. `label` is required and becomes the aria-label. */

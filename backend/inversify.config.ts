@@ -64,6 +64,8 @@ import { DashboardRepository } from "./repositories/dashboard-repository";
 import { DashboardService } from "./services/dashboard-service";
 import { DashboardController } from "./controllers/dashboard-controller";
 import { DashboardApi } from "./routes/dashboard.api";
+import { MemberActivityRepository } from "./repositories/member-activity-repository";
+import { MemberActivityService } from "./services/member-activity-service";
 // TODO: improve the container, it should use types
 
 const container = new Container({ defaultScope: "Singleton" });
@@ -139,5 +141,7 @@ container.bind<DashboardRepository>(DashboardRepository).toSelf();
 container.bind<DashboardService>(DashboardService).toSelf();
 container.bind<DashboardController>(DashboardController).toSelf();
 container.bind<DashboardApi>(DashboardApi).toSelf();
+container.bind<MemberActivityRepository>(MemberActivityRepository).toSelf();
+container.bind<MemberActivityService>(MemberActivityService).toSelf();
 
 export default container;

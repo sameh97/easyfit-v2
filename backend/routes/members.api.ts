@@ -28,6 +28,8 @@ export class MembersApi implements AppRoute {
       this.membersController.getAddedMembersByMonth
     );
     this.router.get("/api/genders", verifyToken, this.membersController.getGendersNumber);
+    // Read-only: the member's group trainings and purchases (redesign.md §7.10, Phase 2).
+    this.router.get("/api/members/:id/activity", verifyToken, this.membersController.getActivity);
     this.router.get("/api/members-phones", verifyToken, this.membersController.getAllPhones);
     this.router.post("/api/add-member", verifyToken ,this.membersController.createMember);
     this.router.put("/api/update-member", verifyToken,this.membersController.update);

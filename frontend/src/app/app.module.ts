@@ -1,8 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LanguageService } from './services/language.service';
+import { I18nModule } from './shared/i18n/i18n.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 
@@ -10,10 +14,8 @@ import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
 import { RegisterPageComponent } from './components/register-page/register-page.component';
 
 import { SearchfilterPipe } from './searchfilter.pipe';
-import { AddMemberComponent } from './components/members-components/add-member/add-member.component';
-import { UpdateMemberComponent } from './components/members-components/update-member/update-member.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogConfig, MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { SharedModule } from './shared/shared.module';
 import { UiModule } from './shared/ui/ui.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -41,7 +43,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MembersChartComponent } from './components/members-chart/members-chart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MembersPageComponent } from './components/members-components/members-page/members-page.component';
-import { MembersTableComponent } from './components/members-components/members-table/members-table.component';
+import { MemberDetailComponent } from './components/members-components/member-detail/member-detail.component';
+import { MemberFormComponent } from './components/members-components/member-form/member-form.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatRadioModule } from '@angular/material/radio';
 import { SchedulerPageComponent } from './components/scheduler-components/scheduler-page/scheduler-page.component';
@@ -78,10 +81,9 @@ import { AddUserComponent } from './components/registration-components/users-com
 import { UpdateUserComponent } from './components/registration-components/users-components/update-user/update-user.component';
 import { NotificationsDropdownComponent } from './components/notifications/notifications-dropdown.component';
 import { MatBadgeModule } from '@angular/material/badge';
-import { AddTrainerComponent } from './components/trainers-components/add-trainer/add-trainer.component';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
-import { UpdateTrainerComponent } from './components/trainers-components/update-trainer/update-trainer.component';
-import { TrainersTableComponent } from './components/trainers-components/trainers-table/trainers-table.component';
+import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
+import { TrainerFormComponent } from './components/trainers-components/trainer-form/trainer-form.component';
 import { DoughnutChartComponent } from './components/members-components/doughnut-chart/doughnut-chart.component';
 import { DisplayTrainingsComponent } from './components/group-training-components/display-trainings/display-trainings.component';
 import { AddGroupTrainingComponent } from './components/group-training-components/add-group-training/add-group-training.component';
@@ -90,18 +92,30 @@ import { ShowSingleTrainingComponent } from './components/group-training-compone
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { UserProfileComponent } from './components/profile-components/user-profile/user-profile.component';
 import { EditProfileUserComponent } from './components/profile-components/edit-profile-user/edit-profile-user.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarConfig, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { ProductsChartComponent } from './components/products-components/products-chart/products-chart.component';
 import { IncomeChartComponent } from './components/products-components/income-chart/income-chart.component';
 
+export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+/** Load the saved language before the first render, so nothing flashes in the wrong language. */
+export function initLanguage(language: LanguageService): () => Promise<void> {
+  return () => language.init();
+}
+
+// `data: { studio: true }` marks redesigned pages: they follow the UI language and direction.
+// Every other page is pinned to English, left to right, until its phase (redesign.md §7.8).
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent, data: { studio: true } },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { studio: true } },
   {
     path: 'members',
     component: MembersPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   { path: 'machines', component: MachinesComponent, canActivate: [AuthGuard] },
   {
@@ -113,6 +127,7 @@ const routes: Routes = [
     path: 'trainers',
     component: TrainersPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'scheduler',
@@ -154,8 +169,6 @@ const routes: Routes = [
     LoginComponent,
     RegisterPageComponent,
     SearchfilterPipe,
-    AddMemberComponent,
-    UpdateMemberComponent,
     MachinesComponent,
     CreateMachineComponent,
     EditMachineComponent,
@@ -166,7 +179,8 @@ const routes: Routes = [
     HomeComponent,
     MembersChartComponent,
     MembersPageComponent,
-    MembersTableComponent,
+    MemberDetailComponent,
+    MemberFormComponent,
     SchedulerPageComponent,
     MachineDetailsComponent,
     UpdateScheduledJobComponent,
@@ -188,10 +202,9 @@ const routes: Routes = [
     AddUserComponent,
     UpdateUserComponent,
     NotificationsDropdownComponent,
-    AddTrainerComponent,
     TrainersPageComponent,
-    UpdateTrainerComponent,
-    TrainersTableComponent,
+    TrainerDetailComponent,
+    TrainerFormComponent,
     DoughnutChartComponent,
     DisplayTrainingsComponent,
     AddGroupTrainingComponent,
@@ -209,6 +222,11 @@ const routes: Routes = [
     ReactiveFormsModule,
     SharedModule,
     UiModule,
+    I18nModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
+    }),
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MatDialogModule,
@@ -244,7 +262,13 @@ const routes: Routes = [
     MatSnackBarModule,
   ],
 
-  providers: [],
+  providers: [
+    { provide: APP_INITIALIZER, useFactory: initLanguage, deps: [LanguageService], multi: true },
+    // Legacy Material dialogs and snackbars attach to <body>, outside the page's dir="ltr" wrapper;
+    // pin them to LTR so they don't inherit <html dir="rtl"> in Hebrew. Studio overlays set their own.
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { ...new MatDialogConfig(), direction: 'ltr' } },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { ...new MatSnackBarConfig(), direction: 'ltr' } },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

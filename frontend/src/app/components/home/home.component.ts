@@ -1,8 +1,9 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AppUtil } from 'src/app/common/app-util';
-import { productCategoryLabel } from 'src/app/common/product-categories';
+import { productCategoryKey } from 'src/app/common/product-categories';
 import {
   DashboardClass,
   DashboardLowStockProduct,
@@ -15,6 +16,8 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 import { DashboardService } from 'src/app/services/dashboard-service/dashboard.service';
 import { ShellActionsService } from 'src/app/services/shell-actions.service';
 import { ShellStateService } from 'src/app/services/shell-state.service';
+import { Lang, LanguageService } from 'src/app/services/language.service';
+import { realPhotoUrl } from 'src/app/shared/ui/avatar/photo';
 import { BarDatum } from 'src/app/shared/ui/bar-chart/bar-chart.component';
 import { PillStatus } from 'src/app/shared/ui/status-pill/status-pill.component';
 import { SegmentOption } from 'src/app/shared/ui/segmented-control/segmented-control.component';
@@ -48,7 +51,9 @@ interface ExpiringRow {
 interface MaintenanceRow {
   id: number;
   name: string;
-  detail: string;
+  jobType: string;
+  /** Always shown left to right (§7.8). */
+  serialNumber: string;
   due: string;
   urgent: boolean;
 }
@@ -61,27 +66,7 @@ interface StockRow {
   critical: boolean;
 }
 
-const MONTHS_SHORT: readonly string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const MONTHS_LONG: readonly string[] = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
-
-const METRIC_COPY: Record<ChartMetric, { title: string; unit: string; question: string }> = {
-  income: { title: 'Income', unit: 'Monthly', question: 'Explain my monthly income this year' },
-  members: { title: 'New members', unit: 'Joined per month', question: 'Explain how many members joined each month this year' },
-  products: { title: 'Products sold', unit: 'Units per month', question: 'Explain my product sales this year' },
-};
+const METRICS: readonly ChartMetric[] = ['income', 'members', 'products'];
 
 const DAY_MS = 86400000;
 
@@ -98,11 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   readonly today: Date = new Date();
 
   metric: ChartMetric = 'income';
-  readonly metricOptions: SegmentOption[] = [
-    { value: 'income', label: 'Income' },
-    { value: 'members', label: 'Members' },
-    { value: 'products', label: 'Products sold' },
-  ];
+  metricOptions: SegmentOption[] = [];
 
   // View models, rebuilt whenever a summary arrives.
   kpis: Kpi[] = [];
@@ -118,8 +99,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     private authService: AuthenticationService,
     private dashboardService: DashboardService,
     private actions: ShellActionsService,
-    private shell: ShellStateService
+    private shell: ShellStateService,
+    private language: LanguageService,
+    private router: Router
   ) {}
+
+  private t(key: string, params?: Record<string, string | number>): string {
+    return this.language.t(key, params);
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -135,6 +122,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
     );
     this.subscriptions.push(this.shell.aiPanelOpen$.subscribe((open: boolean) => (this.aiPanelOpen = open)));
+    // Everything below is built in code, so rebuild it in the new language.
+    this.subscriptions.push(
+      this.language.lang$.subscribe((_lang: Lang) => {
+        this.metricOptions = METRICS.map((metric: ChartMetric) => ({
+          value: metric,
+          label: this.t(`dashboard.chart.${metric}.tab`),
+        }));
+        if (this.summary) {
+          this.apply(this.summary);
+        }
+      })
+    );
     this.reload();
   }
 
@@ -159,7 +158,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   get greeting(): string {
     const hour: number = new Date().getHours();
     const part: string = hour < 12 ? 'morning' : hour < 18 ? 'afternoon' : 'evening';
-    return this.firstName ? `Good ${part}, ${this.firstName}` : `Good ${part}`;
+    return this.firstName
+      ? this.t(`dashboard.greeting.${part}`, { name: this.firstName })
+      : this.t(`dashboard.greeting.${part}NoName`);
+  }
+
+  get subtitle(): string {
+    const date: string = this.language.date(this.today, 'longDay');
+    return this.gymName ? `${date} · ${this.gymName}` : date;
   }
 
   get gymName(): string {
@@ -180,12 +186,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.actions.create('new-class').pipe(take(1)).subscribe();
   }
 
+  /** Opens the member's detail panel (quick renew lives there). */
   renew(row: ExpiringRow): void {
-    this.actions.editMember(row.member).pipe(take(1)).subscribe();
+    this.router.navigate(['/members'], { queryParams: { member: row.member.id } });
   }
 
   explain(): void {
-    this.shell.openAiPanel(METRIC_COPY[this.metric].question);
+    this.shell.openAiPanel(this.t(`dashboard.chart.${this.metric}.question`));
   }
 
   setMetric(value: string): void {
@@ -200,7 +207,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   // ---- Chart copy ------------------------------------------------------
 
   get chartTitle(): string {
-    return METRIC_COPY[this.metric].title;
+    return this.t(`dashboard.chart.${this.metric}.title`);
   }
 
   get chartSubtitle(): string {
@@ -209,7 +216,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     const total: number = this.series(this.summary).reduce((sum: number, v: number) => sum + v, 0);
     const formatted: string = this.metric === 'income' ? this.money(total) : total.toLocaleString('en-US');
-    return `${METRIC_COPY[this.metric].unit}, ${this.today.getFullYear()} · ${formatted} so far`;
+    return this.t('dashboard.chart.subtitle', {
+      unit: this.t(`dashboard.chart.${this.metric}.unit`),
+      year: this.today.getFullYear(),
+      total: formatted,
+    });
   }
 
   get chartIsEmpty(): boolean {
@@ -233,14 +244,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.stock = summary.lowStock.map((product: DashboardLowStockProduct) => ({
       id: product.id,
       name: product.name,
-      detail: `${productCategoryLabel(product.categoryID)} · ${this.money(product.price)}`,
-      left: product.quantity <= 0 ? 'Out of stock' : `${product.quantity} left`,
+      detail: `${this.t(productCategoryKey(product.categoryID))} · ${this.money(product.price)}`,
+      left:
+        product.quantity <= 0
+          ? this.t('dashboard.stock.outOfStock')
+          : this.language.tCount('dashboard.stock.left', product.quantity),
       critical: product.quantity <= 2,
     }));
   }
 
   private buildKpis(summary: DashboardSummary): Kpi[] {
-    const month: number = this.today.getMonth();
     const nextClass: DashboardClass | undefined = summary.classesToday.list.find(
       (c: DashboardClass) => new Date(c.startTime).getTime() > Date.now()
     );
@@ -248,42 +261,49 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     return [
       {
-        label: 'Active members',
+        label: this.t('dashboard.kpi.activeMembers'),
         value: summary.members.active.toLocaleString('en-US'),
         chip: summary.members.newThisMonth > 0 ? `↑ ${summary.members.newThisMonth}` : null,
         chipStatus: 'active',
-        caption: summary.members.newThisMonth > 0 ? 'New this month' : 'No new members this month',
+        caption:
+          summary.members.newThisMonth > 0 ? this.t('dashboard.kpi.newThisMonth') : this.t('dashboard.kpi.noNewThisMonth'),
       },
       {
-        label: 'Expiring this week',
+        label: this.t('dashboard.kpi.expiringThisWeek'),
         value: String(summary.expiring.within7Days),
-        chip: summary.expiring.within7Days > 0 ? 'Action' : null,
+        chip: summary.expiring.within7Days > 0 ? this.t('dashboard.kpi.action') : null,
         chipStatus: 'expiring',
         caption:
           summary.expiring.within7Days > 0
-            ? `${summary.expiring.within3Days} in the next 3 days`
-            : 'Nothing expires in the next 7 days',
+            ? this.language.tCount('dashboard.kpi.inNext3Days', summary.expiring.within3Days)
+            : this.t('dashboard.kpi.nothingExpires'),
       },
       {
-        label: 'Classes today',
+        label: this.t('dashboard.kpi.classesToday'),
         value: String(summary.classesToday.total),
-        chip: summary.classesToday.total > 0 ? `${summary.classesToday.remaining} left` : null,
+        chip:
+          summary.classesToday.total > 0
+            ? this.language.tCount('dashboard.kpi.classesLeft', summary.classesToday.remaining)
+            : null,
         chipStatus: 'neutral',
         caption: nextClass
-          ? `Next: ${this.className(nextClass.description)} at ${this.time(nextClass.startTime)}`
+          ? this.t('dashboard.kpi.nextClass', {
+              name: this.className(nextClass.description),
+              time: this.language.date(nextClass.startTime, 'time'),
+            })
           : summary.classesToday.total > 0
-          ? 'No more classes today'
-          : 'No classes scheduled today',
+          ? this.t('dashboard.kpi.noMoreClasses')
+          : this.t('dashboard.kpi.noClassesScheduled'),
       },
       {
-        label: `Revenue · ${MONTHS_LONG[month]}`,
+        label: this.t('dashboard.kpi.revenue', { month: this.language.date(this.today, 'monthLong') }),
         value: this.money(summary.revenue.thisMonth),
         chip: change === null ? null : `${change >= 0 ? '↑' : '↓'} ${Math.abs(change)}%`,
         chipStatus: change !== null && change >= 0 ? 'active' : 'expiring',
         caption:
           summary.revenue.lastMonthSamePeriod > 0
-            ? `vs ${this.money(summary.revenue.lastMonthSamePeriod)} same period last month`
-            : 'No sales in the same period last month',
+            ? this.t('dashboard.kpi.vsSamePeriod', { amount: this.money(summary.revenue.lastMonthSamePeriod) })
+            : this.t('dashboard.kpi.noSalesSamePeriod'),
       },
     ];
   }
@@ -304,7 +324,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     return values.map((value: number, index: number) => {
       const current: boolean = index === values.length - 1;
       return {
-        label: MONTHS_SHORT[index],
+        label: this.language.date(new Date(this.today.getFullYear(), index, 1), 'monthShort'),
         value,
         highlight: current,
         valueLabel: this.metric === 'income' ? (current ? this.money(value) : this.compactMoney(value)) : value.toLocaleString('en-US'),
@@ -324,7 +344,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         state = 'next';
         nextFound = true;
       }
-      const people: string = `${c.memberCount} ${c.memberCount === 1 ? 'member' : 'members'}`;
+      const people: string = this.language.tCount('dashboard.today.members', c.memberCount);
       return {
         id: c.id,
         time: start,
@@ -340,16 +360,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     const days: number = this.daysFromToday(due);
     let label: string;
     if (days <= 0) {
-      label = 'Due today';
+      label = this.t('dashboard.maintenance.dueToday');
     } else if (days === 1) {
-      label = 'Tomorrow';
+      label = this.t('dashboard.maintenance.tomorrow');
     } else {
-      label = due.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      label = this.language.date(due, 'shortDay');
     }
     return {
       id: job.jobId,
       name: job.machineName,
-      detail: `${job.jobType === 'clean' ? 'Clean' : 'Service'} · SN ${job.serialNumber}`,
+      jobType: this.t(job.jobType === 'clean' ? 'dashboard.maintenance.clean' : 'dashboard.maintenance.service'),
+      serialNumber: job.serialNumber,
       due: label,
       urgent: days <= 0,
     };
@@ -359,12 +380,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private expiryNote(daysLeft: number): string {
     if (daysLeft <= 0) {
-      return 'Expires today';
+      return this.t('dashboard.expiring.today');
     }
     if (daysLeft === 1) {
-      return 'Expires tomorrow';
+      return this.t('dashboard.expiring.tomorrow');
     }
-    return `Expires in ${daysLeft} days`;
+    return this.language.tCount('dashboard.expiring.inDays', daysLeft);
   }
 
   /** Class descriptions are free text; show the part before a colon as the class name. */
@@ -373,14 +394,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     return head || description;
   }
 
-  private time(iso: string): string {
-    const d: Date = new Date(iso);
-    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-  }
-
   private daysFromToday(date: Date): number {
     const startOf = (d: Date): number => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
     return Math.round((startOf(date) - startOf(new Date())) / DAY_MS);
+  }
+
+  photoOf(url: string | null | undefined): string | null {
+    return realPhotoUrl(url);
   }
 
   money(value: number): string {

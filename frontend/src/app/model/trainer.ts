@@ -3,13 +3,16 @@ export class Trainer {
   public firstName: string;
   public lastName: string;
   public phone: string;
-  public birthDay: Date;
+  /** ISO string from the API, YYYY-MM-DD when sent by a form. */
+  public birthDay: Date | string;
   public email: string;
   public address: string;
   public isActive: boolean;
   public gender: number;
-  public certificationDate: Date;
-  public joinDate: Date;
+  /** ISO string from the API, YYYY-MM-DD when sent by a form. */
+  public certificationDate: Date | string;
+  /** ISO string from the API, YYYY-MM-DD when sent by a form. */
+  public joinDate: Date | string;
   public imageURL: string;
   public gymId: number;
 }

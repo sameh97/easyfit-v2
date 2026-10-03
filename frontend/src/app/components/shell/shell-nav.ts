@@ -3,42 +3,44 @@ import { IconName } from 'src/app/shared/ui/icon/icons';
 export type NavBadge = 'members' | 'maintenance';
 
 export interface NavItem {
-  label: string;
+  /** Translation key (shell.nav.items.*). */
+  labelKey: string;
   path: string;
   icon: IconName;
   badge?: NavBadge;
 }
 
 export interface NavGroup {
-  label: string;
+  /** Translation key (shell.nav.groups.*). */
+  labelKey: string;
   items: NavItem[];
 }
 
 /** Sidebar groups (redesign.md §7.3). Also the "Pages" group of the command palette. */
 export const NAV_GROUPS: NavGroup[] = [
-  { label: 'Overview', items: [{ label: 'Dashboard', path: '/home', icon: 'home' }] },
+  { labelKey: 'shell.nav.groups.overview', items: [{ labelKey: 'shell.nav.items.dashboard', path: '/home', icon: 'home' }] },
   {
-    label: 'People',
+    labelKey: 'shell.nav.groups.people',
     items: [
-      { label: 'Members', path: '/members', icon: 'users', badge: 'members' },
-      { label: 'Trainers', path: '/trainers', icon: 'user-check' },
-      { label: 'Classes', path: '/group-trainings', icon: 'calendar' },
+      { labelKey: 'shell.nav.items.members', path: '/members', icon: 'users', badge: 'members' },
+      { labelKey: 'shell.nav.items.trainers', path: '/trainers', icon: 'user-check' },
+      { labelKey: 'shell.nav.items.classes', path: '/group-trainings', icon: 'calendar' },
     ],
   },
   {
-    label: 'Equipment',
+    labelKey: 'shell.nav.groups.equipment',
     items: [
-      { label: 'Machines', path: '/machines', icon: 'dumbbell' },
-      { label: 'Maintenance', path: '/scheduler', icon: 'wrench', badge: 'maintenance' },
+      { labelKey: 'shell.nav.items.machines', path: '/machines', icon: 'dumbbell' },
+      { labelKey: 'shell.nav.items.maintenance', path: '/scheduler', icon: 'wrench', badge: 'maintenance' },
     ],
   },
   {
-    label: 'Shop',
+    labelKey: 'shell.nav.groups.shop',
     items: [
-      { label: 'Products', path: '/products', icon: 'shopping-bag' },
-      { label: 'Catalogs', path: '/catalog', icon: 'send' },
+      { labelKey: 'shell.nav.items.products', path: '/products', icon: 'shopping-bag' },
+      { labelKey: 'shell.nav.items.catalogs', path: '/catalog', icon: 'send' },
     ],
   },
 ];
 
-export const PROFILE_PAGE: NavItem = { label: 'Profile & settings', path: '/profile', icon: 'settings' };
+export const PROFILE_PAGE: NavItem = { labelKey: 'shell.nav.items.profile', path: '/profile', icon: 'settings' };

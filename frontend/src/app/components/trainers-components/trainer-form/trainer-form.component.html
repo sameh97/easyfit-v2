@@ -1,0 +1,34 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="trainer-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-image-upload [currentUrl]="currentPhoto" (fileChange)="onPhoto($event)"></app-image-upload>
+
+        <app-form-section [title]="'members.form.personal' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="firstName" [label]="'members.form.firstName' | translate" [required]="true" autocomplete="off" name="firstName"></app-text-field>
+                <app-text-field [control]="lastName" [label]="'members.form.lastName' | translate" [required]="true" autocomplete="off" name="lastName"></app-text-field>
+            </div>
+            <app-text-field [control]="phone" type="tel" inputmode="tel" [ltr]="true" [label]="'members.form.phone' | translate" [required]="true" placeholder="05X-XXXXXXX" name="phone"></app-text-field>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="email" type="email" [ltr]="true" [label]="'members.form.email' | translate" [required]="true" placeholder="name@example.com" name="email"></app-text-field>
+                <app-date-field [control]="birthDay" [label]="'members.form.birthday' | translate" [required]="true"></app-date-field>
+            </div>
+            <app-segmented-field [control]="gender" [options]="genderOptions" [label]="'members.form.gender' | translate" [required]="true"></app-segmented-field>
+            <app-text-field [control]="address" [label]="'members.form.address' | translate" [required]="true" [placeholder]="'members.form.addressPlaceholder' | translate" name="address"></app-text-field>
+        </app-form-section>
+
+        <app-form-section [title]="'trainers.form.work' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-date-field [control]="joinDate" [label]="'members.form.joinDate' | translate" [required]="true"></app-date-field>
+                <app-date-field [control]="certificationDate" [label]="'trainers.form.certificationDate' | translate" [required]="true"></app-date-field>
+            </div>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="trainer-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'trainers.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

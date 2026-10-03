@@ -1,0 +1,113 @@
+<!-- Error state -->
+<div *ngIf="state === 'error'" class="rounded-card bg-surface shadow-card">
+    <app-empty-state icon="alert-circle" tone="danger" [title]="'common.table.errorTitle' | translate" [message]="'common.table.errorBody' | translate">
+        <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="retry.emit()">{{ 'common.actions.retry' | translate }}</button>
+    </app-empty-state>
+</div>
+
+<section *ngIf="state !== 'error'" class="flex flex-col overflow-hidden rounded-card bg-surface shadow-card" role="table" [attr.aria-label]="label" [attr.aria-busy]="state === 'loading' ? 'true' : null" [attr.aria-rowcount]="state === 'ready' ? total + 1 : null">
+
+    <!-- ===== Wide layout (≥ md): header + 62px grid rows ===== -->
+    <ng-container *ngIf="!stacked">
+        <div role="rowgroup">
+            <div role="row" class="grid h-11 items-center gap-3 border-b border-solid border-line-soft px-5" [style.gridTemplateColumns]="gridColumns">
+                <div *ngFor="let column of visibleColumns" role="columnheader" [attr.aria-sort]="ariaSort(column)" class="min-w-0 text-[11px] font-bold uppercase tracking-[1.2px] text-ink-4">
+                    <button *ngIf="isSortable(column); else plainHeader" type="button" (click)="toggleSort(column)"
+                        class="-mx-1.5 inline-flex max-w-full items-center gap-1 rounded-md border-0 bg-transparent px-1.5 py-1 font-bold uppercase tracking-[1.2px] hover:text-ink"
+                        [ngClass]="sort?.key === column.key ? 'text-ink-2' : 'text-ink-4'">
+                        <span class="truncate">{{ column.labelKey | translate }}</span>
+                        <app-icon [name]="sort?.key === column.key ? (sort?.direction === 'asc' ? 'arrow-up' : 'arrow-down') : 'arrow-up-down'" [size]="12" [class.opacity-40]="sort?.key !== column.key"></app-icon>
+                    </button>
+                    <ng-template #plainHeader><span [class.sr-only]="column.headerHidden" class="block truncate">{{ column.labelKey | translate }}</span></ng-template>
+                </div>
+            </div>
+        </div>
+
+        <div role="rowgroup">
+            <ng-container *ngIf="state === 'loading'">
+                <div *ngFor="let i of skeletonRows" role="row" class="grid h-[62px] items-center gap-3 border-b border-solid border-line-soft px-5" [style.gridTemplateColumns]="gridColumns">
+                    <div *ngFor="let column of visibleColumns; let first = first" role="cell" class="flex items-center gap-3">
+                        <app-skeleton *ngIf="first" shape="circle" width="38px" height="38px"></app-skeleton>
+                        <app-skeleton *ngIf="!column.headerHidden" [width]="first ? '55%' : '70%'" height="12px"></app-skeleton>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="state === 'ready'">
+                <div *ngFor="let row of pageRows; trackBy: trackRow" role="row" tabindex="0"
+                    [attr.aria-label]="rowLabel(row)" [attr.aria-current]="isSelected(row) ? 'true' : null"
+                    (click)="rowClick.emit(row)" (keydown)="onRowKeydown($event, row)"
+                    class="grid h-[62px] cursor-pointer items-center gap-3 border-b border-solid border-line-soft px-5 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+                    [ngClass]="rowClasses(row)" [style.gridTemplateColumns]="gridColumns">
+                    <div *ngFor="let column of visibleColumns" role="cell" class="min-w-0">
+                        <ng-container *ngTemplateOutlet="cellTemplate(column.key); context: { $implicit: row }"></ng-container>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </ng-container>
+
+    <!-- ===== Stacked layout (< md): each row is a card ===== -->
+    <div *ngIf="stacked" role="rowgroup" class="flex flex-col">
+        <ng-container *ngIf="state === 'loading'">
+            <div *ngFor="let i of skeletonRows" role="row" class="flex items-center gap-3 border-b border-solid border-line-soft p-4">
+                <app-skeleton shape="circle" width="38px" height="38px"></app-skeleton>
+                <div class="flex flex-1 flex-col gap-2"><app-skeleton width="50%" height="12px"></app-skeleton><app-skeleton width="70%" height="10px"></app-skeleton></div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="state === 'ready'">
+            <div *ngFor="let row of pageRows; trackBy: trackRow" role="row" tabindex="0"
+                [attr.aria-label]="rowLabel(row)" [attr.aria-current]="isSelected(row) ? 'true' : null"
+                (click)="rowClick.emit(row)" (keydown)="onRowKeydown($event, row)"
+                class="flex cursor-pointer flex-col gap-2.5 border-b border-solid border-line-soft p-4 text-sm outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
+                [ngClass]="rowClasses(row)">
+                <div class="flex items-start gap-2">
+                    <div *ngFor="let column of cardTitleColumns" role="cell" class="min-w-0 flex-1">
+                        <ng-container *ngTemplateOutlet="cellTemplate(column.key); context: { $implicit: row }"></ng-container>
+                    </div>
+                    <div *ngFor="let column of cardCornerColumns" role="cell" class="flex-shrink-0">
+                        <ng-container *ngTemplateOutlet="cellTemplate(column.key); context: { $implicit: row }"></ng-container>
+                    </div>
+                </div>
+                <dl class="grid grid-cols-2 gap-x-3 gap-y-2">
+                    <div *ngFor="let column of cardDetailColumns" role="cell" class="flex min-w-0 flex-col gap-0.5">
+                        <dt class="text-[11px] font-bold uppercase tracking-[1.2px] text-ink-4">{{ column.labelKey | translate }}</dt>
+                        <dd class="m-0 min-w-0"><ng-container *ngTemplateOutlet="cellTemplate(column.key); context: { $implicit: row }"></ng-container></dd>
+                    </div>
+                </dl>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="state === 'ready' && !total">
+        <ng-content select="[tableEmpty]"></ng-content>
+    </div>
+
+    <!-- Pager -->
+    <div *ngIf="state === 'ready' && total" class="flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm text-neutral">
+        <div class="flex flex-wrap items-center gap-4">
+            <span [innerHTML]="'common.table.showing' | translate: { from: from, to: to, total: total }"></span>
+            <label class="flex items-center gap-2 text-[13px] text-ink-3">
+                {{ 'common.table.rowsPerPage' | translate }}
+                <select #sizeSelect class="h-8 cursor-pointer rounded-full border border-solid border-line bg-surface pe-2 ps-3 text-[13px] font-semibold text-ink" [value]="pageSize" (change)="setPageSize(sizeSelect.value)">
+                    <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+                </select>
+            </label>
+        </div>
+        <nav class="flex gap-1.5" [attr.aria-label]="'common.table.pagination' | translate">
+            <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-line bg-surface p-0 text-ink disabled:text-ink-4 disabled:opacity-60"
+                [disabled]="page === 0" (click)="goTo(page - 1)" [attr.aria-label]="'common.table.previous' | translate">
+                <app-icon name="chevron-left" [size]="16" class="flip-rtl"></app-icon>
+            </button>
+            <button *ngFor="let n of pageNumbers" type="button" (click)="goTo(n)" [attr.aria-current]="n === page ? 'page' : null"
+                [attr.aria-label]="'common.table.page' | translate: { page: n + 1 }"
+                class="h-9 min-w-[36px] rounded-full px-2 text-sm"
+                [ngClass]="n === page ? 'border-0 bg-ink font-bold text-white' : 'border border-solid border-line bg-surface font-semibold text-ink hover:bg-surface-subtle'">{{ n + 1 }}</button>
+            <button type="button" class="flex h-9 w-9 items-center justify-center rounded-full border border-solid border-line bg-surface p-0 text-ink disabled:text-ink-4 disabled:opacity-60"
+                [disabled]="page >= pageCount - 1" (click)="goTo(page + 1)" [attr.aria-label]="'common.table.next' | translate">
+                <app-icon name="chevron-right" [size]="16" class="flip-rtl"></app-icon>
+            </button>
+        </nav>
+    </div>
+</section>

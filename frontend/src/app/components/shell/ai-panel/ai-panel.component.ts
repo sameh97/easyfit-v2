@@ -3,17 +3,17 @@ import { Subscription } from 'rxjs';
 import { AppUtil } from 'src/app/common/app-util';
 import { ShellStateService } from 'src/app/services/shell-state.service';
 
-/** Example questions shown as disabled chips until the assistant ships. */
+/** Example questions (translation keys) shown as disabled chips until the assistant ships. */
 const EXAMPLE_QUESTIONS: readonly string[] = [
-  'Who expires this week?',
-  'Summarise this month’s sales',
-  'Overdue maintenance?',
-  'Which classes are busiest?',
+  'shell.ai.examples.expiring',
+  'shell.ai.examples.sales',
+  'shell.ai.examples.maintenance',
+  'shell.ai.examples.classes',
 ];
 
 /**
  * EasyFit AI panel — UI shell only in Phase 1 (no backend).
- * Docks as a third column on ≥ xl, slides over the page below xl, full-screen on phones.
+ * Sits on the inline-end side. Docks as a third column on ≥ xl, slides over the page below xl, full-screen on phones.
  */
 @Component({
   selector: 'app-ai-panel',
