@@ -97,9 +97,9 @@ export class GroupedTraingingRepository {
       where: {
         [Op.and]: [
           {
+            // The trainer may change on edit, so find the class by id and gym only.
             id: groupTraining.id,
             gymId: groupTraining.gymId,
-            trainerId: groupTraining.trainerId,
           },
         ],
       },
@@ -122,6 +122,8 @@ export class GroupedTraingingRepository {
             },
             gymId: groupTraining.gymId,
             trainerId: groupTraining.trainerId,
+            // The class being edited never clashes with itself.
+            id: { [Op.ne]: groupTraining.id },
           },
         ],
       },

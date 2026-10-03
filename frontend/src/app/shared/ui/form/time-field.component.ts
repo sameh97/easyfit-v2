@@ -61,62 +61,64 @@ const SUGGESTIONS: readonly string[] = Array.from({ length: (24 * 60) / STEP_MIN
 @Component({
   selector: 'app-time-field',
   template: `
-    <div class="relative flex flex-col gap-1.5" (focusout)="onFocusOut($event)">
+    <div class="flex flex-col gap-1.5" (focusout)="onFocusOut($event)">
       <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
-      <div [class]="boxClass">
-        <input
-          #input
-          [id]="id"
-          type="text"
-          inputmode="numeric"
+      <div class="relative">
+        <div [class]="boxClass">
+          <input
+            #input
+            [id]="id"
+            type="text"
+            inputmode="numeric"
+            dir="ltr"
+            autocomplete="off"
+            placeholder="HH:MM"
+            role="combobox"
+            aria-autocomplete="none"
+            [attr.aria-expanded]="open"
+            [attr.aria-controls]="id + '-list'"
+            [attr.aria-activedescendant]="open && active >= 0 ? id + '-opt-' + active : null"
+            [formControl]="control"
+            [attr.aria-required]="required ? 'true' : null"
+            [attr.aria-invalid]="invalid ? 'true' : null"
+            [attr.aria-describedby]="invalid ? id + '-error' : help ? id + '-help' : null"
+            [class]="inputClass"
+            (blur)="normalize()"
+            (keydown)="onKeydown($event)"
+          />
+          <button
+            type="button"
+            tabindex="-1"
+            class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0 text-ink-3 hover:bg-surface-muted hover:text-ink"
+            [attr.aria-label]="'common.form.pickTime' | translate"
+            (click)="toggle()"
+          >
+            <app-icon name="clock" [size]="17"></app-icon>
+          </button>
+        </div>
+        <ul
+          *ngIf="open"
+          #list
+          [id]="id + '-list'"
+          role="listbox"
+          [attr.aria-label]="label"
           dir="ltr"
-          autocomplete="off"
-          placeholder="HH:MM"
-          role="combobox"
-          aria-autocomplete="none"
-          [attr.aria-expanded]="open"
-          [attr.aria-controls]="id + '-list'"
-          [attr.aria-activedescendant]="open && active >= 0 ? id + '-opt-' + active : null"
-          [formControl]="control"
-          [attr.aria-required]="required ? 'true' : null"
-          [attr.aria-invalid]="invalid ? 'true' : null"
-          [attr.aria-describedby]="invalid ? id + '-error' : help ? id + '-help' : null"
-          [class]="inputClass"
-          (blur)="normalize()"
-          (keydown)="onKeydown($event)"
-        />
-        <button
-          type="button"
-          tabindex="-1"
-          class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0 text-ink-3 hover:bg-surface-muted hover:text-ink"
-          [attr.aria-label]="'common.form.pickTime' | translate"
-          (click)="toggle()"
+          class="absolute start-0 top-full z-10 mb-0 mt-1.5 max-h-60 w-40 list-none overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-overlay"
         >
-          <app-icon name="clock" [size]="17"></app-icon>
-        </button>
+          <li
+            *ngFor="let time of suggestions; let i = index"
+            [id]="id + '-opt-' + i"
+            role="option"
+            [attr.aria-selected]="time === control.value"
+            (mousedown)="$event.preventDefault()"
+            (click)="pick(time)"
+            class="cursor-pointer rounded-xl px-3 py-2 text-sm font-semibold text-ink"
+            [ngClass]="i === active ? 'bg-accent-soft text-accent' : time === control.value ? 'bg-surface-subtle' : 'hover:bg-surface-subtle'"
+          >
+            {{ time }}
+          </li>
+        </ul>
       </div>
-      <ul
-        *ngIf="open"
-        #list
-        [id]="id + '-list'"
-        role="listbox"
-        [attr.aria-label]="label"
-        dir="ltr"
-        class="absolute start-0 top-[74px] z-10 m-0 max-h-60 w-40 list-none overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-overlay"
-      >
-        <li
-          *ngFor="let time of suggestions; let i = index"
-          [id]="id + '-opt-' + i"
-          role="option"
-          [attr.aria-selected]="time === control.value"
-          (mousedown)="$event.preventDefault()"
-          (click)="pick(time)"
-          class="cursor-pointer rounded-xl px-3 py-2 text-sm font-semibold text-ink"
-          [ngClass]="i === active ? 'bg-accent-soft text-accent' : time === control.value ? 'bg-surface-subtle' : 'hover:bg-surface-subtle'"
-        >
-          {{ time }}
-        </li>
-      </ul>
       <app-field-error *ngIf="invalid; else helpTpl" [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
       <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
     </div>

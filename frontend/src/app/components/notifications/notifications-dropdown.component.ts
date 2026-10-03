@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { AppUtil } from 'src/app/common/app-util';
 import { AppNotificationMessage } from 'src/app/model/app-notification-message';
 import { UserNotificationsService } from 'src/app/services/user-notifications.service';
-import { WebSocketService } from 'src/app/services/web-socket.service';
+import { WebSocketService } from '../../services/web-socket.service';
 import { SocketTopics } from 'src/app/shared/util/socket-util';
 
 @Component({

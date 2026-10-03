@@ -423,7 +423,10 @@
     "dateFormat": "Enter a date like 14/03/2027.",
     "imageType": "Choose a JPG or PNG image.",
     "invalid": "This value isn't valid.",
-    "timeFormat": "Enter a 24-hour time like 17:30."
+    "timeFormat": "Enter a 24-hour time like 17:30.",
+    "startInPast": "Pick a start time after now.",
+    "trainerBusy": "This trainer already has a class at {{time}}, less than an hour before.",
+    "membersRequired": "Add at least one member."
   },
   "members": {
     "page": {
@@ -681,6 +684,100 @@
       "deactivateBody": "They'll show as inactive until you activate them again.",
       "deleteTitle": "Delete {{name}}?",
       "deleteBody": "This removes the trainer for good. It can't be undone."
+    }
+  },
+  "classes": {
+    "page": {
+      "title": "Classes",
+      "weekCount": {
+        "one": "{{count}} class this week",
+        "two": "{{count}} classes this week",
+        "other": "{{count}} classes this week"
+      },
+      "todayCount": {
+        "one": "{{count}} today",
+        "two": "{{count}} today",
+        "other": "{{count}} today"
+      },
+      "dayCount": {
+        "one": "{{count}} class",
+        "two": "{{count}} classes",
+        "other": "{{count}} classes"
+      },
+      "doneCount": {
+        "one": "{{count}} done",
+        "two": "{{count}} done",
+        "other": "{{count}} done"
+      },
+      "weekLabel": "Days of the week",
+      "prevWeek": "Previous week",
+      "nextWeek": "Next week",
+      "today": "Today",
+      "trainerFilter": "Trainer: {{name}}",
+      "trainerAll": "All",
+      "trainerFilterLabel": "Filter by trainer",
+      "searchLabel": "Search classes",
+      "searchPlaceholder": "Class name"
+    },
+    "row": {
+      "done": "Done",
+      "upNext": "Up next",
+      "members": {
+        "one": "{{count}} member",
+        "two": "{{count}} members",
+        "other": "{{count}} members"
+      }
+    },
+    "actions": {
+      "new": "New class",
+      "add": "Add class",
+      "edit": "Edit class"
+    },
+    "empty": {
+      "dayTitle": "No classes on this day",
+      "dayBody": "Pick another day, or add a class.",
+      "noMatchTitle": "No classes match",
+      "noMatchBody": "Try another trainer or search."
+    },
+    "detail": {
+      "label": "Class details",
+      "eyebrow": "Class",
+      "trainer": "Trainer",
+      "unknownTrainer": "This class's trainer no longer exists.",
+      "participants": "Participants · {{count}}",
+      "showAll": "Show all",
+      "showLess": "Show less",
+      "noParticipants": "No members in this class."
+    },
+    "form": {
+      "addTitle": "New class",
+      "editTitle": "Edit class",
+      "when": "When",
+      "date": "Date",
+      "time": "Start time",
+      "timeHelp": "24-hour, e.g. 17:30",
+      "class": "Class",
+      "description": "Description",
+      "descriptionHelp": "The part before a colon is shown as the class name.",
+      "descriptionPlaceholder": "Pilates Core: bring a towel and water",
+      "trainer": "Trainer",
+      "trainerPlaceholder": "Choose a trainer",
+      "membersSection": "Members · {{count}}",
+      "members": "Add members",
+      "membersPlaceholder": "Add members by name or phone"
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "busyError": "The trainer already has a class less than an hour before this one.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again.",
+      "notFound": "That class wasn't found. It may have been deleted."
+    },
+    "confirm": {
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the class and its participant list. It can't be undone."
     }
   }
 }

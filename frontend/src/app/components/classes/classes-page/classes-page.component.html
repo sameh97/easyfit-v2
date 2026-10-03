@@ -1,0 +1,109 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'classes.page.title' | translate" [subtitle]="state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'classes.actions.new' | translate }}</button>
+            </ng-container>
+        </app-page-header>
+
+        <!-- Week navigation + filters -->
+        <div class="flex flex-wrap items-center gap-2.5">
+            <div class="flex items-center gap-1.5">
+                <button type="button" appIconButton variant="outline" size="lg" icon="chevron-left" class="flip-rtl" [label]="'classes.page.prevWeek' | translate" (click)="shiftWeek(-1)"></button>
+                <span class="min-w-[150px] px-1.5 text-center text-[15px] font-bold text-ink" aria-live="polite">{{ weekRange }}</span>
+                <button type="button" appIconButton variant="outline" size="lg" icon="chevron-right" class="flip-rtl" [label]="'classes.page.nextWeek' | translate" (click)="shiftWeek(1)"></button>
+                <button appButton variant="secondary" size="sm" type="button" [disabled]="isTodaySelected" (click)="goToday()">{{ 'classes.page.today' | translate }}</button>
+            </div>
+            <span class="hidden flex-1 md:block"></span>
+            <button type="button" aria-haspopup="menu" aria-expanded="false" (click)="openTrainerMenu($event)"
+                class="flex h-11 items-center gap-2 rounded-full border border-solid bg-surface px-4 text-sm font-semibold text-ink-2 hover:border-line-strong"
+                [ngClass]="trainerFilter !== null ? 'border-accent text-accent' : 'border-line'">
+                <span class="max-w-[200px] truncate">{{ trainerFilterLabel }}</span>
+                <app-icon name="chevron-down" [size]="15"></app-icon>
+            </button>
+            <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[220px]">
+                <app-icon name="search" [size]="17"></app-icon>
+                <span class="sr-only">{{ 'classes.page.searchLabel' | translate }}</span>
+                <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'classes.page.searchPlaceholder' | translate"
+                    class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+            </label>
+        </div>
+
+        <div class="flex items-start gap-4">
+            <div class="flex min-w-0 flex-1 flex-col gap-[18px]">
+                <app-week-strip [days]="weekDays" [selected]="selectedDay" [label]="'classes.page.weekLabel' | translate" countKey="classes.page.dayCount"
+                    panelId="classes-day" idPrefix="classes-day" (selectedChange)="selectDay($event)"></app-week-strip>
+
+                <!-- Error -->
+                <app-card *ngIf="state === 'error'">
+                    <app-empty-state icon="alert-circle" tone="danger" [title]="'common.table.errorTitle' | translate" [message]="'common.table.errorBody' | translate">
+                        <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="load()">{{ 'common.actions.retry' | translate }}</button>
+                    </app-empty-state>
+                </app-card>
+
+                <section *ngIf="state !== 'error'" id="classes-day" role="tabpanel" aria-labelledby="classes-day-title"
+                    class="flex flex-col gap-1 rounded-card bg-surface px-3 pb-3 pt-3.5 shadow-card">
+                    <div class="flex flex-wrap items-baseline justify-between gap-x-3 px-2.5 pb-2 pt-1">
+                        <h2 id="classes-day-title" class="text-lg font-extrabold tracking-card text-ink">{{ selectedDay | localDate: 'longDay' }}</h2>
+                        <span *ngIf="state === 'ready'" class="text-[13px] text-ink-3">{{ daySummary }}</span>
+                    </div>
+
+                    <!-- Loading -->
+                    <ng-container *ngIf="state === 'loading'">
+                        <div *ngFor="let i of skeletonRows" class="flex h-[66px] items-center gap-3.5 px-3" aria-hidden="true">
+                            <app-skeleton width="48px" height="16px"></app-skeleton>
+                            <div class="flex flex-1 flex-col gap-2"><app-skeleton width="40%" height="14px"></app-skeleton><app-skeleton width="60%" height="12px"></app-skeleton></div>
+                        </div>
+                    </ng-container>
+
+                    <!-- Empty day -->
+                    <ng-container *ngIf="state === 'ready' && !dayRows.length">
+                        <app-empty-state *ngIf="!filtering; else noMatches" icon="calendar" [compact]="true" [title]="'classes.empty.dayTitle' | translate" [message]="'classes.empty.dayBody' | translate">
+                            <button appButton variant="secondary" size="sm" icon="plus" type="button" (click)="add()">{{ 'classes.actions.new' | translate }}</button>
+                        </app-empty-state>
+                        <ng-template #noMatches>
+                            <app-empty-state icon="search" [compact]="true" [title]="'classes.empty.noMatchTitle' | translate" [message]="'classes.empty.noMatchBody' | translate"></app-empty-state>
+                        </ng-template>
+                    </ng-container>
+
+                    <!-- Classes of the day -->
+                    <ul *ngIf="state === 'ready' && dayRows.length" class="m-0 flex list-none flex-col gap-1 p-0">
+                        <li *ngFor="let row of dayRows; trackBy: trackById">
+                            <button type="button" (click)="select(row.training)" [attr.aria-current]="row.training.id === selectedId ? 'true' : null"
+                                class="flex min-h-[66px] w-full items-center gap-3.5 rounded-[14px] border-0 px-3 py-2 text-start text-ink transition-colors"
+                                [ngClass]="[
+                                    row.training.id === selectedId ? 'bg-surface-subtle ring-2 ring-inset ring-accent' : row.state === 'next' ? 'bg-accent-soft' : 'bg-transparent hover:bg-surface-subtle',
+                                    row.state === 'done' ? 'opacity-[.55]' : ''
+                                ]">
+                                <span class="flex w-[58px] flex-shrink-0 flex-col">
+                                    <span class="text-base font-extrabold">{{ row.training.startTime | localDate: 'time' }}</span>
+                                    <span *ngIf="row.state === 'done'" class="text-xs text-ink-3">{{ 'classes.row.done' | translate }}</span>
+                                </span>
+                                <span class="h-2.5 w-2.5 flex-shrink-0 rounded-full" [ngClass]="row.state === 'done' ? 'bg-neutral-dot' : 'bg-accent'" aria-hidden="true"></span>
+                                <span class="flex min-w-0 flex-grow flex-col">
+                                    <span class="truncate text-[15px] font-bold" dir="auto">{{ row.title }}</span>
+                                    <span *ngIf="row.note" class="truncate text-[13px] text-ink-3" dir="auto">{{ row.note }}</span>
+                                    <span class="truncate text-[13px] text-ink-3 md:hidden"><span dir="auto">{{ row.trainerName }}</span><ng-container *ngIf="row.trainerName"> · </ng-container>{{ row.members }}</span>
+                                </span>
+                                <span class="hidden w-[190px] flex-shrink-0 items-center gap-2 md:flex">
+                                    <app-avatar *ngIf="row.trainer" [name]="row.trainerName" [id]="row.trainer.id" [imageUrl]="trainerPhoto(row.trainer)" [size]="30"></app-avatar>
+                                    <span class="truncate text-sm font-semibold text-ink-2" dir="auto">{{ row.trainerName }}</span>
+                                </span>
+                                <span class="hidden w-[110px] flex-shrink-0 items-center gap-1.5 text-sm text-ink-2 md:flex">
+                                    <app-icon name="users" [size]="16"></app-icon>{{ row.members }}
+                                </span>
+                                <span class="flex-shrink-0 text-end md:w-[74px]">
+                                    <span *ngIf="row.state === 'next'" class="text-xs font-bold text-accent">{{ 'classes.row.upNext' | translate }}</span>
+                                </span>
+                            </button>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+
+            <app-side-panel [open]="!!selected" [label]="'classes.detail.label' | translate" [eyebrow]="'classes.detail.eyebrow' | translate" (closed)="closeDetail()">
+                <app-class-detail *ngIf="selected as training" [training]="training" [trainer]="selectedTrainer" (deleted)="closeDetail()"></app-class-detail>
+            </app-side-panel>
+        </div>
+    </div>
+</app-nav>

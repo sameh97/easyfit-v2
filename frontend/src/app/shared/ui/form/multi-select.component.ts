@@ -22,60 +22,62 @@ const MAX_RESULTS: number = 50;
 @Component({
   selector: 'app-multi-select',
   template: `
-    <div class="relative flex flex-col gap-2.5" (focusout)="onFocusOut($event)">
+    <div class="flex flex-col gap-2.5" (focusout)="onFocusOut($event)">
       <label [for]="id" [class]="labelClass" [ngClass]="hideLabel ? 'sr-only' : ''">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
-      <div [class]="boxClass">
-        <app-icon name="search" [size]="17" class="text-ink-3"></app-icon>
-        <input
-          #input
-          [id]="id"
-          type="text"
-          autocomplete="off"
-          role="combobox"
-          aria-autocomplete="list"
-          [attr.aria-expanded]="open"
-          [attr.aria-controls]="id + '-list'"
-          [attr.aria-activedescendant]="open && active >= 0 && results[active] ? id + '-opt-' + results[active].value : null"
-          [attr.placeholder]="placeholder"
-          [attr.aria-required]="required ? 'true' : null"
-          [attr.aria-invalid]="invalid ? 'true' : null"
-          [attr.aria-describedby]="invalid ? id + '-error' : help ? id + '-help' : null"
-          [value]="query"
-          [class]="inputClass"
-          (input)="onInput(input.value)"
-          (focus)="openList()"
-          (click)="openList()"
-          (keydown)="onKeydown($event)"
-        />
-      </div>
+      <div class="relative">
+        <div [class]="boxClass">
+          <app-icon name="search" [size]="17" class="text-ink-3"></app-icon>
+          <input
+            #input
+            [id]="id"
+            type="text"
+            autocomplete="off"
+            role="combobox"
+            aria-autocomplete="list"
+            [attr.aria-expanded]="open"
+            [attr.aria-controls]="id + '-list'"
+            [attr.aria-activedescendant]="open && active >= 0 && results[active] ? id + '-opt-' + results[active].value : null"
+            [attr.placeholder]="placeholder"
+            [attr.aria-required]="required ? 'true' : null"
+            [attr.aria-invalid]="invalid ? 'true' : null"
+            [attr.aria-describedby]="invalid ? id + '-error' : help ? id + '-help' : null"
+            [value]="query"
+            [class]="inputClass"
+            (input)="onInput(input.value)"
+            (focus)="openList()"
+            (click)="openList()"
+            (keydown)="onKeydown($event)"
+          />
+        </div>
 
-      <ul
-        *ngIf="open"
-        [id]="id + '-list'"
-        role="listbox"
-        aria-multiselectable="true"
-        [attr.aria-label]="label"
-        class="absolute inset-x-0 top-[78px] z-10 m-0 max-h-64 list-none overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-overlay"
-      >
-        <li *ngIf="!results.length" class="px-3 py-2.5 text-sm text-ink-3" role="presentation">{{ 'common.multiSelect.noResults' | translate }}</li>
-        <li
-          *ngFor="let option of results; let i = index; trackBy: trackByValue"
-          [id]="id + '-opt-' + option.value"
-          role="option"
-          aria-selected="false"
-          (mousedown)="$event.preventDefault()"
-          (click)="add(option)"
-          class="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2"
-          [ngClass]="i === active ? 'bg-accent-soft' : 'hover:bg-surface-subtle'"
+        <ul
+          *ngIf="open"
+          [id]="id + '-list'"
+          role="listbox"
+          aria-multiselectable="true"
+          [attr.aria-label]="label"
+          class="absolute inset-x-0 top-full z-10 mb-0 mt-1.5 max-h-64 list-none overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-overlay"
         >
-          <app-avatar [name]="option.label" [id]="option.value" [imageUrl]="option.imageUrl || null" [size]="30"></app-avatar>
-          <span class="flex min-w-0 flex-col">
-            <span class="truncate text-sm font-semibold text-ink" dir="auto">{{ option.label }}</span>
-            <span *ngIf="option.caption" class="truncate text-xs text-ink-3"><bdi dir="ltr">{{ option.caption }}</bdi></span>
-          </span>
-        </li>
-        <li *ngIf="truncated" class="px-3 py-2 text-xs text-ink-3" role="presentation">{{ 'common.multiSelect.typeToNarrow' | translate }}</li>
-      </ul>
+          <li *ngIf="!results.length" class="px-3 py-2.5 text-sm text-ink-3" role="presentation">{{ 'common.multiSelect.noResults' | translate }}</li>
+          <li
+            *ngFor="let option of results; let i = index; trackBy: trackByValue"
+            [id]="id + '-opt-' + option.value"
+            role="option"
+            aria-selected="false"
+            (mousedown)="$event.preventDefault()"
+            (click)="add(option)"
+            class="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2"
+            [ngClass]="i === active ? 'bg-accent-soft' : 'hover:bg-surface-subtle'"
+          >
+            <app-avatar [name]="option.label" [id]="option.value" [imageUrl]="option.imageUrl || null" [size]="30"></app-avatar>
+            <span class="flex min-w-0 flex-col">
+              <span class="truncate text-sm font-semibold text-ink" dir="auto">{{ option.label }}</span>
+              <span *ngIf="option.caption" class="truncate text-xs text-ink-3"><bdi dir="ltr">{{ option.caption }}</bdi></span>
+            </span>
+          </li>
+          <li *ngIf="truncated" class="px-3 py-2 text-xs text-ink-3" role="presentation">{{ 'common.multiSelect.typeToNarrow' | translate }}</li>
+        </ul>
+      </div>
 
       <ul *ngIf="picked.length" class="m-0 flex list-none flex-wrap gap-1.5 p-0" [attr.aria-label]="'common.multiSelect.selected' | translate: { label: label }">
         <li *ngFor="let option of visibleChips; trackBy: trackByValue" class="flex h-[34px] items-center gap-1.5 rounded-full bg-surface-muted px-1 text-[13px] font-bold text-ink">

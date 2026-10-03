@@ -423,7 +423,10 @@
     "dateFormat": "יש להזין תאריך כמו 14/03/2027.",
     "imageType": "יש לבחור תמונה בפורמט JPG או PNG.",
     "invalid": "הערך אינו תקין.",
-    "timeFormat": "יש להזין שעה בפורמט 24 שעות, למשל 17:30."
+    "timeFormat": "יש להזין שעה בפורמט 24 שעות, למשל 17:30.",
+    "startInPast": "יש לבחור שעת התחלה מאוחרת מעכשיו.",
+    "trainerBusy": "למאמן הזה כבר יש שיעור ב-{{time}}, פחות משעה לפני כן.",
+    "membersRequired": "יש להוסיף לפחות מנוי אחד."
   },
   "members": {
     "page": {
@@ -681,6 +684,100 @@
       "deactivateBody": "המאמן יופיע כלא פעיל עד שתפעילו אותו שוב.",
       "deleteTitle": "למחוק את {{name}}?",
       "deleteBody": "המאמן יימחק לצמיתות. אי אפשר לבטל את הפעולה."
+    }
+  },
+  "classes": {
+    "page": {
+      "title": "שיעורים",
+      "weekCount": {
+        "one": "שיעור אחד השבוע",
+        "two": "{{count}} שיעורים השבוע",
+        "other": "{{count}} שיעורים השבוע"
+      },
+      "todayCount": {
+        "one": "אחד היום",
+        "two": "{{count}} היום",
+        "other": "{{count}} היום"
+      },
+      "dayCount": {
+        "one": "שיעור אחד",
+        "two": "{{count}} שיעורים",
+        "other": "{{count}} שיעורים"
+      },
+      "doneCount": {
+        "one": "אחד הסתיים",
+        "two": "{{count}} הסתיימו",
+        "other": "{{count}} הסתיימו"
+      },
+      "weekLabel": "ימי השבוע",
+      "prevWeek": "השבוע הקודם",
+      "nextWeek": "השבוע הבא",
+      "today": "היום",
+      "trainerFilter": "מאמן: {{name}}",
+      "trainerAll": "הכל",
+      "trainerFilterLabel": "סינון לפי מאמן",
+      "searchLabel": "חיפוש שיעורים",
+      "searchPlaceholder": "שם השיעור"
+    },
+    "row": {
+      "done": "הסתיים",
+      "upNext": "הבא בתור",
+      "members": {
+        "one": "משתתף אחד",
+        "two": "{{count}} משתתפים",
+        "other": "{{count}} משתתפים"
+      }
+    },
+    "actions": {
+      "new": "שיעור חדש",
+      "add": "הוספת שיעור",
+      "edit": "עריכת שיעור"
+    },
+    "empty": {
+      "dayTitle": "אין שיעורים ביום הזה",
+      "dayBody": "בחרו יום אחר, או הוסיפו שיעור.",
+      "noMatchTitle": "אין שיעורים מתאימים",
+      "noMatchBody": "נסו מאמן או חיפוש אחר."
+    },
+    "detail": {
+      "label": "פרטי השיעור",
+      "eyebrow": "שיעור",
+      "trainer": "מאמן",
+      "unknownTrainer": "המאמן של השיעור הזה כבר לא קיים.",
+      "participants": "משתתפים · {{count}}",
+      "showAll": "הצגת כולם",
+      "showLess": "הצגת פחות",
+      "noParticipants": "אין מנויים בשיעור הזה."
+    },
+    "form": {
+      "addTitle": "שיעור חדש",
+      "editTitle": "עריכת שיעור",
+      "when": "מתי",
+      "date": "תאריך",
+      "time": "שעת התחלה",
+      "timeHelp": "בפורמט 24 שעות, למשל 17:30",
+      "class": "שיעור",
+      "description": "תיאור",
+      "descriptionHelp": "החלק שלפני הנקודתיים מוצג כשם השיעור.",
+      "descriptionPlaceholder": "פילאטיס ליבה: להביא מגבת ומים",
+      "trainer": "מאמן",
+      "trainerPlaceholder": "בחירת מאמן",
+      "membersSection": "משתתפים · {{count}}",
+      "members": "הוספת משתתפים",
+      "membersPlaceholder": "הוספת מנויים לפי שם או טלפון"
+    },
+    "toast": {
+      "added": "{{name}} נוסף",
+      "updated": "השינויים ב{{name}} נשמרו",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "busyError": "למאמן כבר יש שיעור פחות משעה לפני השיעור הזה.",
+      "deleted": "{{name}} נמחק",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. נסו שוב.",
+      "notFound": "השיעור לא נמצא. ייתכן שנמחק."
+    },
+    "confirm": {
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "השיעור ורשימת המשתתפים שלו יימחקו. אי אפשר לבטל את הפעולה."
     }
   }
 }

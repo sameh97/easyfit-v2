@@ -6,7 +6,7 @@ import { AppNotificationMessage } from 'src/app/model/app-notification-message';
 import { Machine } from 'src/app/model/machine';
 import { MachinesService } from 'src/app/services/machines-service/machines.service';
 import { UserNotificationsService } from 'src/app/services/user-notifications.service';
-import { WebSocketService } from 'src/app/services/web-socket.service';
+import { WebSocketService } from '../../../services/web-socket.service';
 import { SocketTopics } from 'src/app/shared/util/socket-util';
 
 @Component({

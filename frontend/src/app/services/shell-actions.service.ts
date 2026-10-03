@@ -6,6 +6,8 @@ import { NavigationHelperService } from '../shared/services/navigation-helper.se
 import { MemberFormComponent, MemberFormData } from '../components/members-components/member-form/member-form.component';
 import { TrainerFormComponent, TrainerFormData } from '../components/trainers-components/trainer-form/trainer-form.component';
 import { Trainer } from '../model/trainer';
+import { ClassFormComponent, ClassFormData } from '../components/classes/class-form/class-form.component';
+import { GroupTraining } from '../model/group-training';
 import { AddGroupTrainingComponent } from '../components/group-training-components/add-group-training/add-group-training.component';
 import { AddProductComponent } from '../components/products-components/add-product/add-product.component';
 import { SellProductComponent } from '../components/products-components/sell-product/sell-product.component';
@@ -70,6 +72,24 @@ export class ShellActionsService {
 
   editTrainer(trainer: Trainer): Observable<Trainer | undefined> {
     return this.openTrainerForm(trainer);
+  }
+
+  /** Studio "New class" side panel, prefilled with `day`. Emits the new class, or undefined when cancelled. */
+  addClass(day: Date | null = null): Observable<GroupTraining | undefined> {
+    return this.openClassForm(null, day);
+  }
+
+  editClass(training: GroupTraining): Observable<GroupTraining | undefined> {
+    return this.openClassForm(training, null);
+  }
+
+  private openClassForm(training: GroupTraining | null, day: Date | null): Observable<GroupTraining | undefined> {
+    return this.sidePanel
+      .open<ClassFormComponent, ClassFormData, GroupTraining>(ClassFormComponent, {
+        data: { training, day },
+        ariaLabel: this.language.t(training ? 'classes.form.editTitle' : 'classes.form.addTitle'),
+      })
+      .afterClosed$.pipe(tap(() => this.dashboardService.load().subscribe({ error: () => undefined })));
   }
 
   private openTrainerForm(trainer: Trainer | null): Observable<Trainer | undefined> {
