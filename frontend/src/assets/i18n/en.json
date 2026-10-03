@@ -46,6 +46,14 @@
     },
     "toast": {
       "region": "Notifications"
+    },
+    "form": {
+      "datePlaceholder": "DD/MM/YYYY",
+      "openCalendar": "Open calendar",
+      "uploadPhoto": "Upload photo",
+      "changePhoto": "Change photo",
+      "removePhoto": "Remove",
+      "photoHelp": "JPG or PNG. Optional."
     }
   },
   "shell": {
@@ -337,5 +345,19 @@
       "emptyTitle": "Stock looks good",
       "emptyBody": "No product is down to 5 or fewer."
     }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Enter a valid email address.",
+    "minlength": "Enter at least {{requiredLength}} characters.",
+    "name": "Use letters only (English or Hebrew).",
+    "phone": "Enter a valid Israeli mobile number (05X-XXXXXXX).",
+    "birthDayFuture": "The birthday can't be in the future.",
+    "ageUnder": "Must be at least 16 years old.",
+    "dateInFuture": "Pick a date after today.",
+    "endBeforeJoin": "Must be after the join date.",
+    "dateFormat": "Enter a date like 14/03/2027.",
+    "imageType": "Choose a JPG or PNG image.",
+    "invalid": "This value isn't valid."
   }
 }

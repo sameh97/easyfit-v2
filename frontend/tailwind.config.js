@@ -104,7 +104,7 @@ module.exports = {
           bar: '#E39A1C',
         },
         // bg/text = the "danger-soft" pill (Expired), §5.2
-        danger: { DEFAULT: '#B4351F', dot: '#D9362B', bg: '#FBE4DF', text: '#A6321D' },
+        danger: { DEFAULT: '#B4351F', dot: '#D9362B', bg: '#FBE4DF', text: '#A6321D', ring: 'rgba(180,53,31,0.12)' },
         neutral: { DEFAULT: '#55585F', bg: '#ECEBE6', dot: '#C9C6BD' },
       },
       fontFamily: {

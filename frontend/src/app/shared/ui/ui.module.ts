@@ -20,6 +20,16 @@ import { ConfirmDialogComponent } from './overlay/confirm-dialog.component';
 import { PanelLayoutComponent } from './overlay/panel-layout.component';
 import { SidePanelComponent } from './overlay/side-panel.component';
 import { ToastHostComponent } from './overlay/toast-host.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FieldErrorComponent } from './form/field-error.component';
+import { TextFieldComponent } from './form/text-field.component';
+import { TextAreaComponent } from './form/text-area.component';
+import { SelectComponent } from './form/select.component';
+import { DateFieldComponent } from './form/date-field.component';
+import { SegmentedFieldComponent } from './form/segmented-field.component';
+import { ImageUploadComponent } from './form/image-upload.component';
+import { FormSectionComponent } from './form/form-section.component';
 
 const COMPONENTS = [
   IconComponent,
@@ -38,12 +48,20 @@ const COMPONENTS = [
   PanelLayoutComponent,
   SidePanelComponent,
   ToastHostComponent,
+  FieldErrorComponent,
+  TextFieldComponent,
+  TextAreaComponent,
+  SelectComponent,
+  DateFieldComponent,
+  SegmentedFieldComponent,
+  ImageUploadComponent,
+  FormSectionComponent,
 ];
 
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */
 @NgModule({
   declarations: COMPONENTS,
-  imports: [CommonModule, I18nModule, A11yModule, OverlayModule, PortalModule],
+  imports: [CommonModule, I18nModule, A11yModule, OverlayModule, PortalModule, ReactiveFormsModule, MatDatepickerModule],
   exports: [...COMPONENTS, I18nModule],
 })
 export class UiModule {}

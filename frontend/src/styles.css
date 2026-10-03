@@ -136,6 +136,45 @@ body .studio :where(*, *::before, *::after) {
     animation: studio-pop-in 160ms ease-out;
 }
 
+/* Material datepicker, restyled to Studio (§7.4). Only Studio date fields set this panel class,
+   which Material puts on the <mat-calendar> inside the popup. */
+.mat-datepicker-content:has(.studio-datepicker) {
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(27, 28, 32, 0.16);
+    font-family: "Plus Jakarta Sans", "Rubik", system-ui, sans-serif;
+    color: #1b1c20;
+}
+
+.mat-calendar.studio-datepicker {
+    font-family: inherit;
+}
+
+.studio-datepicker .mat-calendar-period-button,
+.studio-datepicker .mat-calendar-body-cell-content,
+.studio-datepicker .mat-calendar-table-header th {
+    font-family: inherit;
+    font-weight: 600;
+}
+
+.studio-datepicker .mat-calendar-table-header th,
+.studio-datepicker .mat-calendar-body-label {
+    color: #8a8d94;
+}
+
+.studio-datepicker .mat-calendar-body-selected {
+    background-color: #2f4bf0;
+    color: #fff;
+}
+
+.studio-datepicker .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    border-color: #2f4bf0;
+}
+
+.studio-datepicker .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected),
+.studio-datepicker .cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+    background-color: #e2e6fd;
+}
+
 @keyframes studio-panel-in {
     from { transform: translateX(32px); opacity: 0; }
 }

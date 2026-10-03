@@ -46,6 +46,14 @@
     },
     "toast": {
       "region": "הודעות"
+    },
+    "form": {
+      "datePlaceholder": "DD/MM/YYYY",
+      "openCalendar": "פתיחת לוח השנה",
+      "uploadPhoto": "העלאת תמונה",
+      "changePhoto": "החלפת תמונה",
+      "removePhoto": "הסרה",
+      "photoHelp": "JPG או PNG. לא חובה."
     }
   },
   "shell": {
@@ -337,5 +345,19 @@
       "emptyTitle": "המלאי תקין",
       "emptyBody": "אין מוצר שירד ל-5 יחידות או פחות."
     }
+  },
+  "validation": {
+    "required": "שדה חובה.",
+    "email": "יש להזין כתובת אימייל תקינה.",
+    "minlength": "יש להזין לפחות {{requiredLength}} תווים.",
+    "name": "יש להשתמש באותיות בלבד (עברית או אנגלית).",
+    "phone": "יש להזין מספר נייד ישראלי תקין (05X-XXXXXXX).",
+    "birthDayFuture": "תאריך הלידה לא יכול להיות בעתיד.",
+    "ageUnder": "הגיל המינימלי הוא 16.",
+    "dateInFuture": "יש לבחור תאריך אחרי היום.",
+    "endBeforeJoin": "התאריך חייב להיות אחרי תאריך ההצטרפות.",
+    "dateFormat": "יש להזין תאריך כמו 14/03/2027.",
+    "imageType": "יש לבחור תמונה בפורמט JPG או PNG.",
+    "invalid": "הערך אינו תקין."
   }
 }
