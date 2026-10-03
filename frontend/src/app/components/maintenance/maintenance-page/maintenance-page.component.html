@@ -1,0 +1,94 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'maintenance.page.title' | translate" [subtitle]="!loading && state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'maintenance.actions.schedule' | translate }}</button>
+            </ng-container>
+        </app-page-header>
+
+        <!-- Toolbar: job type filter with counts, machine search -->
+        <div class="flex flex-wrap items-center gap-2.5">
+            <div role="group" [attr.aria-label]="'maintenance.filters.label' | translate" class="flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-surface p-1 shadow-card">
+                <button *ngFor="let f of typeFilters" type="button" [attr.aria-pressed]="typeFilter === f" (click)="setTypeFilter(f)"
+                    class="whitespace-nowrap rounded-full border-0 px-3.5 py-[9px] text-sm transition-colors"
+                    [ngClass]="typeFilter === f ? 'bg-ink font-bold text-white' : 'bg-transparent font-semibold text-neutral hover:text-ink'">
+                    {{ (f === 'all' ? 'machines.filters.all' : 'maintenance.types.' + f) | translate }}
+                    <span [ngClass]="typeFilter === f ? 'opacity-70' : ''">{{ counts[f] }}</span>
+                </button>
+            </div>
+            <span class="hidden flex-1 md:block"></span>
+            <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[240px]">
+                <app-icon name="search" [size]="17"></app-icon>
+                <span class="sr-only">{{ 'maintenance.page.searchLabel' | translate }}</span>
+                <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'maintenance.page.searchPlaceholder' | translate"
+                    class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+            </label>
+        </div>
+
+        <!-- Error -->
+        <app-card *ngIf="state === 'error' || statusError">
+            <app-empty-state icon="alert-circle" tone="danger" [title]="'common.table.errorTitle' | translate" [message]="'common.table.errorBody' | translate">
+                <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="retry()">{{ 'common.actions.retry' | translate }}</button>
+            </app-empty-state>
+        </app-card>
+
+        <section *ngIf="state !== 'error' && !statusError" [attr.aria-label]="'maintenance.page.listLabel' | translate" class="flex flex-col rounded-card bg-surface px-5 pb-3 pt-1.5 shadow-card">
+            <!-- Loading -->
+            <ng-container *ngIf="loading">
+                <div *ngFor="let i of skeletonRows" class="flex h-[62px] items-center gap-3.5 border-t border-solid border-line-soft first:border-t-0" aria-hidden="true">
+                    <app-skeleton width="72px" height="20px"></app-skeleton>
+                    <div class="flex flex-1 flex-col gap-2"><app-skeleton width="40%" height="14px"></app-skeleton><app-skeleton width="25%" height="12px"></app-skeleton></div>
+                    <app-skeleton width="120px" height="14px"></app-skeleton>
+                </div>
+            </ng-container>
+
+            <!-- Empty -->
+            <ng-container *ngIf="!loading && !groups.length">
+                <app-empty-state *ngIf="!rows.length; else noMatches" icon="wrench" tone="accent" [title]="'maintenance.empty.title' | translate" [message]="'maintenance.empty.body' | translate">
+                    <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'maintenance.actions.schedule' | translate }}</button>
+                </app-empty-state>
+                <ng-template #noMatches>
+                    <app-empty-state icon="search" [title]="'maintenance.empty.noMatchTitle' | translate" [message]="'maintenance.empty.noMatchBody' | translate"></app-empty-state>
+                </ng-template>
+            </ng-container>
+
+            <!-- Groups -->
+            <ng-container *ngIf="!loading">
+                <div *ngFor="let g of groups; let first = first; trackBy: trackByGroup" class="flex flex-col">
+                    <h2 class="pb-1.5 text-[11px] font-extrabold uppercase tracking-label" [ngClass]="[first ? 'pt-3' : 'pt-[18px]', isDanger(g.group) ? 'text-danger-text' : 'text-ink-4']">
+                        {{ groupLabel(g.group) }} <span class="font-bold text-ink-4">{{ g.rows.length }}</span>
+                    </h2>
+                    <ul class="m-0 list-none p-0">
+                        <li *ngFor="let row of g.rows; trackBy: trackByJob"
+                            class="flex flex-wrap items-center gap-x-3.5 gap-y-1 border-t border-solid border-line-soft py-2.5 md:h-[62px] md:flex-nowrap md:py-0"
+                            [ngClass]="g.group === 'inactive' ? 'opacity-60' : ''">
+                            <app-job-type-pill [type]="row.type" [fixed]="true"></app-job-type-pill>
+                            <span class="flex min-w-0 flex-1 flex-col">
+                                <a *ngIf="row.machine; else noMachine" routerLink="/machines" [queryParams]="{ machine: row.machine.id }" class="truncate text-[15px] font-bold text-ink hover:text-accent" dir="auto">{{ machineName(row) }}</a>
+                                <ng-template #noMachine><span class="truncate text-[15px] font-bold text-ink-3">{{ machineName(row) }}</span></ng-template>
+                                <span class="text-[13px] text-ink-3"><bdi dir="ltr">{{ row.job.machineSerialNumber }}</bdi><span class="md:hidden"> · {{ every(row) }}</span></span>
+                            </span>
+                            <span class="hidden w-[120px] flex-shrink-0 text-sm text-ink-2 md:block">{{ every(row) }}</span>
+                            <span class="flex w-full flex-col ps-[86px] md:w-[180px] md:flex-shrink-0 md:ps-0">
+                                <span class="text-sm font-bold" [ngClass]="isDanger(g.group) ? 'text-danger' : 'text-ink'">{{ when(row) }}</span>
+                                <span class="text-xs text-ink-3">{{ note(row) }}</span>
+                            </span>
+                            <span class="ms-auto flex items-center gap-1 md:ms-0">
+                                <span class="flex w-[118px] justify-end">
+                                    <button *ngIf="row.status?.openAlerts" type="button" [disabled]="busySerial === row.job.machineSerialNumber" (click)="markDone(row)"
+                                        [attr.aria-label]="'maintenance.actions.markDoneFor' | translate: { name: machineName(row) }"
+                                        class="flex h-[34px] items-center gap-1.5 rounded-full border-0 bg-ink px-3 text-[13px] font-bold text-white hover:bg-ink-2 disabled:opacity-60">
+                                        <app-icon name="check" [size]="14"></app-icon>{{ 'maintenance.actions.markDone' | translate }}
+                                    </button>
+                                </span>
+                                <button type="button" appIconButton icon="pen" [label]="'maintenance.actions.editFor' | translate: { name: machineName(row) }" (click)="edit(row)"></button>
+                                <button type="button" appIconButton icon="more-horizontal" aria-haspopup="menu" aria-expanded="false"
+                                    [label]="'members.actions.moreFor' | translate: { name: machineName(row) }" (click)="openMoreMenu($event, row)"></button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </ng-container>
+        </section>
+    </div>
+</app-nav>

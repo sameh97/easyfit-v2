@@ -10,6 +10,8 @@ import { ClassFormComponent, ClassFormData } from '../components/classes/class-f
 import { GroupTraining } from '../model/group-training';
 import { MachineFormComponent, MachineFormData } from '../components/machines/machine-form/machine-form.component';
 import { Machine } from '../model/machine';
+import { JobFormComponent, JobFormData } from '../components/maintenance/job-form/job-form.component';
+import { ScheduledJob } from '../model/scheduled-job';
 import { AddGroupTrainingComponent } from '../components/group-training-components/add-group-training/add-group-training.component';
 import { AddProductComponent } from '../components/products-components/add-product/add-product.component';
 import { SellProductComponent } from '../components/products-components/sell-product/sell-product.component';
@@ -122,6 +124,22 @@ export class ShellActionsService {
     return this.sidePanel.open<MachineFormComponent, MachineFormData, Machine>(MachineFormComponent, {
       data: { machine, hasMaintenance },
       ariaLabel: this.language.t(machine ? 'machines.form.editTitle' : 'machines.form.addTitle'),
+    }).afterClosed$;
+  }
+
+  /** Studio "Schedule maintenance" side panel, optionally for one machine. Emits the new job, or undefined. */
+  scheduleMaintenance(machineSerialNumber: string | null = null): Observable<ScheduledJob | undefined> {
+    return this.openJobForm(null, machineSerialNumber);
+  }
+
+  editJob(job: ScheduledJob): Observable<ScheduledJob | undefined> {
+    return this.openJobForm(job, null);
+  }
+
+  private openJobForm(job: ScheduledJob | null, machineSerialNumber: string | null): Observable<ScheduledJob | undefined> {
+    return this.sidePanel.open<JobFormComponent, JobFormData, ScheduledJob>(JobFormComponent, {
+      data: { job, machineSerialNumber },
+      ariaLabel: this.language.t(job ? 'maintenance.form.editTitle' : 'maintenance.form.addTitle'),
     }).afterClosed$;
   }
 

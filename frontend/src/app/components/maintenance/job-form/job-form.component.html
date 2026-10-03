@@ -1,0 +1,30 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="job-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-form-section [title]="'maintenance.form.job' | translate">
+            <app-select [control]="machine" [options]="machineOptions" [label]="'maintenance.form.machine' | translate" [required]="true" [placeholder]="'maintenance.form.machinePlaceholder' | translate"></app-select>
+            <app-segmented-field [control]="jobID" [options]="typeOptions" [label]="'maintenance.form.type' | translate" [required]="true"></app-segmented-field>
+        </app-form-section>
+
+        <app-form-section [title]="'maintenance.form.when' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-date-field [control]="startDate" [label]="'maintenance.form.startDate' | translate" [required]="true"></app-date-field>
+                <app-time-field [control]="startTime" [label]="'maintenance.form.startTime' | translate" [required]="true"></app-time-field>
+                <app-date-field [control]="endDate" [label]="'maintenance.form.endDate' | translate" [required]="true"></app-date-field>
+                <app-time-field [control]="endTime" [label]="'maintenance.form.endTime' | translate" [required]="true"
+                    [messages]="{ endDateNotValid: 'validation.endInPast', endDateBeforeStartDate: 'validation.endBeforeStart' }"></app-time-field>
+            </div>
+            <app-text-field [control]="daysFrequency" inputmode="numeric" [ltr]="true" [label]="'maintenance.form.every' | translate" [required]="true" placeholder="7" name="daysFrequency"
+                [help]="'maintenance.form.everyHelp' | translate"
+                [messages]="{ frequencyLowerThanOneDay: 'validation.frequencyMin', overFrequency: 'validation.frequencyTooLong' }"></app-text-field>
+            <app-switch [control]="isActive" [label]="'maintenance.form.active' | translate" [help]="'maintenance.form.activeHelp' | translate"></app-switch>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="job-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'maintenance.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

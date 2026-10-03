@@ -88,6 +88,8 @@ import { MachinesPageComponent } from './components/machines/machines-page/machi
 import { MachineDetailComponent } from './components/machines/machine-detail/machine-detail.component';
 import { MachineFormComponent } from './components/machines/machine-form/machine-form.component';
 import { JobTypePillComponent, MachineBadgeComponent } from './components/machines/machine-badges.component';
+import { MaintenancePageComponent } from './components/maintenance/maintenance-page/maintenance-page.component';
+import { JobFormComponent } from './components/maintenance/job-form/job-form.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
@@ -139,8 +141,9 @@ const routes: Routes = [
   },
   {
     path: 'scheduler',
-    component: SchedulerPageComponent,
+    component: MaintenancePageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'catalog',
@@ -220,6 +223,8 @@ const routes: Routes = [
     MachineFormComponent,
     MachineBadgeComponent,
     JobTypePillComponent,
+    MaintenancePageComponent,
+    JobFormComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,

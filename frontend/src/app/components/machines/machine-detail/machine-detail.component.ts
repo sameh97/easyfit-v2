@@ -71,6 +71,10 @@ export class MachineDetailComponent {
       .subscribe((saved: Machine | undefined) => saved && this.actions.refreshMaintenance());
   }
 
+  scheduleJob(): void {
+    this.shellActions.scheduleMaintenance(this.view.machine.serialNumber).subscribe();
+  }
+
   openMoreMenu(event: Event): void {
     const trigger: HTMLElement = event.currentTarget as HTMLElement;
     const items: MenuItem[] = [{ id: 'delete', label: this.language.t('common.actions.delete'), icon: 'trash', tone: 'danger' }];

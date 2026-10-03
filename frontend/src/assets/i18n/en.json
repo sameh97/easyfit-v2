@@ -437,7 +437,11 @@
     "machineName": "Start with an English letter; then letters, digits, spaces, _ or .",
     "serialNumber": "Use English letters, digits, - _ or . only.",
     "year": "Enter a year between 1980 and 2030.",
-    "price": "Enter a price of 0 or more."
+    "price": "Enter a price of 0 or more.",
+    "endInPast": "Pick an end after now.",
+    "endBeforeStart": "The end must be after the start.",
+    "frequencyMin": "Enter at least 1 day.",
+    "frequencyTooLong": "That's longer than the time from start to end."
   },
   "members": {
     "page": {
@@ -821,7 +825,8 @@
       "noUpcoming": "No upcoming runs"
     },
     "actions": {
-      "add": "Add machine"
+      "add": "Add machine",
+      "scheduleJob": "Schedule job"
     },
     "empty": {
       "title": "No machines yet",
@@ -884,7 +889,102 @@
       },
       "nextRun": "Next run {{when}}",
       "paused": "Paused",
-      "noRunsLeft": "No runs left"
+      "noRunsLeft": "No runs left",
+      "ended": "Ended",
+      "endedOn": "Ended {{date}}",
+      "endsOn": "Ends {{date}}",
+      "daysAgo": {
+        "one": "Yesterday",
+        "two": "{{count}} days ago",
+        "other": "{{count}} days ago"
+      },
+      "alertOpen": "alert still open",
+      "alertSent": "Alert sent",
+      "dueNow": "Due now",
+      "inHours": {
+        "one": "In 1 hour",
+        "two": "In {{count}} hours",
+        "other": "In {{count}} hours"
+      },
+      "inDays": {
+        "one": "Tomorrow",
+        "two": "In {{count}} days",
+        "other": "In {{count}} days"
+      }
+    },
+    "page": {
+      "title": "Maintenance",
+      "summary": "{{jobs}} {{machines}}",
+      "jobs": {
+        "one": "{{count}} job",
+        "two": "{{count}} jobs",
+        "other": "{{count}} jobs"
+      },
+      "onMachines": {
+        "one": "on {{count}} machine",
+        "two": "on {{count}} machines",
+        "other": "on {{count}} machines"
+      },
+      "searchLabel": "Search jobs",
+      "searchPlaceholder": "Machine or serial number",
+      "listLabel": "Maintenance jobs"
+    },
+    "filters": {
+      "label": "Job type"
+    },
+    "groups": {
+      "overdue": "Overdue",
+      "today": "Today",
+      "week": "This week",
+      "later": "Later",
+      "inactive": "Inactive"
+    },
+    "actions": {
+      "schedule": "Schedule maintenance",
+      "add": "Schedule job",
+      "markDone": "Mark done",
+      "markDoneFor": "Mark the alerts for {{name}} done",
+      "editFor": "Edit job for {{name}}",
+      "deactivate": "Deactivate",
+      "activate": "Activate"
+    },
+    "empty": {
+      "title": "No maintenance jobs yet",
+      "body": "Schedule cleaning and service for your machines and get alerts when they're due.",
+      "noMatchTitle": "No jobs match",
+      "noMatchBody": "Try another type or search."
+    },
+    "form": {
+      "addTitle": "Schedule maintenance",
+      "editTitle": "Edit maintenance job",
+      "job": "Job",
+      "machine": "Machine",
+      "machinePlaceholder": "Choose a machine",
+      "type": "Job type",
+      "when": "When",
+      "startDate": "Start date",
+      "startTime": "Start time",
+      "endDate": "End date",
+      "endTime": "End time",
+      "every": "Every (days)",
+      "everyHelp": "How often the job repeats, e.g. 7 for weekly.",
+      "active": "Active",
+      "activeHelp": "Paused jobs send no alerts."
+    },
+    "toast": {
+      "added": "{{name}} scheduled",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "activated": "{{name}} is active again",
+      "deactivated": "{{name}} was paused",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again."
+    },
+    "confirm": {
+      "deactivateTitle": "Deactivate {{name}}?",
+      "deactivateBody": "It stops sending alerts until you activate it again.",
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the job for good. It can't be undone."
     }
   }
 }

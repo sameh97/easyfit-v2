@@ -13,7 +13,7 @@
 <!-- Actions -->
 <div class="flex gap-2 px-5 pt-4">
     <button appButton variant="secondary" type="button" icon="pen" class="flex-grow" (click)="edit()">{{ 'common.actions.edit' | translate }}</button>
-    <ng-content select="[machineActions]"></ng-content>
+    <button appButton variant="primary" type="button" icon="plus" class="flex-grow" (click)="scheduleJob()">{{ 'machines.actions.scheduleJob' | translate }}</button>
     <button type="button" appIconButton variant="outline" size="md" icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'common.actions.moreActions' | translate" (click)="openMoreMenu($event)"></button>
 </div>
 
