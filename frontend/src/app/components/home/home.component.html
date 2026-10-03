@@ -72,7 +72,9 @@
                             <a routerLink="/group-trainings" class="text-sm font-bold text-accent hover:text-accent hover:underline">{{ 'dashboard.today.fullSchedule' | translate }}</a>
                         </div>
                         <ul *ngIf="classes.length; else noClasses" class="flex flex-col gap-1.5">
-                            <li *ngFor="let c of classes; trackBy: trackById" class="flex items-center gap-3.5 rounded-[14px] px-3 py-[9px]"
+                            <li *ngFor="let c of classes; trackBy: trackById">
+                                <a routerLink="/group-trainings" [queryParams]="{ class: c.id }"
+                                class="flex items-center gap-3.5 rounded-[14px] px-3 py-[9px] text-ink hover:bg-surface-subtle hover:text-ink"
                                 [ngClass]="{ 'bg-accent-soft': c.state === 'next', 'opacity-[.55]': c.state === 'done' }">
                                 <span class="h-2.5 w-2.5 flex-shrink-0 rounded-full" [ngClass]="c.state === 'done' ? 'bg-neutral-dot' : 'bg-accent'" aria-hidden="true"></span>
                                 <span class="w-[46px] flex-shrink-0 text-sm font-bold text-ink">{{ c.time | localDate: 'time' }}</span>
@@ -82,6 +84,7 @@
                                 </div>
                                 <span *ngIf="c.state === 'next'" class="flex-shrink-0 text-xs font-bold text-accent">{{ 'dashboard.today.upNext' | translate }}</span>
                                 <span *ngIf="c.state === 'done'" class="flex-shrink-0 text-xs font-bold text-ink-4">{{ 'dashboard.today.done' | translate }}</span>
+                                </a>
                             </li>
                         </ul>
                         <ng-template #noClasses>
@@ -124,7 +127,8 @@
                             <a routerLink="/scheduler" class="text-sm font-bold text-accent hover:text-accent hover:underline">{{ 'dashboard.maintenance.allJobs' | translate }}</a>
                         </div>
                         <ul *ngIf="maintenance.length; else noMaintenance" class="flex flex-col gap-3">
-                            <li *ngFor="let job of maintenance; trackBy: trackById" class="flex items-center gap-3">
+                            <li *ngFor="let job of maintenance; trackBy: trackById">
+                                <a routerLink="/machines" [queryParams]="{ serial: job.serialNumber }" class="-mx-2 flex items-center gap-3 rounded-[14px] px-2 py-1 text-ink hover:bg-surface-subtle hover:text-ink">
                                 <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-tile bg-surface-muted text-ink-2" aria-hidden="true">
                                     <app-icon name="wrench" [size]="18"></app-icon>
                                 </span>
@@ -133,6 +137,7 @@
                                     <span class="truncate text-[13px] text-ink-3">{{ job.jobType }} · {{ 'dashboard.maintenance.serial' | translate }} <bdi dir="ltr">{{ job.serialNumber }}</bdi></span>
                                 </div>
                                 <span class="flex-shrink-0 text-[13px] font-bold" [ngClass]="job.urgent ? 'text-danger' : 'text-neutral'">{{ job.due }}</span>
+                                </a>
                             </li>
                         </ul>
                         <ng-template #noMaintenance>

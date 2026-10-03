@@ -12,10 +12,8 @@ import { MachineFormComponent, MachineFormData } from '../components/machines/ma
 import { Machine } from '../model/machine';
 import { JobFormComponent, JobFormData } from '../components/maintenance/job-form/job-form.component';
 import { ScheduledJob } from '../model/scheduled-job';
-import { AddGroupTrainingComponent } from '../components/group-training-components/add-group-training/add-group-training.component';
 import { AddProductComponent } from '../components/products-components/add-product/add-product.component';
 import { SellProductComponent } from '../components/products-components/sell-product/sell-product.component';
-import { AddScheduledJobPageComponent } from '../components/scheduler-components/add-scheduled-job-page/add-scheduled-job-page.component';
 import { Member } from '../model/member';
 import { Product } from '../model/product';
 import { DashboardService } from './dashboard-service/dashboard.service';
@@ -25,16 +23,15 @@ import { LanguageService } from './language.service';
 /** Actions that open an existing create dialog without extra input. */
 export type CreateAction = 'add-member' | 'add-trainer' | 'new-class' | 'add-product' | 'schedule-maintenance';
 
-/** Legacy Material create dialogs; members and trainers use Studio side panels instead. */
-const CREATE_DIALOGS: Record<Exclude<CreateAction, 'add-member' | 'add-trainer'>, ComponentType<object>> = {
-  'new-class': AddGroupTrainingComponent,
+/** Legacy Material create dialogs, for pages not redesigned yet (Products, Phase 4). */
+const CREATE_DIALOGS: Record<'add-product', ComponentType<object>> = {
   'add-product': AddProductComponent,
-  'schedule-maintenance': AddScheduledJobPageComponent,
 };
 
 /**
  * Opens the create/edit UIs from the shell, palette and dashboard: Studio side panels for
- * members and trainers, the existing (Material) dialogs for pages not redesigned yet,
+ * members, trainers, classes, machines and maintenance jobs, the existing (Material) dialogs
+ * for pages not redesigned yet,
  * with the same options the owning pages use. Each method emits once when the dialog closes,
  * after which the dashboard summary (KPIs, gym card counts) is refreshed.
  */
@@ -55,6 +52,12 @@ export class ShellActionsService {
     }
     if (action === 'add-trainer') {
       return this.addTrainer();
+    }
+    if (action === 'new-class') {
+      return this.addClass();
+    }
+    if (action === 'schedule-maintenance') {
+      return this.scheduleMaintenance();
     }
     return this.afterClose(this.navigationService.openDialog(CREATE_DIALOGS[action], null, null, true));
   }

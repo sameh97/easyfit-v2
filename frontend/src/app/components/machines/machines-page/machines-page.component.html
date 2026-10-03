@@ -35,7 +35,7 @@
                 </app-card>
 
                 <!-- Loading -->
-                <ul *ngIf="state === 'loading'" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? '' : 'xl:grid-cols-3'" aria-busy="true">
+                <ul *ngIf="state === 'loading'" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? 'lg:grid-cols-1 xl:grid-cols-2' : 'xl:grid-cols-3'" aria-busy="true">
                     <li *ngFor="let i of skeletonCards">
                         <app-card padding="sm" class="flex gap-3.5">
                             <app-skeleton width="72px" height="72px" shape="block"></app-skeleton>
@@ -55,7 +55,7 @@
                 </app-card>
 
                 <!-- Cards -->
-                <ul *ngIf="state === 'ready' && filtered.length" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? '' : 'xl:grid-cols-3'" [attr.aria-label]="'machines.page.title' | translate">
+                <ul *ngIf="state === 'ready' && filtered.length" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? 'lg:grid-cols-1 xl:grid-cols-2' : 'xl:grid-cols-3'" [attr.aria-label]="'machines.page.title' | translate">
                     <li *ngFor="let view of filtered; trackBy: trackById">
                         <article (click)="select(view.machine)"
                             class="flex h-full cursor-pointer gap-3.5 rounded-card bg-surface p-4 shadow-card transition-shadow hover:shadow-overlay"

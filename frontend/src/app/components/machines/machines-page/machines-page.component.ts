@@ -48,6 +48,8 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
   private status: MaintenanceStatus | null = null;
   private alertGroups: MachineAlertGroup[] = [];
   private pendingId: number | null = null;
+  /** ?serial=<serial number> (the dashboard's Maintenance rows), resolved to ?machine=<id>. */
+  private pendingSerial: string | null = null;
   private machinesSubscription: Subscription | null = null;
   private readonly subscriptions: Subscription[] = [];
 
@@ -91,7 +93,8 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
       this.route.queryParamMap.subscribe((params: ParamMap) => {
         const id: number = Number(params.get('machine'));
         this.pendingId = Number.isInteger(id) && id > 0 ? id : null;
-        if (this.pendingId === null) {
+        this.pendingSerial = params.get('serial');
+        if (this.pendingId === null && this.pendingSerial === null) {
           this.selectedId = null;
         }
         this.resolvePending();
@@ -225,7 +228,22 @@ export class MachinesPageComponent implements OnInit, OnDestroy {
   }
 
   private resolvePending(): void {
-    if (this.pendingId === null || this.state !== 'ready' || !this.machines) {
+    if (this.state !== 'ready' || !this.machines) {
+      return;
+    }
+    if (this.pendingSerial !== null) {
+      const serial: string = this.pendingSerial;
+      this.pendingSerial = null;
+      const machine: Machine | undefined = this.machines.find((m: Machine) => String(m.serialNumber) === serial);
+      if (machine) {
+        this.router.navigate([], { relativeTo: this.route, queryParams: { machine: machine.id, serial: null }, queryParamsHandling: 'merge', replaceUrl: true });
+      } else {
+        this.toast.error(this.language.t('machines.toast.notFound'));
+        this.router.navigate([], { relativeTo: this.route, queryParams: { serial: null }, queryParamsHandling: 'merge', replaceUrl: true });
+      }
+      return;
+    }
+    if (this.pendingId === null) {
       return;
     }
     const id: number = this.pendingId;

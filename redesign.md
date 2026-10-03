@@ -96,9 +96,9 @@ The first redesign pass is done for **Login**, the **app shell** (sidebar and to
 | `/home` | `HomeComponent` (dashboard) | gym user | `app-nav` | ✅ |
 | `/members` | `MembersPageComponent` | gym user | `app-nav` | ✅ Phase 2 |
 | `/trainers` | `TrainersPageComponent` | gym user | `app-nav` | ✅ Phase 2 |
-| `/group-trainings` | `DisplayTrainingsComponent` | gym user | `app-nav` | ❌ |
-| `/machines` | `MachinesComponent` | gym user | `app-nav` | ❌ |
-| `/scheduler` | `SchedulerPageComponent` (machine maintenance) | gym user | `app-nav` | ❌ |
+| `/group-trainings` | `ClassesPageComponent` | gym user | `app-nav` | ✅ Phase 3 |
+| `/machines` | `MachinesPageComponent` | gym user | `app-nav` | ✅ Phase 3 |
+| `/scheduler` | `MaintenancePageComponent` (machine maintenance) | gym user | `app-nav` | ✅ Phase 3 |
 | `/products` | `ProductsPageComponent` (+ bills tab) | gym user | `app-nav` | ❌ |
 | `/catalog` | `CatalogPageComponent` | gym user | `app-nav` | ❌ |
 | `/profile` | `UserProfileComponent` | gym user | `app-nav` | ❌ |
@@ -639,5 +639,17 @@ Branch `redesign/phase-3` (from master, after Phase 2 is merged). Mockups: the `
 - `npm run check:studio` passes; screenshots at 1440, 1024 and 390px in English and Hebrew broadly match the P3 mockups.
 - Keyboard: panels and dialogs trap focus, close on Esc and return focus; every icon button has a translated `aria-label`.
 - **Report:** the new Hebrew strings, for the owner to review.
+
+#### Done in Phase 3 (decisions made while building it)
+- **Backend fix in `PUT /api/group-training`** (approved by the owner; same request and response): the class was looked up by id + trainerId and the "trainer busy" check matched the class itself, so changing the trainer, or editing without moving the time by an hour, always failed.
+- **Trainer clash rule** shown on the class form's time field before saving is the backend's: a trainer can't start a class less than an hour after another of theirs started. Class times now take any minute (24h field); the legacy dialog only offered whole hours.
+- **`GET /api/maintenance/status?tzOffset=`** returns `due` (= the dashboard's `maintenanceDue`), per job `nextRun`, `dueToday`, `overdue`, `openAlerts`, `oldestOpenAlertAt`, and per machine `openAlerts`. The rule lives in `backend/common/maintenance-due.ts`, shared with the dashboard. The sidebar badge reads this endpoint.
+- **Maintenance groups:** This week = from tomorrow to the end of Saturday (Sunday–Saturday weeks, like Classes); Later after that; Inactive = paused, or active with no run left.
+- **Bell panel** groups the alerts of `GET /api/notifications` on the client (the grouped endpoint has no times). An alert from today reads "due", an older one "overdue". One store (`MaintenanceAlertsService`) feeds the bell, the panel and the machine panel.
+- **Done on a single alert** (machine panel) uses `PUT /api/notification` with `seen = true`, as the legacy dialog did; Done on a machine and Mark done use `DELETE /api/machine-notifications`.
+- **Machine serial numbers stay editable** (legacy rule), but jobs and alerts reference the serial, so changing it orphans them; the edit form warns when the machine has jobs or alerts. A real fix needs a backend change (cascade or lock).
+- **Machine name rule** (legacy `validateMachineName`) still requires an English first letter; Hebrew machine names are refused.
+- Deep links: `/group-trainings?day=YYYY-MM-DD&class=<id>`, `/machines?machine=<id>` (also `?serial=<serial>`), `/scheduler?machine=<serial>` (prefills the search).
+- New kit pieces: `TimeField`, `MultiSelect`, `Switch`, `Tabs`, `WeekStrip`; the machine badge and job-type pill live in `components/machines/machine-badges.component.ts`.
 
 **Phase 4+:** written after Phase 3, following the order in §7.5.
