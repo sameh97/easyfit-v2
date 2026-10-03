@@ -35,6 +35,17 @@
     },
     "language": {
       "label": "שפה"
+    },
+    "panel": {
+      "requiredNotePrefix": "שדות המסומנים ב-",
+      "requiredNoteSuffix": " הם שדות חובה",
+      "discardTitle": "לבטל את השינויים?",
+      "discardBody": "יש שינויים שלא נשמרו. אם תסגרו את החלון, הם יאבדו.",
+      "discard": "ביטול השינויים",
+      "keepEditing": "המשך עריכה"
+    },
+    "toast": {
+      "region": "הודעות"
     }
   },
   "shell": {
@@ -83,11 +94,12 @@
       "profile": "פרופיל",
       "settings": "פרופיל והגדרות",
       "logout": "התנתקות",
-      "logoutConfirm": "להתנתק מהחשבון?",
       "roles": {
         "manager": "מנהל/ת",
         "admin": "אדמין"
-      }
+      },
+      "logoutTitle": "להתנתק?",
+      "logoutBody": "כדי להמשיך לעבוד תצטרכו להתחבר שוב."
     },
     "search": {
       "trigger": "חיפוש או מעבר אל…"

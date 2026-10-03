@@ -35,6 +35,17 @@
     },
     "language": {
       "label": "Language"
+    },
+    "panel": {
+      "requiredNotePrefix": "Fields marked ",
+      "requiredNoteSuffix": " are required",
+      "discardTitle": "Discard changes?",
+      "discardBody": "You have unsaved changes. If you close this panel, they'll be lost.",
+      "discard": "Discard",
+      "keepEditing": "Keep editing"
+    },
+    "toast": {
+      "region": "Notifications"
     }
   },
   "shell": {
@@ -83,11 +94,12 @@
       "profile": "Profile",
       "settings": "Profile and settings",
       "logout": "Log out",
-      "logoutConfirm": "Are you sure you want to log out?",
       "roles": {
         "manager": "Manager",
         "admin": "Admin"
-      }
+      },
+      "logoutTitle": "Log out?",
+      "logoutBody": "You'll need to sign in again to keep working."
     },
     "search": {
       "trigger": "Search or jump to…"

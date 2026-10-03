@@ -17,6 +17,7 @@ import { ShellStateService } from 'src/app/services/shell-state.service';
 import { ShellContext, ShellContextService } from 'src/app/services/shell-context.service';
 import { initialsOf } from 'src/app/shared/ui/avatar/avatar.component';
 import { DashboardService } from 'src/app/services/dashboard-service/dashboard.service';
+import { ConfirmDialogService } from 'src/app/shared/ui/overlay/confirm-dialog.service';
 import { Lang, LANGUAGES, LANGUAGE_NAMES, LanguageService, TextDir } from 'src/app/services/language.service';
 
 /** Below md: off-canvas drawer. md–lg: 72px rail. ≥ lg: full sidebar (user can collapse). ≥ xl: AI panel docks. */
@@ -63,6 +64,7 @@ export class NavComponent implements OnInit, OnDestroy {
     private shellContextService: ShellContextService,
     private dashboardService: DashboardService,
     private language: LanguageService,
+    private confirmDialog: ConfirmDialogService,
     public shell: ShellStateService
   ) {
     this.lang = language.current;
@@ -322,13 +324,20 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.userMenuOpen = false;
-    const message: string = this.language.t('shell.user.logoutConfirm');
-    this.navigationService.openYesNoDialogNoCallback(message, 500).subscribe((res: boolean) => {
-      if (res) {
-        this.authService.logout();
-      }
-    });
+    // Focus the account button first so the dialog returns focus there (the menu item goes away).
+    this.closeUserMenu(true);
+    this.confirmDialog
+      .confirm({
+        title: this.language.t('shell.user.logoutTitle'),
+        message: this.language.t('shell.user.logoutBody'),
+        confirmLabel: this.language.t('shell.user.logout'),
+        tone: 'danger',
+      })
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.authService.logout();
+        }
+      });
   }
 
   // ---- Global shortcuts --------------------------------------------------
