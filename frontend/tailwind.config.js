@@ -3,6 +3,57 @@
 const ACCENT = '#2F4BF0';
 const ACCENT_SOFT = '#E2E6FD';
 
+/**
+ * Logical-direction utilities (redesign.md §7.10, Phase 2 step 1).
+ * Tailwind 2 has no ms-/ps-/start- utilities, so this plugin builds them from the
+ * theme scales with CSS logical properties. They follow `dir`, so one template works
+ * in English (LTR) and Hebrew (RTL). Studio code must use these, never ml-/pl-/left-…
+ *
+ * @param {{
+ *   matchUtilities: (utilities: Record<string, (value: string) => Record<string, string>>, options: { values: Record<string, string> }) => void,
+ *   addUtilities: (utilities: Record<string, Record<string, string>>) => void,
+ *   theme: (path: string) => Record<string, string>,
+ * }} api
+ */
+function logicalUtilities({ matchUtilities, addUtilities, theme }) {
+  /** @param {string} property */
+  const one = (property) => (value) => ({ [property]: value });
+  /** @param {string[]} properties */
+  const many = (properties) => (value) => Object.fromEntries(properties.map((property) => [property, value]));
+
+  matchUtilities(
+    { ms: one('margin-inline-start'), me: one('margin-inline-end') },
+    { values: theme('margin') }
+  );
+  matchUtilities(
+    { ps: one('padding-inline-start'), pe: one('padding-inline-end') },
+    { values: theme('padding') }
+  );
+  matchUtilities(
+    { start: one('inset-inline-start'), end: one('inset-inline-end') },
+    { values: theme('inset') }
+  );
+  matchUtilities(
+    {
+      'rounded-s': many(['border-start-start-radius', 'border-end-start-radius']),
+      'rounded-e': many(['border-start-end-radius', 'border-end-end-radius']),
+    },
+    { values: theme('borderRadius') }
+  );
+
+  /** @type {Record<string, Record<string, string>>} */
+  const fixed = {
+    '.text-start': { 'text-align': 'start' },
+    '.text-end': { 'text-align': 'end' },
+  };
+  for (const [key, width] of Object.entries(theme('borderWidth'))) {
+    const suffix = key === 'DEFAULT' ? '' : `-${key}`;
+    fixed[`.border-s${suffix}`] = { 'border-inline-start-width': width };
+    fixed[`.border-e${suffix}`] = { 'border-inline-end-width': width };
+  }
+  addUtilities(fixed);
+}
+
 module.exports = {
   mode: 'jit',
   // Utilities are generated ONLY from Studio code. Legacy templates use Bootstrap helpers
@@ -52,11 +103,13 @@ module.exports = {
           text: '#8A5A00',
           bar: '#E39A1C',
         },
-        danger: { DEFAULT: '#B4351F', dot: '#D9362B' },
+        // bg/text = the "danger-soft" pill (Expired), §5.2
+        danger: { DEFAULT: '#B4351F', dot: '#D9362B', bg: '#FBE4DF', text: '#A6321D' },
         neutral: { DEFAULT: '#55585F', bg: '#ECEBE6', dot: '#C9C6BD' },
       },
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        // Plus Jakarta Sans has no Hebrew letters; Rubik covers them (§7.8).
+        sans: ['"Plus Jakarta Sans"', 'Rubik', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         tile: '12px',
@@ -67,10 +120,11 @@ module.exports = {
         card: '0 1px 2px rgba(27,28,32,.05), 0 6px 20px rgba(27,28,32,.05)',
         overlay: '0 20px 50px rgba(27,28,32,.16)',
       },
+      // Negative heading tracking is set to 0 in Hebrew through these variables (styles.css).
       letterSpacing: {
-        title: '-1.2px',
-        card: '-0.3px',
-        kpi: '-1px',
+        title: 'var(--ef-tracking-title)',
+        card: 'var(--ef-tracking-card)',
+        kpi: 'var(--ef-tracking-kpi)',
         logo: '-0.8px',
         label: '1.4px',
       },
@@ -81,5 +135,5 @@ module.exports = {
     // base styles; Tailwind's preflight would override them.
     preflight: false,
   },
-  plugins: [],
+  plugins: [logicalUtilities],
 };

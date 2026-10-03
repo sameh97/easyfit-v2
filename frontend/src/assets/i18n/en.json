@@ -1,0 +1,329 @@
+{
+  "common": {
+    "actions": {
+      "retry": "Retry",
+      "close": "Close",
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "edit": "Edit",
+      "delete": "Delete",
+      "undo": "Undo",
+      "dismiss": "Dismiss",
+      "moreActions": "More actions"
+    },
+    "status": {
+      "active": "Active",
+      "expiring": "Expiring",
+      "expired": "Expired",
+      "inactive": "Inactive"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "chart": {
+      "month": "Month",
+      "value": "Value"
+    },
+    "productCategory": {
+      "protein": "Protein",
+      "bcaa": "BCAA",
+      "glutamine": "Glutamine",
+      "creatine": "Creatine",
+      "clothes": "Clothes",
+      "other": "Other"
+    },
+    "language": {
+      "label": "Language"
+    }
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "homeLink": "easyfit, go to dashboard",
+    "sidebar": {
+      "expand": "Expand sidebar",
+      "collapse": "Collapse sidebar",
+      "navigation": "Navigation",
+      "openNavigation": "Open navigation",
+      "closeNavigation": "Close navigation",
+      "main": "Main"
+    },
+    "gym": {
+      "fallbackName": "Your gym",
+      "members": {
+        "one": "{{count}} member",
+        "two": "{{count}} members",
+        "other": "{{count}} members"
+      }
+    },
+    "askAi": "Ask EasyFit AI",
+    "nav": {
+      "groups": {
+        "overview": "Overview",
+        "people": "People",
+        "equipment": "Equipment",
+        "shop": "Shop"
+      },
+      "items": {
+        "dashboard": "Dashboard",
+        "members": "Members",
+        "trainers": "Trainers",
+        "classes": "Classes",
+        "machines": "Machines",
+        "maintenance": "Maintenance",
+        "products": "Products",
+        "catalogs": "Catalogs",
+        "profile": "Profile & settings"
+      }
+    },
+    "user": {
+      "menuFor": "Account menu for {{name}}",
+      "menu": "Account",
+      "signedInAs": "Signed in as",
+      "profile": "Profile",
+      "settings": "Profile and settings",
+      "logout": "Log out",
+      "logoutConfirm": "Are you sure you want to log out?",
+      "roles": {
+        "manager": "Manager",
+        "admin": "Admin"
+      }
+    },
+    "search": {
+      "trigger": "Search or jump to…"
+    },
+    "notifications": {
+      "label": "Notifications",
+      "unread": {
+        "one": "Notifications, {{count}} unread",
+        "two": "Notifications, {{count}} unread",
+        "other": "Notifications, {{count}} unread"
+      }
+    },
+    "palette": {
+      "dialog": "Command palette",
+      "inputLabel": "Search or jump to",
+      "inputLabelSell": "Search products to sell",
+      "placeholder": "Search members, pages and actions…",
+      "placeholderSell": "Sell product: search by name or code…",
+      "back": "Back to all results",
+      "close": "Close command palette",
+      "results": "Results",
+      "groups": {
+        "askAi": "Ask AI",
+        "members": "Members",
+        "products": "Products",
+        "pages": "Pages",
+        "actions": "Actions"
+      },
+      "askAiQuery": "Ask EasyFit AI: “{{query}}”",
+      "askAiEmpty": "Ask EasyFit AI anything about your gym",
+      "comingSoon": "Coming soon",
+      "currentPage": "Current page",
+      "pickProduct": "Pick a product",
+      "actions": {
+        "addMember": "Add member",
+        "sellProduct": "Sell product",
+        "newClass": "New class",
+        "addTrainer": "Add trainer",
+        "addProduct": "Add product",
+        "scheduleMaintenance": "Schedule maintenance"
+      },
+      "membersError": "Could not load members.",
+      "membersLoading": "Loading members…",
+      "membersNone": "No members match.",
+      "productsError": "Could not load products.",
+      "productsLoading": "Loading products…",
+      "productsNone": "No products match.",
+      "productsEmpty": "No products yet. Add one first.",
+      "inStock": {
+        "one": "{{count}} in stock",
+        "two": "{{count}} in stock",
+        "other": "{{count}} in stock"
+      },
+      "outOfStock": "Out of stock",
+      "hints": {
+        "move": "↑↓ to move",
+        "open": "↵ to open",
+        "askAi": "Tab to ask AI",
+        "comingSoon": "(coming soon)",
+        "close": "Esc to close",
+        "back": "Esc to go back"
+      }
+    },
+    "ai": {
+      "title": "EasyFit AI",
+      "beta": "Beta",
+      "newChat": "New chat (coming soon)",
+      "close": "Close AI panel",
+      "comingSoonTitle": "EasyFit AI is coming soon",
+      "comingSoonBody": "Ask questions about your members, classes, sales and maintenance, and get answers with sources. Any change it suggests will always ask you to confirm first.",
+      "youCanAsk": "You'll be able to ask",
+      "examplesLabel": "Example questions",
+      "examples": {
+        "expiring": "Who expires this week?",
+        "sales": "Summarise this month’s sales",
+        "maintenance": "Overdue maintenance?",
+        "classes": "Which classes are busiest?"
+      },
+      "composerLabel": "Ask EasyFit AI (coming soon)",
+      "composerPlaceholder": "Ask about members, classes, sales…",
+      "attach": "Attach a document (coming soon)",
+      "send": "Send (coming soon)",
+      "notConnected": "The assistant isn't connected yet."
+    }
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to your account to continue.",
+    "email": "Email",
+    "emailError": "Please enter a valid email address.",
+    "password": "Password",
+    "passwordError": "Password is required.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "invalid": "Invalid email or password.",
+    "signIn": "Sign in",
+    "signingIn": "Signing in",
+    "tagline": "Gym management for owners and front-desk teams.",
+    "eyebrow": "EasyFit for gyms",
+    "headline": "Run your gym.",
+    "headlineAccent": "Not your paperwork.",
+    "lead": "Members, classes, equipment and sales in one calm place, with the day's work up front.",
+    "featuresLabel": "What you can do",
+    "features": {
+      "membersTitle": "Members and renewals",
+      "membersBody": "See who's about to expire and renew them in a couple of clicks.",
+      "classesTitle": "Classes and trainers",
+      "classesBody": "Plan group classes and who teaches them, day by day.",
+      "maintenanceTitle": "Equipment maintenance",
+      "maintenanceBody": "Cleaning and service reminders for every machine."
+    }
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "Good morning, {{name}}",
+      "afternoon": "Good afternoon, {{name}}",
+      "evening": "Good evening, {{name}}",
+      "morningNoName": "Good morning",
+      "afternoonNoName": "Good afternoon",
+      "eveningNoName": "Good evening"
+    },
+    "actions": {
+      "sellProduct": "Sell product",
+      "addMember": "Add member"
+    },
+    "error": {
+      "title": "We couldn't load your dashboard",
+      "body": "Check your connection and try again."
+    },
+    "loading": "Loading dashboard",
+    "kpi": {
+      "activeMembers": "Active members",
+      "newThisMonth": "New this month",
+      "noNewThisMonth": "No new members this month",
+      "expiringThisWeek": "Expiring this week",
+      "action": "Action",
+      "inNext3Days": {
+        "one": "{{count}} in the next 3 days",
+        "two": "{{count}} in the next 3 days",
+        "other": "{{count}} in the next 3 days"
+      },
+      "nothingExpires": "Nothing expires in the next 7 days",
+      "classesToday": "Classes today",
+      "classesLeft": {
+        "one": "{{count}} left",
+        "two": "{{count}} left",
+        "other": "{{count}} left"
+      },
+      "nextClass": "Next: {{name}} at {{time}}",
+      "noMoreClasses": "No more classes today",
+      "noClassesScheduled": "No classes scheduled today",
+      "revenue": "Revenue · {{month}}",
+      "vsSamePeriod": "vs {{amount}} same period last month",
+      "noSalesSamePeriod": "No sales in the same period last month"
+    },
+    "chart": {
+      "label": "Chart",
+      "explain": "Explain this",
+      "subtitle": "{{unit}}, {{year}} · {{total}} so far",
+      "emptyTitle": "No data yet this year",
+      "emptyMembers": "New members will show up here by month.",
+      "emptySales": "Sales will show up here by month.",
+      "income": {
+        "title": "Income",
+        "tab": "Income",
+        "unit": "Monthly",
+        "question": "Explain my monthly income this year"
+      },
+      "members": {
+        "title": "New members",
+        "tab": "Members",
+        "unit": "Joined per month",
+        "question": "Explain how many members joined each month this year"
+      },
+      "products": {
+        "title": "Products sold",
+        "tab": "Products sold",
+        "unit": "Units per month",
+        "question": "Explain my product sales this year"
+      }
+    },
+    "today": {
+      "title": "Today",
+      "fullSchedule": "Full schedule",
+      "upNext": "Up next",
+      "done": "Done",
+      "members": {
+        "one": "{{count}} member",
+        "two": "{{count}} members",
+        "other": "{{count}} members"
+      },
+      "emptyTitle": "No classes today",
+      "emptyBody": "Schedule a group training and it will show up here.",
+      "newClass": "New class"
+    },
+    "expiring": {
+      "title": "Expiring soon",
+      "thisWeek": {
+        "one": "{{count}} this week",
+        "two": "{{count}} this week",
+        "other": "{{count}} this week"
+      },
+      "today": "Expires today",
+      "tomorrow": "Expires tomorrow",
+      "inDays": {
+        "one": "Expires in {{count}} day",
+        "two": "Expires in {{count}} days",
+        "other": "Expires in {{count}} days"
+      },
+      "renew": "Renew",
+      "renewName": "Renew {{name}}",
+      "emptyTitle": "All clear",
+      "emptyBody": "No memberships expire in the next 7 days."
+    },
+    "maintenance": {
+      "title": "Maintenance",
+      "allJobs": "All jobs",
+      "dueToday": "Due today",
+      "tomorrow": "Tomorrow",
+      "clean": "Clean",
+      "service": "Service",
+      "serial": "SN",
+      "emptyTitle": "Nothing scheduled",
+      "emptyBody": "Upcoming cleaning and service jobs will show up here."
+    },
+    "stock": {
+      "title": "Low stock",
+      "products": "Products",
+      "outOfStock": "Out of stock",
+      "left": {
+        "one": "{{count}} left",
+        "two": "{{count}} left",
+        "other": "{{count}} left"
+      },
+      "emptyTitle": "Stock looks good",
+      "emptyBody": "No product is down to 5 or fewer."
+    }
+  }
+}

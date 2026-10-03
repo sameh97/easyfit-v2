@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { ActivatedRouteSnapshot, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -17,11 +17,12 @@ import { ShellStateService } from 'src/app/services/shell-state.service';
 import { ShellContext, ShellContextService } from 'src/app/services/shell-context.service';
 import { initialsOf } from 'src/app/shared/ui/avatar/avatar.component';
 import { DashboardService } from 'src/app/services/dashboard-service/dashboard.service';
+import { Lang, LANGUAGES, LANGUAGE_NAMES, LanguageService, TextDir } from 'src/app/services/language.service';
 
 /** Below md: off-canvas drawer. md–lg: 72px rail. ≥ lg: full sidebar (user can collapse). ≥ xl: AI panel docks. */
 type Viewport = 'phone' | 'tablet' | 'desktop' | 'wide';
 
-const ROLE_LABELS: Record<number, string> = { 1: 'Manager', 2: 'Admin' };
+const ROLE_KEYS: Record<number, string> = { 1: 'shell.user.roles.manager', 2: 'shell.user.roles.admin' };
 
 @Component({
   selector: 'app-nav',
@@ -36,6 +37,11 @@ export class NavComponent implements OnInit, OnDestroy {
   drawerOpen: boolean = false;
   userMenuOpen: boolean = false;
   aiPanelOpen: boolean = false;
+  lang: Lang;
+  /** Redesigned pages follow the UI language; legacy pages are pinned to English LTR. */
+  studioRoute: boolean = false;
+  readonly languages: readonly Lang[] = LANGUAGES;
+  readonly languageNames: Record<Lang, string> = LANGUAGE_NAMES;
   private userCollapsed: boolean = false;
   private subscriptions: Subscription[] = [];
   /** Job alerts can arrive in bursts; refresh the badge once things settle. */
@@ -56,10 +62,16 @@ export class NavComponent implements OnInit, OnDestroy {
     private router: Router,
     private shellContextService: ShellContextService,
     private dashboardService: DashboardService,
+    private language: LanguageService,
     public shell: ShellStateService
-  ) {}
+  ) {
+    this.lang = language.current;
+  }
 
   ngOnInit(): void {
+    this.studioRoute = this.isStudioRoute();
+    this.subscriptions.push(this.language.lang$.subscribe((lang: Lang) => (this.lang = lang)));
+
     this.subscriptions.push(
       this.authService.currentUser$.subscribe((user: User | null) => {
         this.currentUser = user;
@@ -99,6 +111,7 @@ export class NavComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           this.drawerOpen = false;
           this.userMenuOpen = false;
+          this.studioRoute = this.isStudioRoute();
         })
     );
 
@@ -211,7 +224,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   get gymName(): string {
-    return this.context.gymName ?? 'Your gym';
+    return this.context.gymName ?? this.language.t('shell.gym.fallbackName');
   }
 
   /** First letters of the first two words ("Power House TLV" → "PH"), as in the mockup. */
@@ -225,7 +238,7 @@ export class NavComponent implements OnInit, OnDestroy {
     if (count === null) {
       return '';
     }
-    return `${count} ${count === 1 ? 'member' : 'members'}`;
+    return this.language.tCount('shell.gym.members', count);
   }
 
   get userName(): string {
@@ -235,12 +248,37 @@ export class NavComponent implements OnInit, OnDestroy {
     return `${this.currentUser.firstName ?? ''} ${this.currentUser.lastName ?? ''}`.trim();
   }
 
-  get userRole(): string {
-    return (this.currentUser && ROLE_LABELS[this.currentUser.roleId]) || '';
+  get userRoleKey(): string | null {
+    return (this.currentUser && ROLE_KEYS[this.currentUser.roleId]) || null;
   }
 
   get notificationsLabel(): string {
-    return this.notificationNumber > 0 ? `Notifications, ${this.notificationNumber} unread` : 'Notifications';
+    return this.notificationNumber > 0
+      ? this.language.tCount('shell.notifications.unread', this.notificationNumber)
+      : this.language.t('shell.notifications.label');
+  }
+
+  // ---- Language ----------------------------------------------------------
+
+  get contentDir(): TextDir {
+    return this.studioRoute ? this.language.dir : 'ltr';
+  }
+
+  get contentLang(): Lang {
+    return this.studioRoute ? this.lang : 'en';
+  }
+
+  setLanguage(lang: Lang): void {
+    this.language.use(lang);
+  }
+
+  /** Routes opt in with `data: { studio: true }` once their page is redesigned. */
+  private isStudioRoute(): boolean {
+    let route: ActivatedRouteSnapshot | null = this.router.routerState.snapshot.root;
+    while (route?.firstChild) {
+      route = route.firstChild;
+    }
+    return route?.data?.studio === true;
   }
 
   formatCount(count: number): string {
@@ -285,7 +323,7 @@ export class NavComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.userMenuOpen = false;
-    const message: string = `Are you sure you want to log out?`;
+    const message: string = this.language.t('shell.user.logoutConfirm');
     this.navigationService.openYesNoDialogNoCallback(message, 500).subscribe((res: boolean) => {
       if (res) {
         this.authService.logout();

@@ -8,10 +8,30 @@
    Preflight is off, so Studio surfaces opt in with the .studio class.
    `body .studio :where(…)` (0,1,1) beats Bootstrap's reboot and .mat-typography
    element rules; Tailwind utilities are !important, so they still win. */
+/* Heading tracking (tailwind.config.js letterSpacing). Hebrew gets none (§7.8). */
+:root {
+    --ef-tracking-title: -1.2px;
+    --ef-tracking-card: -0.3px;
+    --ef-tracking-kpi: -1px;
+}
+
+[dir="rtl"] {
+    --ef-tracking-title: 0;
+    --ef-tracking-card: 0;
+    --ef-tracking-kpi: 0;
+}
+
+/* Directional icons (chevrons, arrows, pager) mirror in RTL; others don't. */
+[dir="rtl"] .flip-rtl {
+    transform: scaleX(-1);
+}
+
 .studio {
-    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-family: "Plus Jakarta Sans", "Rubik", system-ui, sans-serif;
     color: theme('colors.ink.DEFAULT');
     -webkit-font-smoothing: antialiased;
+    /* Bootstrap's reboot sets body { text-align: left }; follow the direction instead. */
+    text-align: start;
 }
 
 body .studio :where(h1, h2, h3, h4, p, ul, ol, figure) {

@@ -1,0 +1,329 @@
+{
+  "common": {
+    "actions": {
+      "retry": "נסו שוב",
+      "close": "סגירה",
+      "cancel": "ביטול",
+      "save": "שמירת שינויים",
+      "edit": "עריכה",
+      "delete": "מחיקה",
+      "undo": "ביטול פעולה",
+      "dismiss": "סגירה",
+      "moreActions": "פעולות נוספות"
+    },
+    "status": {
+      "active": "פעיל",
+      "expiring": "עומד לפוג",
+      "expired": "פג תוקף",
+      "inactive": "לא פעיל"
+    },
+    "gender": {
+      "male": "זכר",
+      "female": "נקבה"
+    },
+    "chart": {
+      "month": "חודש",
+      "value": "ערך"
+    },
+    "productCategory": {
+      "protein": "חלבון",
+      "bcaa": "BCAA",
+      "glutamine": "גלוטמין",
+      "creatine": "קריאטין",
+      "clothes": "ביגוד",
+      "other": "אחר"
+    },
+    "language": {
+      "label": "שפה"
+    }
+  },
+  "shell": {
+    "skipToContent": "דילוג לתוכן",
+    "homeLink": "easyfit, מעבר ללוח הבקרה",
+    "sidebar": {
+      "expand": "הרחבת סרגל הצד",
+      "collapse": "כיווץ סרגל הצד",
+      "navigation": "ניווט",
+      "openNavigation": "פתיחת הניווט",
+      "closeNavigation": "סגירת הניווט",
+      "main": "ראשי"
+    },
+    "gym": {
+      "fallbackName": "חדר הכושר שלך",
+      "members": {
+        "one": "מנוי אחד",
+        "two": "{{count}} מנויים",
+        "other": "{{count}} מנויים"
+      }
+    },
+    "askAi": "שאל את EasyFit AI",
+    "nav": {
+      "groups": {
+        "overview": "סקירה",
+        "people": "אנשים",
+        "equipment": "ציוד",
+        "shop": "חנות"
+      },
+      "items": {
+        "dashboard": "לוח בקרה",
+        "members": "מנויים",
+        "trainers": "מאמנים",
+        "classes": "שיעורים",
+        "machines": "מכשירים",
+        "maintenance": "תחזוקה",
+        "products": "מוצרים",
+        "catalogs": "קטלוגים",
+        "profile": "פרופיל והגדרות"
+      }
+    },
+    "user": {
+      "menuFor": "תפריט החשבון של {{name}}",
+      "menu": "חשבון",
+      "signedInAs": "מחובר/ת בתור",
+      "profile": "פרופיל",
+      "settings": "פרופיל והגדרות",
+      "logout": "התנתקות",
+      "logoutConfirm": "להתנתק מהחשבון?",
+      "roles": {
+        "manager": "מנהל/ת",
+        "admin": "אדמין"
+      }
+    },
+    "search": {
+      "trigger": "חיפוש או מעבר אל…"
+    },
+    "notifications": {
+      "label": "התראות",
+      "unread": {
+        "one": "התראות, אחת שלא נקראה",
+        "two": "התראות, {{count}} שלא נקראו",
+        "other": "התראות, {{count}} שלא נקראו"
+      }
+    },
+    "palette": {
+      "dialog": "חלון פקודות",
+      "inputLabel": "חיפוש או מעבר אל",
+      "inputLabelSell": "חיפוש מוצר למכירה",
+      "placeholder": "חיפוש מנויים, עמודים ופעולות…",
+      "placeholderSell": "מכירת מוצר: חיפוש לפי שם או קוד…",
+      "back": "חזרה לכל התוצאות",
+      "close": "סגירת חלון הפקודות",
+      "results": "תוצאות",
+      "groups": {
+        "askAi": "שאל את ה-AI",
+        "members": "מנויים",
+        "products": "מוצרים",
+        "pages": "עמודים",
+        "actions": "פעולות"
+      },
+      "askAiQuery": "שאל את EasyFit AI: ״{{query}}״",
+      "askAiEmpty": "שאל את EasyFit AI כל שאלה על חדר הכושר",
+      "comingSoon": "בקרוב",
+      "currentPage": "העמוד הנוכחי",
+      "pickProduct": "בחירת מוצר",
+      "actions": {
+        "addMember": "הוספת מנוי",
+        "sellProduct": "מכירת מוצר",
+        "newClass": "שיעור חדש",
+        "addTrainer": "הוספת מאמן",
+        "addProduct": "הוספת מוצר",
+        "scheduleMaintenance": "תזמון תחזוקה"
+      },
+      "membersError": "לא הצלחנו לטעון את המנויים.",
+      "membersLoading": "טוען מנויים…",
+      "membersNone": "אין מנויים מתאימים.",
+      "productsError": "לא הצלחנו לטעון את המוצרים.",
+      "productsLoading": "טוען מוצרים…",
+      "productsNone": "אין מוצרים מתאימים.",
+      "productsEmpty": "עדיין אין מוצרים. יש להוסיף מוצר קודם.",
+      "inStock": {
+        "one": "יחידה אחת במלאי",
+        "two": "{{count}} במלאי",
+        "other": "{{count}} במלאי"
+      },
+      "outOfStock": "אזל מהמלאי",
+      "hints": {
+        "move": "↑↓ למעבר",
+        "open": "↵ לפתיחה",
+        "askAi": "Tab לשאלת ה-AI",
+        "comingSoon": "(בקרוב)",
+        "close": "Esc לסגירה",
+        "back": "Esc לחזרה"
+      }
+    },
+    "ai": {
+      "title": "EasyFit AI",
+      "beta": "בטא",
+      "newChat": "שיחה חדשה (בקרוב)",
+      "close": "סגירת חלון ה-AI",
+      "comingSoonTitle": "EasyFit AI יגיע בקרוב",
+      "comingSoonBody": "שאלו על המנויים, השיעורים, המכירות והתחזוקה וקבלו תשובות עם מקורות. כל שינוי שהעוזר יציע תמיד ידרוש את אישורכם קודם.",
+      "youCanAsk": "תוכלו לשאול",
+      "examplesLabel": "שאלות לדוגמה",
+      "examples": {
+        "expiring": "של מי המנוי מסתיים השבוע?",
+        "sales": "סיכום המכירות של החודש",
+        "maintenance": "יש תחזוקה באיחור?",
+        "classes": "אילו שיעורים הכי עמוסים?"
+      },
+      "composerLabel": "שאל את EasyFit AI (בקרוב)",
+      "composerPlaceholder": "שאלו על מנויים, שיעורים, מכירות…",
+      "attach": "צירוף מסמך (בקרוב)",
+      "send": "שליחה (בקרוב)",
+      "notConnected": "העוזר עדיין לא מחובר."
+    }
+  },
+  "login": {
+    "title": "ברוכים השבים",
+    "subtitle": "התחברו לחשבון כדי להמשיך.",
+    "email": "אימייל",
+    "emailError": "יש להזין כתובת אימייל תקינה.",
+    "password": "סיסמה",
+    "passwordError": "יש להזין סיסמה.",
+    "showPassword": "הצגת הסיסמה",
+    "hidePassword": "הסתרת הסיסמה",
+    "invalid": "אימייל או סיסמה שגויים.",
+    "signIn": "התחברות",
+    "signingIn": "מתחבר…",
+    "tagline": "ניהול חדר כושר לבעלים ולצוות הקבלה.",
+    "eyebrow": "EasyFit לחדרי כושר",
+    "headline": "תנהלו את חדר הכושר.",
+    "headlineAccent": "לא את הניירת.",
+    "lead": "מנויים, שיעורים, ציוד ומכירות במקום אחד רגוע, עם משימות היום בראש.",
+    "featuresLabel": "מה אפשר לעשות",
+    "features": {
+      "membersTitle": "מנויים וחידושים",
+      "membersBody": "רואים של מי המנוי עומד לפוג ומחדשים בכמה קליקים.",
+      "classesTitle": "שיעורים ומאמנים",
+      "classesBody": "מתכננים שיעורים קבוצתיים ומי מעביר אותם, יום אחרי יום.",
+      "maintenanceTitle": "תחזוקת ציוד",
+      "maintenanceBody": "תזכורות ניקוי ושירות לכל מכשיר."
+    }
+  },
+  "dashboard": {
+    "greeting": {
+      "morning": "בוקר טוב, {{name}}",
+      "afternoon": "צהריים טובים, {{name}}",
+      "evening": "ערב טוב, {{name}}",
+      "morningNoName": "בוקר טוב",
+      "afternoonNoName": "צהריים טובים",
+      "eveningNoName": "ערב טוב"
+    },
+    "actions": {
+      "sellProduct": "מכירת מוצר",
+      "addMember": "הוספת מנוי"
+    },
+    "error": {
+      "title": "לא הצלחנו לטעון את לוח הבקרה",
+      "body": "בדקו את החיבור ונסו שוב."
+    },
+    "loading": "טוען את לוח הבקרה",
+    "kpi": {
+      "activeMembers": "מנויים פעילים",
+      "newThisMonth": "חדשים החודש",
+      "noNewThisMonth": "אין מנויים חדשים החודש",
+      "expiringThisWeek": "פגים השבוע",
+      "action": "לטיפול",
+      "inNext3Days": {
+        "one": "אחד ב-3 הימים הקרובים",
+        "two": "{{count}} ב-3 הימים הקרובים",
+        "other": "{{count}} ב-3 הימים הקרובים"
+      },
+      "nothingExpires": "אף מנוי לא פג ב-7 הימים הקרובים",
+      "classesToday": "שיעורים היום",
+      "classesLeft": {
+        "one": "נותר אחד",
+        "two": "נותרו {{count}}",
+        "other": "נותרו {{count}}"
+      },
+      "nextClass": "הבא: {{name}} ב-{{time}}",
+      "noMoreClasses": "אין עוד שיעורים היום",
+      "noClassesScheduled": "אין שיעורים מתוכננים היום",
+      "revenue": "הכנסות · {{month}}",
+      "vsSamePeriod": "לעומת {{amount}} באותה תקופה בחודש שעבר",
+      "noSalesSamePeriod": "לא היו מכירות באותה תקופה בחודש שעבר"
+    },
+    "chart": {
+      "label": "גרף",
+      "explain": "הסבר",
+      "subtitle": "{{unit}}, {{year}} · {{total}} עד כה",
+      "emptyTitle": "עדיין אין נתונים השנה",
+      "emptyMembers": "מנויים חדשים יופיעו כאן לפי חודש.",
+      "emptySales": "המכירות יופיעו כאן לפי חודש.",
+      "income": {
+        "title": "הכנסות",
+        "tab": "הכנסות",
+        "unit": "חודשי",
+        "question": "הסבר את ההכנסות החודשיות שלי השנה"
+      },
+      "members": {
+        "title": "מנויים חדשים",
+        "tab": "מנויים",
+        "unit": "הצטרפו בכל חודש",
+        "question": "הסבר כמה מנויים הצטרפו בכל חודש השנה"
+      },
+      "products": {
+        "title": "מוצרים שנמכרו",
+        "tab": "מוצרים שנמכרו",
+        "unit": "יחידות בחודש",
+        "question": "הסבר את מכירות המוצרים שלי השנה"
+      }
+    },
+    "today": {
+      "title": "היום",
+      "fullSchedule": "לוח מלא",
+      "upNext": "הבא בתור",
+      "done": "הסתיים",
+      "members": {
+        "one": "משתתף אחד",
+        "two": "{{count}} משתתפים",
+        "other": "{{count}} משתתפים"
+      },
+      "emptyTitle": "אין שיעורים היום",
+      "emptyBody": "קבעו שיעור קבוצתי והוא יופיע כאן.",
+      "newClass": "שיעור חדש"
+    },
+    "expiring": {
+      "title": "פגים בקרוב",
+      "thisWeek": {
+        "one": "אחד השבוע",
+        "two": "{{count}} השבוע",
+        "other": "{{count}} השבוע"
+      },
+      "today": "פג היום",
+      "tomorrow": "פג מחר",
+      "inDays": {
+        "one": "פג בעוד יום",
+        "two": "פג בעוד יומיים",
+        "other": "פג בעוד {{count}} ימים"
+      },
+      "renew": "חידוש",
+      "renewName": "חידוש המנוי של {{name}}",
+      "emptyTitle": "הכול בסדר",
+      "emptyBody": "אף מנוי לא פג ב-7 הימים הקרובים."
+    },
+    "maintenance": {
+      "title": "תחזוקה",
+      "allJobs": "כל המשימות",
+      "dueToday": "להיום",
+      "tomorrow": "מחר",
+      "clean": "ניקוי",
+      "service": "שירות",
+      "serial": "מס׳ סידורי",
+      "emptyTitle": "אין משימות מתוכננות",
+      "emptyBody": "משימות ניקוי ושירות קרובות יופיעו כאן."
+    },
+    "stock": {
+      "title": "מלאי נמוך",
+      "products": "מוצרים",
+      "outOfStock": "אזל מהמלאי",
+      "left": {
+        "one": "נותרה יחידה אחת",
+        "two": "נותרו {{count}}",
+        "other": "נותרו {{count}}"
+      },
+      "emptyTitle": "המלאי תקין",
+      "emptyBody": "אין מוצר שירד ל-5 יחידות או פחות."
+    }
+  }
+}

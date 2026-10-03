@@ -1,7 +1,7 @@
-/* Tooltip shown next to rail items when the sidebar is collapsed (72px). */
+/* Tooltip shown next to (inline-end of) rail items when the sidebar is collapsed (72px). */
 .rail-tip {
   position: absolute;
-  left: calc(100% + 12px);
+  inset-inline-start: calc(100% + 12px);
   top: 50%;
   z-index: 60;
   transform: translateY(-50%);
@@ -25,7 +25,7 @@
 /* Visually hidden until focused by keyboard. */
 .skip-link {
   position: absolute;
-  left: 16px;
+  inset-inline-start: 16px;
   top: -100px;
   z-index: 70;
   padding: 10px 16px;

@@ -1,23 +1,23 @@
 <app-nav>
     <div class="studio flex flex-col gap-5">
         <!-- 1. Greeting header -->
-        <app-page-header [title]="greeting" [subtitle]="(today | date: 'EEEE, d MMMM') + (gymName ? ' · ' + gymName : '')">
+        <app-page-header [title]="greeting" [subtitle]="subtitle">
             <ng-container actions>
-                <button appButton variant="secondary" icon="shopping-bag" (click)="sellProduct()">Sell product</button>
-                <button appButton variant="primary" icon="plus" (click)="addMember()">Add member</button>
+                <button appButton variant="secondary" icon="shopping-bag" (click)="sellProduct()">{{ 'dashboard.actions.sellProduct' | translate }}</button>
+                <button appButton variant="primary" icon="plus" (click)="addMember()">{{ 'dashboard.actions.addMember' | translate }}</button>
             </ng-container>
         </app-page-header>
 
         <!-- Error state (no data at all) -->
         <app-card *ngIf="state === 'error'">
-            <app-empty-state icon="alert-circle" tone="danger" title="We couldn't load your dashboard" message="Check your connection and try again.">
-                <button appButton variant="secondary" size="sm" icon="refresh-cw" (click)="reload()">Retry</button>
+            <app-empty-state icon="alert-circle" tone="danger" [title]="'dashboard.error.title' | translate" [message]="'dashboard.error.body' | translate">
+                <button appButton variant="secondary" size="sm" icon="refresh-cw" (click)="reload()">{{ 'common.actions.retry' | translate }}</button>
             </app-empty-state>
         </app-card>
 
         <!-- Loading skeletons -->
         <ng-container *ngIf="state === 'loading'">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" [ngClass]="aiPanelOpen ? '2xl:grid-cols-4' : 'xl:grid-cols-4'" aria-busy="true" aria-label="Loading dashboard">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" [ngClass]="aiPanelOpen ? '2xl:grid-cols-4' : 'xl:grid-cols-4'" aria-busy="true" [attr.aria-label]="'dashboard.loading' | translate">
                 <app-card *ngFor="let i of [1, 2, 3, 4]" padding="sm" class="flex flex-col gap-3">
                     <app-skeleton width="55%" height="14px"></app-skeleton>
                     <app-skeleton width="40%" height="34px" shape="block"></app-skeleton>
@@ -54,11 +54,11 @@
                                 <p class="text-sm text-ink-3">{{ chartSubtitle }}</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
-                                <app-segmented-control label="Chart" [options]="metricOptions" [value]="metric" (valueChange)="setMetric($event)"></app-segmented-control>
-                                <button appButton variant="secondary" size="sm" icon="sparkle" (click)="explain()" aria-controls="ai-panel">Explain this</button>
+                                <app-segmented-control [label]="'dashboard.chart.label' | translate" [options]="metricOptions" [value]="metric" (valueChange)="setMetric($event)"></app-segmented-control>
+                                <button appButton variant="secondary" size="sm" icon="sparkle" (click)="explain()" aria-controls="ai-panel">{{ 'dashboard.chart.explain' | translate }}</button>
                             </div>
                         </div>
-                        <app-empty-state *ngIf="chartIsEmpty; else chart" icon="bar-chart" title="No data yet this year" [message]="metric === 'members' ? 'New members will show up here by month.' : 'Sales will show up here by month.'"></app-empty-state>
+                        <app-empty-state *ngIf="chartIsEmpty; else chart" icon="bar-chart" [title]="'dashboard.chart.emptyTitle' | translate" [message]="(metric === 'members' ? 'dashboard.chart.emptyMembers' : 'dashboard.chart.emptySales') | translate"></app-empty-state>
                         <ng-template #chart>
                             <app-bar-chart class="flex-grow" [bars]="bars" [height]="170" [caption]="chartTitle + ', ' + chartSubtitle"></app-bar-chart>
                         </ng-template>
@@ -68,25 +68,25 @@
                 <app-card>
                     <section aria-labelledby="today-title" class="flex flex-col gap-1.5">
                         <div class="mb-2 flex items-center justify-between">
-                            <h2 id="today-title" class="text-lg font-extrabold tracking-card text-ink">Today</h2>
-                            <a routerLink="/group-trainings" class="text-sm font-bold text-accent hover:text-accent hover:underline">Full schedule</a>
+                            <h2 id="today-title" class="text-lg font-extrabold tracking-card text-ink">{{ 'dashboard.today.title' | translate }}</h2>
+                            <a routerLink="/group-trainings" class="text-sm font-bold text-accent hover:text-accent hover:underline">{{ 'dashboard.today.fullSchedule' | translate }}</a>
                         </div>
                         <ul *ngIf="classes.length; else noClasses" class="flex flex-col gap-1.5">
                             <li *ngFor="let c of classes; trackBy: trackById" class="flex items-center gap-3.5 rounded-[14px] px-3 py-[9px]"
                                 [ngClass]="{ 'bg-accent-soft': c.state === 'next', 'opacity-[.55]': c.state === 'done' }">
                                 <span class="h-2.5 w-2.5 flex-shrink-0 rounded-full" [ngClass]="c.state === 'done' ? 'bg-neutral-dot' : 'bg-accent'" aria-hidden="true"></span>
-                                <span class="w-[46px] flex-shrink-0 text-sm font-bold text-ink">{{ c.time | date: 'HH:mm' }}</span>
+                                <span class="w-[46px] flex-shrink-0 text-sm font-bold text-ink">{{ c.time | localDate: 'time' }}</span>
                                 <div class="flex min-w-0 flex-grow flex-col">
                                     <span class="truncate text-[15px] font-bold text-ink" dir="auto">{{ c.name }}</span>
                                     <span class="truncate text-[13px] text-ink-3" dir="auto">{{ c.detail }}</span>
                                 </div>
-                                <span *ngIf="c.state === 'next'" class="flex-shrink-0 text-xs font-bold text-accent">Up next</span>
-                                <span *ngIf="c.state === 'done'" class="flex-shrink-0 text-xs font-bold text-ink-4">Done</span>
+                                <span *ngIf="c.state === 'next'" class="flex-shrink-0 text-xs font-bold text-accent">{{ 'dashboard.today.upNext' | translate }}</span>
+                                <span *ngIf="c.state === 'done'" class="flex-shrink-0 text-xs font-bold text-ink-4">{{ 'dashboard.today.done' | translate }}</span>
                             </li>
                         </ul>
                         <ng-template #noClasses>
-                            <app-empty-state icon="calendar" title="No classes today" message="Schedule a group training and it will show up here." [compact]="true">
-                                <button appButton variant="secondary" size="sm" icon="plus" (click)="newClass()">New class</button>
+                            <app-empty-state icon="calendar" [title]="'dashboard.today.emptyTitle' | translate" [message]="'dashboard.today.emptyBody' | translate" [compact]="true">
+                                <button appButton variant="secondary" size="sm" icon="plus" (click)="newClass()">{{ 'dashboard.today.newClass' | translate }}</button>
                             </app-empty-state>
                         </ng-template>
                     </section>
@@ -98,8 +98,8 @@
                 <app-card padding="md">
                     <section aria-labelledby="expiring-title" class="flex flex-col gap-3">
                         <div class="flex items-center justify-between gap-2">
-                            <h2 id="expiring-title" class="text-[17px] font-extrabold text-ink">Expiring soon</h2>
-                            <app-status-pill *ngIf="summary.expiring.within7Days > 0" status="expiring" [label]="summary.expiring.within7Days + ' this week'"></app-status-pill>
+                            <h2 id="expiring-title" class="text-[17px] font-extrabold text-ink">{{ 'dashboard.expiring.title' | translate }}</h2>
+                            <app-status-pill *ngIf="summary.expiring.within7Days > 0" status="expiring" [label]="'dashboard.expiring.thisWeek' | plural: summary.expiring.within7Days | translate: { count: summary.expiring.within7Days }"></app-status-pill>
                         </div>
                         <ul *ngIf="expiring.length; else noExpiring" class="flex flex-col gap-3">
                             <li *ngFor="let row of expiring" class="flex items-center gap-3">
@@ -108,11 +108,11 @@
                                     <span class="truncate text-[15px] font-bold text-ink" dir="auto">{{ row.name }}</span>
                                     <span class="text-[13px] font-semibold text-warning-text">{{ row.note }}</span>
                                 </div>
-                                <button appButton variant="secondary" size="sm" (click)="renew(row)" [attr.aria-label]="'Renew ' + row.name">Renew</button>
+                                <button appButton variant="secondary" size="sm" (click)="renew(row)" [attr.aria-label]="'dashboard.expiring.renewName' | translate: { name: row.name }">{{ 'dashboard.expiring.renew' | translate }}</button>
                             </li>
                         </ul>
                         <ng-template #noExpiring>
-                            <app-empty-state icon="check" title="All clear" message="No memberships expire in the next 7 days." [compact]="true"></app-empty-state>
+                            <app-empty-state icon="check" [title]="'dashboard.expiring.emptyTitle' | translate" [message]="'dashboard.expiring.emptyBody' | translate" [compact]="true"></app-empty-state>
                         </ng-template>
                     </section>
                 </app-card>
@@ -120,8 +120,8 @@
                 <app-card padding="md">
                     <section aria-labelledby="maintenance-title" class="flex flex-col gap-3">
                         <div class="flex items-center justify-between gap-2">
-                            <h2 id="maintenance-title" class="text-[17px] font-extrabold text-ink">Maintenance</h2>
-                            <a routerLink="/scheduler" class="text-sm font-bold text-accent hover:text-accent hover:underline">All jobs</a>
+                            <h2 id="maintenance-title" class="text-[17px] font-extrabold text-ink">{{ 'dashboard.maintenance.title' | translate }}</h2>
+                            <a routerLink="/scheduler" class="text-sm font-bold text-accent hover:text-accent hover:underline">{{ 'dashboard.maintenance.allJobs' | translate }}</a>
                         </div>
                         <ul *ngIf="maintenance.length; else noMaintenance" class="flex flex-col gap-3">
                             <li *ngFor="let job of maintenance; trackBy: trackById" class="flex items-center gap-3">
@@ -130,13 +130,13 @@
                                 </span>
                                 <div class="flex min-w-0 flex-grow flex-col">
                                     <span class="truncate text-[15px] font-bold text-ink" dir="auto">{{ job.name }}</span>
-                                    <span class="truncate text-[13px] text-ink-3">{{ job.detail }}</span>
+                                    <span class="truncate text-[13px] text-ink-3">{{ job.jobType }} · {{ 'dashboard.maintenance.serial' | translate }} <bdi dir="ltr">{{ job.serialNumber }}</bdi></span>
                                 </div>
                                 <span class="flex-shrink-0 text-[13px] font-bold" [ngClass]="job.urgent ? 'text-danger' : 'text-neutral'">{{ job.due }}</span>
                             </li>
                         </ul>
                         <ng-template #noMaintenance>
-                            <app-empty-state icon="wrench" title="Nothing scheduled" message="Upcoming cleaning and service jobs will show up here." [compact]="true"></app-empty-state>
+                            <app-empty-state icon="wrench" [title]="'dashboard.maintenance.emptyTitle' | translate" [message]="'dashboard.maintenance.emptyBody' | translate" [compact]="true"></app-empty-state>
                         </ng-template>
                     </section>
                 </app-card>
@@ -144,8 +144,8 @@
                 <app-card padding="md">
                     <section aria-labelledby="stock-title" class="flex flex-col gap-3">
                         <div class="flex items-center justify-between gap-2">
-                            <h2 id="stock-title" class="text-[17px] font-extrabold text-ink">Low stock</h2>
-                            <a routerLink="/products" class="text-sm font-bold text-accent hover:text-accent hover:underline">Products</a>
+                            <h2 id="stock-title" class="text-[17px] font-extrabold text-ink">{{ 'dashboard.stock.title' | translate }}</h2>
+                            <a routerLink="/products" class="text-sm font-bold text-accent hover:text-accent hover:underline">{{ 'dashboard.stock.products' | translate }}</a>
                         </div>
                         <ul *ngIf="stock.length; else noStock" class="flex flex-col gap-3">
                             <li *ngFor="let item of stock; trackBy: trackById" class="flex items-center gap-3">
@@ -160,7 +160,7 @@
                             </li>
                         </ul>
                         <ng-template #noStock>
-                            <app-empty-state icon="check" title="Stock looks good" message="No product is down to 5 or fewer." [compact]="true"></app-empty-state>
+                            <app-empty-state icon="check" [title]="'dashboard.stock.emptyTitle' | translate" [message]="'dashboard.stock.emptyBody' | translate" [compact]="true"></app-empty-state>
                         </ng-template>
                     </section>
                 </app-card>

@@ -35,7 +35,7 @@ export interface BarDatum {
     <table class="sr-only">
       <caption>{{ caption }}</caption>
       <thead>
-        <tr><th scope="col">Month</th><th scope="col">Value</th></tr>
+        <tr><th scope="col">{{ 'common.chart.month' | translate }}</th><th scope="col">{{ 'common.chart.value' | translate }}</th></tr>
       </thead>
       <tbody>
         <tr *ngFor="let bar of bars">

@@ -1,8 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { LanguageService } from './services/language.service';
+import { I18nModule } from './shared/i18n/i18n.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 
@@ -13,7 +17,7 @@ import { SearchfilterPipe } from './searchfilter.pipe';
 import { AddMemberComponent } from './components/members-components/add-member/add-member.component';
 import { UpdateMemberComponent } from './components/members-components/update-member/update-member.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogConfig, MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { SharedModule } from './shared/shared.module';
 import { UiModule } from './shared/ui/ui.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -90,14 +94,25 @@ import { ShowSingleTrainingComponent } from './components/group-training-compone
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { UserProfileComponent } from './components/profile-components/user-profile/user-profile.component';
 import { EditProfileUserComponent } from './components/profile-components/edit-profile-user/edit-profile-user.component';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarConfig, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { ProductsChartComponent } from './components/products-components/products-chart/products-chart.component';
 import { IncomeChartComponent } from './components/products-components/income-chart/income-chart.component';
 
+export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+/** Load the saved language before the first render, so nothing flashes in the wrong language. */
+export function initLanguage(language: LanguageService): () => Promise<void> {
+  return () => language.init();
+}
+
+// `data: { studio: true }` marks redesigned pages: they follow the UI language and direction.
+// Every other page is pinned to English, left to right, until its phase (redesign.md §7.8).
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent, data: { studio: true } },
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { studio: true } },
   {
     path: 'members',
     component: MembersPageComponent,
@@ -209,6 +224,11 @@ const routes: Routes = [
     ReactiveFormsModule,
     SharedModule,
     UiModule,
+    I18nModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'en',
+      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
+    }),
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MatDialogModule,
@@ -244,7 +264,13 @@ const routes: Routes = [
     MatSnackBarModule,
   ],
 
-  providers: [],
+  providers: [
+    { provide: APP_INITIALIZER, useFactory: initLanguage, deps: [LanguageService], multi: true },
+    // Legacy Material dialogs and snackbars attach to <body>, outside the page's dir="ltr" wrapper;
+    // pin them to LTR so they don't inherit <html dir="rtl"> in Hebrew. Studio overlays set their own.
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { ...new MatDialogConfig(), direction: 'ltr' } },
+    { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { ...new MatSnackBarConfig(), direction: 'ltr' } },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

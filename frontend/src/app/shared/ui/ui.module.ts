@@ -12,6 +12,7 @@ import { SegmentedControlComponent } from './segmented-control/segmented-control
 import { EmptyStateComponent } from './empty-state/empty-state.component';
 import { SkeletonComponent } from './skeleton/skeleton.component';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { I18nModule } from '../i18n/i18n.module';
 
 const COMPONENTS = [
   IconComponent,
@@ -31,7 +32,7 @@ const COMPONENTS = [
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */
 @NgModule({
   declarations: COMPONENTS,
-  imports: [CommonModule],
+  imports: [CommonModule, I18nModule],
   exports: COMPONENTS,
 })
 export class UiModule {}

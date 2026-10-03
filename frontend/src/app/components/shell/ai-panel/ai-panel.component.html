@@ -12,18 +12,18 @@
         class="studio z-50 flex flex-col overflow-hidden bg-surface shadow-card"
         [ngClass]="docked
             ? 'sticky top-4 h-[calc(100vh-2rem)] w-[400px] flex-shrink-0 rounded-panel'
-            : (phone ? 'fixed inset-0' : 'fixed bottom-4 right-4 top-4 w-[400px] max-w-[calc(100vw-2rem)] rounded-panel shadow-overlay')"
+            : (phone ? 'fixed inset-0' : 'fixed bottom-4 end-4 top-4 w-[400px] max-w-[calc(100vw-2rem)] rounded-panel shadow-overlay')"
     >
         <!-- Header -->
         <div class="flex items-center gap-2.5 border-b border-solid border-line-soft px-[18px] py-4">
             <span class="flex h-[34px] w-[34px] items-center justify-center rounded-[11px] bg-accent-soft text-accent">
                 <app-icon name="sparkle" [size]="18"></app-icon>
             </span>
-            <h2 id="ai-panel-title" class="text-base font-extrabold text-ink">EasyFit AI</h2>
-            <span class="rounded-full bg-surface-muted px-[7px] py-0.5 text-[11px] font-bold text-neutral">Beta</span>
+            <h2 id="ai-panel-title" class="text-base font-extrabold text-ink">{{ 'shell.ai.title' | translate }}</h2>
+            <span class="rounded-full bg-surface-muted px-[7px] py-0.5 text-[11px] font-bold text-neutral">{{ 'shell.ai.beta' | translate }}</span>
             <span class="flex-grow"></span>
-            <button type="button" appIconButton icon="pen" [iconSize]="16" label="New chat (coming soon)" disabled></button>
-            <button #closeButton type="button" appIconButton icon="x" label="Close AI panel" (click)="close()"></button>
+            <button type="button" appIconButton icon="pen" [iconSize]="16" [label]="'shell.ai.newChat' | translate" disabled></button>
+            <button #closeButton type="button" appIconButton icon="x" [label]="'shell.ai.close' | translate" (click)="close()"></button>
         </div>
 
         <!-- Empty state -->
@@ -32,14 +32,14 @@
                 <app-icon name="sparkle" [size]="26"></app-icon>
             </span>
             <div class="flex flex-col gap-1.5">
-                <p class="text-lg font-extrabold tracking-card text-ink">EasyFit AI is coming soon</p>
-                <p class="text-sm leading-relaxed text-ink-3">Ask questions about your members, classes, sales and maintenance, and get answers with sources. Any change it suggests will always ask you to confirm first.</p>
+                <p class="text-lg font-extrabold tracking-card text-ink">{{ 'shell.ai.comingSoonTitle' | translate }}</p>
+                <p class="text-sm leading-relaxed text-ink-3">{{ 'shell.ai.comingSoonBody' | translate }}</p>
             </div>
             <div class="flex flex-col items-center gap-2">
-                <span class="text-[11px] font-bold uppercase tracking-label text-ink-4">You'll be able to ask</span>
-                <ul class="flex flex-wrap justify-center gap-1.5" aria-label="Example questions">
+                <span class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'shell.ai.youCanAsk' | translate }}</span>
+                <ul class="flex flex-wrap justify-center gap-1.5" [attr.aria-label]="'shell.ai.examplesLabel' | translate">
                     <li *ngFor="let example of examples">
-                        <button type="button" disabled class="h-8 rounded-full border border-solid border-line bg-surface-subtle px-3 text-xs font-semibold text-ink-2 opacity-70">{{ example }}</button>
+                        <button type="button" disabled class="h-8 rounded-full border border-solid border-line bg-surface-subtle px-3 text-xs font-semibold text-ink-2 opacity-70">{{ example | translate }}</button>
                     </li>
                 </ul>
             </div>
@@ -47,16 +47,16 @@
 
         <!-- Composer (disabled) -->
         <div class="flex flex-col gap-2.5 border-t border-solid border-line-soft px-4 pb-4 pt-3.5">
-            <label for="ai-composer" class="sr-only">Ask EasyFit AI (coming soon)</label>
-            <div class="flex items-center gap-2 rounded-[18px] border border-solid border-line-strong bg-surface-subtle py-1.5 pl-3.5 pr-1.5">
-                <input id="ai-composer" type="text" disabled [value]="draft" placeholder="Ask about members, classes, sales…"
+            <label for="ai-composer" class="sr-only">{{ 'shell.ai.composerLabel' | translate }}</label>
+            <div class="flex items-center gap-2 rounded-[18px] border border-solid border-line-strong bg-surface-subtle py-1.5 pe-1.5 ps-3.5">
+                <input id="ai-composer" type="text" disabled [value]="draft" [placeholder]="'shell.ai.composerPlaceholder' | translate"
                     class="min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
-                <button type="button" appIconButton icon="paperclip" [iconSize]="17" label="Attach a document (coming soon)" disabled></button>
-                <button type="button" disabled aria-label="Send (coming soon)" class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-tile border-0 bg-accent text-white opacity-40">
+                <button type="button" appIconButton icon="paperclip" [iconSize]="17" [label]="'shell.ai.attach' | translate" disabled></button>
+                <button type="button" disabled [attr.aria-label]="'shell.ai.send' | translate" class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-tile border-0 bg-accent text-white opacity-40">
                     <app-icon name="arrow-up" [size]="17"></app-icon>
                 </button>
             </div>
-            <p class="text-center text-xs text-ink-3">The assistant isn't connected yet.</p>
+            <p class="text-center text-xs text-ink-3">{{ 'shell.ai.notConnected' | translate }}</p>
         </div>
     </aside>
 </ng-container>
