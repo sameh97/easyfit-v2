@@ -242,7 +242,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Categories** are hard-coded in the frontend: 1 protein, 2 BCAA, 3 Glutamine, 4 Creatine, 5 Clothes.
 - **Data:** Product `id, name, description, code, quantity, price, imgUrl, categoryID, gymId`. Bill `id, coustomerID, coustomerName, coustomerPhone, productID, productName, quantity, totalCost, gymId, createdAt`. (`coustomer` is misspelled in the DB.)
 
-> ✅ **Decision (Phase 4).** Mockups `P4-Products.dc.html`, `P4-Sell.dc.html` to be made and approved before coding.
+> ✅ **Decision (Phase 4).** Mockups: `P4-Products.dc.html`, `P4-Sell.dc.html`, `P4-Sales.dc.html`.
 > - **Two tabs on one page:** **Products** (card grid, §7.4 "cards for small visual sets") and **Sales** (the bills, as a `DataTable`). The tab is in the URL (`?tab=sales`).
 > - **Product card:** photo (or an icon tile), name, category pill, price (₪), code (LTR), and stock: "N in stock" (neutral), "N left" (warning at ≤ 5, the dashboard's low-stock rule), "Out of stock" (danger at 0). A **Sell** button on the card.
 > - **Toolbar:** search by name or code, a category filter (the five hard-coded categories), and a segmented **All · Low stock · Out of stock**.
@@ -259,7 +259,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Send catalog dialog:** pick member phones (chips) and send the link over WhatsApp. This **doesn't work in Docker** because `wbm` needs Chromium and a QR login.
 - The **public catalog page** that members open is **server-rendered HTML** in `backend/services/easyfit-catalog-template.ts` and `backend/templates/` (not Angular). Include it in the redesign if you want.
 
-> ✅ **Decision (Phase 4).** Mockup `P4-Catalogs.dc.html` to be made and approved before coding.
+> ✅ **Decision (Phase 4).** Mockups: `P4-Catalogs.dc.html`, `P4-Public-Catalog.dc.html`. Catalog rows have three lines (products and status · product names · validity and actions) so they fit next to the Share panel.
 > - **A table** (few columns, few rows): products (avatar stack of product photos + "N products"), link (shortened, LTR) with **Copy link**, valid for N days, created, **status** (Active / Expired: `creationTime + durationDays` before now), actions (Share, Edit, more-menu with Delete).
 > - **Create/Edit side panel:** products as chips (the Phase 3 `MultiSelect`), "valid for" days (1–100, as today). After creating, the panel shows the link with **Copy**.
 > - ✅ **Share on WhatsApp replaces `wbm` sending** (which doesn't work in Docker: it needs Chromium and a QR login): a searchable list of members with phones, each row a `https://wa.me/972…?text=…` link that opens WhatsApp with the message and link filled in; plus **Copy link** and **Copy message**. No backend change; the old send endpoint stays but is unused.
@@ -268,7 +268,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 ### 5.9 Profile `/profile`
 - **Today:** a `mat-card` with first and last name, "member since", email and phone, plus an *Edit* button. It opens the **Edit profile dialog** (name, email (read-only), phone, birthday, address, image; there is no password field), and Phase 2 added the language switch.
 
-> ✅ **Decision (Phase 4).** Mockup `P4-Profile.dc.html` to be made and approved before coding.
+> ✅ **Decision (Phase 4).** Mockup: `P4-Profile.dc.html`.
 > - **A settings-style page** with three cards: **Profile** (avatar, name, role, email, phone LTR, birthday, address, member since; **Edit** opens the side panel), **Gym** (name, phone, address, read-only; the admin edits gyms), **Preferences** (language English / עברית, the existing switch).
 > - **Edit profile side panel:** photo, first/last name, phone, birthday, address; email shown read-only with the note that it is the sign-in name. Rules unchanged (`validateName`, `validateIsraeliPhoneNumber`, `validateBirthDay`).
 > - ✅ **No password change in Phase 4.** A gym user can't change their password today; it needs a new endpoint that checks the current password. Noted for later.
@@ -285,7 +285,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 ### 5.11 Admin: Gyms `/admin`, Users `/users`
 - **Today:** the old `mat-sidenav` shell. **Gyms** is a `mat-table` (name, phone, address, edit, delete) with add/edit gym dialogs. **Users** is a `mat-table` (first name, last name, email, phone, birthday, address, gym name, edit, delete) with add/edit user dialogs (all user fields plus a gym multiselect).
 
-> ✅ **Decision (Phase 4).** Mockup `P4-Admin.dc.html` to be made and approved before coding.
+> ✅ **Decision (Phase 4).** Mockup: `P4-Admin-Users.dc.html` (Gyms uses the same table pattern). In the admin area ⌘K offers only pages and actions (no members to search).
 > - **The same Studio shell with an admin nav** (answers the ✏️ in §4): the floating sidebar with *Gyms* and *Users*, no gym card, no ⌘K member search (the palette keeps Pages and Actions), no bell. `app-admin-nav` is deleted.
 > - **Gyms:** a `DataTable` (name, phone LTR, address, users count), add/edit side panel (name, phone, address; rules unchanged), delete with confirm.
 > - **Users:** a `DataTable` (avatar and name, email LTR, phone LTR, gym, role), add/edit side panel (name, email, password + confirm on add, phone, birthday, address, gym select, photo; rules unchanged, including `validatePassword`), delete with confirm.
@@ -296,7 +296,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - A **404 page** (a TODO in the routes).
 - **Register**: `RegisterPageComponent` exists but isn't routed.
 
-> ✅ **Decision (Phase 4).**
+> ✅ **Decision (Phase 4).** Mockup: `P4-404.dc.html`.
 > - **404:** a Studio page for unknown URLs (`**` route): "Page not found", a short line and a button back to the dashboard (or to login when signed out). Inside the shell when signed in.
 > - **Register:** `RegisterPageComponent` is unrouted and admins create users; *recommendation:* delete it.
 > - Landing page, forgot password: out of scope for Phase 4 (✏️ say if you want either).
@@ -676,8 +676,8 @@ Branch `redesign/phase-3` (from master, after Phase 2 is merged). Mockups: the `
 - Deep links: `/group-trainings?day=YYYY-MM-DD&class=<id>`, `/machines?machine=<id>` (also `?serial=<serial>`), `/scheduler?machine=<serial>` (prefills the search).
 - New kit pieces: `TimeField`, `MultiSelect`, `Switch`, `Tabs`, `WeekStrip`; the machine badge and job-type pill live in `components/machines/machine-badges.component.ts`.
 
-**Phase 4: Products and Sales, Catalogs, Profile, Admin, 404** (✅ decisions approved; 📝 waiting for the P4 mockups)
-Branch `redesign/phase-4` (from `redesign/phase-1`, after Phase 3 is merged). Decisions: §5.7, §5.8, §5.9, §5.11, §5.12. Same rules as Phases 2–3 (translations, logical utilities, purge list, `data: { studio: true }`, one commit per step, prod build and EN/HE browser test per step).
+**Phase 4: Products and Sales, Catalogs, Profile, Admin, 404** (✅ approved with the P4 mockups)
+Branch `redesign/phase-4` (from `redesign/phase-1`, after Phase 3 is merged). Mockups: the `P4-*.dc.html` files. Decisions: §5.7, §5.8, §5.9, §5.11, §5.12. Same rules as Phases 2–3 (translations, logical utilities, purge list, `data: { studio: true }`, one commit per step, prod build and EN/HE browser test per step).
 
 1. **Products and Sales** (§5.7): product card grid with stock states, filters, detail panel, add/edit side panel; the quick **Sell** side panel (member prefill); the Sales tab (`DataTable`, date range, totals, CSV). Deep links `?product=`, `?tab=sales`. Dashboard Low stock rows and ⌘K "Sell product" / "Add product" open the new panels. Deleting a sale restores stock (backend, same request and response).
 2. **Catalogs** (§5.8): table with status and Copy link, create/edit side panel (products as chips), **Share on WhatsApp** (wa.me links) instead of `wbm` sending.

@@ -21,6 +21,15 @@ opened directly in a browser; read the markup for the exact colours, sizes, spac
 | `P3-Maintenance.dc.html` | **Maintenance** jobs grouped Overdue / Today / This week / Later / Inactive, Mark done | ✅ Approved (Phase 3) |
 | `P3-Notifications.dc.html` | The **bell panel** under the bell, grouped by machine | ✅ Approved (Phase 3) |
 | `P3-Sidebar.dc.html` | The shared sidebar the P3 screens import (component, not a screen) | Reference |
+| `P4-Products.dc.html` | **Products**: product cards with stock states (in stock / N left / out of stock), filters, product detail panel with recent sales | ✅ Approved (Phase 4) |
+| `P4-Sell.dc.html` | **Sell side panel**: quantity stepper, optional member prefill, customer fields with an ID error, live total | ✅ Approved (Phase 4) |
+| `P4-Sales.dc.html` | **Sales tab**: date range, revenue / items / sales totals, sales table, Export | ✅ Approved (Phase 4) |
+| `P4-Catalogs.dc.html` | **Catalogs** list (three-line rows: products and status, names, validity and actions) with the **Share on WhatsApp** panel | ✅ Approved (Phase 4) |
+| `P4-Profile.dc.html` | **Profile and settings**: profile, gym and preferences (language) cards | ✅ Approved (Phase 4) |
+| `P4-Public-Catalog.dc.html` | The **public catalog page** members open, phone size, in Hebrew | ✅ Approved (Phase 4) |
+| `P4-Admin-Users.dc.html` | **Admin: Users** in the Studio shell with the admin nav (Gyms uses the same table pattern) | ✅ Approved (Phase 4) |
+| `P4-404.dc.html` | **404** page inside the shell | ✅ Approved (Phase 4) |
+| `P4-Sidebar.dc.html` | The shared sidebar the P4 screens import (`active`, `admin` props) | Reference |
 
 Notes:
 - The mockups use physical CSS (`left`, `padding-left`) in places. The real code must use logical utilities (§7.10, Phase 2 step 1).

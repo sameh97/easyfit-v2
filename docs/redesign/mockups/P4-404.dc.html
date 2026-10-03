@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Page not found</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans','Rubik',sans-serif;color:#1b1c20;background:#f5f4f0}
+a{color:#2F4BF0;text-decoration:none}a:hover{color:#1f36c4}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; display: flex; gap: 16px; padding: 16px; background: #F5F4F0; overflow: hidden; font-family: 'Plus Jakarta Sans', 'Rubik', sans-serif; color: #1B1C20; box-sizing: border-box">
+<dc-import name="P4-Sidebar" active="none" hint-size="256px,968px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 6px 4px">
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; width: 380px; height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #6B6E76; font-size: 14px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg>Search or jump to…<span dir="ltr" style="margin-inline-start: auto; font-size: 12px; font-weight: 700; border: 1px solid #E7E5DF; border-radius: 8px; padding: 2px 8px">Ctrl K</span></button>
+<span style="flex-grow: 1"></span>
+<button type="button" aria-label="Notifications" style="width: 44px; height: 44px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></button>
+</div>
+<section aria-labelledby="nf-title" style="flex-grow: 1; display: flex; align-items: center; justify-content: center">
+<div style="width: 460px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center">
+<span style="font-size: 120px; font-weight: 800; letter-spacing: -6px; line-height: 1; color: #E2E6FD">404</span>
+<h1 id="nf-title" style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -1px">Page not found</h1>
+<p style="margin: 0; font-size: 15px; color: #6B6E76; line-height: 1.5">There's nothing at <bdi dir="ltr" style="font-weight: 700; color: #44464C">/reports</bdi>. It may have moved, or the link has a typo.</p>
+<div style="display: flex; gap: 10px; padding-top: 6px">
+<a href="#" style="height: 46px; padding: 0 22px; border-radius: 23px; background: #2F4BF0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center">Back to dashboard</a>
+<button type="button" style="height: 46px; padding: 0 20px; border: 1px solid #D9D6CE; border-radius: 23px; background: #FFFFFF; color: #1B1C20; font-size: 15px; font-weight: 700">Search or jump to…</button>
+</div>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
