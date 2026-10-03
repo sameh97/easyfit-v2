@@ -54,6 +54,16 @@
       "changePhoto": "Change photo",
       "removePhoto": "Remove",
       "photoHelp": "JPG or PNG. Optional."
+    },
+    "table": {
+      "showing": "Showing <strong>{{from}}–{{to}}</strong> of {{total}}",
+      "rowsPerPage": "Rows per page",
+      "pagination": "Pages",
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {{page}}",
+      "errorTitle": "We couldn't load this list",
+      "errorBody": "Check your connection and try again."
     }
   },
   "shell": {

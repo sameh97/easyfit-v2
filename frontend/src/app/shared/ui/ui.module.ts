@@ -30,6 +30,8 @@ import { DateFieldComponent } from './form/date-field.component';
 import { SegmentedFieldComponent } from './form/segmented-field.component';
 import { ImageUploadComponent } from './form/image-upload.component';
 import { FormSectionComponent } from './form/form-section.component';
+import { DataTableComponent } from './data-table/data-table.component';
+import { CellDefDirective } from './data-table/data-table.types';
 
 const COMPONENTS = [
   IconComponent,
@@ -56,6 +58,8 @@ const COMPONENTS = [
   SegmentedFieldComponent,
   ImageUploadComponent,
   FormSectionComponent,
+  DataTableComponent,
+  CellDefDirective,
 ];
 
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */

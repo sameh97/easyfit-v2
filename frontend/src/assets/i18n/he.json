@@ -54,6 +54,16 @@
       "changePhoto": "החלפת תמונה",
       "removePhoto": "הסרה",
       "photoHelp": "JPG או PNG. לא חובה."
+    },
+    "table": {
+      "showing": "מציג <strong>{{from}}–{{to}}</strong> מתוך {{total}}",
+      "rowsPerPage": "שורות בעמוד",
+      "pagination": "עמודים",
+      "previous": "העמוד הקודם",
+      "next": "העמוד הבא",
+      "page": "עמוד {{page}}",
+      "errorTitle": "לא הצלחנו לטעון את הרשימה",
+      "errorBody": "בדקו את החיבור ונסו שוב."
     }
   },
   "shell": {
