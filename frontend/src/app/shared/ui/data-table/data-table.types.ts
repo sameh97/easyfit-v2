@@ -43,3 +43,31 @@ export class CellDefDirective<T> {
 }
 
 export const PAGE_SIZES: readonly number[] = [10, 25, 50];
+
+/** Sorts a copy of `rows` the way the table does (nulls last; numbers; locale-aware strings). */
+export function sortRows<T>(rows: T[], columns: DataTableColumn<T>[], sort: DataTableSort | null): T[] {
+  const column: DataTableColumn<T> | undefined = columns.find((c: DataTableColumn<T>) => c.key === sort?.key);
+  const sorted: T[] = [...rows];
+  if (column?.sortValue && sort) {
+    const value = column.sortValue;
+    const factor: number = sort.direction === 'asc' ? 1 : -1;
+    sorted.sort((a: T, b: T) => compareValues(value(a), value(b), factor));
+  }
+  return sorted;
+}
+
+function compareValues(a: SortValue, b: SortValue, factor: number): number {
+  if (a === null && b === null) {
+    return 0;
+  }
+  if (a === null) {
+    return 1;
+  }
+  if (b === null) {
+    return -1;
+  }
+  if (typeof a === 'number' && typeof b === 'number') {
+    return (a - b) * factor;
+  }
+  return String(a).localeCompare(String(b), undefined, { sensitivity: 'base', numeric: true }) * factor;
+}

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppConsts } from '../../common/consts';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Member } from 'src/app/model/member';
+import { MemberActivity } from 'src/app/model/member-activity';
 import { AuthenticationService } from './../authentication.service';
 import { CoreUtil } from 'src/app/common/core-util';
 import { catchError, filter, switchMap, tap } from 'rxjs/operators';
@@ -98,6 +99,15 @@ export class MembersService {
           AppUtil.updateInSubject(this.membersSubject, member);
         })
       )
+      .pipe(catchError(AppUtil.handleError));
+  };
+
+  /** Group trainings and purchases (matched by phone) of one member; scoped to the gym on the server. */
+  public getActivity = (id: number): Observable<MemberActivity> => {
+    return this.http
+      .get<MemberActivity>(`${this.url}/${id}/activity`, {
+        headers: CoreUtil.createAuthorizationHeader(),
+      })
       .pipe(catchError(AppUtil.handleError));
   };
 

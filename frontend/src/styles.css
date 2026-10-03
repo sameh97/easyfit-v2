@@ -121,6 +121,14 @@ body .studio :where(*, *::before, *::after) {
     }
 }
 
+/* Popup menus (MenuService). */
+.cdk-overlay-pane.studio-menu {
+    overflow: hidden;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 20px 50px rgba(27, 28, 32, 0.16);
+}
+
 /* Confirm dialog: 400px, radius 24, centred. */
 .cdk-overlay-pane.studio-dialog {
     display: block;

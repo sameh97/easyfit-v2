@@ -369,5 +369,190 @@
     "dateFormat": "Enter a date like 14/03/2027.",
     "imageType": "Choose a JPG or PNG image.",
     "invalid": "This value isn't valid."
+  },
+  "members": {
+    "page": {
+      "title": "Members",
+      "people": {
+        "one": "{{count}} person",
+        "two": "{{count}} people",
+        "other": "{{count}} people"
+      },
+      "valid": {
+        "one": "{{count}} with a valid membership",
+        "two": "{{count}} with a valid membership",
+        "other": "{{count}} with a valid membership"
+      }
+    },
+    "actions": {
+      "add": "Add member",
+      "export": "Export",
+      "editName": "Edit {{name}}",
+      "moreFor": "More actions for {{name}}",
+      "renew": "Renew membership",
+      "deactivate": "Deactivate",
+      "activate": "Activate"
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "expiring": "Expiring",
+      "expired": "Expired",
+      "inactive": "Inactive",
+      "statusLabel": "Filter by status",
+      "searchLabel": "Search members",
+      "searchPlaceholder": "Name, phone or email",
+      "genderButton": "Gender: {{value}}",
+      "genderLabel": "Gender",
+      "gender": {
+        "all": "All",
+        "male": "Male",
+        "female": "Female"
+      },
+      "clear": "Clear filters"
+    },
+    "table": {
+      "member": "Member",
+      "phone": "Phone",
+      "status": "Status",
+      "ends": "Membership ends",
+      "joined": "Joined"
+    },
+    "notes": {
+      "endsToday": "Ends today",
+      "inDays": {
+        "one": "In {{count}} day",
+        "two": "In {{count}} days",
+        "other": "In {{count}} days"
+      },
+      "weeksLeft": {
+        "one": "{{count}} week left",
+        "two": "{{count}} weeks left",
+        "other": "{{count}} weeks left"
+      },
+      "monthsLeft": {
+        "one": "{{count}} month left",
+        "two": "{{count}} months left",
+        "other": "{{count}} months left"
+      },
+      "daysAgo": {
+        "one": "{{count}} day ago",
+        "two": "{{count}} days ago",
+        "other": "{{count}} days ago"
+      },
+      "weeksAgo": {
+        "one": "{{count}} week ago",
+        "two": "{{count}} weeks ago",
+        "other": "{{count}} weeks ago"
+      },
+      "monthsAgo": {
+        "one": "{{count}} month ago",
+        "two": "{{count}} months ago",
+        "other": "{{count}} months ago"
+      }
+    },
+    "empty": {
+      "title": "No members yet",
+      "body": "Add your first member to start tracking memberships.",
+      "noMatchTitle": "No members match",
+      "noMatchBody": "Try another search or filter."
+    },
+    "detail": {
+      "label": "Member details",
+      "eyebrow": "Member",
+      "expiresToday": "Expires today",
+      "expiresIn": {
+        "one": "Expires in {{count}} day",
+        "two": "Expires in {{count}} days",
+        "other": "Expires in {{count}} days"
+      },
+      "membership": "Membership",
+      "periodArrow": "→",
+      "progressLabel": "Membership time used",
+      "quickRenew": "Quick renew",
+      "renewBy": {
+        "one": "+{{count}} month",
+        "two": "+{{count}} months",
+        "other": "+{{count}} months"
+      },
+      "comingUp": "Coming up",
+      "activityError": "Couldn't load classes and purchases.",
+      "noUpcoming": "No upcoming classes.",
+      "withTrainer": "with {{name}}",
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "tabsLabel": "Member details",
+      "tabs": {
+        "overview": "Overview",
+        "classes": "Classes",
+        "purchases": "Purchases"
+      },
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "participants": {
+        "one": "{{count}} participant",
+        "two": "{{count}} participants",
+        "other": "{{count}} participants"
+      },
+      "noClassesTitle": "No classes yet",
+      "noClassesBody": "Group trainings this member joins will show up here.",
+      "matchedByPhone": "Matched by phone number: sales whose customer phone is this member's phone.",
+      "noPurchasesTitle": "No purchases",
+      "noPurchasesBody": "No sales were made to this phone number.",
+      "purchasesTotal": {
+        "one": "{{count}} purchase",
+        "two": "{{count}} purchases",
+        "other": "{{count}} purchases"
+      },
+      "quantity": "Qty {{count}}"
+    },
+    "form": {
+      "addTitle": "Add member",
+      "editTitle": "Edit member",
+      "personal": "Personal details",
+      "membership": "Membership",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
+      "email": "Email",
+      "birthday": "Birthday",
+      "gender": "Gender",
+      "address": "Address",
+      "addressPlaceholder": "Street, city",
+      "joinDate": "Join date",
+      "endDate": "Membership ends",
+      "setLength": "Set length",
+      "months": {
+        "one": "{{count}} month",
+        "two": "{{count}} months",
+        "other": "{{count}} months"
+      }
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "renewed": "Membership renewed until {{date}}",
+      "renewUndone": "Renewal undone",
+      "renewError": "Couldn't renew {{name}}'s membership. Try again.",
+      "undoError": "Couldn't undo the renewal. Try again.",
+      "activated": "{{name}} is active again",
+      "deactivated": "{{name}} was deactivated",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "emailChangeError": "The email can't be changed: members are matched by email when saving.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. They may still be booked into classes.",
+      "notFound": "That member wasn't found. They may have been deleted.",
+      "exported": {
+        "one": "Exported {{count}} member",
+        "two": "Exported {{count}} members",
+        "other": "Exported {{count}} members"
+      }
+    },
+    "confirm": {
+      "deactivateTitle": "Deactivate {{name}}?",
+      "deactivateBody": "They'll show as inactive until you activate or renew them.",
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the member for good. It can't be undone."
+    }
   }
 }

@@ -1,38 +1,88 @@
 <app-nav>
-    <div class="flex-container">
-        <div>
-            <div class="flex-container-header">
-                <div class="header-title">
-                    <h1 class="mat-h1">Members Page</h1>
-                </div>
-                <div class="header-actions"></div>
+    <div class="studio flex flex-col gap-5">
+        <!-- Header -->
+        <app-page-header [title]="'members.page.title' | translate" [subtitle]="state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="secondary" icon="download" type="button" [disabled]="state !== 'ready' || !filtered.length" (click)="exportCsv()">{{ 'members.actions.export' | translate }}</button>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'members.actions.add' | translate }}</button>
+            </ng-container>
+        </app-page-header>
 
+        <!-- Toolbar: status filter with counts, search, gender -->
+        <div class="flex flex-wrap items-center gap-2.5">
+            <div role="group" [attr.aria-label]="'members.filters.statusLabel' | translate" class="flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-surface p-1 shadow-card">
+                <button *ngFor="let f of statusFilters" type="button" [attr.aria-pressed]="statusFilter === f" (click)="setStatus(f)"
+                    class="whitespace-nowrap rounded-full border-0 px-3.5 py-[9px] text-sm transition-colors"
+                    [ngClass]="statusFilter === f ? 'bg-ink font-bold text-white' : 'bg-transparent font-semibold text-neutral hover:text-ink'">
+                    {{ 'members.filters.' + f | translate }}
+                    <span [ngClass]="statusFilter === f ? 'opacity-70' : (f === 'expiring' ? 'text-warning-text' : (f === 'expired' ? 'text-danger-text' : ''))">{{ counts[f] }}</span>
+                </button>
+            </div>
+            <span class="hidden flex-grow md:block"></span>
+            <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[240px]">
+                <app-icon name="search" [size]="17"></app-icon>
+                <span class="sr-only">{{ 'members.filters.searchLabel' | translate }}</span>
+                <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'members.filters.searchPlaceholder' | translate"
+                    class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+            </label>
+            <button #genderButton type="button" aria-haspopup="menu" aria-expanded="false" (click)="openGenderMenu(genderButton)"
+                class="flex h-11 items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-sm font-semibold text-ink-2 hover:border-line-strong">
+                {{ 'members.filters.genderButton' | translate: { value: ('members.filters.gender.' + gender | translate) } }}
+                <app-icon name="chevron-down" [size]="15"></app-icon>
+            </button>
+        </div>
+
+        <!-- Table + detail panel -->
+        <div class="flex items-start gap-4">
+            <div class="min-w-0 flex-1">
+                <app-data-table [rows]="filtered" [columns]="columns" [state]="state" [sort]="sort" (sortChange)="sort = $event"
+                    [rowId]="rowId" [rowLabel]="rowLabel" [rowClass]="rowClass" [selectedId]="selectedId" [narrow]="narrow"
+                    [label]="'members.page.title' | translate" [resetPageOn]="filterKey" (rowClick)="select($event)" (retry)="load()">
+
+                    <ng-template appCell="member" let-row>
+                        <div class="flex min-w-0 items-center gap-3">
+                            <app-avatar [name]="rowInfo(row).name" [id]="row.id" [imageUrl]="rowInfo(row).photo" [size]="38"></app-avatar>
+                            <div class="flex min-w-0 flex-col">
+                                <span class="truncate font-bold text-ink" dir="auto">{{ rowInfo(row).name }}</span>
+                                <span class="truncate text-[13px] text-ink-3"><bdi dir="ltr">{{ row.email }}</bdi></span>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template appCell="phone" let-row><bdi dir="ltr" class="font-medium text-ink-2">{{ row.phone }}</bdi></ng-template>
+                    <ng-template appCell="status" let-row><app-status-pill [status]="rowInfo(row).pill"></app-status-pill></ng-template>
+                    <ng-template appCell="ends" let-row>
+                        <div class="flex flex-col">
+                            <span class="font-semibold text-ink">{{ rowInfo(row).end ? (rowInfo(row).end | localDate) : '—' }}</span>
+                            <span class="text-[13px]" [ngClass]="noteClass(rowInfo(row).note)">
+                                <ng-container *ngIf="rowInfo(row).note as note; else noNote">{{ note.count === null ? (note.key | translate) : (note.key | plural: note.count | translate: { count: note.count }) }}</ng-container>
+                                <ng-template #noNote>—</ng-template>
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template appCell="joined" let-row><span class="text-ink-2">{{ rowInfo(row).joined | localDate }}</span></ng-template>
+                    <ng-template appCell="edit" let-row>
+                        <button type="button" appIconButton icon="pen" [iconSize]="16" [label]="'members.actions.editName' | translate: { name: rowInfo(row).name }" (click)="edit(row, $event)" (keydown.enter)="$event.stopPropagation()"></button>
+                    </ng-template>
+                    <ng-template appCell="more" let-row>
+                        <button type="button" appIconButton icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'members.actions.moreFor' | translate: { name: rowInfo(row).name }" (click)="openRowMenu($event, row)" (keydown.enter)="$event.stopPropagation()"></button>
+                    </ng-template>
+
+                    <div tableEmpty>
+                        <app-empty-state *ngIf="!members.length; else noMatches" icon="users" tone="accent" [title]="'members.empty.title' | translate" [message]="'members.empty.body' | translate">
+                            <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'members.actions.add' | translate }}</button>
+                        </app-empty-state>
+                        <ng-template #noMatches>
+                            <app-empty-state icon="search" [title]="'members.empty.noMatchTitle' | translate" [message]="'members.empty.noMatchBody' | translate">
+                                <button *ngIf="hasFilters" appButton variant="secondary" size="sm" type="button" (click)="clearFilters()">{{ 'members.filters.clear' | translate }}</button>
+                            </app-empty-state>
+                        </ng-template>
+                    </div>
+                </app-data-table>
             </div>
 
+            <app-side-panel [open]="!!selected" [label]="'members.detail.label' | translate" [eyebrow]="'members.detail.eyebrow' | translate" (closed)="closeDetail()">
+                <app-member-detail *ngIf="selected as member" [member]="member" (deleted)="closeDetail()"></app-member-detail>
+            </app-side-panel>
         </div>
-        <div>
-            <mat-card class="dashboard-card">
-                <mat-card-header>
-                    <mat-card-title>
-
-                        <h2> All Members</h2>
-                        <button class="add-button" type="button" (click)="openCreateMemberDialog()" mat-mini-fab color="primary" aria-label="Example icon button with a plus one icon">
-              <mat-icon>add</mat-icon>
-            </button>
-
-                        <mat-menu #menu="matMenu" xPosition="before">
-                            <button mat-menu-item>Expand</button>
-                            <button mat-menu-item>Remove</button>
-                        </mat-menu>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="dashboard-card-content">
-
-                    <app-members-table></app-members-table>
-                </mat-card-content>
-            </mat-card>
-        </div>
-        <div></div>
     </div>
-
 </app-nav>

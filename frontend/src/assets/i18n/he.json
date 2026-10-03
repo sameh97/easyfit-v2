@@ -369,5 +369,190 @@
     "dateFormat": "יש להזין תאריך כמו 14/03/2027.",
     "imageType": "יש לבחור תמונה בפורמט JPG או PNG.",
     "invalid": "הערך אינו תקין."
+  },
+  "members": {
+    "page": {
+      "title": "מנויים",
+      "people": {
+        "one": "אדם אחד",
+        "two": "{{count}} אנשים",
+        "other": "{{count}} אנשים"
+      },
+      "valid": {
+        "one": "אחד עם מנוי בתוקף",
+        "two": "{{count}} עם מנוי בתוקף",
+        "other": "{{count}} עם מנוי בתוקף"
+      }
+    },
+    "actions": {
+      "add": "הוספת מנוי",
+      "export": "ייצוא",
+      "editName": "עריכת {{name}}",
+      "moreFor": "פעולות נוספות עבור {{name}}",
+      "renew": "חידוש מנוי",
+      "deactivate": "השבתה",
+      "activate": "הפעלה"
+    },
+    "filters": {
+      "all": "הכל",
+      "active": "פעילים",
+      "expiring": "עומדים לפוג",
+      "expired": "פג תוקף",
+      "inactive": "לא פעילים",
+      "statusLabel": "סינון לפי סטטוס",
+      "searchLabel": "חיפוש מנויים",
+      "searchPlaceholder": "שם, טלפון או אימייל",
+      "genderButton": "מגדר: {{value}}",
+      "genderLabel": "מגדר",
+      "gender": {
+        "all": "הכל",
+        "male": "זכר",
+        "female": "נקבה"
+      },
+      "clear": "ניקוי הסינון"
+    },
+    "table": {
+      "member": "מנוי",
+      "phone": "טלפון",
+      "status": "סטטוס",
+      "ends": "סיום מנוי",
+      "joined": "הצטרפות"
+    },
+    "notes": {
+      "endsToday": "מסתיים היום",
+      "inDays": {
+        "one": "בעוד יום",
+        "two": "בעוד יומיים",
+        "other": "בעוד {{count}} ימים"
+      },
+      "weeksLeft": {
+        "one": "נותר שבוע",
+        "two": "נותרו שבועיים",
+        "other": "נותרו {{count}} שבועות"
+      },
+      "monthsLeft": {
+        "one": "נותר חודש",
+        "two": "נותרו חודשיים",
+        "other": "נותרו {{count}} חודשים"
+      },
+      "daysAgo": {
+        "one": "לפני יום",
+        "two": "לפני יומיים",
+        "other": "לפני {{count}} ימים"
+      },
+      "weeksAgo": {
+        "one": "לפני שבוע",
+        "two": "לפני שבועיים",
+        "other": "לפני {{count}} שבועות"
+      },
+      "monthsAgo": {
+        "one": "לפני חודש",
+        "two": "לפני חודשיים",
+        "other": "לפני {{count}} חודשים"
+      }
+    },
+    "empty": {
+      "title": "עדיין אין מנויים",
+      "body": "הוסיפו את המנוי הראשון כדי להתחיל לעקוב אחרי המנויים.",
+      "noMatchTitle": "אין מנויים מתאימים",
+      "noMatchBody": "נסו חיפוש או סינון אחר."
+    },
+    "detail": {
+      "label": "פרטי המנוי",
+      "eyebrow": "מנוי",
+      "expiresToday": "פג היום",
+      "expiresIn": {
+        "one": "פג בעוד יום",
+        "two": "פג בעוד יומיים",
+        "other": "פג בעוד {{count}} ימים"
+      },
+      "membership": "מנוי",
+      "periodArrow": "←",
+      "progressLabel": "חלק המנוי שחלף",
+      "quickRenew": "חידוש מהיר",
+      "renewBy": {
+        "one": "+חודש",
+        "two": "+חודשיים",
+        "other": "+{{count}} חודשים"
+      },
+      "comingUp": "בקרוב",
+      "activityError": "לא הצלחנו לטעון שיעורים ורכישות.",
+      "noUpcoming": "אין שיעורים קרובים.",
+      "withTrainer": "עם {{name}}",
+      "today": "היום",
+      "tomorrow": "מחר",
+      "tabsLabel": "פרטי המנוי",
+      "tabs": {
+        "overview": "סקירה",
+        "classes": "שיעורים",
+        "purchases": "רכישות"
+      },
+      "upcoming": "קרובים",
+      "past": "קודמים",
+      "participants": {
+        "one": "משתתף אחד",
+        "two": "{{count}} משתתפים",
+        "other": "{{count}} משתתפים"
+      },
+      "noClassesTitle": "עדיין אין שיעורים",
+      "noClassesBody": "שיעורים קבוצתיים שהמנוי משתתף בהם יופיעו כאן.",
+      "matchedByPhone": "לפי מספר טלפון: מכירות שבהן הטלפון של הלקוח הוא הטלפון של המנוי.",
+      "noPurchasesTitle": "אין רכישות",
+      "noPurchasesBody": "לא היו מכירות למספר הטלפון הזה.",
+      "purchasesTotal": {
+        "one": "רכישה אחת",
+        "two": "{{count}} רכישות",
+        "other": "{{count}} רכישות"
+      },
+      "quantity": "כמות {{count}}"
+    },
+    "form": {
+      "addTitle": "הוספת מנוי",
+      "editTitle": "עריכת מנוי",
+      "personal": "פרטים אישיים",
+      "membership": "מנוי",
+      "firstName": "שם פרטי",
+      "lastName": "שם משפחה",
+      "phone": "טלפון",
+      "email": "אימייל",
+      "birthday": "תאריך לידה",
+      "gender": "מגדר",
+      "address": "כתובת",
+      "addressPlaceholder": "רחוב, עיר",
+      "joinDate": "תאריך הצטרפות",
+      "endDate": "סיום מנוי",
+      "setLength": "אורך המנוי",
+      "months": {
+        "one": "חודש",
+        "two": "חודשיים",
+        "other": "{{count}} חודשים"
+      }
+    },
+    "toast": {
+      "added": "{{name}} נוסף/ה",
+      "updated": "השינויים של {{name}} נשמרו",
+      "renewed": "המנוי חודש עד {{date}}",
+      "renewUndone": "החידוש בוטל",
+      "renewError": "לא הצלחנו לחדש את המנוי של {{name}}. נסו שוב.",
+      "undoError": "לא הצלחנו לבטל את החידוש. נסו שוב.",
+      "activated": "{{name}} פעיל/ה שוב",
+      "deactivated": "{{name}} הושבת/ה",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "emailChangeError": "אי אפשר לשנות את האימייל: המנוי מזוהה לפי האימייל בשמירה.",
+      "deleted": "{{name}} נמחק/ה",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. ייתכן שהמנוי עדיין רשום לשיעורים.",
+      "notFound": "המנוי לא נמצא. ייתכן שנמחק.",
+      "exported": {
+        "one": "יוצא מנוי אחד",
+        "two": "יוצאו {{count}} מנויים",
+        "other": "יוצאו {{count}} מנויים"
+      }
+    },
+    "confirm": {
+      "deactivateTitle": "להשבית את {{name}}?",
+      "deactivateBody": "המנוי יופיע כלא פעיל עד שתפעילו או תחדשו אותו.",
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "המנוי יימחק לצמיתות. אי אפשר לבטל את הפעולה."
+    }
   }
 }

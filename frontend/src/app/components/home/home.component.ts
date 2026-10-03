@@ -1,4 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AppUtil } from 'src/app/common/app-util';
@@ -16,6 +17,7 @@ import { DashboardService } from 'src/app/services/dashboard-service/dashboard.s
 import { ShellActionsService } from 'src/app/services/shell-actions.service';
 import { ShellStateService } from 'src/app/services/shell-state.service';
 import { Lang, LanguageService } from 'src/app/services/language.service';
+import { realPhotoUrl } from 'src/app/shared/ui/avatar/photo';
 import { BarDatum } from 'src/app/shared/ui/bar-chart/bar-chart.component';
 import { PillStatus } from 'src/app/shared/ui/status-pill/status-pill.component';
 import { SegmentOption } from 'src/app/shared/ui/segmented-control/segmented-control.component';
@@ -98,7 +100,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private actions: ShellActionsService,
     private shell: ShellStateService,
-    private language: LanguageService
+    private language: LanguageService,
+    private router: Router
   ) {}
 
   private t(key: string, params?: Record<string, string | number>): string {
@@ -183,8 +186,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.actions.create('new-class').pipe(take(1)).subscribe();
   }
 
+  /** Opens the member's detail panel (quick renew lives there). */
   renew(row: ExpiringRow): void {
-    this.actions.editMember(row.member).pipe(take(1)).subscribe();
+    this.router.navigate(['/members'], { queryParams: { member: row.member.id } });
   }
 
   explain(): void {
@@ -393,6 +397,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   private daysFromToday(date: Date): number {
     const startOf = (d: Date): number => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
     return Math.round((startOf(date) - startOf(new Date())) / DAY_MS);
+  }
+
+  photoOf(url: string | null | undefined): string | null {
+    return realPhotoUrl(url);
   }
 
   money(value: number): string {

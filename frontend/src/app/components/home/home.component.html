@@ -103,7 +103,7 @@
                         </div>
                         <ul *ngIf="expiring.length; else noExpiring" class="flex flex-col gap-3">
                             <li *ngFor="let row of expiring" class="flex items-center gap-3">
-                                <app-avatar [name]="row.name" [id]="row.member.id" [imageUrl]="row.member.imageURL || null" [size]="40"></app-avatar>
+                                <app-avatar [name]="row.name" [id]="row.member.id" [imageUrl]="photoOf(row.member.imageURL)" [size]="40"></app-avatar>
                                 <div class="flex min-w-0 flex-grow flex-col">
                                     <span class="truncate text-[15px] font-bold text-ink" dir="auto">{{ row.name }}</span>
                                     <span class="text-[13px] font-semibold text-warning-text">{{ row.note }}</span>

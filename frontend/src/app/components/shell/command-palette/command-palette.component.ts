@@ -13,6 +13,8 @@ import { productCategoryKey } from 'src/app/common/product-categories';
 import { Lang, LanguageService } from 'src/app/services/language.service';
 import { AppUtil } from 'src/app/common/app-util';
 import { NAV_GROUPS, NavItem, PROFILE_PAGE } from '../shell-nav';
+import { realPhotoUrl } from 'src/app/shared/ui/avatar/photo';
+import { memberStatus as deriveStatus } from '../../members-components/member-status';
 
 type PaletteGroupKey = 'ask-ai' | 'members' | 'products' | 'pages' | 'actions';
 
@@ -289,10 +291,10 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
         detail: member.phone,
         detailLtr: true,
         icon: 'user' as IconName,
-        avatar: { name: `${member.firstName} ${member.lastName}`, id: member.id, imageUrl: member.imageURL || null },
+        avatar: { name: `${member.firstName} ${member.lastName}`, id: member.id, imageUrl: realPhotoUrl(member.imageURL) },
         meta: this.t(`common.status.${this.memberStatus(member)}`),
         metaTone: (this.memberStatus(member) === 'expiring' ? 'warning' : 'muted') as MetaTone,
-        run: () => this.editMember(member),
+        run: () => this.openMember(member),
       }));
     if (!group.items.length) {
       group.note = this.t('shell.palette.membersNone');
@@ -337,17 +339,8 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     return NAV_GROUPS.reduce((all: NavItem[], group) => all.concat(group.items), [] as NavItem[]).concat(PROFILE_PAGE);
   }
 
-  private memberStatus(member: Member): 'active' | 'expiring' | 'inactive' {
-    if (!member.isActive) {
-      return 'inactive';
-    }
-    if (member.endOfMembershipDate) {
-      const days: number = (new Date(member.endOfMembershipDate).getTime() - Date.now()) / 86400000;
-      if (days >= 0 && days <= 7) {
-        return 'expiring';
-      }
-    }
-    return 'active';
+  private memberStatus(member: Member): string {
+    return deriveStatus(member);
   }
 
   // ---- Running items -----------------------------------------------------
@@ -396,9 +389,10 @@ export class CommandPaletteComponent implements OnInit, OnDestroy {
     this.actions.create(action).pipe(take(1)).subscribe();
   }
 
-  private editMember(member: Member): void {
+  /** Opens the member's detail panel on the Members page (deep link). */
+  private openMember(member: Member): void {
     this.closeForHandoff();
-    this.actions.editMember(member).pipe(take(1)).subscribe();
+    this.router.navigate(['/members'], { queryParams: { member: member.id } });
   }
 
   private sell(product: Product): void {

@@ -32,6 +32,7 @@ import { ImageUploadComponent } from './form/image-upload.component';
 import { FormSectionComponent } from './form/form-section.component';
 import { DataTableComponent } from './data-table/data-table.component';
 import { CellDefDirective } from './data-table/data-table.types';
+import { MenuComponent } from './menu/menu.component';
 
 const COMPONENTS = [
   IconComponent,
@@ -60,6 +61,7 @@ const COMPONENTS = [
   FormSectionComponent,
   DataTableComponent,
   CellDefDirective,
+  MenuComponent,
 ];
 
 /** Studio component kit (redesign.md §7.10 step 2–3). Tailwind only, no Material. */

@@ -14,8 +14,6 @@ import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
 import { RegisterPageComponent } from './components/register-page/register-page.component';
 
 import { SearchfilterPipe } from './searchfilter.pipe';
-import { AddMemberComponent } from './components/members-components/add-member/add-member.component';
-import { UpdateMemberComponent } from './components/members-components/update-member/update-member.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogConfig, MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { SharedModule } from './shared/shared.module';
@@ -45,7 +43,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MembersChartComponent } from './components/members-chart/members-chart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MembersPageComponent } from './components/members-components/members-page/members-page.component';
-import { MembersTableComponent } from './components/members-components/members-table/members-table.component';
+import { MemberDetailComponent } from './components/members-components/member-detail/member-detail.component';
+import { MemberFormComponent } from './components/members-components/member-form/member-form.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatRadioModule } from '@angular/material/radio';
 import { SchedulerPageComponent } from './components/scheduler-components/scheduler-page/scheduler-page.component';
@@ -117,6 +116,7 @@ const routes: Routes = [
     path: 'members',
     component: MembersPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   { path: 'machines', component: MachinesComponent, canActivate: [AuthGuard] },
   {
@@ -169,8 +169,6 @@ const routes: Routes = [
     LoginComponent,
     RegisterPageComponent,
     SearchfilterPipe,
-    AddMemberComponent,
-    UpdateMemberComponent,
     MachinesComponent,
     CreateMachineComponent,
     EditMachineComponent,
@@ -181,7 +179,8 @@ const routes: Routes = [
     HomeComponent,
     MembersChartComponent,
     MembersPageComponent,
-    MembersTableComponent,
+    MemberDetailComponent,
+    MemberFormComponent,
     SchedulerPageComponent,
     MachineDetailsComponent,
     UpdateScheduledJobComponent,

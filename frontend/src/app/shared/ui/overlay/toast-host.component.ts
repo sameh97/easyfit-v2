@@ -25,7 +25,7 @@ import { Toast, ToastService } from './toast.service';
         >
           <app-icon [name]="toast.tone === 'success' ? 'check' : 'alert-circle'" [size]="15" [strokeWidth]="2.5"></app-icon>
         </span>
-        <span class="min-w-0" dir="auto">{{ toast.message }}</span>
+        <span class="min-w-0">{{ toast.message }}</span>
         <button
           *ngIf="toast.action"
           type="button"

@@ -5,14 +5,45 @@ import { Logger } from "../common/logger";
 import { MemberDto } from "../models/dto/member-dto";
 import { Member } from "../models/member";
 import { MembersService } from "../services/members-service";
+import { MemberActivityService } from "../services/member-activity-service";
+import { MemberActivityDto } from "../models/dto/member-activity-dto";
+import { InputError } from "../exeptions/input-error";
+
+/** `verifyToken` puts the decoded JWT on `req.user`; its `sub` is the signed-in user. */
+interface AuthenticatedRequest {
+  user?: { sub?: { gymId?: number } };
+  params: { id?: string };
+}
 
 @injectable()
 export class MemebrsController {
   constructor(
     @inject(MembersService) private membersService: MembersService,
     @inject(MemberDtoMapper) private membersDtoMapper: MemberDtoMapper,
-    @inject(Logger) private logger: Logger
+    @inject(Logger) private logger: Logger,
+    @inject(MemberActivityService) private memberActivityService: MemberActivityService
   ) {}
+
+  public getActivity = async (req: AuthenticatedRequest, res: unknown, next: (result: unknown) => void): Promise<void> => {
+    try {
+      // Scope by the gym in the verified JWT, never by a client-supplied gymId.
+      const gymId: number = Number(req.user?.sub?.gymId);
+      if (!Number.isInteger(gymId)) {
+        throw new InputError("Cannot resolve the gym of the signed-in user");
+      }
+      const memberId: number = Number(req.params.id);
+      if (!Number.isInteger(memberId) || memberId <= 0) {
+        throw new InputError("Member id must be a positive whole number");
+      }
+
+      const activity: MemberActivityDto = await this.memberActivityService.getActivity(gymId, memberId);
+
+      next(activity);
+    } catch (err) {
+      this.logger.error(`cannot get member activity`, err);
+      next(err);
+    }
+  };
 
   public getAll = async (req: any, res: any, next: any) => {
     try {

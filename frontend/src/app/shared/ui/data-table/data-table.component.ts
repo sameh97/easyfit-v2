@@ -19,7 +19,7 @@ import {
   DataTableColumn,
   DataTableSort,
   PAGE_SIZES,
-  SortValue,
+  sortRows,
 } from './data-table.types';
 
 export type DataTableState = 'loading' | 'error' | 'ready';
@@ -112,16 +112,7 @@ export class DataTableComponent<T> implements OnInit, OnChanges, OnDestroy {
   }
 
   private applySort(): void {
-    const column: DataTableColumn<T> | undefined = this.columns.find(
-      (c: DataTableColumn<T>) => c.key === this.sort?.key
-    );
-    const rows: T[] = [...this.rows];
-    if (column?.sortValue && this.sort) {
-      const value = column.sortValue;
-      const factor: number = this.sort.direction === 'asc' ? 1 : -1;
-      rows.sort((a: T, b: T) => compareValues(value(a), value(b), factor));
-    }
-    this.sortedRows = rows;
+    this.sortedRows = sortRows(this.rows, this.columns, this.sort);
     this.clampPage();
     this.slicePage();
   }
@@ -212,21 +203,4 @@ export class DataTableComponent<T> implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
   }
-}
-
-/** Nulls last in both directions; numbers numerically; strings with the locale collator. */
-function compareValues(a: SortValue, b: SortValue, factor: number): number {
-  if (a === null && b === null) {
-    return 0;
-  }
-  if (a === null) {
-    return 1;
-  }
-  if (b === null) {
-    return -1;
-  }
-  if (typeof a === 'number' && typeof b === 'number') {
-    return (a - b) * factor;
-  }
-  return String(a).localeCompare(String(b), undefined, { sensitivity: 'base', numeric: true }) * factor;
 }

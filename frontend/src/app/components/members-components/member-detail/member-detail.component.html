@@ -1,0 +1,155 @@
+<!-- Header: avatar, name, status -->
+<div class="flex items-center gap-3.5 px-5 pt-2.5">
+    <app-avatar [name]="name" [id]="member.id" [imageUrl]="photo" [size]="64"></app-avatar>
+    <div class="flex min-w-0 flex-col items-start gap-1.5">
+        <h2 class="max-w-full truncate text-[22px] font-extrabold tracking-card text-ink" dir="auto">{{ name }}</h2>
+        <app-status-pill [status]="pill" [label]="statusLabel"></app-status-pill>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="flex gap-2 px-5 pt-4">
+    <button appButton variant="primary" type="button" icon="refresh-cw" class="flex-grow" aria-haspopup="menu" aria-expanded="false" [disabled]="busy" (click)="openRenewMenu($event)">
+        {{ 'members.actions.renew' | translate }}
+    </button>
+    <button appButton variant="secondary" type="button" icon="pen" (click)="edit()">{{ 'common.actions.edit' | translate }}</button>
+    <button type="button" appIconButton variant="outline" size="md" icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'common.actions.moreActions' | translate" (click)="openMoreMenu($event)"></button>
+</div>
+
+<!-- Tabs -->
+<div class="px-5 pt-4">
+    <div role="tablist" [attr.aria-label]="'members.detail.tabsLabel' | translate" class="flex gap-0.5 rounded-full bg-surface-muted p-1" (keydown)="onTabKeydown($event)">
+        <button *ngFor="let t of tabs" type="button" role="tab" [id]="'member-tab-' + t" [attr.aria-selected]="tab === t" [attr.aria-controls]="'member-tabpanel-' + t" [attr.tabindex]="tab === t ? 0 : -1"
+            (click)="selectTab(t)"
+            class="flex-1 whitespace-nowrap rounded-full border-0 px-2 py-2 text-[13px] transition-colors"
+            [ngClass]="tab === t ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-neutral hover:text-ink'">
+            {{ tabLabel(t) }}
+        </button>
+    </div>
+</div>
+
+<div class="flex flex-col gap-4 px-5 pb-5 pt-4" role="tabpanel" [id]="'member-tabpanel-' + tab" [attr.aria-labelledby]="'member-tab-' + tab" tabindex="0">
+
+    <!-- ============ Overview ============ -->
+    <ng-container *ngIf="tab === 'overview'">
+        <div class="flex flex-col gap-2.5 rounded-2xl bg-surface-subtle p-4">
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+                <span class="text-[13px] font-bold text-ink-2">{{ 'members.detail.membership' | translate }}</span>
+                <span *ngIf="joinDate && endDate" class="text-[13px] text-ink-3">
+                    {{ joinDate | localDate }} {{ 'members.detail.periodArrow' | translate }} <strong class="text-ink">{{ endDate | localDate }}</strong>
+                </span>
+            </div>
+            <div class="h-1.5 overflow-hidden rounded-full bg-surface-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="progress" [attr.aria-label]="'members.detail.progressLabel' | translate">
+                <div class="h-1.5 rounded-full" [ngClass]="progressClass" [style.width.%]="progress"></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-1.5">
+                <span class="me-1 text-[13px] text-ink-3">{{ 'members.detail.quickRenew' | translate }}</span>
+                <button *ngFor="let months of renewMonths" type="button" [disabled]="busy" (click)="renew(months)"
+                    class="h-[34px] rounded-full border border-solid border-line-strong bg-surface px-3 text-[13px] font-bold text-ink transition-colors hover:bg-surface-subtle disabled:opacity-50">
+                    {{ 'members.detail.renewBy' | plural: months | translate: { count: months } }}
+                </button>
+            </div>
+        </div>
+
+        <dl class="m-0 flex flex-col">
+            <div *ngFor="let row of contactRows" class="flex items-center gap-3 border-b border-solid border-line-soft py-[9px]">
+                <span class="flex text-ink-4" aria-hidden="true"><app-icon [name]="row.icon" [size]="16"></app-icon></span>
+                <dt class="w-[92px] flex-shrink-0 text-[13px] text-ink-3">{{ row.labelKey | translate }}</dt>
+                <dd class="m-0 min-w-0 flex-grow truncate text-sm font-semibold text-ink">
+                    <bdi *ngIf="row.ltr; else plain" dir="ltr">{{ row.value }}</bdi>
+                    <ng-template #plain><span dir="auto">{{ row.value }}</span></ng-template>
+                </dd>
+            </div>
+        </dl>
+
+        <section class="flex flex-col gap-2" [attr.aria-label]="'members.detail.comingUp' | translate">
+            <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.comingUp' | translate }}</h3>
+            <ng-container [ngSwitch]="activityState">
+                <app-skeleton *ngSwitchCase="'loading'" width="100%" height="56px" shape="block"></app-skeleton>
+                <p *ngSwitchCase="'error'" class="text-[13px] text-danger">{{ 'members.detail.activityError' | translate }}
+                    <button type="button" class="border-0 bg-transparent p-0 font-bold text-accent underline" (click)="loadActivity()">{{ 'common.actions.retry' | translate }}</button></p>
+                <ng-container *ngSwitchDefault>
+                    <p *ngIf="!comingUp.length" class="text-[13px] text-ink-3">{{ 'members.detail.noUpcoming' | translate }}</p>
+                    <div *ngFor="let c of comingUp; let first = first; trackBy: trackById" class="flex items-center gap-3 rounded-[14px] px-3 py-2.5" [ngClass]="first ? 'bg-accent-soft' : 'bg-surface-subtle'">
+                        <span class="w-11 flex-shrink-0 text-sm font-extrabold text-ink">{{ c.startTime | localDate: 'time' }}</span>
+                        <span class="flex min-w-0 flex-col">
+                            <span class="truncate text-sm font-bold text-ink"><span dir="auto">{{ classTitle(c) }}</span> · {{ classDay(c) }}</span>
+                            <span *ngIf="c.trainer" class="truncate text-xs text-neutral">{{ 'members.detail.withTrainer' | translate: { name: trainerName(c) } }}</span>
+                        </span>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </section>
+    </ng-container>
+
+    <!-- ============ Classes ============ -->
+    <ng-container *ngIf="tab === 'classes'">
+        <ng-container [ngSwitch]="activityState">
+            <ng-container *ngSwitchCase="'loading'"><app-skeleton *ngFor="let i of [1, 2, 3]" width="100%" height="56px" shape="block"></app-skeleton></ng-container>
+            <app-empty-state *ngSwitchCase="'error'" icon="alert-circle" tone="danger" [compact]="true" [title]="'members.detail.activityError' | translate">
+                <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="loadActivity()">{{ 'common.actions.retry' | translate }}</button>
+            </app-empty-state>
+            <ng-container *ngSwitchDefault>
+                <app-empty-state *ngIf="!classCount" icon="calendar" [compact]="true" [title]="'members.detail.noClassesTitle' | translate" [message]="'members.detail.noClassesBody' | translate"></app-empty-state>
+                <section *ngIf="activity?.classes?.upcoming?.length" class="flex flex-col gap-2">
+                    <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.upcoming' | translate }}</h3>
+                    <ng-container *ngTemplateOutlet="classList; context: { $implicit: activity?.classes?.upcoming, past: false }"></ng-container>
+                </section>
+                <section *ngIf="activity?.classes?.past?.length" class="flex flex-col gap-2">
+                    <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.past' | translate }}</h3>
+                    <ng-container *ngTemplateOutlet="classList; context: { $implicit: activity?.classes?.past, past: true }"></ng-container>
+                </section>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+
+    <ng-template #classList let-items let-past="past">
+        <ul class="flex flex-col gap-1.5">
+            <li *ngFor="let c of items; trackBy: trackById" class="flex items-center gap-3 rounded-[14px] bg-surface-subtle px-3 py-2.5" [ngClass]="past ? 'opacity-70' : ''">
+                <span class="flex w-[68px] flex-shrink-0 flex-col">
+                    <span class="text-sm font-extrabold text-ink">{{ c.startTime | localDate: 'time' }}</span>
+                    <span class="text-xs text-ink-3">{{ classDay(c) }}</span>
+                </span>
+                <span class="flex min-w-0 flex-col">
+                    <span class="truncate text-sm font-bold text-ink" dir="auto">{{ classTitle(c) }}</span>
+                    <span class="truncate text-xs text-neutral">
+                        <ng-container *ngIf="c.trainer">{{ 'members.detail.withTrainer' | translate: { name: trainerName(c) } }} · </ng-container>{{ 'members.detail.participants' | plural: c.participantCount | translate: { count: c.participantCount } }}
+                    </span>
+                </span>
+            </li>
+        </ul>
+    </ng-template>
+
+    <!-- ============ Purchases ============ -->
+    <ng-container *ngIf="tab === 'purchases'">
+        <ng-container [ngSwitch]="activityState">
+            <ng-container *ngSwitchCase="'loading'"><app-skeleton *ngFor="let i of [1, 2, 3]" width="100%" height="56px" shape="block"></app-skeleton></ng-container>
+            <app-empty-state *ngSwitchCase="'error'" icon="alert-circle" tone="danger" [compact]="true" [title]="'members.detail.activityError' | translate">
+                <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="loadActivity()">{{ 'common.actions.retry' | translate }}</button>
+            </app-empty-state>
+            <ng-container *ngSwitchDefault>
+                <div class="flex items-start gap-2 rounded-2xl bg-surface-subtle px-3.5 py-3 text-[13px] text-ink-3">
+                    <app-icon name="phone" [size]="15" class="mt-0.5"></app-icon>
+                    <span>{{ 'members.detail.matchedByPhone' | translate }}</span>
+                </div>
+                <app-empty-state *ngIf="!purchaseCount" icon="shopping-bag" [compact]="true" [title]="'members.detail.noPurchasesTitle' | translate" [message]="'members.detail.noPurchasesBody' | translate"></app-empty-state>
+                <ng-container *ngIf="purchaseCount">
+                    <div class="flex items-baseline justify-between text-sm">
+                        <span class="text-ink-3">{{ 'members.detail.purchasesTotal' | plural: purchaseCount | translate: { count: purchaseCount } }}</span>
+                        <strong class="text-ink">{{ money(activity?.purchases?.totalSpent || 0) }}</strong>
+                    </div>
+                    <ul class="flex flex-col">
+                        <li *ngFor="let p of activity?.purchases?.items; trackBy: trackById" class="flex items-center gap-3 border-b border-solid border-line-soft py-2.5">
+                            <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-tile bg-surface-muted text-ink-2" aria-hidden="true"><app-icon name="package" [size]="16"></app-icon></span>
+                            <span class="flex min-w-0 flex-grow flex-col">
+                                <span class="truncate text-sm font-bold text-ink" dir="auto">{{ p.productName }}</span>
+                                <span class="text-xs text-ink-3">{{ 'members.detail.quantity' | translate: { count: p.quantity } }} · {{ p.createdAt | localDate }}</span>
+                            </span>
+                            <span class="flex-shrink-0 text-sm font-bold text-ink">{{ money(p.totalCost) }}</span>
+                        </li>
+                    </ul>
+                </ng-container>
+            </ng-container>
+        </ng-container>
+    </ng-container>
+</div>

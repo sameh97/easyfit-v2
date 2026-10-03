@@ -65,6 +65,7 @@ module.exports = {
     './src/app/components/shell/**/*.{html,ts}',
     './src/app/components/home/**/*.{html,ts}',
     './src/app/components/login/**/*.{html,ts}',
+    './src/app/components/members-components/**/*.{html,ts}',
   ],
   // Bootstrap 4 ships !important helpers with the same names (p-5 = 3rem, bg-white, text-warning…)
   // and body.mat-typography styles h1/h2/p at higher specificity than a utility. Making utilities
@@ -102,6 +103,7 @@ module.exports = {
           bg: '#FDEFD6',
           text: '#8A5A00',
           bar: '#E39A1C',
+          row: '#FFF8EB',
         },
         // bg/text = the "danger-soft" pill (Expired), §5.2
         danger: { DEFAULT: '#B4351F', dot: '#D9362B', bg: '#FBE4DF', text: '#A6321D', ring: 'rgba(180,53,31,0.12)' },
