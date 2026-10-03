@@ -15,7 +15,7 @@ EasyFit is a **gym management web app** for gym owners and staff (not for gym me
 - **Gym users** (role `1`, "regular user") manage one gym: members, trainers, group classes, machines and their maintenance, product sales, and product catalogs sent to members over WhatsApp.
 - **Admin** (role `2`, `Admin@easyfit.com`) creates gyms and the user accounts for each gym. The admin has a separate UI with its own layout.
 - Every piece of data is scoped to a gym (`gymId`). A gym user only ever sees their own gym.
-- Currency is ₪ (ILS). Phone and ID validation is Israeli-specific (`05X-XXXXXXX`, Israeli ID checksum). Names can be in Latin or Hebrew letters. The UI is English and left-to-right only.
+- Currency is ₪ (ILS). Phone and ID validation is Israeli-specific (`05X-XXXXXXX`, Israeli ID checksum). Names can be in Latin or Hebrew letters. The UI was English and left-to-right only; since Phase 2, redesigned pages are in English and Hebrew (right-to-left), see §7.8.
 
 ---
 
@@ -94,8 +94,8 @@ The first redesign pass is done for **Login**, the **app shell** (sidebar and to
 | `/` | redirects to `/login` | – | – | – |
 | `/login` | `LoginComponent` | everyone | full screen | ✅ |
 | `/home` | `HomeComponent` (dashboard) | gym user | `app-nav` | ✅ |
-| `/members` | `MembersPageComponent` | gym user | `app-nav` | ❌ |
-| `/trainers` | `TrainersPageComponent` | gym user | `app-nav` | ❌ |
+| `/members` | `MembersPageComponent` | gym user | `app-nav` | ✅ Phase 2 |
+| `/trainers` | `TrainersPageComponent` | gym user | `app-nav` | ✅ Phase 2 |
 | `/group-trainings` | `DisplayTrainingsComponent` | gym user | `app-nav` | ❌ |
 | `/machines` | `MachinesComponent` | gym user | `app-nav` | ❌ |
 | `/scheduler` | `SchedulerPageComponent` (machine maintenance) | gym user | `app-nav` | ❌ |
@@ -181,13 +181,31 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 > - **Detail panel:** Overview (contact details, join and certification dates) and Classes (upcoming and past group trainings they lead).
 > - **Add/Edit trainer** uses the same side-panel form as a member, plus **certification date** and minus the membership section.
 
+> ✅ **Done in Phase 2 (§5.2, §5.3).** What was decided while building it:
+> - **The update endpoints find members and trainers by email**, not by id. The email therefore can't be changed from an edit form; the form says so instead of failing silently. Changing this needs a backend change (out of scope so far).
+> - **Trainers have no `gender` column**, but the legacy trainer forms require gender (it picks the placeholder photo). The rule stays; editing prefills it from the placeholder photo when there is one.
+> - **Placeholder photos** (`AppConsts.*_DEFULT_IMAGE`) count as "no photo": initials are shown. New records still save the placeholder, as before.
+> - **"Ends soonest first"** sorts running memberships by end date, then expired ones, then inactive members.
+> - **Renew membership** opens a menu with +1 / +3 / +12 months (the same as the quick-renew chips). An inactive member gets **Activate** instead of Deactivate.
+> - **Member activity** comes from `GET /api/members/:id/activity` (read-only, gym from the JWT): upcoming and the last 10 past classes, and up to 50 purchases with the total count and total spent. Bill phones are compared with spaces and dashes removed.
+> - **Trainer cards** count "classes this week" from Sunday to Saturday.
+> - **CSV export** is UTF-8 with a BOM (Excel shows Hebrew), headers in the UI language, dates as `YYYY-MM-DD`.
+> - Deep links: `/members?member=<id>` and `/trainers?trainer=<id>`.
+
 ### 5.4 Group trainings `/group-trainings`
 - **Today:** a `mat-card` with a search box and a `mat-table`. Columns: training (trainer), start time, description, edit, delete.
 - **Add/Edit dialog:** trainer (multiselect dropdown), members (multiselect), start date/time, description.
 - **Show single training dialog:** the class details plus a table of participating members.
 - **Data:** `id, startTime, description, trainerId, gymId`, with members joined through `MemberParticipate`. There's **no end time, capacity, class type or room field**.
 
-> ✏️ Your vision (weekly calendar view? list grouped by day? capacity bars? class-type colors?). Note if you want new fields such as duration or capacity; those need backend changes.
+> ✅ **Decision (Phase 3): a week strip with a day list.** Mockup: `P3-Classes.dc.html` (to be approved). No new fields: classes keep only a start time, a description, a trainer and members.
+> - **Header:** "Classes", subtitle "N classes this week", primary action **New class**.
+> - **Week strip:** seven day pills (Sunday to Saturday) with the day name, the date and the number of classes; previous/next week buttons (chevrons mirror in RTL) and **Today**. The selected day is in the URL (`?day=YYYY-MM-DD`).
+> - **Day list:** one row per class, by start time: time, class name (the description before a colon) with the rest as a caption, trainer (avatar and name) and member count. Past classes are dimmed to 55% and the next class gets an accent-soft background and an "Up next" tag, the same rules as the dashboard's Today card.
+> - **Filters:** trainer (menu) and search by class name.
+> - **Detail panel (420px):** date and time, description, trainer (opens the trainer panel), participants (avatar, name, opens the member panel), **Edit**, and a more-menu with **Delete** (confirm).
+> - **Add/Edit side panel:** date, time (24h), trainer (active trainers), members (searchable multi-select with chips) and description. The validation rules of the legacy add/edit class dialogs stay the same.
+> - Deep link `/group-trainings?class=<id>`. The dashboard's Today rows and the ⌘K "New class" action open the new panels.
 
 ### 5.5 Machines `/machines`
 - **Today:** a `mat-card` with a search box, a "+" FAB and a virtual-scroll `mat-list`. Each item has a **250×250 image** on the left, then name, serial number, description, production year, price (₪), and buttons: *Notifications*, *Edit* and *Delete*.
@@ -195,7 +213,12 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Machine notifications dialog:** a list of maintenance alerts for one machine (job type and time) with *Done* buttons and a "clear all" button.
 - **Data:** `id, name, description, serialNumber, productionYear, imgUrl, price, gymId`.
 
-> ✏️ Your vision (grid of equipment cards? status badge "needs cleaning / service due"?):
+> ✅ **Decision (Phase 3): a card grid, linked to Maintenance.** Mockup: `P3-Machines.dc.html` (to be approved).
+> - **Card:** photo (or an icon tile), name, serial number (always LTR), production year, price (₪) and a **status badge** from the machine's maintenance jobs: *Due today* or *Overdue* (danger), *Next: {date}* (neutral), or *No jobs* (neutral). Machines with open alerts show the alert count.
+> - **Toolbar:** search by name or serial number, and a segmented filter **All · Needs attention · OK**.
+> - **Detail panel:** photo, serial number, year, price, description; a **Maintenance** section with the machine's jobs (type, every N days, next run) linking to Maintenance; and the machine's **open alerts** with **Done** and **Clear all** (this replaces the machine-notifications dialog, same endpoints).
+> - **Add/Edit side panel:** name, serial number (LTR), description, production year, price (LTR) and photo. Validation rules unchanged.
+> - Deep link `/machines?machine=<id>`.
 
 ### 5.6 Scheduler (machine maintenance) `/scheduler`
 - **Today:** a virtual-scroll `mat-list` of scheduled jobs. Each shows the job type (**Clean** or **Service**), active/inactive, start date, end date and "every N days", with buttons for *Machine details*, *Edit* and *Delete*.
@@ -203,7 +226,12 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - When a job fires, the backend creates a notification and pushes it over socket.io. That drives the bell badge in the top bar.
 - **Data:** `id, startTime, endTime, isActive, daysFrequency, jobID (1 = clean, 2 = service), machineSerialNumber, gymId`.
 
-> ✏️ Your vision (timeline/calendar of upcoming maintenance? merge into the Machines page?):
+> ✅ **Decision (Phase 3): its own page, linked to Machines.** Mockup: `P3-Maintenance.dc.html` (to be approved).
+> - **List of jobs grouped by when they are next due:** *Overdue*, *Today*, *This week*, *Later*, then *Inactive*. Each row: job type pill (Clean / Service), machine name and serial number, "every N days", the next run (date and time), and the open-alert state.
+> - Rows with an open alert have **Mark done**, which clears that machine's alerts (existing endpoint).
+> - **Actions:** Edit, and a more-menu with Deactivate/Activate and Delete (confirm).
+> - **Add/Edit side panel:** machine (by name and serial number), job type (segmented Clean / Service), start date and time, end date and time, every N days, and an Active switch. Validation rules unchanged.
+> - **One status, everywhere:** the "due today / overdue" rules of §5.1 decide the badge on Machines, the groups here and the sidebar badge. ⚠️ **Needs approval:** a read-only `GET /api/maintenance/status` (gym from the JWT) that reuses the dashboard's logic (`job-occurrence.ts`) and returns, per job, the next run and whether it is due today or overdue, and per machine the open-alert count. Without it the frontend would re-implement those rules.
 
 ### 5.7 Products `/products`
 - **Today:** `mat-tab-group` with two tabs.
@@ -233,7 +261,10 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - The redesigned bell badge shows the unread count, which updates live over socket.io.
 - Clicking it opens the old **`NotificationsDropdownComponent`** as a Material dialog: cards grouped by machine, showing machine name, count and time, each with a *View* button.
 
-> ✏️ Your vision (real dropdown panel under the bell? mark-all-read? link to the machine?):
+> ✅ **Decision (Phase 3): a dropdown panel under the bell.** Mockup: `P3-Notifications.dc.html` (to be approved).
+> - About 380px wide, radius 20, overlay shadow, anchored to the bell at the inline end; a full-width sheet below `md`.
+> - Grouped by machine: machine name, number of alerts and the latest time. **View** opens the machine's detail panel; **Done** clears that machine's alerts; **Clear all** (with confirm) clears every alert of the gym. All through the existing endpoints.
+> - Empty state: "You're all caught up". The unread count and the socket.io live updates stay as they are.
 
 ### 5.11 Admin: Gyms `/admin`, Users `/users`
 - **Today:** the old `mat-sidenav` shell. **Gyms** is a `mat-table` (name, phone, address, edit, delete) with add/edit gym dialogs. **Users** is a `mat-table` (first name, last name, email, phone, birthday, address, gym name, edit, delete) with add/edit user dialogs (all user fields plus a gym multiselect).
@@ -266,7 +297,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - Chart colors don't match the brand.
 - Some tables and dialogs aren't mobile-friendly.
 - Typos in the UI copy ("peer month" and similar).
-- The UI is English left-to-right only. ✅ Hebrew with RTL is added in Phase 2 (§7.8).
+- The UI is English left-to-right only. ✅ Hebrew with RTL was added in Phase 2 (§7.8).
 - The admin routes have no role guard.
 
 ---
@@ -576,4 +607,37 @@ Branch `redesign/phase-2` (from master, after Phase 1 is merged). Mockups: `P2-M
 - Keyboard: side panels and dialogs trap focus, close on Esc and return focus. Every icon button has a translated `aria-label`.
 - **Report:** the Hebrew strings you wrote, in a list, for the owner to review.
 
-**Phase 3+:** written after Phase 2, following the order in §7.5.
+#### Notes from Phase 2 for later phases
+- **Every UI string goes through the translation files** (`assets/i18n/en.json` and `he.json`, grouped by area). Counted strings have `one` / `two` / `other` forms and use the `plural` pipe or `LanguageService.tCount`. Dates use the `localDate` pipe or `LanguageService.date`, never the built-in `date` pipe.
+- **Direction:** only logical utilities (`ms-`, `pe-`, `start-`, `text-start`, `border-s`, `rounded-e`…); `rtl:` for transforms; `flip-rtl` on directional icons; `<bdi dir="ltr">` or `[ltr]="true"` for phones, emails, serial numbers and prices.
+- **Studio routes** set `data: { studio: true }` in `app.module.ts`; routes without it are wrapped in `dir="ltr" lang="en"`.
+- **Run `npm run check:studio`** before every commit: it fails on missing translation keys and on physical-direction utilities in Studio folders.
+- **Building blocks:** `SidePanelService` + `<app-panel-layout>` for forms, `<app-side-panel>` for details, `ConfirmDialogService`, `ToastService`, `MenuService` for small menus, `<app-data-table>`, the form kit in `shared/ui/form`. Menus anchor to `event.currentTarget` (a template ref on an `appButton` is the component, not the element).
+
+---
+
+**Phase 3: Classes, Machines, Maintenance, notifications panel** *(draft: approve together with the P3 mockups)*
+Branch `redesign/phase-3` (from master, after Phase 2 is merged). Decisions: §5.4, §5.5, §5.6, §5.10.
+
+1. **Kit additions** (`shared/ui`): a `TimeField` (24h, typed or picked), a searchable `MultiSelect` with chips (members of a class), a `Switch`, a shared `Tabs` component (extracted from the detail panels), and a `WeekStrip`.
+2. **Notifications panel** (§5.10) replacing `NotificationsDropdownComponent`.
+3. **Classes** (§5.4): week strip, day list, detail panel, add/edit side panel; deep link `?class=<id>`.
+4. **Machines** (§5.5): card grid with status badges, detail panel with jobs and open alerts, add/edit side panel; deep link `?machine=<id>`.
+5. **Maintenance** (§5.6): grouped job list, Mark done, add/edit side panel; the read-only status endpoint if approved.
+6. **Wiring and tidy-up:** ⌘K "New class" and "Schedule maintenance" and the dashboard's Today and Maintenance cards open the new panels. Add the new folders to the `purge` list and `data: { studio: true }` to the routes. Delete the replaced components (`display-trainings`, `add-group-training`, `edit-group-training`, `show-single-training`, `machines`, `machines-table`, `create-machine`, `edit-machine`, `machine-notifications`, `scheduler-page`, `add-scheduled-job-page`, `update-scheduled-job`, `machine-details`, `notifications-dropdown`) once nothing references them.
+
+**Do not in Phase 3:**
+- Change the DB schema (no class duration, capacity or type) or any existing endpoint's request or response.
+- Remove the Bootstrap, jQuery, Angular Material, `ng-multiselect-dropdown` or date-picker libraries (Phase 5); they just stop being used on these pages.
+- Redesign Products, Catalogs, Profile or Admin.
+- Change validation rules.
+
+**Phase 3 is done when:**
+- `ng build --prod` passes with no new warnings and no `any`; the backend type-checks.
+- Classes, machines and maintenance jobs can be created, viewed, edited and deleted (jobs also deactivated and marked done) against the real backend, in both languages.
+- The bell panel shows live alerts, View, Done and Clear all work, and the sidebar badge agrees with Machines and Maintenance.
+- `npm run check:studio` passes; screenshots at 1440, 1024 and 390px in English and Hebrew broadly match the P3 mockups.
+- Keyboard: panels and dialogs trap focus, close on Esc and return focus; every icon button has a translated `aria-label`.
+- **Report:** the new Hebrew strings, for the owner to review.
+
+**Phase 4+:** written after Phase 3, following the order in §7.5.
