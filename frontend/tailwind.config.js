@@ -72,6 +72,7 @@ module.exports = {
     './src/app/components/maintenance/**/*.{html,ts}',
     './src/app/components/products/**/*.{html,ts}',
     './src/app/components/catalogs/**/*.{html,ts}',
+    './src/app/components/profile/**/*.{html,ts}',
   ],
   // Bootstrap 4 ships !important helpers with the same names (p-5 = 3rem, bg-white, text-warning…)
   // and body.mat-typography styles h1/h2/p at higher specificity than a utility. Making utilities

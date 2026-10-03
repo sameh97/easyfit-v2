@@ -1,0 +1,31 @@
+<app-panel-layout [title]="'profile.form.title' | translate">
+    <form panelBody id="profile-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-image-upload [currentUrl]="currentPhoto" (fileChange)="onPhoto($event)"></app-image-upload>
+
+        <app-form-section [title]="'members.form.personal' | translate">
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="firstName" [label]="'members.form.firstName' | translate" [required]="true" autocomplete="given-name" name="firstName"></app-text-field>
+                <app-text-field [control]="lastName" [label]="'members.form.lastName' | translate" [required]="true" autocomplete="family-name" name="lastName"></app-text-field>
+            </div>
+            <div class="flex flex-col gap-1.5">
+                <span class="text-[13px] font-bold text-ink-2">{{ 'profile.form.email' | translate }}</span>
+                <span class="flex h-[46px] items-center rounded-full border border-solid border-line bg-surface-subtle px-4 text-[15px] font-medium text-ink-3"><bdi dir="ltr">{{ original.email }}</bdi></span>
+                <span class="text-xs text-ink-3">{{ 'profile.form.emailHelp' | translate }}</span>
+            </div>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="phone" type="tel" inputmode="tel" [ltr]="true" [label]="'members.form.phone' | translate" [required]="true" placeholder="05XXXXXXXX" name="phone"
+                    [messages]="{ gymPhoneNotValid: 'validation.israeliPhone' }"></app-text-field>
+                <app-date-field [control]="birthDay" [label]="'members.form.birthday' | translate" [required]="true"></app-date-field>
+            </div>
+            <app-text-field [control]="address" [label]="'members.form.address' | translate" [required]="true" [placeholder]="'members.form.addressPlaceholder' | translate" name="address"></app-text-field>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="profile-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ 'common.actions.save' | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

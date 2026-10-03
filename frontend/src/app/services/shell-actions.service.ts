@@ -16,6 +16,8 @@ import { Bill } from '../model/bill';
 import { CatalogFormComponent, CatalogFormData } from '../components/catalogs/catalog-form/catalog-form.component';
 import { CatalogShareComponent, CatalogShareData } from '../components/catalogs/catalog-share/catalog-share.component';
 import { Catalog } from '../model/catalog';
+import { ProfileFormComponent, ProfileFormData } from '../components/profile/profile-form/profile-form.component';
+import { User } from '../model/user';
 import { Member } from '../model/member';
 import { Product } from '../model/product';
 import { DashboardService } from './dashboard-service/dashboard.service';
@@ -187,6 +189,14 @@ export class ShellActionsService {
     return this.sidePanel.open<CatalogShareComponent, CatalogShareData, void>(CatalogShareComponent, {
       data: { catalog },
       ariaLabel: this.language.t('catalogs.share.title'),
+    }).afterClosed$;
+  }
+
+  /** Studio "Edit profile" side panel for the signed-in user. */
+  editProfile(user: User): Observable<User | undefined> {
+    return this.sidePanel.open<ProfileFormComponent, ProfileFormData, User>(ProfileFormComponent, {
+      data: { user },
+      ariaLabel: this.language.t('profile.form.title'),
     }).afterClosed$;
   }
 }

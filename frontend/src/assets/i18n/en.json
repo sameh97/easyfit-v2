@@ -448,7 +448,8 @@
     "quantityMin": "Enter a quantity above 0.",
     "quantityStock": "Only {{max}} in stock.",
     "productsRequired": "Add at least one product.",
-    "daysRange": "Enter a number of days from 1 to 100."
+    "daysRange": "Enter a number of days from 1 to 100.",
+    "israeliPhone": "Enter a valid Israeli phone number, digits only (e.g. 0541234567)."
   },
   "members": {
     "page": {
@@ -1247,6 +1248,35 @@
         "two": "The link to its {{count}} products stops working. It can't be undone.",
         "other": "The link to its {{count}} products stops working. It can't be undone."
       }
+    }
+  },
+  "profile": {
+    "page": {
+      "title": "Profile and settings",
+      "subtitle": "Your details, your gym and how EasyFit looks for you"
+    },
+    "since": "since {{date}}",
+    "actions": {
+      "edit": "Edit profile"
+    },
+    "fields": {
+      "email": "Email (sign-in)"
+    },
+    "gym": {
+      "note": "Gym details are managed by the EasyFit admin."
+    },
+    "preferences": {
+      "title": "Preferences",
+      "languageHelp": "Hebrew switches the whole app to right-to-left."
+    },
+    "form": {
+      "title": "Edit profile",
+      "email": "Email",
+      "emailHelp": "This is the email you sign in with. It can't be changed here."
+    },
+    "toast": {
+      "updated": "Profile saved",
+      "saveError": "Couldn't save your profile. Try again."
     }
   }
 }
