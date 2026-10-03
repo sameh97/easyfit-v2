@@ -14,8 +14,15 @@ opened directly in a browser; read the markup for the exact colours, sizes, spac
 | `P2-Members-Detail.dc.html` | Members **table + detail side panel** (narrowed table, tabs, quick renew, toast) | ✅ Approved (Phase 2) |
 | `P2-Member-Form.dc.html` | **Add member side panel** with a validation error, length chips, sticky footer | ✅ Approved (Phase 2). The pattern for every create/edit form |
 | `P2-Members-Hebrew.dc.html` | The Members page in **Hebrew, right-to-left**: sidebar on the right, mirrored layout, LTR phones and emails | ✅ Approved (Phase 2) |
+| `P3-Classes.dc.html` | **Classes**: week strip, day list (done / up next), class detail panel with trainer and participants | ✅ Approved (Phase 3) |
+| `P3-Class-Form.dc.html` | **New class side panel**: date, 24-hour time, description, trainer, members as chips | ✅ Approved (Phase 3) |
+| `P3-Classes-Hebrew.dc.html` | Classes in **Hebrew, right-to-left** | ✅ Approved (Phase 3) |
+| `P3-Machines.dc.html` | **Machines** card grid with status badges; detail panel with open alerts and jobs | ✅ Approved (Phase 3) |
+| `P3-Maintenance.dc.html` | **Maintenance** jobs grouped Overdue / Today / This week / Later / Inactive, Mark done | ✅ Approved (Phase 3) |
+| `P3-Notifications.dc.html` | The **bell panel** under the bell, grouped by machine | ✅ Approved (Phase 3) |
+| `P3-Sidebar.dc.html` | The shared sidebar the P3 screens import (component, not a screen) | Reference |
 
 Notes:
 - The mockups use physical CSS (`left`, `padding-left`) in places. The real code must use logical utilities (§7.10, Phase 2 step 1).
 - The Hebrew mockup's strings are a first draft; the final wording goes in `he.json` and gets reviewed by the owner.
-- All sample names and numbers are made up. Tokens are in `redesign.md` §7.2.
+- All sample names and numbers are made up (the P3 screens use the seed data's class, trainer and machine names, all set on Wednesday 30 September). Tokens are in `redesign.md` §7.2.

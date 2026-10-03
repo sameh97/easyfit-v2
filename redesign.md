@@ -198,7 +198,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Show single training dialog:** the class details plus a table of participating members.
 - **Data:** `id, startTime, description, trainerId, gymId`, with members joined through `MemberParticipate`. There's **no end time, capacity, class type or room field**.
 
-> ✅ **Decision (Phase 3): a week strip with a day list.** Mockup: `P3-Classes.dc.html` (to be approved). No new fields: classes keep only a start time, a description, a trainer and members.
+> ✅ **Decision (Phase 3): a week strip with a day list.** Mockups: `P3-Classes.dc.html`, `P3-Class-Form.dc.html`, `P3-Classes-Hebrew.dc.html`. No new fields: classes keep only a start time, a description, a trainer and members.
 > - **Header:** "Classes", subtitle "N classes this week", primary action **New class**.
 > - **Week strip:** seven day pills (Sunday to Saturday) with the day name, the date and the number of classes; previous/next week buttons (chevrons mirror in RTL) and **Today**. The selected day is in the URL (`?day=YYYY-MM-DD`).
 > - **Day list:** one row per class, by start time: time, class name (the description before a colon) with the rest as a caption, trainer (avatar and name) and member count. Past classes are dimmed to 55% and the next class gets an accent-soft background and an "Up next" tag, the same rules as the dashboard's Today card.
@@ -213,7 +213,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Machine notifications dialog:** a list of maintenance alerts for one machine (job type and time) with *Done* buttons and a "clear all" button.
 - **Data:** `id, name, description, serialNumber, productionYear, imgUrl, price, gymId`.
 
-> ✅ **Decision (Phase 3): a card grid, linked to Maintenance.** Mockup: `P3-Machines.dc.html` (to be approved).
+> ✅ **Decision (Phase 3): a card grid, linked to Maintenance.** Mockup: `P3-Machines.dc.html`.
 > - **Card:** photo (or an icon tile), name, serial number (always LTR), production year, price (₪) and a **status badge** from the machine's maintenance jobs: *Due today* or *Overdue* (danger), *Next: {date}* (neutral), or *No jobs* (neutral). Machines with open alerts show the alert count.
 > - **Toolbar:** search by name or serial number, and a segmented filter **All · Needs attention · OK**.
 > - **Detail panel:** photo, serial number, year, price, description; a **Maintenance** section with the machine's jobs (type, every N days, next run) linking to Maintenance; and the machine's **open alerts** with **Done** and **Clear all** (this replaces the machine-notifications dialog, same endpoints).
@@ -226,12 +226,12 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - When a job fires, the backend creates a notification and pushes it over socket.io. That drives the bell badge in the top bar.
 - **Data:** `id, startTime, endTime, isActive, daysFrequency, jobID (1 = clean, 2 = service), machineSerialNumber, gymId`.
 
-> ✅ **Decision (Phase 3): its own page, linked to Machines.** Mockup: `P3-Maintenance.dc.html` (to be approved).
+> ✅ **Decision (Phase 3): its own page, linked to Machines.** Mockup: `P3-Maintenance.dc.html`.
 > - **List of jobs grouped by when they are next due:** *Overdue*, *Today*, *This week*, *Later*, then *Inactive*. Each row: job type pill (Clean / Service), machine name and serial number, "every N days", the next run (date and time), and the open-alert state.
 > - Rows with an open alert have **Mark done**, which clears that machine's alerts (existing endpoint).
 > - **Actions:** Edit, and a more-menu with Deactivate/Activate and Delete (confirm).
 > - **Add/Edit side panel:** machine (by name and serial number), job type (segmented Clean / Service), start date and time, end date and time, every N days, and an Active switch. Validation rules unchanged.
-> - **One status, everywhere:** the "due today / overdue" rules of §5.1 decide the badge on Machines, the groups here and the sidebar badge. ⚠️ **Needs approval:** a read-only `GET /api/maintenance/status` (gym from the JWT) that reuses the dashboard's logic (`job-occurrence.ts`) and returns, per job, the next run and whether it is due today or overdue, and per machine the open-alert count. Without it the frontend would re-implement those rules.
+> - **One status, everywhere:** the "due today / overdue" rules of §5.1 decide the badge on Machines, the groups here and the sidebar badge. ✅ **Approved:** one new read-only `GET /api/maintenance/status` (gym from the JWT) that reuses the dashboard's logic (`job-occurrence.ts`) and returns, per job, the next run and whether it is due today or overdue, and per machine the open-alert count.
 
 ### 5.7 Products `/products`
 - **Today:** `mat-tab-group` with two tabs.
@@ -261,7 +261,7 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - The redesigned bell badge shows the unread count, which updates live over socket.io.
 - Clicking it opens the old **`NotificationsDropdownComponent`** as a Material dialog: cards grouped by machine, showing machine name, count and time, each with a *View* button.
 
-> ✅ **Decision (Phase 3): a dropdown panel under the bell.** Mockup: `P3-Notifications.dc.html` (to be approved).
+> ✅ **Decision (Phase 3): a dropdown panel under the bell.** Mockup: `P3-Notifications.dc.html`.
 > - About 380px wide, radius 20, overlay shadow, anchored to the bell at the inline end; a full-width sheet below `md`.
 > - Grouped by machine: machine name, number of alerts and the latest time. **View** opens the machine's detail panel; **Done** clears that machine's alerts; **Clear all** (with confirm) clears every alert of the gym. All through the existing endpoints.
 > - Empty state: "You're all caught up". The unread count and the socket.io live updates stay as they are.
@@ -616,18 +616,18 @@ Branch `redesign/phase-2` (from master, after Phase 1 is merged). Mockups: `P2-M
 
 ---
 
-**Phase 3: Classes, Machines, Maintenance, notifications panel** *(draft: approve together with the P3 mockups)*
-Branch `redesign/phase-3` (from master, after Phase 2 is merged). Decisions: §5.4, §5.5, §5.6, §5.10.
+**Phase 3: Classes, Machines, Maintenance, notifications panel** (✅ approved with the P3 mockups)
+Branch `redesign/phase-3` (from master, after Phase 2 is merged). Mockups: the `P3-*.dc.html` files. Decisions: §5.4, §5.5, §5.6, §5.10.
 
 1. **Kit additions** (`shared/ui`): a `TimeField` (24h, typed or picked), a searchable `MultiSelect` with chips (members of a class), a `Switch`, a shared `Tabs` component (extracted from the detail panels), and a `WeekStrip`.
 2. **Notifications panel** (§5.10) replacing `NotificationsDropdownComponent`.
 3. **Classes** (§5.4): week strip, day list, detail panel, add/edit side panel; deep link `?class=<id>`.
 4. **Machines** (§5.5): card grid with status badges, detail panel with jobs and open alerts, add/edit side panel; deep link `?machine=<id>`.
-5. **Maintenance** (§5.6): grouped job list, Mark done, add/edit side panel; the read-only status endpoint if approved.
+5. **Maintenance** (§5.6): grouped job list, Mark done, add/edit side panel, and the read-only `GET /api/maintenance/status` (approved). Build the endpoint first in this step; Machines (step 4) can start from the existing data and switch to it.
 6. **Wiring and tidy-up:** ⌘K "New class" and "Schedule maintenance" and the dashboard's Today and Maintenance cards open the new panels. Add the new folders to the `purge` list and `data: { studio: true }` to the routes. Delete the replaced components (`display-trainings`, `add-group-training`, `edit-group-training`, `show-single-training`, `machines`, `machines-table`, `create-machine`, `edit-machine`, `machine-notifications`, `scheduler-page`, `add-scheduled-job-page`, `update-scheduled-job`, `machine-details`, `notifications-dropdown`) once nothing references them.
 
 **Do not in Phase 3:**
-- Change the DB schema (no class duration, capacity or type) or any existing endpoint's request or response.
+- Change the DB schema (no class duration, capacity or type) or any existing endpoint's request or response. The only new endpoint is the read-only maintenance status one.
 - Remove the Bootstrap, jQuery, Angular Material, `ng-multiselect-dropdown` or date-picker libraries (Phase 5); they just stop being used on these pages.
 - Redesign Products, Catalogs, Profile or Admin.
 - Change validation rules.

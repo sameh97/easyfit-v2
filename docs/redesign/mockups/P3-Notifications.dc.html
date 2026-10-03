@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Notifications panel under the bell</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans','Rubik',sans-serif;color:#1b1c20;background:#f5f4f0}
+a{color:#2F4BF0;text-decoration:none}a:hover{color:#1f36c4}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; display: flex; gap: 16px; padding: 16px; background: #F5F4F0; overflow: hidden; font-family: 'Plus Jakarta Sans', 'Rubik', sans-serif; color: #1B1C20; box-sizing: border-box">
+<dc-import name="P3-Sidebar" active="dashboard" hint-size="256px,968px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 6px 4px">
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; width: 380px; height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #6B6E76; font-size: 14px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg>Search or jump to…<span dir="ltr" style="margin-inline-start: auto; font-size: 12px; font-weight: 700; border: 1px solid #E7E5DF; border-radius: 8px; padding: 2px 8px">Ctrl K</span></button>
+<span style="flex-grow: 1"></span>
+<button type="button" aria-label="Notifications, 3 unread" aria-expanded="true" aria-controls="bell-panel" style="position: relative; width: 44px; height: 44px; border: 1px solid #2F4BF0; border-radius: 22px; background: #E2E6FD; color: #2F4BF0; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 9px; inset-inline-end: 10px; width: 9px; height: 9px; border-radius: 5px; background: #D9362B; border: 2px solid #FFFFFF"></span></button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1">Good afternoon, Dana</h1><p style="margin: 0; font-size: 15px; color: #6B6E76">Wednesday, 30 September · Power House TLV</p></div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="4"><div style="background: #FFFFFF; border-radius: 20px; padding: 20px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); display: flex; flex-direction: column; gap: 8px"><span style="font-size: 14px; font-weight: 600; color: #6B6E76">{{k.label}}</span><span style="font-size: 34px; font-weight: 800; letter-spacing: -1px">{{k.value}}</span></div></sc-for>
+</div>
+<div style="flex-grow: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="grid-column: span 2; background: #FFFFFF; border-radius: 20px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05)"></div>
+<div style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05)"></div>
+</div>
+</main>
+
+<section id="bell-panel" role="dialog" aria-label="Notifications" style="position: absolute; top: 74px; inset-inline-end: 20px; width: 384px; background: #FFFFFF; border-radius: 20px; box-shadow: 0 20px 50px rgba(27,28,32,0.16); display: flex; flex-direction: column; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px 12px">
+<div style="display: flex; align-items: baseline; gap: 8px"><h2 style="margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.3px">Notifications</h2><span style="font-size: 13px; color: #6B6E76">3 alerts on 2 machines</span></div>
+<button type="button" style="border: 0; background: transparent; padding: 0; font-size: 13px; font-weight: 700; color: #2F4BF0">Clear all</button>
+</div>
+<sc-for list="{{groups}}" as="n" hint-placeholder-count="2">
+<div style="display: flex; gap: 12px; padding: 14px 18px; border-top: 1px solid #EFEEE9">
+<span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px; background: #FBE4DF; color: #B4351F; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1; min-width: 0">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px"><span style="font-size: 15px; font-weight: 700">{{n.machine}}</span><span style="font-size: 12px; color: #6B6E76; white-space: nowrap">{{n.time}}</span></div>
+<span style="font-size: 13px; color: #44464C">{{n.text}} · <bdi dir="ltr">{{n.serial}}</bdi></span>
+<div style="display: flex; gap: 6px; padding-top: 6px">
+<a href="P3-Machines.dc.html" style="height: 32px; padding: 0 12px; border: 1px solid #D9D6CE; border-radius: 16px; background: #FFFFFF; color: #1B1C20; font-size: 13px; font-weight: 700; display: flex; align-items: center">View machine</a>
+<button type="button" style="height: 32px; padding: 0 12px; border: 0; border-radius: 16px; background: #1B1C20; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Done</button>
+</div>
+</div>
+</div>
+</sc-for>
+<a href="P3-Maintenance.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 6px; height: 48px; border-top: 1px solid #EFEEE9; background: #FAF9F6; font-size: 14px; font-weight: 700">Open Maintenance<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      kpis: [
+        { label: 'Active members', value: '398' }, { label: 'Expiring this week', value: '9' },
+        { label: 'Classes today', value: '4' }, { label: 'Revenue · September', value: '₪48,250' }
+      ],
+      groups: [
+        { machine: 'Treadmill Pro', serial: 'G1-SN-1001', text: '2 alerts · Clean due', time: 'Today, 06:00' },
+        { machine: 'Treadmill Pro', serial: 'G1-SN-1002', text: '1 alert · Clean overdue', time: 'Wed, 23 Sep' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

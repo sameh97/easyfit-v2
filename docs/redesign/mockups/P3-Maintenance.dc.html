@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Maintenance: jobs grouped by due date</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans','Rubik',sans-serif;color:#1b1c20;background:#f5f4f0}
+a{color:#2F4BF0;text-decoration:none}a:hover{color:#1f36c4}
+button,input{font-family:inherit}button{cursor:pointer}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; display: flex; gap: 16px; padding: 16px; background: #F5F4F0; overflow: hidden; font-family: 'Plus Jakarta Sans', 'Rubik', sans-serif; color: #1B1C20; box-sizing: border-box">
+<dc-import name="P3-Sidebar" active="maintenance" hint-size="256px,968px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 6px 4px">
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; width: 380px; height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #6B6E76; font-size: 14px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg>Search or jump to…<span dir="ltr" style="margin-inline-start: auto; font-size: 12px; font-weight: 700; border: 1px solid #E7E5DF; border-radius: 8px; padding: 2px 8px">Ctrl K</span></button>
+<span style="flex-grow: 1"></span>
+<button type="button" aria-label="Notifications, 3 unread" style="position: relative; width: 44px; height: 44px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span style="position: absolute; top: 9px; inset-inline-end: 10px; width: 9px; height: 9px; border-radius: 5px; background: #D9362B; border: 2px solid #FFFFFF"></span></button>
+</div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1">Maintenance</h1><p style="margin: 0; font-size: 15px; color: #6B6E76">14 jobs on 12 machines · 3 need attention</p></div>
+<button type="button" style="height: 46px; padding: 0 20px; border: 0; border-radius: 23px; background: #2F4BF0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Schedule maintenance</button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+<div role="group" aria-label="Job type" style="display: flex; gap: 2px; padding: 4px; background: #FFFFFF; border-radius: 999px; box-shadow: 0 1px 2px rgba(27,28,32,0.05)">
+<button type="button" aria-pressed="true" style="border: 0; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 700; background: #1B1C20; color: #FFFFFF">All <span style="opacity: 0.7">14</span></button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 600; background: transparent; color: #55585F">Clean <span>9</span></button>
+<button type="button" aria-pressed="false" style="border: 0; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 600; background: transparent; color: #55585F">Service <span>5</span></button>
+</div>
+<span style="flex-grow: 1"></span>
+<div style="display: flex; align-items: center; gap: 8px; width: 240px; height: 44px; padding: 0 16px; background: #FFFFFF; border: 1px solid #E7E5DF; border-radius: 22px; color: #6B6E76; box-sizing: border-box"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg><input type="search" aria-label="Search jobs" placeholder="Machine or serial number" style="border: 0; outline: none; flex-grow: 1; min-width: 0; font-size: 14px; background: transparent"></div>
+</div>
+<section aria-label="Maintenance jobs" style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); padding: 6px 20px 12px; display: flex; flex-direction: column">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column">
+<h2 style="{{g.headStyle}}">{{g.label}} <span style="color: #8A8D94; font-weight: 700">{{g.count}}</span></h2>
+<sc-for list="{{g.rows}}" as="r" hint-placeholder-count="2">
+<div style="{{r.rowStyle}}">
+<span style="{{r.typeStyle}}">{{r.type}}</span>
+<span style="display: flex; flex-direction: column; flex-grow: 1; min-width: 0"><a href="P3-Machines.dc.html" style="font-size: 15px; font-weight: 700; color: #1B1C20">{{r.machine}}</a><span dir="ltr" style="font-size: 13px; color: #6B6E76; text-align: start">{{r.serial}}</span></span>
+<span style="width: 120px; flex-shrink: 0; font-size: 14px; color: #44464C">{{r.every}}</span>
+<span style="width: 170px; flex-shrink: 0; display: flex; flex-direction: column"><span style="{{r.whenStyle}}">{{r.when}}</span><span style="font-size: 12px; color: #6B6E76">{{r.whenNote}}</span></span>
+<span style="width: 118px; flex-shrink: 0; display: flex; justify-content: flex-end"><sc-if value="{{r.alert}}" hint-placeholder-val="{{false}}"><button type="button" style="height: 34px; padding: 0 12px; border: 0; border-radius: 17px; background: #1B1C20; color: #FFFFFF; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Mark done</button></sc-if></span>
+<button type="button" aria-label="Edit job" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg></button>
+<button type="button" aria-label="More actions" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M19 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M5 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2"></path></svg></button>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+var TYPE = { Clean: 'background: #E2F3F7; color: #0E6A80', Service: 'background: #EFE7FD; color: #6D3BD8' };
+var GROUPS = [
+  { label: 'Overdue', tone: 'danger', rows: [
+    { type: 'Clean', machine: 'Treadmill Pro', serial: 'G1-SN-1002', every: 'Every 7 days', when: 'Wed, 23 Sep, 06:00', whenNote: '7 days ago · alert still open', alert: true } ] },
+  { label: 'Today', tone: 'danger', rows: [
+    { type: 'Clean', machine: 'Treadmill Pro', serial: 'G1-SN-1001', every: 'Every 7 days', when: 'Today, 06:00', whenNote: 'Alert sent', alert: true },
+    { type: 'Service', machine: 'Spin Bike', serial: 'G1-SN-1004', every: 'Every 30 days', when: 'Today, 18:00', whenNote: 'In 6 hours', alert: false } ] },
+  { label: 'This week', tone: 'neutral', rows: [
+    { type: 'Clean', machine: 'Rowing Machine', serial: 'G1-SN-1007', every: 'Every 14 days', when: 'Fri, 2 Oct, 07:00', whenNote: 'In 2 days', alert: false },
+    { type: 'Clean', machine: 'Spin Bike', serial: 'G1-SN-1005', every: 'Every 7 days', when: 'Sat, 3 Oct, 06:00', whenNote: 'In 3 days', alert: false } ] },
+  { label: 'Later', tone: 'neutral', rows: [
+    { type: 'Service', machine: 'Leg Press', serial: 'G1-SN-1010', every: 'Every 90 days', when: 'Wed, 14 Oct, 08:00', whenNote: 'In 14 days', alert: false } ] },
+  { label: 'Inactive', tone: 'muted', rows: [
+    { type: 'Service', machine: 'Cable Crossover', serial: 'G1-SN-1012', every: 'Every 180 days', when: 'Paused', whenNote: 'Ended 1 Sep 2026', alert: false } ] }
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      groups: GROUPS.map(function (g, i) {
+        return {
+          label: g.label, count: String(g.rows.length),
+          headStyle: 'margin: 0; padding: ' + (i === 0 ? '12px' : '18px') + ' 0 6px; font-size: 11px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: ' + (g.tone === 'danger' ? '#A6321D' : '#8A8D94'),
+          rows: g.rows.map(function (r) {
+            return Object.assign({}, r, {
+              typeStyle: 'width: 72px; flex-shrink: 0; text-align: center; font-size: 12px; font-weight: 700; padding: 3px 0; border-radius: 999px; ' + TYPE[r.type],
+              whenStyle: 'font-size: 14px; font-weight: 700; color: ' + (g.tone === 'danger' ? '#B4351F' : '#1B1C20'),
+              rowStyle: 'height: 62px; display: flex; align-items: center; gap: 14px; border-top: 1px solid #F3F2EE; ' + (g.tone === 'muted' ? 'opacity: 0.6' : '')
+            });
+          })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>
