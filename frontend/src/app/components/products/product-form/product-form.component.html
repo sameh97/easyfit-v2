@@ -1,0 +1,29 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="product-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-image-upload [currentUrl]="currentPhoto" (fileChange)="onPhoto($event)"></app-image-upload>
+
+        <app-form-section [title]="'products.form.details' | translate">
+            <app-text-field [control]="name" [label]="'products.form.name' | translate" [required]="true" autocomplete="off" name="name" [placeholder]="'products.form.namePlaceholder' | translate"></app-text-field>
+            <app-select [control]="categoryID" [options]="categoryOptions" [label]="'products.form.category' | translate" [required]="true" [placeholder]="'products.form.categoryPlaceholder' | translate"></app-select>
+            <app-text-area [control]="description" [rows]="2" [label]="'products.form.description' | translate" [required]="true"></app-text-area>
+        </app-form-section>
+
+        <app-form-section [title]="'products.form.pricing' | translate">
+            <app-text-field [control]="code" [ltr]="true" [label]="'products.form.code' | translate" [required]="true" autocomplete="off" name="code" placeholder="G1-P001"></app-text-field>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="price" inputmode="decimal" [ltr]="true" [label]="'products.form.price' | translate" [required]="true" placeholder="249" name="price"
+                    [messages]="{ min: 'validation.price' }"></app-text-field>
+                <app-text-field [control]="quantity" inputmode="numeric" [ltr]="true" [label]="'products.form.quantity' | translate" [required]="true" placeholder="12" name="quantity"
+                    [messages]="{ nonZero: 'validation.quantityMin' }"></app-text-field>
+            </div>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="product-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'products.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

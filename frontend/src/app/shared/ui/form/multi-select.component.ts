@@ -120,6 +120,8 @@ export class MultiSelectComponent {
   @Input() help: string | null = null;
   @Input() placeholder: string | null = null;
   @Input() collapseAfter: number = 6;
+  /** Pick one: a new pick replaces the current one. */
+  @Input() single: boolean = false;
   @Input() messages: FieldMessages = {};
 
   readonly id: string = newFieldId('multi');
@@ -183,8 +185,11 @@ export class MultiSelectComponent {
 
   add(option: MultiSelectOption): void {
     if (!this.values.includes(option.value)) {
-      this.control.setValue([...this.values, option.value]);
+      this.control.setValue(this.single ? [option.value] : [...this.values, option.value]);
       this.control.markAsDirty();
+    }
+    if (this.single) {
+      this.open = false;
     }
     this.query = '';
     this.refresh();

@@ -1,0 +1,66 @@
+<div class="flex flex-col gap-[18px]">
+    <!-- Toolbar: date range, search, export -->
+    <div class="flex flex-wrap items-center gap-2.5">
+        <div role="group" [attr.aria-label]="'sales.rangeLabel' | translate" class="flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-surface p-1 shadow-card">
+            <button *ngFor="let r of ranges" type="button" [attr.aria-pressed]="range === r" (click)="setRange(r)"
+                class="whitespace-nowrap rounded-full border-0 px-3.5 py-[9px] text-sm transition-colors"
+                [ngClass]="range === r ? 'bg-ink font-bold text-white' : 'bg-transparent font-semibold text-neutral hover:text-ink'">
+                {{ 'sales.ranges.' + r | translate }}
+            </button>
+        </div>
+        <span class="hidden flex-1 md:block"></span>
+        <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[260px]">
+            <app-icon name="search" [size]="17"></app-icon>
+            <span class="sr-only">{{ 'sales.searchLabel' | translate }}</span>
+            <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'sales.searchPlaceholder' | translate"
+                class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+        </label>
+        <button appButton variant="secondary" icon="download" type="button" [disabled]="!filtered.length" (click)="export()">{{ 'sales.actions.export' | translate }}</button>
+    </div>
+
+    <!-- Totals of the filtered rows -->
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3" aria-live="polite">
+        <div class="flex flex-col gap-1 rounded-card bg-surface px-5 py-[18px] shadow-card">
+            <span class="text-sm font-semibold text-ink-3">{{ revenueLabel }}</span>
+            <span class="text-[30px] font-extrabold tracking-kpi text-ink"><bdi dir="ltr">{{ revenue }}</bdi></span>
+        </div>
+        <div class="flex flex-col gap-1 rounded-card bg-surface px-5 py-[18px] shadow-card">
+            <span class="text-sm font-semibold text-ink-3">{{ 'sales.itemsSold' | translate }}</span>
+            <span class="text-[30px] font-extrabold tracking-kpi text-ink">{{ items }}</span>
+        </div>
+        <div class="flex flex-col gap-1 rounded-card bg-surface px-5 py-[18px] shadow-card">
+            <span class="text-sm font-semibold text-ink-3">{{ 'sales.salesCount' | translate }}</span>
+            <span class="text-[30px] font-extrabold tracking-kpi text-ink">{{ filtered.length }}</span>
+        </div>
+    </div>
+
+    <app-data-table [rows]="filtered" [columns]="columns" [state]="state" [sort]="sort" (sortChange)="sort = $event"
+        [rowId]="rowId" [rowLabel]="rowLabel" [label]="'sales.title' | translate" [resetPageOn]="range + '|' + query" (retry)="retry.emit()">
+        <ng-template appCell="date" let-row>
+            <span class="flex flex-col">
+                <span class="font-bold text-ink">{{ row.createdAt | localDate: 'shortDay' }}</span>
+                <span class="text-xs text-ink-3">{{ row.createdAt | localDate: 'time' }}</span>
+            </span>
+        </ng-template>
+        <ng-template appCell="product" let-row><span class="truncate font-semibold text-ink" dir="auto">{{ row.productName }}</span></ng-template>
+        <ng-template appCell="customer" let-row>
+            <span class="flex min-w-0 flex-col">
+                <span class="truncate font-semibold text-ink" dir="auto">{{ row.coustomerName }}</span>
+                <span class="text-xs text-ink-3"><bdi dir="ltr">{{ row.coustomerPhone }}</bdi></span>
+            </span>
+        </ng-template>
+        <ng-template appCell="qty" let-row><span class="tabular-nums">{{ row.quantity }}</span></ng-template>
+        <ng-template appCell="total" let-row><span class="font-bold tabular-nums text-ink"><bdi dir="ltr">{{ money(row.totalCost) }}</bdi></span></ng-template>
+        <ng-template appCell="more" let-row>
+            <button type="button" appIconButton icon="more-horizontal" aria-haspopup="menu" aria-expanded="false"
+                [label]="'sales.actions.moreFor' | translate: { product: row.productName, customer: row.coustomerName }" (click)="openMoreMenu($event, row)" (keydown.enter)="$event.stopPropagation()"></button>
+        </ng-template>
+
+        <div tableEmpty>
+            <app-empty-state *ngIf="!bills.length; else noMatches" icon="shopping-bag" tone="accent" [title]="'sales.empty.title' | translate" [message]="'sales.empty.body' | translate"></app-empty-state>
+            <ng-template #noMatches>
+                <app-empty-state icon="search" [title]="'sales.empty.noMatchTitle' | translate" [message]="'sales.empty.noMatchBody' | translate"></app-empty-state>
+            </ng-template>
+        </div>
+    </app-data-table>
+</div>

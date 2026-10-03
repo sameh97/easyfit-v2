@@ -8,4 +8,6 @@ export class Bill {
   public gymId: number;
   public quantity: number;
   public totalCost: number;
+  /** Set by the server (ISO). */
+  public createdAt?: string;
 }

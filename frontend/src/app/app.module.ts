@@ -80,6 +80,11 @@ import { MachineFormComponent } from './components/machines/machine-form/machine
 import { JobTypePillComponent, MachineBadgeComponent } from './components/machines/machine-badges.component';
 import { MaintenancePageComponent } from './components/maintenance/maintenance-page/maintenance-page.component';
 import { JobFormComponent } from './components/maintenance/job-form/job-form.component';
+import { ProductsPageComponent as StudioProductsPageComponent } from './components/products/products-page/products-page.component';
+import { ProductDetailComponent } from './components/products/product-detail/product-detail.component';
+import { ProductFormComponent } from './components/products/product-form/product-form.component';
+import { SellFormComponent } from './components/products/sell-form/sell-form.component';
+import { SalesTabComponent } from './components/products/sales-tab/sales-tab.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
@@ -116,8 +121,9 @@ const routes: Routes = [
   { path: 'machines', component: MachinesPageComponent, canActivate: [AuthGuard], data: { studio: true } },
   {
     path: 'products',
-    component: ProductsPageComponent,
+    component: StudioProductsPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'trainers',
@@ -201,6 +207,11 @@ const routes: Routes = [
     JobTypePillComponent,
     MaintenancePageComponent,
     JobFormComponent,
+    StudioProductsPageComponent,
+    ProductDetailComponent,
+    ProductFormComponent,
+    SellFormComponent,
+    SalesTabComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,

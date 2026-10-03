@@ -441,7 +441,12 @@
     "endInPast": "Pick an end after now.",
     "endBeforeStart": "The end must be after the start.",
     "frequencyMin": "Enter at least 1 day.",
-    "frequencyTooLong": "That's longer than the time from start to end."
+    "frequencyTooLong": "That's longer than the time from start to end.",
+    "productName": "Start with a letter (English or Hebrew); then letters, digits, spaces, _ or .",
+    "productCode": "Use English letters, digits and - only.",
+    "israeliId": "Enter a valid Israeli ID number.",
+    "quantityMin": "Enter a quantity above 0.",
+    "quantityStock": "Only {{max}} in stock."
   },
   "members": {
     "page": {
@@ -985,6 +990,170 @@
       "deactivateBody": "It stops sending alerts until you activate it again.",
       "deleteTitle": "Delete {{name}}?",
       "deleteBody": "This removes the job for good. It can't be undone."
+    }
+  },
+  "products": {
+    "page": {
+      "title": "Products",
+      "count": {
+        "one": "{{count}} product",
+        "two": "{{count}} products",
+        "other": "{{count}} products"
+      },
+      "lowCount": {
+        "one": "{{count}} low on stock",
+        "two": "{{count}} low on stock",
+        "other": "{{count}} low on stock"
+      },
+      "tabsLabel": "Products and sales",
+      "tabProducts": "Products",
+      "tabSales": "Sales",
+      "categoryFilter": "Category: {{name}}",
+      "categoryAll": "All",
+      "categoryFilterLabel": "Filter by category",
+      "searchLabel": "Search products",
+      "searchPlaceholder": "Name or code"
+    },
+    "filters": {
+      "label": "Filter by stock",
+      "all": "All",
+      "low": "Low stock",
+      "out": "Out of stock"
+    },
+    "stock": {
+      "out": "Out of stock",
+      "inStock": {
+        "one": "{{count}} in stock",
+        "two": "{{count}} in stock",
+        "other": "{{count}} in stock"
+      },
+      "left": {
+        "one": "{{count}} left",
+        "two": "{{count}} left",
+        "other": "{{count}} left"
+      }
+    },
+    "actions": {
+      "add": "Add product"
+    },
+    "empty": {
+      "title": "No products yet",
+      "body": "Add the products you sell at the front desk.",
+      "noMatchTitle": "No products match",
+      "noMatchBody": "Try another search or filter."
+    },
+    "detail": {
+      "label": "Product details",
+      "eyebrow": "Product",
+      "price": "Price",
+      "code": "Code",
+      "description": "Description",
+      "recentSales": {
+        "one": "Recent sales · {{count}} this month",
+        "two": "Recent sales · {{count}} this month",
+        "other": "Recent sales · {{count}} this month"
+      },
+      "allSales": "All sales",
+      "noSales": "No sales of this product yet."
+    },
+    "form": {
+      "addTitle": "Add product",
+      "editTitle": "Edit product",
+      "details": "Product",
+      "name": "Name",
+      "namePlaceholder": "Whey Protein Vanilla",
+      "category": "Category",
+      "categoryPlaceholder": "Choose a category",
+      "description": "Description",
+      "pricing": "Code, price and stock",
+      "code": "Code",
+      "price": "Price (₪)",
+      "quantity": "Quantity in stock"
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again.",
+      "notFound": "That product wasn't found. It may have been deleted."
+    },
+    "confirm": {
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the product for good. Its past sales stay in the Sales list."
+    }
+  },
+  "sales": {
+    "title": "Sales",
+    "error": "Couldn't load the sales.",
+    "revenue": "Revenue · {{period}}",
+    "allTime": "all time",
+    "itemsSold": "Items sold",
+    "salesCount": "Sales",
+    "rangeLabel": "Date range",
+    "ranges": {
+      "month": "This month",
+      "lastMonth": "Last month",
+      "year": "This year",
+      "all": "All"
+    },
+    "searchLabel": "Search sales",
+    "searchPlaceholder": "Customer, phone or product",
+    "table": {
+      "date": "Date",
+      "product": "Product",
+      "customer": "Customer",
+      "qty": "Qty",
+      "total": "Total"
+    },
+    "csv": {
+      "time": "Time"
+    },
+    "actions": {
+      "sell": "Sell",
+      "sellName": "Sell {{name}}",
+      "delete": "Delete sale",
+      "export": "Export",
+      "moreFor": "More actions for the sale of {{product}} to {{customer}}"
+    },
+    "empty": {
+      "title": "No sales yet",
+      "body": "Sales show up here when you sell a product.",
+      "noMatchTitle": "No sales match",
+      "noMatchBody": "Try another date range or search."
+    },
+    "form": {
+      "title": "Sell product",
+      "each": "each",
+      "quantity": "Quantity",
+      "less": "One less",
+      "more": "One more",
+      "upTo": "Up to {{count}}",
+      "customer": "Customer",
+      "member": "Find a member (optional)",
+      "memberPlaceholder": "Name or phone",
+      "memberHelp": "Fills in the name and phone below.",
+      "name": "Name",
+      "phone": "Phone",
+      "idNumber": "ID number",
+      "idHelp": "Israeli ID, 9 digits",
+      "sell": "Sell",
+      "sellFor": "Sell · {{total}}"
+    },
+    "toast": {
+      "sold": "Sold {{count}} × {{product}} · {{total}}",
+      "stockError": "There isn't enough in stock anymore. Check the quantity.",
+      "sellError": "Couldn't save the sale. Try again.",
+      "deleted": "Sale of {{product}} deleted",
+      "deleteError": "Couldn't delete the sale. Try again."
+    },
+    "confirm": {
+      "deleteTitle": "Delete the sale of {{product}} to {{customer}} ({{total}})?",
+      "deleteBody": {
+        "one": "{{count}} {{product}} will go back into stock.",
+        "two": "{{count}} {{product}} will go back into stock.",
+        "other": "{{count}} {{product}} will go back into stock."
+      }
     }
   }
 }

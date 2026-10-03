@@ -22,6 +22,9 @@ export const DEFAULT_FIELD_MESSAGES: FieldMessages = {
   serialNumberNotValid: 'validation.serialNumber',
   yearNotValid: 'validation.year',
   priceNotValid: 'validation.price',
+  productNameNotValid: 'validation.productName',
+  productCodeNotValid: 'validation.productCode',
+  idNotValid: 'validation.israeliId',
 };
 
 let nextFieldId: number = 0;
