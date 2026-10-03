@@ -446,7 +446,9 @@
     "productCode": "Use English letters, digits and - only.",
     "israeliId": "Enter a valid Israeli ID number.",
     "quantityMin": "Enter a quantity above 0.",
-    "quantityStock": "Only {{max}} in stock."
+    "quantityStock": "Only {{max}} in stock.",
+    "productsRequired": "Add at least one product.",
+    "daysRange": "Enter a number of days from 1 to 100."
   },
   "members": {
     "page": {
@@ -1153,6 +1155,97 @@
         "one": "{{count}} {{product}} will go back into stock.",
         "two": "{{count}} {{product}} will go back into stock.",
         "other": "{{count}} {{product}} will go back into stock."
+      }
+    }
+  },
+  "catalogs": {
+    "page": {
+      "title": "Catalogs",
+      "count": {
+        "one": "{{count}} catalog",
+        "two": "{{count}} catalogs",
+        "other": "{{count}} catalogs"
+      },
+      "active": {
+        "one": "{{count}} active",
+        "two": "{{count}} active",
+        "other": "{{count}} active"
+      }
+    },
+    "actions": {
+      "new": "New catalog",
+      "create": "Create catalog",
+      "edit": "Edit catalog",
+      "share": "Share",
+      "copyLink": "Copy link",
+      "copyMessage": "Copy message"
+    },
+    "status": {
+      "active": "Active",
+      "expired": "Expired"
+    },
+    "row": {
+      "products": {
+        "one": "{{count}} product",
+        "two": "{{count}} products",
+        "other": "{{count}} products"
+      },
+      "validFor": {
+        "one": "Valid for 1 day",
+        "two": "Valid for {{count}} days",
+        "other": "Valid for {{count}} days"
+      },
+      "until": "until {{date}}",
+      "expiredOn": "Expired {{date}}",
+      "created": "created {{date}}"
+    },
+    "empty": {
+      "title": "No catalogs yet",
+      "body": "A catalog is a link to some of your products that you can send to members."
+    },
+    "form": {
+      "addTitle": "New catalog",
+      "editTitle": "Edit catalog",
+      "productsSection": "Products · {{count}}",
+      "products": "Products",
+      "productsPlaceholder": "Add products by name or code",
+      "linkSection": "Link",
+      "days": "Valid for (days)",
+      "daysHelp": "How many days the link works, from 1 to 100."
+    },
+    "share": {
+      "title": "Share catalog",
+      "validUntil": "valid until {{date}}",
+      "link": "Link",
+      "message": "Message",
+      "messageHelp": "{link} is where the link goes.",
+      "defaultMessage": "New at the gym: {{products}}. See prices and order at the front desk: {link}",
+      "sendSection": "Send on WhatsApp",
+      "searchLabel": "Search members",
+      "searchPlaceholder": "Name or phone",
+      "noMembers": "No active members with a mobile number match.",
+      "sendTo": "Send on WhatsApp to {{name}}",
+      "whatsapp": "WhatsApp",
+      "opened": "Opened",
+      "showMore": "Show {{count}} more",
+      "done": "Done"
+    },
+    "toast": {
+      "added": "Catalog created",
+      "updated": "Catalog saved",
+      "saveError": "Couldn't save the catalog. Try again.",
+      "deleted": "Catalog deleted",
+      "deleteError": "Couldn't delete the catalog. Try again.",
+      "linkCopied": "Link copied",
+      "messageCopied": "Message copied",
+      "copyError": "Couldn't copy. Select the text and copy it instead."
+    },
+    "confirm": {
+      "deleteTitle": "Delete this catalog?",
+      "deleteBody": {
+        "one": "The link to its product stops working. It can't be undone.",
+        "two": "The link to its {{count}} products stops working. It can't be undone.",
+        "other": "The link to its {{count}} products stops working. It can't be undone."
       }
     }
   }

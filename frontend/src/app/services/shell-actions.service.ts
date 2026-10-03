@@ -13,6 +13,9 @@ import { ScheduledJob } from '../model/scheduled-job';
 import { ProductFormComponent, ProductFormData } from '../components/products/product-form/product-form.component';
 import { SellFormComponent, SellFormData } from '../components/products/sell-form/sell-form.component';
 import { Bill } from '../model/bill';
+import { CatalogFormComponent, CatalogFormData } from '../components/catalogs/catalog-form/catalog-form.component';
+import { CatalogShareComponent, CatalogShareData } from '../components/catalogs/catalog-share/catalog-share.component';
+import { Catalog } from '../model/catalog';
 import { Member } from '../model/member';
 import { Product } from '../model/product';
 import { DashboardService } from './dashboard-service/dashboard.service';
@@ -160,6 +163,30 @@ export class ShellActionsService {
     return this.sidePanel.open<SellFormComponent, SellFormData, Bill>(SellFormComponent, {
       data: { product },
       ariaLabel: this.language.t('sales.form.title'),
+    }).afterClosed$;
+  }
+
+  /** Studio "New catalog" side panel. Emits the new catalog, or undefined when cancelled. */
+  addCatalog(): Observable<Catalog | undefined> {
+    return this.openCatalogForm(null);
+  }
+
+  editCatalog(catalog: Catalog): Observable<Catalog | undefined> {
+    return this.openCatalogForm(catalog);
+  }
+
+  private openCatalogForm(catalog: Catalog | null): Observable<Catalog | undefined> {
+    return this.sidePanel.open<CatalogFormComponent, CatalogFormData, Catalog>(CatalogFormComponent, {
+      data: { catalog },
+      ariaLabel: this.language.t(catalog ? 'catalogs.form.editTitle' : 'catalogs.form.addTitle'),
+    }).afterClosed$;
+  }
+
+  /** Share catalog panel: link, message and WhatsApp per member. */
+  shareCatalog(catalog: Catalog): Observable<void | undefined> {
+    return this.sidePanel.open<CatalogShareComponent, CatalogShareData, void>(CatalogShareComponent, {
+      data: { catalog },
+      ariaLabel: this.language.t('catalogs.share.title'),
     }).afterClosed$;
   }
 }

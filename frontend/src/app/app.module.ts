@@ -85,6 +85,9 @@ import { ProductDetailComponent } from './components/products/product-detail/pro
 import { ProductFormComponent } from './components/products/product-form/product-form.component';
 import { SellFormComponent } from './components/products/sell-form/sell-form.component';
 import { SalesTabComponent } from './components/products/sales-tab/sales-tab.component';
+import { CatalogsPageComponent } from './components/catalogs/catalogs-page/catalogs-page.component';
+import { CatalogFormComponent } from './components/catalogs/catalog-form/catalog-form.component';
+import { CatalogShareComponent } from './components/catalogs/catalog-share/catalog-share.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
@@ -139,8 +142,9 @@ const routes: Routes = [
   },
   {
     path: 'catalog',
-    component: CatalogPageComponent,
+    component: CatalogsPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'admin',
@@ -212,6 +216,9 @@ const routes: Routes = [
     ProductFormComponent,
     SellFormComponent,
     SalesTabComponent,
+    CatalogsPageComponent,
+    CatalogFormComponent,
+    CatalogShareComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,
