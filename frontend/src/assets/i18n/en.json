@@ -1398,5 +1398,13 @@
         "deleteBody": "They won't be able to sign in anymore. It can't be undone."
       }
     }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "bodyBefore": "There's nothing at ",
+    "bodyAfter": ". It may have moved, or the link has a typo.",
+    "backToDashboard": "Back to dashboard",
+    "backToGyms": "Back to gyms",
+    "signIn": "Go to sign in"
   }
 }
