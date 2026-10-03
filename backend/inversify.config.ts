@@ -64,6 +64,9 @@ import { DashboardRepository } from "./repositories/dashboard-repository";
 import { DashboardService } from "./services/dashboard-service";
 import { DashboardController } from "./controllers/dashboard-controller";
 import { DashboardApi } from "./routes/dashboard.api";
+import { MaintenanceStatusService } from "./services/maintenance-status-service";
+import { MaintenanceController } from "./controllers/maintenance-controller";
+import { MaintenanceApi } from "./routes/maintenance.api";
 import { MemberActivityRepository } from "./repositories/member-activity-repository";
 import { MemberActivityService } from "./services/member-activity-service";
 // TODO: improve the container, it should use types
@@ -141,6 +144,9 @@ container.bind<DashboardRepository>(DashboardRepository).toSelf();
 container.bind<DashboardService>(DashboardService).toSelf();
 container.bind<DashboardController>(DashboardController).toSelf();
 container.bind<DashboardApi>(DashboardApi).toSelf();
+container.bind<MaintenanceStatusService>(MaintenanceStatusService).toSelf();
+container.bind<MaintenanceController>(MaintenanceController).toSelf();
+container.bind<MaintenanceApi>(MaintenanceApi).toSelf();
 container.bind<MemberActivityRepository>(MemberActivityRepository).toSelf();
 container.bind<MemberActivityService>(MemberActivityService).toSelf();
 

@@ -76,6 +76,12 @@
     },
     "weekStrip": {
       "today": "Today"
+    },
+    "when": {
+      "today": "Today, {{time}}",
+      "tomorrow": "Tomorrow, {{time}}",
+      "yesterday": "Yesterday, {{time}}",
+      "other": "{{day}}, {{time}}"
     }
   },
   "shell": {
@@ -426,7 +432,12 @@
     "timeFormat": "Enter a 24-hour time like 17:30.",
     "startInPast": "Pick a start time after now.",
     "trainerBusy": "This trainer already has a class at {{time}}, less than an hour before.",
-    "membersRequired": "Add at least one member."
+    "membersRequired": "Add at least one member.",
+    "maxlength": "Use at most {{requiredLength}} characters.",
+    "machineName": "Start with an English letter; then letters, digits, spaces, _ or .",
+    "serialNumber": "Use English letters, digits, - _ or . only.",
+    "year": "Enter a year between 1980 and 2030.",
+    "price": "Enter a price of 0 or more."
   },
   "members": {
     "page": {
@@ -778,6 +789,102 @@
     "confirm": {
       "deleteTitle": "Delete {{name}}?",
       "deleteBody": "This removes the class and its participant list. It can't be undone."
+    }
+  },
+  "machines": {
+    "page": {
+      "title": "Machines",
+      "count": {
+        "one": "{{count}} machine",
+        "two": "{{count}} machines",
+        "other": "{{count}} machines"
+      },
+      "attention": {
+        "one": "{{count}} needs attention",
+        "two": "{{count}} need attention",
+        "other": "{{count}} need attention"
+      },
+      "searchLabel": "Search machines",
+      "searchPlaceholder": "Name or serial number"
+    },
+    "filters": {
+      "label": "Filter by status",
+      "all": "All",
+      "attention": "Needs attention",
+      "ok": "OK"
+    },
+    "badge": {
+      "overdue": "Overdue",
+      "due": "Due today",
+      "next": "Next: {{date}}",
+      "none": "No jobs",
+      "noUpcoming": "No upcoming runs"
+    },
+    "actions": {
+      "add": "Add machine"
+    },
+    "empty": {
+      "title": "No machines yet",
+      "body": "Add your gym's machines to schedule cleaning and service.",
+      "noMatchTitle": "No machines match",
+      "noMatchBody": "Try another search or filter."
+    },
+    "detail": {
+      "label": "Machine details",
+      "eyebrow": "Machine",
+      "openAlerts": "Open alerts · {{count}}",
+      "doneFor": "Mark done: {{alert}}",
+      "jobs": "Maintenance jobs",
+      "openMaintenance": "Open Maintenance",
+      "noJobs": "No maintenance jobs for this machine.",
+      "serial": "Serial number",
+      "year": "Year",
+      "price": "Price",
+      "description": "Description"
+    },
+    "form": {
+      "addTitle": "Add machine",
+      "editTitle": "Edit machine",
+      "details": "Machine",
+      "name": "Name",
+      "namePlaceholder": "Treadmill Pro",
+      "serial": "Serial number",
+      "serialLinked": "Jobs and alerts are linked to the serial number. Changing it can unlink them.",
+      "description": "Description",
+      "purchase": "Purchase",
+      "year": "Production year",
+      "price": "Price (₪)",
+      "priceHelp": "Numbers only, e.g. 18500"
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "duplicateSerial": "A machine with serial number {{serial}} already exists.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again.",
+      "notFound": "That machine wasn't found. It may have been deleted.",
+      "alertDone": "Alert marked done"
+    },
+    "confirm": {
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This also deletes its maintenance jobs and alerts. It can't be undone."
+    }
+  },
+  "maintenance": {
+    "types": {
+      "clean": "Clean",
+      "service": "Service"
+    },
+    "row": {
+      "every": {
+        "one": "Every day",
+        "two": "Every {{count}} days",
+        "other": "Every {{count}} days"
+      },
+      "nextRun": "Next run {{when}}",
+      "paused": "Paused",
+      "noRunsLeft": "No runs left"
     }
   }
 }

@@ -26,6 +26,9 @@ export interface MaintenanceAlert {
   jobId: number | null;
   jobType: JobType;
   createdAt: Date;
+  /** As received, sent back unchanged when one alert is marked Done. */
+  content: unknown;
+  topic: string;
 }
 
 /** A machine's open alerts, newest first (§5.10: grouped by machine). */
@@ -136,6 +139,29 @@ export class MaintenanceAlertsService implements OnDestroy {
     );
   }
 
+  /** Done on one alert (PUT /api/notification with seen = true, as the legacy machine dialog did). */
+  markDone(alert: MaintenanceAlert): Observable<void> {
+    const body = {
+      id: alert.id,
+      content: alert.content,
+      topic: alert.topic,
+      gymId: this.gymId,
+      seen: true,
+      targetObjectId: alert.machineSerialNumber,
+    };
+    return this.http.put(`${AppConsts.BASE_URL}/api/notification`, body, { headers: CoreUtil.createAuthorizationHeader() }).pipe(
+      tap(() => {
+        this.groupsSubject.next(
+          this.groups
+            .map((group: MachineAlertGroup) => withoutAlert(group, alert.id))
+            .filter((group: MachineAlertGroup | null): group is MachineAlertGroup => group !== null)
+        );
+        this.cleared$.next();
+      }),
+      map(() => undefined)
+    );
+  }
+
   /** Clear all: every open alert of the gym (DELETE /api/gym-notifications). */
   clearAll(): Observable<void> {
     const url: string = `${AppConsts.BASE_URL}/api/gym-notifications?gymId=${this.gymId}`;
@@ -168,6 +194,23 @@ export class MaintenanceAlertsService implements OnDestroy {
   }
 }
 
+/** The group without one alert, or null when that was its last one. */
+function withoutAlert(group: MachineAlertGroup, alertId: number): MachineAlertGroup | null {
+  const alerts: MaintenanceAlert[] = group.alerts.filter((alert: MaintenanceAlert) => alert.id !== alertId);
+  if (alerts.length === group.alerts.length) {
+    return group;
+  }
+  if (!alerts.length) {
+    return null;
+  }
+  return {
+    ...group,
+    alerts,
+    latestAt: alerts[0].createdAt,
+    jobTypes: (['clean', 'service'] as JobType[]).filter((type: JobType) => alerts.some((alert: MaintenanceAlert) => alert.jobType === type)),
+  };
+}
+
 function countAlerts(groups: MachineAlertGroup[]): number {
   return groups.reduce((sum: number, group: MachineAlertGroup) => sum + group.alerts.length, 0);
 }
@@ -181,6 +224,8 @@ function toAlert(dto: AlertDto): MaintenanceAlert {
     jobId: typeof job.id === 'number' ? job.id : null,
     jobType: typeof job.jobID === 'number' ? jobTypeOf(job.jobID) : dto.topic === SocketTopics.TOPIC_CLEAN_MACHINE ? 'clean' : 'service',
     createdAt: new Date(dto.createdAt),
+    content: dto.content,
+    topic: dto.topic,
   };
 }
 

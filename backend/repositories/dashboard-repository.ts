@@ -11,7 +11,7 @@ import { Product } from "../models/product";
 import { Trainer } from "../models/trainer";
 const { Op } = require("sequelize");
 
-/** Read-only queries behind GET /api/dashboard/summary. Every query is scoped by gymId. */
+/** Read-only queries behind GET /api/dashboard/summary and GET /api/maintenance/status. Every query is scoped by gymId. */
 @injectable()
 export class DashboardRepository {
   public getGym = async (gymId: number): Promise<Gym | null> => {
@@ -100,6 +100,19 @@ export class DashboardRepository {
     return await AppNotification.findAll({
       attributes: ["id", "content"],
       where: { gymId: gymId, seen: false, createdAt: { [Op.lt]: before } },
+    });
+  };
+
+  /** Every scheduled job of the gym, active or not. */
+  public getAllJobs = async (gymId: number): Promise<MachineScheduledJob[]> => {
+    return await MachineScheduledJob.findAll({ where: { gymId: gymId } });
+  };
+
+  /** All open (not marked Done) alerts of the gym. */
+  public getOpenNotifications = async (gymId: number): Promise<AppNotification[]> => {
+    return await AppNotification.findAll({
+      attributes: ["id", "content", "targetObjectId", "createdAt"],
+      where: { gymId: gymId, seen: false },
     });
   };
 

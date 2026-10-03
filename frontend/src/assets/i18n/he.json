@@ -76,6 +76,12 @@
     },
     "weekStrip": {
       "today": "היום"
+    },
+    "when": {
+      "today": "היום, {{time}}",
+      "tomorrow": "מחר, {{time}}",
+      "yesterday": "אתמול, {{time}}",
+      "other": "{{day}}, {{time}}"
     }
   },
   "shell": {
@@ -426,7 +432,12 @@
     "timeFormat": "יש להזין שעה בפורמט 24 שעות, למשל 17:30.",
     "startInPast": "יש לבחור שעת התחלה מאוחרת מעכשיו.",
     "trainerBusy": "למאמן הזה כבר יש שיעור ב-{{time}}, פחות משעה לפני כן.",
-    "membersRequired": "יש להוסיף לפחות מנוי אחד."
+    "membersRequired": "יש להוסיף לפחות מנוי אחד.",
+    "maxlength": "יש להזין עד {{requiredLength}} תווים.",
+    "machineName": "יש להתחיל באות באנגלית; אחר כך אותיות, ספרות, רווחים, _ או .",
+    "serialNumber": "יש להשתמש רק באותיות באנגלית, ספרות, - _ או .",
+    "year": "יש להזין שנה בין 1980 ל-2030.",
+    "price": "יש להזין מחיר של 0 ומעלה."
   },
   "members": {
     "page": {
@@ -778,6 +789,102 @@
     "confirm": {
       "deleteTitle": "למחוק את {{name}}?",
       "deleteBody": "השיעור ורשימת המשתתפים שלו יימחקו. אי אפשר לבטל את הפעולה."
+    }
+  },
+  "machines": {
+    "page": {
+      "title": "מכשירים",
+      "count": {
+        "one": "מכשיר אחד",
+        "two": "שני מכשירים",
+        "other": "{{count}} מכשירים"
+      },
+      "attention": {
+        "one": "אחד דורש טיפול",
+        "two": "{{count}} דורשים טיפול",
+        "other": "{{count}} דורשים טיפול"
+      },
+      "searchLabel": "חיפוש מכשירים",
+      "searchPlaceholder": "שם או מספר סידורי"
+    },
+    "filters": {
+      "label": "סינון לפי סטטוס",
+      "all": "הכל",
+      "attention": "דורשים טיפול",
+      "ok": "תקינים"
+    },
+    "badge": {
+      "overdue": "באיחור",
+      "due": "להיום",
+      "next": "הבא: {{date}}",
+      "none": "אין משימות",
+      "noUpcoming": "אין הפעלות קרובות"
+    },
+    "actions": {
+      "add": "הוספת מכשיר"
+    },
+    "empty": {
+      "title": "עדיין אין מכשירים",
+      "body": "הוסיפו את המכשירים של חדר הכושר כדי לתזמן ניקוי ושירות.",
+      "noMatchTitle": "אין מכשירים מתאימים",
+      "noMatchBody": "נסו חיפוש או סינון אחר."
+    },
+    "detail": {
+      "label": "פרטי המכשיר",
+      "eyebrow": "מכשיר",
+      "openAlerts": "התראות פתוחות · {{count}}",
+      "doneFor": "סימון כבוצע: {{alert}}",
+      "jobs": "משימות תחזוקה",
+      "openMaintenance": "מעבר לתחזוקה",
+      "noJobs": "אין משימות תחזוקה למכשיר הזה.",
+      "serial": "מספר סידורי",
+      "year": "שנה",
+      "price": "מחיר",
+      "description": "תיאור"
+    },
+    "form": {
+      "addTitle": "הוספת מכשיר",
+      "editTitle": "עריכת מכשיר",
+      "details": "מכשיר",
+      "name": "שם",
+      "namePlaceholder": "Treadmill Pro",
+      "serial": "מספר סידורי",
+      "serialLinked": "המשימות וההתראות מקושרות למספר הסידורי. שינוי שלו עלול לנתק אותן.",
+      "description": "תיאור",
+      "purchase": "רכישה",
+      "year": "שנת ייצור",
+      "price": "מחיר (₪)",
+      "priceHelp": "מספרים בלבד, למשל 18500"
+    },
+    "toast": {
+      "added": "{{name}} נוסף",
+      "updated": "השינויים ב{{name}} נשמרו",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "duplicateSerial": "כבר קיים מכשיר עם המספר הסידורי {{serial}}.",
+      "deleted": "{{name}} נמחק",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. נסו שוב.",
+      "notFound": "המכשיר לא נמצא. ייתכן שנמחק.",
+      "alertDone": "ההתראה סומנה כבוצעה"
+    },
+    "confirm": {
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "גם משימות התחזוקה וההתראות שלו יימחקו. אי אפשר לבטל את הפעולה."
+    }
+  },
+  "maintenance": {
+    "types": {
+      "clean": "ניקוי",
+      "service": "שירות"
+    },
+    "row": {
+      "every": {
+        "one": "כל יום",
+        "two": "כל יומיים",
+        "other": "כל {{count}} ימים"
+      },
+      "nextRun": "ההפעלה הבאה: {{when}}",
+      "paused": "מושהה",
+      "noRunsLeft": "אין עוד הפעלות"
     }
   }
 }

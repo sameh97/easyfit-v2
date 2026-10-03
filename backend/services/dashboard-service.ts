@@ -1,17 +1,17 @@
 import { inject, injectable } from "inversify";
 import { MemberDtoMapper } from "../common/dto-mapper/member-dto-mapper";
 import { nextOccurrence } from "../common/job-occurrence";
+import { LocalCalendar } from "../common/local-calendar";
+import { countMaintenanceDue } from "../common/maintenance-due";
 import { Bill } from "../models/bill";
 import {
   DashboardClassDto,
   DashboardLowStockDto,
   DashboardMaintenanceDto,
-  DashboardMaintenanceDueDto,
   DashboardSummaryDto,
   MaintenanceJobType,
 } from "../models/dto/dashboard-summary-dto";
 import { GroupTraining } from "../models/group-training";
-import { AppNotification } from "../models/app-notification";
 import { Machine } from "../models/machines";
 import { MachineScheduledJob } from "../models/machine-scheduled-job";
 import { Member } from "../models/member";
@@ -25,57 +25,6 @@ const LOW_STOCK_LIMIT = 5;
 const EXPIRING_LIST_LIMIT = 5;
 const MAINTENANCE_LIMIT = 3;
 const JOB_TYPES: Record<number, MaintenanceJobType> = { 1: "clean", 2: "service" };
-
-/**
- * Calendar in the client's timezone. `offsetMinutes` is JS `Date#getTimezoneOffset()`
- * from the browser (UTC − local, e.g. −180 in Israel in summer). The API container runs in
- * UTC, so "today" and "this month" are computed from the offset the client sends.
- */
-class LocalCalendar {
-  private readonly offsetMs: number;
-  /** "now" shifted so that its UTC fields read as the client's local wall clock. */
-  private readonly localNow: Date;
-
-  constructor(public readonly now: Date, offsetMinutes: number) {
-    this.offsetMs = offsetMinutes * 60 * 1000;
-    this.localNow = new Date(now.getTime() - this.offsetMs);
-  }
-
-  get year(): number {
-    return this.localNow.getUTCFullYear();
-  }
-
-  /** 0-based. */
-  get month(): number {
-    return this.localNow.getUTCMonth();
-  }
-
-  /** Instant of local midnight for the given local calendar date (month may overflow). */
-  startOf(year: number, month: number, day: number = 1): Date {
-    return new Date(Date.UTC(year, month, day) + this.offsetMs);
-  }
-
-  get date(): number {
-    return this.localNow.getUTCDate();
-  }
-
-  get todayStart(): Date {
-    return this.startOf(this.year, this.month, this.date);
-  }
-
-  /** 0-based local month of an instant. */
-  monthOf(instant: Date): { year: number; month: number } {
-    const local = new Date(instant.getTime() - this.offsetMs);
-    return { year: local.getUTCFullYear(), month: local.getUTCMonth() };
-  }
-
-  /** Whole local days from today's midnight to the local day of `instant` (0 = today). */
-  daysFromToday(instant: Date): number {
-    const local = new Date(instant.getTime() - this.offsetMs);
-    const dayStart = this.startOf(local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate());
-    return Math.round((dayStart.getTime() - this.todayStart.getTime()) / DAY_MS);
-  }
-}
 
 @injectable()
 export class DashboardService {
@@ -169,7 +118,7 @@ export class DashboardService {
       newMembersByMonth,
       productsSoldByMonth,
       maintenance: await this.buildMaintenance(gymId, jobs, todayStart),
-      maintenanceDue: this.countMaintenanceDue(jobs, openAlerts, todayStart, tomorrowStart),
+      maintenanceDue: countMaintenanceDue(jobs, openAlerts, todayStart, tomorrowStart),
       lowStock: lowStock.map(
         (product): DashboardLowStockDto => ({
           id: product.id,
@@ -241,48 +190,4 @@ export class DashboardService {
       nextDue: nextDue.toISOString(),
     }));
   };
-
-  /**
-   * Jobs needing attention (sidebar badge): active jobs with a run due today, plus active jobs
-   * whose alert from an earlier day is still open (not marked Done) — overdue. The schema has no
-   * per-run completion record, so an open alert is the only "not done yet" signal. Each job counts once.
-   */
-  private countMaintenanceDue(
-    jobs: MachineScheduledJob[],
-    openAlerts: AppNotification[],
-    todayStart: Date,
-    tomorrowStart: Date
-  ): DashboardMaintenanceDueDto {
-    const dueToday = new Set<number>(
-      jobs
-        .filter((job: MachineScheduledJob) => {
-          const next = nextOccurrence(job, todayStart);
-          return next !== null && next < tomorrowStart;
-        })
-        .map((job: MachineScheduledJob) => job.id)
-    );
-
-    const activeIds = new Set<number>(jobs.map((job: MachineScheduledJob) => job.id));
-    const overdue = new Set<number>();
-    openAlerts.forEach((alert: AppNotification) => {
-      const jobId = this.jobIdOf(alert);
-      if (jobId !== null && activeIds.has(jobId) && !dueToday.has(jobId)) {
-        overdue.add(jobId);
-      }
-    });
-
-    return { today: dueToday.size, overdue: overdue.size, total: dueToday.size + overdue.size };
-  }
-
-  /** Scheduled-job alerts store the job DTO as JSON in `content`; other alerts yield null. */
-  private jobIdOf(alert: AppNotification): number | null {
-    try {
-      const parsed: { id?: unknown } = JSON.parse(alert.content);
-      return typeof parsed.id === "number" ? parsed.id : null;
-    } catch {
-      return null;
-    }
-  }
-
-
 }

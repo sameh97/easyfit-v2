@@ -8,6 +8,8 @@ import { TrainerFormComponent, TrainerFormData } from '../components/trainers-co
 import { Trainer } from '../model/trainer';
 import { ClassFormComponent, ClassFormData } from '../components/classes/class-form/class-form.component';
 import { GroupTraining } from '../model/group-training';
+import { MachineFormComponent, MachineFormData } from '../components/machines/machine-form/machine-form.component';
+import { Machine } from '../model/machine';
 import { AddGroupTrainingComponent } from '../components/group-training-components/add-group-training/add-group-training.component';
 import { AddProductComponent } from '../components/products-components/add-product/add-product.component';
 import { SellProductComponent } from '../components/products-components/sell-product/sell-product.component';
@@ -103,6 +105,23 @@ export class ShellActionsService {
     return this.sidePanel.open<MemberFormComponent, MemberFormData, Member>(MemberFormComponent, {
       data: { member },
       ariaLabel: this.language.t(member ? 'members.form.editTitle' : 'members.form.addTitle'),
+    }).afterClosed$;
+  }
+
+  /** Studio "Add machine" side panel. Emits the new machine, or undefined when cancelled. */
+  addMachine(): Observable<Machine | undefined> {
+    return this.openMachineForm(null, false);
+  }
+
+  /** `hasMaintenance`: jobs or alerts are linked to its serial number (the form warns before it changes). */
+  editMachine(machine: Machine, hasMaintenance: boolean): Observable<Machine | undefined> {
+    return this.openMachineForm(machine, hasMaintenance);
+  }
+
+  private openMachineForm(machine: Machine | null, hasMaintenance: boolean): Observable<Machine | undefined> {
+    return this.sidePanel.open<MachineFormComponent, MachineFormData, Machine>(MachineFormComponent, {
+      data: { machine, hasMaintenance },
+      ariaLabel: this.language.t(machine ? 'machines.form.editTitle' : 'machines.form.addTitle'),
     }).afterClosed$;
   }
 

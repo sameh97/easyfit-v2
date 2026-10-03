@@ -84,6 +84,10 @@ import { NotificationsPanelComponent } from './components/shell/notifications-pa
 import { ClassesPageComponent } from './components/classes/classes-page/classes-page.component';
 import { ClassDetailComponent } from './components/classes/class-detail/class-detail.component';
 import { ClassFormComponent } from './components/classes/class-form/class-form.component';
+import { MachinesPageComponent } from './components/machines/machines-page/machines-page.component';
+import { MachineDetailComponent } from './components/machines/machine-detail/machine-detail.component';
+import { MachineFormComponent } from './components/machines/machine-form/machine-form.component';
+import { JobTypePillComponent, MachineBadgeComponent } from './components/machines/machine-badges.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
@@ -121,7 +125,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { studio: true },
   },
-  { path: 'machines', component: MachinesComponent, canActivate: [AuthGuard] },
+  { path: 'machines', component: MachinesPageComponent, canActivate: [AuthGuard], data: { studio: true } },
   {
     path: 'products',
     component: ProductsPageComponent,
@@ -211,6 +215,11 @@ const routes: Routes = [
     ClassesPageComponent,
     ClassDetailComponent,
     ClassFormComponent,
+    MachinesPageComponent,
+    MachineDetailComponent,
+    MachineFormComponent,
+    MachineBadgeComponent,
+    JobTypePillComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,

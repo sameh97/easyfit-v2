@@ -1,0 +1,90 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'machines.page.title' | translate" [subtitle]="state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'machines.actions.add' | translate }}</button>
+            </ng-container>
+        </app-page-header>
+
+        <!-- Toolbar: status filter with counts, search -->
+        <div class="flex flex-wrap items-center gap-2.5">
+            <div role="group" [attr.aria-label]="'machines.filters.label' | translate" class="flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-surface p-1 shadow-card">
+                <button *ngFor="let f of filters" type="button" [attr.aria-pressed]="filter === f" (click)="setFilter(f)"
+                    class="whitespace-nowrap rounded-full border-0 px-3.5 py-[9px] text-sm transition-colors"
+                    [ngClass]="filter === f ? 'bg-ink font-bold text-white' : 'bg-transparent font-semibold text-neutral hover:text-ink'">
+                    {{ 'machines.filters.' + f | translate }}
+                    <span [ngClass]="filter === f ? 'opacity-70' : (f === 'attention' ? 'text-danger-text' : '')">{{ counts[f] }}</span>
+                </button>
+            </div>
+            <span class="hidden flex-1 md:block"></span>
+            <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[240px]">
+                <app-icon name="search" [size]="17"></app-icon>
+                <span class="sr-only">{{ 'machines.page.searchLabel' | translate }}</span>
+                <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'machines.page.searchPlaceholder' | translate"
+                    class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+            </label>
+        </div>
+
+        <div class="flex items-start gap-4">
+            <div class="min-w-0 flex-1">
+                <!-- Error -->
+                <app-card *ngIf="state === 'error'">
+                    <app-empty-state icon="alert-circle" tone="danger" [title]="'common.table.errorTitle' | translate" [message]="'common.table.errorBody' | translate">
+                        <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="load()">{{ 'common.actions.retry' | translate }}</button>
+                    </app-empty-state>
+                </app-card>
+
+                <!-- Loading -->
+                <ul *ngIf="state === 'loading'" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? '' : 'xl:grid-cols-3'" aria-busy="true">
+                    <li *ngFor="let i of skeletonCards">
+                        <app-card padding="sm" class="flex gap-3.5">
+                            <app-skeleton width="72px" height="72px" shape="block"></app-skeleton>
+                            <div class="flex flex-1 flex-col gap-2"><app-skeleton width="60%" height="14px"></app-skeleton><app-skeleton width="40%" height="12px"></app-skeleton><app-skeleton width="50%" height="12px"></app-skeleton></div>
+                        </app-card>
+                    </li>
+                </ul>
+
+                <!-- Empty states -->
+                <app-card *ngIf="state === 'ready' && !filtered.length">
+                    <app-empty-state *ngIf="!views.length; else noMatches" icon="dumbbell" tone="accent" [title]="'machines.empty.title' | translate" [message]="'machines.empty.body' | translate">
+                        <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'machines.actions.add' | translate }}</button>
+                    </app-empty-state>
+                    <ng-template #noMatches>
+                        <app-empty-state icon="search" [title]="'machines.empty.noMatchTitle' | translate" [message]="'machines.empty.noMatchBody' | translate"></app-empty-state>
+                    </ng-template>
+                </app-card>
+
+                <!-- Cards -->
+                <ul *ngIf="state === 'ready' && filtered.length" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? '' : 'xl:grid-cols-3'" [attr.aria-label]="'machines.page.title' | translate">
+                    <li *ngFor="let view of filtered; trackBy: trackById">
+                        <article (click)="select(view.machine)"
+                            class="flex h-full cursor-pointer gap-3.5 rounded-card bg-surface p-4 shadow-card transition-shadow hover:shadow-overlay"
+                            [ngClass]="view.machine.id === selectedId ? 'ring-2 ring-accent' : ''">
+                            <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center overflow-hidden rounded-[14px] bg-surface-muted text-ink-4">
+                                <img *ngIf="photo(view) as src; else iconTile" [src]="src" alt="" class="h-full w-full object-cover" />
+                                <ng-template #iconTile><app-icon name="dumbbell" [size]="28"></app-icon></ng-template>
+                            </span>
+                            <div class="flex min-w-0 flex-grow flex-col gap-1">
+                                <div class="flex min-w-0 items-center gap-2">
+                                    <button type="button" class="truncate border-0 bg-transparent p-0 text-start text-base font-extrabold text-ink hover:text-accent" dir="auto"
+                                        [attr.aria-current]="view.machine.id === selectedId ? 'true' : null" (click)="$event.stopPropagation(); select(view.machine)">{{ view.machine.name }}</button>
+                                    <span *ngIf="view.openAlerts" class="flex-shrink-0 whitespace-nowrap text-xs font-bold text-danger">{{ alertsLabel(view) }}</span>
+                                </div>
+                                <span class="truncate text-[13px] text-ink-3"><bdi dir="ltr">{{ view.machine.serialNumber }}</bdi></span>
+                                <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5">
+                                    <app-machine-badge *ngIf="statusReady; else badgeLoading" [view]="view"></app-machine-badge>
+                                    <ng-template #badgeLoading><app-skeleton width="80px" height="20px"></app-skeleton></ng-template>
+                                    <span class="text-[13px] text-ink-2"><bdi dir="ltr">{{ meta(view) }}</bdi></span>
+                                </div>
+                            </div>
+                        </article>
+                    </li>
+                </ul>
+            </div>
+
+            <app-side-panel [open]="!!selected" [label]="'machines.detail.label' | translate" [eyebrow]="'machines.detail.eyebrow' | translate" (closed)="closeDetail()">
+                <app-machine-detail *ngIf="selected as view" [view]="view" [alertGroup]="selectedAlerts" (deleted)="closeDetail()"></app-machine-detail>
+            </app-side-panel>
+        </div>
+    </div>
+</app-nav>
