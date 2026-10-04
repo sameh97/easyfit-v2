@@ -153,7 +153,8 @@
                             <a routerLink="/products" class="text-sm font-bold text-accent hover:text-accent hover:underline">{{ 'dashboard.stock.products' | translate }}</a>
                         </div>
                         <ul *ngIf="stock.length; else noStock" class="flex flex-col gap-3">
-                            <li *ngFor="let item of stock; trackBy: trackById" class="flex items-center gap-3">
+                            <li *ngFor="let item of stock; trackBy: trackById">
+                                <a routerLink="/products" [queryParams]="{ product: item.id }" class="-mx-2 flex items-center gap-3 rounded-[14px] px-2 py-1 text-ink hover:bg-surface-subtle hover:text-ink">
                                 <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-tile bg-surface-muted text-ink-2" aria-hidden="true">
                                     <app-icon name="package" [size]="18"></app-icon>
                                 </span>
@@ -162,6 +163,7 @@
                                     <span class="truncate text-[13px] text-ink-3">{{ item.detail }}</span>
                                 </div>
                                 <span class="flex-shrink-0 text-[13px] font-bold" [ngClass]="item.critical ? 'text-danger' : 'text-warning'">{{ item.left }}</span>
+                                </a>
                             </li>
                         </ul>
                         <ng-template #noStock>

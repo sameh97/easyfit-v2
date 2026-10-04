@@ -1,0 +1,62 @@
+<!-- Header -->
+<div class="flex items-center gap-3.5 px-5 pt-2.5">
+    <span class="flex h-16 w-16 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-accent-soft text-accent">
+        <img *ngIf="photo; else bag" [src]="photo" alt="" class="h-full w-full object-cover" />
+        <ng-template #bag><app-icon name="shopping-bag" [size]="26"></app-icon></ng-template>
+    </span>
+    <div class="flex min-w-0 flex-col items-start gap-1.5">
+        <h2 class="max-w-full truncate text-[22px] font-extrabold tracking-card text-ink" dir="auto">{{ product.name }}</h2>
+        <span class="flex flex-wrap gap-1.5">
+            <span class="rounded-full bg-surface-muted px-[9px] py-[3px] text-xs font-bold text-neutral">{{ categoryKey | translate }}</span>
+            <span class="rounded-full px-[9px] py-[3px] text-xs font-bold" [ngClass]="stockClass">{{ stockText }}</span>
+        </span>
+    </div>
+</div>
+
+<!-- Actions -->
+<div class="flex gap-2 px-5 pt-4">
+    <button appButton variant="primary" type="button" icon="shopping-bag" class="flex-grow" [disabled]="product.quantity <= 0" (click)="sell()">{{ 'sales.actions.sell' | translate }}</button>
+    <button appButton variant="secondary" type="button" icon="pen" class="flex-grow" (click)="edit()">{{ 'common.actions.edit' | translate }}</button>
+    <button type="button" appIconButton variant="outline" size="md" icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'common.actions.moreActions' | translate" (click)="openMoreMenu($event)"></button>
+</div>
+
+<!-- Details -->
+<dl class="m-0 flex flex-col px-5 pt-3.5">
+    <div class="flex gap-3 border-b border-solid border-line-soft py-2">
+        <dt class="w-[100px] flex-shrink-0 text-[13px] text-ink-3">{{ 'products.detail.price' | translate }}</dt>
+        <dd class="m-0 text-sm font-semibold text-ink"><bdi dir="ltr">{{ price }}</bdi></dd>
+    </div>
+    <div class="flex gap-3 border-b border-solid border-line-soft py-2">
+        <dt class="w-[100px] flex-shrink-0 text-[13px] text-ink-3">{{ 'products.detail.code' | translate }}</dt>
+        <dd class="m-0 text-sm font-semibold text-ink"><bdi dir="ltr">{{ product.code }}</bdi></dd>
+    </div>
+    <div class="flex gap-3 py-2">
+        <dt class="w-[100px] flex-shrink-0 text-[13px] text-ink-3">{{ 'products.detail.description' | translate }}</dt>
+        <dd class="m-0 min-w-0 text-sm font-semibold text-ink" dir="auto">{{ product.description }}</dd>
+    </div>
+</dl>
+
+<!-- Recent sales -->
+<section class="flex flex-col gap-1.5 px-5 pb-5 pt-3.5">
+    <div class="flex items-baseline justify-between">
+        <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'products.detail.recentSales' | plural: thisMonth | translate: { count: thisMonth } }}</h3>
+        <button *ngIf="sales.length" type="button" class="border-0 bg-transparent p-0 text-[13px] font-bold text-accent hover:underline" (click)="showSales.emit(product)">{{ 'products.detail.allSales' | translate }}</button>
+    </div>
+    <ng-container [ngSwitch]="salesState">
+        <app-skeleton *ngSwitchCase="'loading'" width="100%" height="48px" shape="block"></app-skeleton>
+        <p *ngSwitchCase="'error'" class="text-[13px] text-danger">{{ 'sales.error' | translate }}</p>
+        <ng-container *ngSwitchDefault>
+            <p *ngIf="!sales.length" class="text-[13px] text-ink-3">{{ 'products.detail.noSales' | translate }}</p>
+            <ul class="m-0 flex list-none flex-col p-0">
+                <li *ngFor="let bill of recentSales; trackBy: trackById" class="flex items-center gap-3 border-b border-solid border-line-soft py-2">
+                    <span class="flex min-w-0 flex-grow flex-col">
+                        <span class="truncate text-sm font-semibold text-ink" dir="auto">{{ bill.coustomerName }}</span>
+                        <span class="text-xs text-ink-3">{{ bill.createdAt | localDate: 'dateTime' }}</span>
+                    </span>
+                    <span class="text-[13px] text-ink-2"><bdi dir="ltr">× {{ bill.quantity }}</bdi></span>
+                    <span class="w-16 text-end text-sm font-bold text-ink"><bdi dir="ltr">{{ money(bill.totalCost) }}</bdi></span>
+                </li>
+            </ul>
+        </ng-container>
+    </ng-container>
+</section>

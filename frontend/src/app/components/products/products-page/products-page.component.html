@@ -1,0 +1,110 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'products.page.title' | translate" [subtitle]="state === 'ready' ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'products.actions.add' | translate }}</button>
+            </ng-container>
+        </app-page-header>
+
+        <div class="w-full max-w-[280px]">
+            <app-tabs idPrefix="products" [tabs]="tabItems" [value]="tab" (valueChange)="setTab($event)" [label]="'products.page.tabsLabel' | translate"></app-tabs>
+        </div>
+
+        <!-- ============ Sales ============ -->
+        <div *ngIf="tab === 'sales'" id="products-tabpanel-sales" role="tabpanel" aria-labelledby="products-tab-sales">
+            <app-sales-tab [bills]="bills" [state]="salesState" [query]="salesQuery" (queryChange)="salesQuery = $event" (retry)="loadSales()"></app-sales-tab>
+        </div>
+
+        <!-- ============ Products ============ -->
+        <div *ngIf="tab === 'products'" id="products-tabpanel-products" role="tabpanel" aria-labelledby="products-tab-products" class="flex flex-col gap-[18px]">
+            <div class="flex flex-wrap items-center gap-2.5">
+                <div role="group" [attr.aria-label]="'products.filters.label' | translate" class="flex max-w-full gap-0.5 overflow-x-auto rounded-full bg-surface p-1 shadow-card">
+                    <button *ngFor="let f of stockFilters" type="button" [attr.aria-pressed]="stockFilter === f" (click)="setStockFilter(f)"
+                        class="whitespace-nowrap rounded-full border-0 px-3.5 py-[9px] text-sm transition-colors"
+                        [ngClass]="stockFilter === f ? 'bg-ink font-bold text-white' : 'bg-transparent font-semibold text-neutral hover:text-ink'">
+                        {{ 'products.filters.' + f | translate }}
+                        <span [ngClass]="stockFilter === f ? 'opacity-70' : (f === 'low' ? 'text-warning-text' : (f === 'out' ? 'text-danger-text' : ''))">{{ counts[f] }}</span>
+                    </button>
+                </div>
+                <span class="hidden flex-1 md:block"></span>
+                <button type="button" aria-haspopup="menu" aria-expanded="false" (click)="openCategoryMenu($event)"
+                    class="flex h-11 items-center gap-2 rounded-full border border-solid bg-surface px-4 text-sm font-semibold text-ink-2 hover:border-line-strong"
+                    [ngClass]="categoryFilter !== null ? 'border-accent text-accent' : 'border-line'">
+                    {{ categoryLabel }}
+                    <app-icon name="chevron-down" [size]="15"></app-icon>
+                </button>
+                <label class="flex h-11 w-full items-center gap-2 rounded-full border border-solid border-line bg-surface px-4 text-ink-3 focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-soft sm:w-[220px]">
+                    <app-icon name="search" [size]="17"></app-icon>
+                    <span class="sr-only">{{ 'products.page.searchLabel' | translate }}</span>
+                    <input #search type="search" [value]="query" (input)="onSearch(search.value)" [placeholder]="'products.page.searchPlaceholder' | translate"
+                        class="h-full min-w-0 flex-grow border-0 bg-transparent p-0 text-sm text-ink placeholder-ink-3 outline-none" />
+                </label>
+            </div>
+
+            <div class="flex items-start gap-4">
+                <div class="min-w-0 flex-1">
+                    <app-card *ngIf="state === 'error'">
+                        <app-empty-state icon="alert-circle" tone="danger" [title]="'common.table.errorTitle' | translate" [message]="'common.table.errorBody' | translate">
+                            <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="load()">{{ 'common.actions.retry' | translate }}</button>
+                        </app-empty-state>
+                    </app-card>
+
+                    <ul *ngIf="state === 'loading'" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? 'lg:grid-cols-1 xl:grid-cols-2' : 'xl:grid-cols-3'" aria-busy="true">
+                        <li *ngFor="let i of skeletonCards">
+                            <app-card padding="sm" class="flex gap-3.5">
+                                <app-skeleton width="72px" height="72px" shape="block"></app-skeleton>
+                                <div class="flex flex-1 flex-col gap-2"><app-skeleton width="60%" height="14px"></app-skeleton><app-skeleton width="40%" height="12px"></app-skeleton><app-skeleton width="50%" height="12px"></app-skeleton></div>
+                            </app-card>
+                        </li>
+                    </ul>
+
+                    <app-card *ngIf="state === 'ready' && !filtered.length">
+                        <app-empty-state *ngIf="!products.length; else noMatches" icon="shopping-bag" tone="accent" [title]="'products.empty.title' | translate" [message]="'products.empty.body' | translate">
+                            <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'products.actions.add' | translate }}</button>
+                        </app-empty-state>
+                        <ng-template #noMatches>
+                            <app-empty-state icon="search" [title]="'products.empty.noMatchTitle' | translate" [message]="'products.empty.noMatchBody' | translate"></app-empty-state>
+                        </ng-template>
+                    </app-card>
+
+                    <ul *ngIf="state === 'ready' && filtered.length" class="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2" [ngClass]="narrow ? 'lg:grid-cols-1 xl:grid-cols-2' : 'xl:grid-cols-3'" [attr.aria-label]="'products.page.title' | translate">
+                        <li *ngFor="let product of filtered; trackBy: trackById">
+                            <article (click)="select(product)"
+                                class="flex h-full cursor-pointer gap-3.5 rounded-card bg-surface p-4 shadow-card transition-shadow hover:shadow-overlay"
+                                [ngClass]="product.id === selectedId ? 'ring-2 ring-accent' : ''">
+                                <span class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center overflow-hidden rounded-[14px] bg-surface-muted text-ink-4">
+                                    <img *ngIf="photo(product) as src; else bag" [src]="src" alt="" class="h-full w-full object-cover" />
+                                    <ng-template #bag><app-icon name="shopping-bag" [size]="28"></app-icon></ng-template>
+                                </span>
+                                <div class="flex min-w-0 flex-grow flex-col gap-1">
+                                    <div class="flex min-w-0 items-center justify-between gap-2">
+                                        <button type="button" class="truncate border-0 bg-transparent p-0 text-start text-base font-extrabold text-ink hover:text-accent" dir="auto"
+                                            [attr.aria-current]="product.id === selectedId ? 'true' : null" (click)="$event.stopPropagation(); select(product)">{{ product.name }}</button>
+                                        <span class="whitespace-nowrap text-base font-extrabold text-ink"><bdi dir="ltr">{{ price(product) }}</bdi></span>
+                                    </div>
+                                    <div class="flex min-w-0 items-center gap-2 text-[13px] text-ink-3">
+                                        <span class="rounded-full bg-surface-muted px-2 py-0.5 text-xs font-bold text-neutral">{{ categoryKey(product) | translate }}</span>
+                                        <span class="truncate"><bdi dir="ltr">{{ product.code }}</bdi></span>
+                                    </div>
+                                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5">
+                                        <span class="whitespace-nowrap rounded-full px-[9px] py-[3px] text-xs font-bold" [ngClass]="stockClass(product)">{{ stockText(product) }}</span>
+                                        <button type="button" [disabled]="product.quantity <= 0" (click)="sell($event, product)"
+                                            [attr.aria-label]="'sales.actions.sellName' | translate: { name: product.name }"
+                                            class="h-8 rounded-full border border-solid border-line-strong bg-surface px-3.5 text-[13px] font-bold text-ink hover:bg-surface-subtle disabled:opacity-50">
+                                            {{ 'sales.actions.sell' | translate }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+                    </ul>
+                </div>
+
+                <app-side-panel [open]="!!selected" [label]="'products.detail.label' | translate" [eyebrow]="'products.detail.eyebrow' | translate" (closed)="closeDetail()">
+                    <app-product-detail *ngIf="selected as product" [product]="product" [bills]="bills" [salesState]="salesState"
+                        (deleted)="closeDetail()" (showSales)="showSalesOf($event)"></app-product-detail>
+                </app-side-panel>
+            </div>
+        </div>
+    </div>
+</app-nav>

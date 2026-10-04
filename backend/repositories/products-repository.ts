@@ -120,13 +120,19 @@ export class ProductsRepository {
   };
 
   public deleteBill = async (id: number, transaction?: Transaction) => {
-    const toDelete = await Bill.findOne({ where: { id: id } });
+    const toDelete = await Bill.findOne({ where: { id: id }, transaction: transaction });
 
     if (!AppUtils.hasValue(toDelete)) {
       throw new NotFoundErr(
         `Cannot delete bill with id ${id} because its not found`
       );
     }
+
+    // Deleting a sale puts its quantity back into stock (redesign.md §5.7). A deleted product stays deleted.
+    await Product.increment(
+      { quantity: Number(toDelete.quantity) || 0 },
+      { where: { id: toDelete.productID, gymId: toDelete.gymId }, transaction: transaction }
+    );
 
     await Bill.destroy({ where: { id: id }, transaction: transaction });
   };

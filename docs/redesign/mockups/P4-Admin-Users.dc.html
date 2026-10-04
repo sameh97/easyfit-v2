@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin: Users</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans','Rubik',sans-serif;color:#1b1c20;background:#f5f4f0}
+a{color:#2F4BF0;text-decoration:none}a:hover{color:#1f36c4}
+button,input{font-family:inherit}button{cursor:pointer}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; display: flex; gap: 16px; padding: 16px; background: #F5F4F0; overflow: hidden; font-family: 'Plus Jakarta Sans', 'Rubik', sans-serif; color: #1B1C20; box-sizing: border-box">
+<dc-import name="P4-Sidebar" active="users" admin="{{true}}" hint-size="256px,968px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 6px 4px">
+<div style="display: flex; align-items: center; gap: 10px; height: 44px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; width: 380px; height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #6B6E76; font-size: 14px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg>Jump to…<span dir="ltr" style="margin-inline-start: auto; font-size: 12px; font-weight: 700; border: 1px solid #E7E5DF; border-radius: 8px; padding: 2px 8px">Ctrl K</span></button>
+</div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1">Users</h1><p style="margin: 0; font-size: 15px; color: #6B6E76">8 users in 3 gyms</p></div>
+<button type="button" style="height: 46px; padding: 0 20px; border: 0; border-radius: 23px; background: #2F4BF0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add user</button>
+</div>
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" style="height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #44464C; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px">Gym: All<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+<span style="flex-grow: 1"></span>
+<div style="display: flex; align-items: center; gap: 8px; width: 260px; height: 44px; padding: 0 16px; background: #FFFFFF; border: 1px solid #E7E5DF; border-radius: 22px; color: #6B6E76; box-sizing: border-box"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg><label for="u-search" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search users</label><input id="u-search" type="search" placeholder="Name, email or phone" style="border: 0; outline: none; flex-grow: 1; min-width: 0; font-size: 14px; background: transparent"></div>
+</div>
+<section aria-label="Users" style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); overflow: hidden">
+<table style="width: 100%; border-collapse: collapse; font-size: 14px">
+<thead><tr>
+<th scope="col" style="text-align: start; padding: 14px 20px; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #8A8D94; border-bottom: 1px solid #EFEEE9">User ↑</th>
+<th scope="col" style="text-align: start; padding: 14px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #8A8D94; border-bottom: 1px solid #EFEEE9">Phone</th>
+<th scope="col" style="text-align: start; padding: 14px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #8A8D94; border-bottom: 1px solid #EFEEE9">Gym</th>
+<th scope="col" style="text-align: start; padding: 14px 12px; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #8A8D94; border-bottom: 1px solid #EFEEE9">Role</th>
+<th scope="col" style="width: 96px; border-bottom: 1px solid #EFEEE9"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Actions</span></th>
+</tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<tr style="height: 62px">
+<td style="padding: 0 20px; border-bottom: 1px solid #F3F2EE"><span style="display: flex; align-items: center; gap: 12px"><span style="width: 36px; height: 36px; border-radius: 18px; background: {{r.bg}}; color: {{r.fg}}; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center">{{r.initials}}</span><span style="display: flex; flex-direction: column"><span style="font-weight: 700">{{r.name}}</span><bdi dir="ltr" style="font-size: 12px; color: #6B6E76">{{r.email}}</bdi></span></span></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #F3F2EE"><bdi dir="ltr">{{r.phone}}</bdi></td>
+<td style="padding: 0 12px; border-bottom: 1px solid #F3F2EE; font-weight: 600">{{r.gym}}</td>
+<td style="padding: 0 12px; border-bottom: 1px solid #F3F2EE"><span style="{{r.roleStyle}}">{{r.role}}</span></td>
+<td style="padding: 0 10px; border-bottom: 1px solid #F3F2EE"><span style="display: flex; gap: 2px"><button type="button" aria-label="Edit user" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg></button><button type="button" aria-label="More actions" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M19 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M5 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2"></path></svg></button></span></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+var AV = [['#E8ECFE', '#2F4BF0'], ['#FDE8E4', '#B4351F'], ['#E4F5EC', '#17693F'], ['#FDF1D8', '#7A4F00'], ['#EFE7FD', '#6D3BD8'], ['#E2F3F7', '#0E6A80']];
+var ROWS = [
+  ['Amir Mizrahi', 'AM', 2, 'amir@ironworks.co.il', '0523344556', 'Ironworks Haifa', 'Manager'],
+  ['Dana Cohen', 'DC', 1, 'dana.cohen@powerhouse.co.il', '0541234567', 'Power House TLV', 'Manager'],
+  ['EasyFit Admin', 'EA', 0, 'admin@easyfit.com', '0500000000', '—', 'Admin'],
+  ['Lina Khoury', 'LK', 0, 'lina@powerhouse.co.il', '0547788990', 'Power House TLV', 'Manager'],
+  ['Omar Haddad', 'OH', 4, 'omar@corefit.co.il', '0531562315', 'CoreFit Nazareth', 'Manager'],
+  ['Shira Katz', 'SK', 5, 'shira@ironworks.co.il', '0529981122', 'Ironworks Haifa', 'Manager'],
+  ['Yousef Mansour', 'YM', 3, 'yousef@corefit.co.il', '0557551249', 'CoreFit Nazareth', 'Manager']
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: ROWS.map(function (r) {
+        var admin = r[6] === 'Admin';
+        return { name: r[0], initials: r[1], bg: AV[r[2]][0], fg: AV[r[2]][1], email: r[3], phone: r[4], gym: r[5], role: r[6],
+          roleStyle: 'font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; ' + (admin ? 'background: #E2E6FD; color: #2F4BF0' : 'background: #ECEBE6; color: #55585F') };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

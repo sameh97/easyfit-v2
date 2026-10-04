@@ -1,0 +1,61 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'profile.page.title' | translate" [subtitle]="'profile.page.subtitle' | translate"></app-page-header>
+
+        <div class="grid grid-cols-1 items-start gap-4 xl:grid-cols-3">
+            <!-- Profile -->
+            <section aria-labelledby="profile-name" class="flex flex-col gap-[18px] rounded-card bg-surface p-6 shadow-card xl:col-span-2">
+                <div class="flex flex-wrap items-center gap-4">
+                    <app-avatar [name]="name" [id]="0" tone="dark" [imageUrl]="photo" [size]="72"></app-avatar>
+                    <div class="flex min-w-0 flex-grow flex-col gap-1">
+                        <h2 id="profile-name" class="truncate text-2xl font-extrabold tracking-card text-ink" dir="auto">{{ name }}</h2>
+                        <span class="text-sm text-ink-3">{{ summary }}</span>
+                    </div>
+                    <button appButton variant="secondary" icon="pen" type="button" [disabled]="!user" (click)="edit()">{{ 'profile.actions.edit' | translate }}</button>
+                </div>
+                <dl *ngIf="user" class="m-0 grid grid-cols-1 gap-x-8 md:grid-cols-2">
+                    <div class="flex flex-col gap-0.5 border-b border-solid border-line-soft py-3">
+                        <dt class="text-[13px] text-ink-3">{{ 'profile.fields.email' | translate }}</dt>
+                        <dd class="m-0 truncate text-[15px] font-semibold text-ink"><bdi dir="ltr">{{ user.email }}</bdi></dd>
+                    </div>
+                    <div class="flex flex-col gap-0.5 border-b border-solid border-line-soft py-3">
+                        <dt class="text-[13px] text-ink-3">{{ 'members.form.phone' | translate }}</dt>
+                        <dd class="m-0 text-[15px] font-semibold text-ink"><bdi dir="ltr">{{ user.phone }}</bdi></dd>
+                    </div>
+                    <div class="flex flex-col gap-0.5 border-b border-solid border-line-soft py-3">
+                        <dt class="text-[13px] text-ink-3">{{ 'members.form.birthday' | translate }}</dt>
+                        <dd class="m-0 text-[15px] font-semibold text-ink">{{ user.birthDay | localDate }}</dd>
+                    </div>
+                    <div class="flex flex-col gap-0.5 border-b border-solid border-line-soft py-3">
+                        <dt class="text-[13px] text-ink-3">{{ 'members.form.address' | translate }}</dt>
+                        <dd class="m-0 text-[15px] font-semibold text-ink" dir="auto">{{ user.address }}</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <div class="flex flex-col gap-4">
+                <!-- Gym -->
+                <section aria-labelledby="gym-name" class="flex flex-col gap-3 rounded-card bg-surface p-[22px] shadow-card">
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-tile bg-ink text-sm font-extrabold text-white" aria-hidden="true">{{ gymInitials }}</span>
+                        <span class="flex min-w-0 flex-col">
+                            <h2 id="gym-name" class="truncate text-[17px] font-extrabold text-ink" dir="auto">{{ context.gymName || ('shell.gym.fallbackName' | translate) }}</h2>
+                            <span class="text-[13px] text-ink-3">{{ gymCounts }}</span>
+                        </span>
+                    </div>
+                    <p class="text-xs text-ink-3">{{ 'profile.gym.note' | translate }}</p>
+                </section>
+
+                <!-- Preferences -->
+                <section aria-labelledby="prefs-title" class="flex flex-col gap-3 rounded-card bg-surface p-[22px] shadow-card">
+                    <h2 id="prefs-title" class="text-[17px] font-extrabold text-ink">{{ 'profile.preferences.title' | translate }}</h2>
+                    <div class="flex flex-col gap-2">
+                        <span class="text-[13px] font-bold text-ink-2" aria-hidden="true">{{ 'common.language.label' | translate }}</span>
+                        <app-language-switch></app-language-switch>
+                    </div>
+                    <span class="text-xs text-ink-3">{{ 'profile.preferences.languageHelp' | translate }}</span>
+                </section>
+            </div>
+        </div>
+    </div>
+</app-nav>

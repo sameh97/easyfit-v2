@@ -11,7 +11,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
 
 import { AuthGuardService as AuthGuard } from './services/auth-guard.service';
-import { RegisterPageComponent } from './components/register-page/register-page.component';
 
 import { SearchfilterPipe } from './searchfilter.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,7 +35,6 @@ import { HomeComponent } from './components/home/home.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
-import { MembersChartComponent } from './components/members-chart/members-chart.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MembersPageComponent } from './components/members-components/members-page/members-page.component';
 import { MemberDetailComponent } from './components/members-components/member-detail/member-detail.component';
@@ -51,25 +49,10 @@ import {
   NgxMatNativeDateModule,
 } from '@angular-material-components/datetime-picker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ProductsPageComponent } from './components/products-components/products-page/products-page.component';
-import { AddProductComponent } from './components/products-components/add-product/add-product.component';
-import { UpdateProductPageComponent } from './components/products-components/update-product-page/update-product-page.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
-import { CatalogPageComponent } from './components/catalog-components/catalog-page/catalog-page.component';
-import { AddCatalogComponent } from './components/catalog-components/add-catalog/add-catalog.component';
-import { UpdateCatalogComponent } from './components/catalog-components/update-catalog/update-catalog.component';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { SendCatalogComponent } from './components/catalog-components/send-catalog/send-catalog.component';
 import { MatChipsModule } from '@angular/material/chips';
-import { SellProductComponent } from './components/products-components/sell-product/sell-product.component';
-import { CreateGymComponent } from './components/registration-components/create-gym/create-gym.component';
-import { AdminPageComponent } from './components/registration-components/admin-page/admin-page.component';
-import { AdminNavComponent } from './components/registration-components/admin-nav/admin-nav.component';
-import { UpdateGymComponent } from './components/registration-components/update-gym/update-gym.component';
-import { UsersPageComponent } from './components/registration-components/users-components/users-page/users-page.component';
-import { AddUserComponent } from './components/registration-components/users-components/add-user/add-user.component';
-import { UpdateUserComponent } from './components/registration-components/users-components/update-user/update-user.component';
 import { NotificationsPanelComponent } from './components/shell/notifications-panel/notifications-panel.component';
 import { ClassesPageComponent } from './components/classes/classes-page/classes-page.component';
 import { ClassDetailComponent } from './components/classes/class-detail/class-detail.component';
@@ -80,17 +63,28 @@ import { MachineFormComponent } from './components/machines/machine-form/machine
 import { JobTypePillComponent, MachineBadgeComponent } from './components/machines/machine-badges.component';
 import { MaintenancePageComponent } from './components/maintenance/maintenance-page/maintenance-page.component';
 import { JobFormComponent } from './components/maintenance/job-form/job-form.component';
+import { ProductsPageComponent } from './components/products/products-page/products-page.component';
+import { ProductDetailComponent } from './components/products/product-detail/product-detail.component';
+import { ProductFormComponent } from './components/products/product-form/product-form.component';
+import { SellFormComponent } from './components/products/sell-form/sell-form.component';
+import { SalesTabComponent } from './components/products/sales-tab/sales-tab.component';
+import { CatalogsPageComponent } from './components/catalogs/catalogs-page/catalogs-page.component';
+import { CatalogFormComponent } from './components/catalogs/catalog-form/catalog-form.component';
+import { CatalogShareComponent } from './components/catalogs/catalog-share/catalog-share.component';
+import { ProfilePageComponent } from './components/profile/profile-page/profile-page.component';
+import { ProfileFormComponent } from './components/profile/profile-form/profile-form.component';
+import { GymsPageComponent } from './components/admin/gyms-page/gyms-page.component';
+import { UsersPageComponent } from './components/admin/users-page/users-page.component';
+import { GymFormComponent } from './components/admin/gym-form/gym-form.component';
+import { UserFormComponent } from './components/admin/user-form/user-form.component';
+import { AdminGuardService as AdminGuard } from './services/admin-guard.service';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
 import { TrainerFormComponent } from './components/trainers-components/trainer-form/trainer-form.component';
-import { DoughnutChartComponent } from './components/members-components/doughnut-chart/doughnut-chart.component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { UserProfileComponent } from './components/profile-components/user-profile/user-profile.component';
-import { EditProfileUserComponent } from './components/profile-components/edit-profile-user/edit-profile-user.component';
 import { MatSnackBarConfig, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { ProductsChartComponent } from './components/products-components/products-chart/products-chart.component';
-import { IncomeChartComponent } from './components/products-components/income-chart/income-chart.component';
 
 export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -118,6 +112,7 @@ const routes: Routes = [
     path: 'products',
     component: ProductsPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'trainers',
@@ -133,18 +128,21 @@ const routes: Routes = [
   },
   {
     path: 'catalog',
-    component: CatalogPageComponent,
+    component: CatalogsPageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
   {
     path: 'admin',
-    component: AdminPageComponent,
-    canActivate: [AuthGuard], //TODO: add admin guard
+    component: GymsPageComponent,
+    canActivate: [AuthGuard, AdminGuard],
+    data: { studio: true },
   },
   {
     path: 'users',
     component: UsersPageComponent,
-    canActivate: [AuthGuard], //TODO: add admin guard
+    canActivate: [AuthGuard, AdminGuard],
+    data: { studio: true },
   },
   {
     path: 'group-trainings',
@@ -154,42 +152,27 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    component: UserProfileComponent,
+    component: ProfilePageComponent,
     canActivate: [AuthGuard],
+    data: { studio: true },
   },
 
-  //TODO: make 404 page
+  // Any other URL: the 404 page (§5.12), inside the shell when signed in.
+  { path: '**', component: NotFoundComponent, data: { studio: true } },
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterPageComponent,
     SearchfilterPipe,
     NavComponent,
     CommandPaletteComponent,
     AiPanelComponent,
     HomeComponent,
-    MembersChartComponent,
     MembersPageComponent,
     MemberDetailComponent,
     MemberFormComponent,
-    ProductsPageComponent,
-    AddProductComponent,
-    UpdateProductPageComponent,
-    CatalogPageComponent,
-    AddCatalogComponent,
-    UpdateCatalogComponent,
-    SendCatalogComponent,
-    SellProductComponent,
-    CreateGymComponent,
-    AdminPageComponent,
-    AdminNavComponent,
-    UpdateGymComponent,
-    UsersPageComponent,
-    AddUserComponent,
-    UpdateUserComponent,
     NotificationsPanelComponent,
     ClassesPageComponent,
     ClassDetailComponent,
@@ -201,14 +184,24 @@ const routes: Routes = [
     JobTypePillComponent,
     MaintenancePageComponent,
     JobFormComponent,
+    ProductsPageComponent,
+    ProductDetailComponent,
+    ProductFormComponent,
+    SellFormComponent,
+    SalesTabComponent,
+    CatalogsPageComponent,
+    CatalogFormComponent,
+    CatalogShareComponent,
+    ProfilePageComponent,
+    ProfileFormComponent,
+    GymsPageComponent,
+    UsersPageComponent,
+    GymFormComponent,
+    UserFormComponent,
+    NotFoundComponent,
     TrainersPageComponent,
     TrainerDetailComponent,
     TrainerFormComponent,
-    DoughnutChartComponent,
-    UserProfileComponent,
-    EditProfileUserComponent,
-    ProductsChartComponent,
-    IncomeChartComponent,
   ],
   imports: [
     BrowserModule,

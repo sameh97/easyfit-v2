@@ -1,0 +1,29 @@
+<app-nav *ngIf="signedIn; else signedOut">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</app-nav>
+
+<ng-template #signedOut>
+    <div class="studio flex min-h-screen flex-col bg-canvas px-4">
+        <a routerLink="/login" dir="ltr" class="flex items-baseline gap-[3px] pt-6 text-[23px] font-extrabold tracking-logo text-ink">
+            easyfit<span class="inline-block h-2 w-2 rounded-full bg-accent" aria-hidden="true"></span>
+        </a>
+        <ng-container *ngTemplateOutlet="content"></ng-container>
+    </div>
+</ng-template>
+
+<ng-template #content>
+    <section aria-labelledby="not-found-title" class="studio flex flex-1 items-center justify-center py-16">
+        <div class="flex w-full max-w-[460px] flex-col items-center gap-3.5 text-center">
+            <span class="text-[120px] font-extrabold leading-none tracking-[-6px] text-accent-soft" aria-hidden="true">404</span>
+            <h1 id="not-found-title" class="text-[32px] font-extrabold tracking-title text-ink">{{ 'notFound.title' | translate }}</h1>
+            <p class="text-[15px] leading-relaxed text-ink-3">
+                {{ 'notFound.bodyBefore' | translate }}<bdi dir="ltr" class="font-bold text-ink-2">{{ path }}</bdi>{{ 'notFound.bodyAfter' | translate }}
+            </p>
+            <div class="flex flex-wrap justify-center gap-2.5 pt-1.5">
+                <a *ngIf="signedIn" appButton variant="primary" [routerLink]="homePath">{{ (homePath === '/admin' ? 'notFound.backToGyms' : 'notFound.backToDashboard') | translate }}</a>
+                <button *ngIf="signedIn" appButton variant="secondary" type="button" icon="search" (click)="shell.openPalette()">{{ 'shell.search.trigger' | translate }}</button>
+                <a *ngIf="!signedIn" appButton variant="primary" routerLink="/login">{{ 'notFound.signIn' | translate }}</a>
+            </div>
+        </div>
+    </section>
+</ng-template>

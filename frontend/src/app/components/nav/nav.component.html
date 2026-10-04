@@ -18,7 +18,7 @@
         >
             <!-- Wordmark + collapse -->
             <div class="flex items-center" [ngClass]="collapsed ? 'flex-col gap-3' : 'justify-between px-1.5'">
-                <a routerLink="/home" dir="ltr" class="flex items-baseline gap-[3px] text-[23px] font-extrabold tracking-logo text-ink" [attr.aria-label]="'shell.homeLink' | translate">
+                <a [routerLink]="homePath" dir="ltr" class="flex items-baseline gap-[3px] text-[23px] font-extrabold tracking-logo text-ink" [attr.aria-label]="'shell.homeLink' | translate">
                     <ng-container *ngIf="!collapsed">easyfit</ng-container><ng-container *ngIf="collapsed">ef</ng-container><span class="inline-block h-2 w-2 rounded-full bg-accent" aria-hidden="true"></span>
                 </a>
                 <button *ngIf="canToggleCollapse" appIconButton icon="panel-left" class="flip-rtl" [label]="(collapsed ? 'shell.sidebar.expand' : 'shell.sidebar.collapse') | translate" [attr.aria-expanded]="!collapsed" (click)="shell.toggleSidebar()"></button>
@@ -26,7 +26,7 @@
             </div>
 
             <!-- Gym card (static label for now; becomes a switcher if multi-gym is added) -->
-            <div class="flex items-center gap-2.5 rounded-2xl border border-solid border-line bg-surface-subtle" [ngClass]="collapsed ? 'justify-center border-0 bg-transparent p-0' : 'p-2.5'" [attr.title]="collapsed ? gymName : null">
+            <div *ngIf="!isAdmin" class="flex items-center gap-2.5 rounded-2xl border border-solid border-line bg-surface-subtle" [ngClass]="collapsed ? 'justify-center border-0 bg-transparent p-0' : 'p-2.5'" [attr.title]="collapsed ? gymName : null">
                 <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-[10px] bg-ink text-[13px] font-extrabold text-white" aria-hidden="true">{{ gymInitials }}</span>
                 <span *ngIf="!collapsed" class="flex min-w-0 flex-col">
                     <span class="truncate text-sm font-bold text-ink" dir="auto">{{ gymName }}</span>
@@ -36,7 +36,7 @@
             </div>
 
             <!-- Ask EasyFit AI -->
-            <button type="button" (click)="shell.toggleAiPanel()" [attr.aria-expanded]="aiPanelOpen" aria-controls="ai-panel" aria-keyshortcuts="Control+J Meta+J"
+            <button *ngIf="!isAdmin" type="button" (click)="shell.toggleAiPanel()" [attr.aria-expanded]="aiPanelOpen" aria-controls="ai-panel" aria-keyshortcuts="Control+J Meta+J"
                 class="rail-link relative flex h-11 flex-shrink-0 items-center gap-2.5 rounded-[14px] border-0 bg-accent text-sm font-bold text-white transition-colors hover:bg-opacity-90"
                 [ngClass]="collapsed ? 'w-12 justify-center' : 'w-full px-3'"
                 [attr.aria-label]="collapsed ? ('shell.askAi' | translate) : null">
@@ -89,7 +89,7 @@
                         <span class="truncate text-xs text-ink-3">{{ userRoleKey ? (userRoleKey | translate) : '' }}</span>
                     </span>
                 </button>
-                <a appIconButton icon="settings" [label]="'shell.user.settings' | translate" routerLink="/profile"></a>
+                <a *ngIf="!isAdmin" appIconButton icon="settings" [label]="'shell.user.settings' | translate" routerLink="/profile"></a>
 
                 <ng-container *ngIf="userMenuOpen">
                     <div class="fixed inset-0 z-10" (click)="closeUserMenu(false)" aria-hidden="true"></div>
@@ -100,7 +100,7 @@
                             <p class="text-xs text-ink-3">{{ 'shell.user.signedInAs' | translate }}</p>
                             <p class="truncate text-sm font-semibold text-ink" dir="ltr"><bdi>{{ currentUser.email }}</bdi></p>
                         </div>
-                        <a role="menuitem" routerLink="/profile" (click)="closeUserMenu(false)" class="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-subtle hover:text-ink">
+                        <a *ngIf="!isAdmin" role="menuitem" routerLink="/profile" (click)="closeUserMenu(false)" class="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-ink-2 hover:bg-surface-subtle hover:text-ink">
                             <app-icon name="user" [size]="17"></app-icon> {{ 'shell.user.profile' | translate }}
                         </a>
 
@@ -139,7 +139,7 @@
 
                 <span class="hidden flex-1 md:block"></span>
 
-                <div class="relative flex-shrink-0">
+                <div *ngIf="!isAdmin" class="relative flex-shrink-0">
                     <button #bellButton appIconButton [variant]="notificationsOpen ? 'accent' : 'outline'" size="md" icon="bell" [label]="notificationsLabel"
                         aria-haspopup="dialog" [attr.aria-expanded]="notificationsOpen" aria-controls="notifications-panel" (click)="toggleNotifications()">
                         <span *ngIf="notificationNumber > 0" class="absolute end-2.5 top-[9px] h-[9px] w-[9px] rounded-full border-2 border-solid border-white bg-danger-dot" aria-hidden="true"></span>
@@ -155,7 +155,7 @@
         </div>
 
         <!-- ============ AI panel (inline-end side; third column on ≥ xl, overlay below) ============ -->
-        <app-ai-panel [docked]="aiDocked" [phone]="isPhone"></app-ai-panel>
+        <app-ai-panel *ngIf="!isAdmin" [docked]="aiDocked" [phone]="isPhone"></app-ai-panel>
     </div>
 
     <app-command-palette></app-command-palette>

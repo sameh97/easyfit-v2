@@ -1,0 +1,59 @@
+<app-nav>
+    <div class="studio flex flex-col gap-[18px]">
+        <app-page-header [title]="'catalogs.page.title' | translate" [subtitle]="state === 'ready' && rows.length ? subtitle : null">
+            <ng-container actions>
+                <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'catalogs.actions.new' | translate }}</button>
+            </ng-container>
+        </app-page-header>
+
+        <app-card *ngIf="state === 'error'">
+            <app-empty-state icon="alert-circle" tone="danger" [title]="'common.table.errorTitle' | translate" [message]="'common.table.errorBody' | translate">
+                <button appButton variant="secondary" size="sm" icon="refresh-cw" type="button" (click)="load()">{{ 'common.actions.retry' | translate }}</button>
+            </app-empty-state>
+        </app-card>
+
+        <app-card *ngIf="state === 'ready' && !rows.length">
+            <app-empty-state icon="send" tone="accent" [title]="'catalogs.empty.title' | translate" [message]="'catalogs.empty.body' | translate">
+                <button appButton variant="primary" size="sm" icon="plus" type="button" (click)="add()">{{ 'catalogs.actions.new' | translate }}</button>
+            </app-empty-state>
+        </app-card>
+
+        <section *ngIf="state === 'loading' || rows.length" [attr.aria-label]="'catalogs.page.title' | translate" class="rounded-card bg-surface py-1.5 shadow-card">
+            <ng-container *ngIf="state === 'loading'">
+                <div *ngFor="let i of skeletonRows" class="flex flex-col gap-2 px-5 py-3.5" aria-hidden="true">
+                    <app-skeleton width="30%" height="14px"></app-skeleton><app-skeleton width="70%" height="12px"></app-skeleton><app-skeleton width="45%" height="12px"></app-skeleton>
+                </div>
+            </ng-container>
+            <ul *ngIf="state === 'ready'" class="m-0 list-none p-0">
+                <li *ngFor="let row of rows; let first = first; trackBy: trackByUuid" class="flex flex-col gap-1.5 px-5 py-3.5"
+                    [ngClass]="[first ? '' : 'border-t border-solid border-line-soft', row.active ? '' : 'opacity-70']">
+                    <div class="flex items-center gap-2.5">
+                        <span class="flex flex-shrink-0" aria-hidden="true">
+                            <span *ngFor="let t of row.thumbs; let i = index" class="flex h-7 w-7 items-center justify-center overflow-hidden rounded-[9px] border-2 border-solid border-white"
+                                [style.margin-inline-start.px]="i ? -8 : 0" [style.background]="t.photo ? null : t.background" [style.color]="t.foreground">
+                                <img *ngIf="t.photo; else bagIcon" [src]="t.photo" alt="" class="h-full w-full object-cover" />
+                                <ng-template #bagIcon><app-icon name="shopping-bag" [size]="13"></app-icon></ng-template>
+                            </span>
+                        </span>
+                        <span class="min-w-0 flex-grow text-[15px] font-bold text-ink">{{ productsLabel(row) }}</span>
+                        <app-status-pill [status]="row.active ? 'active' : 'neutral'" [label]="(row.active ? 'catalogs.status.active' : 'catalogs.status.expired') | translate"></app-status-pill>
+                    </div>
+                    <span class="truncate text-[13px] text-ink-3" dir="auto">{{ row.names }}</span>
+                    <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+                        <span class="text-[13px] text-ink-2">{{ validity(row) }} · {{ created(row) }}</span>
+                        <span class="flex items-center gap-1">
+                            <button type="button" (click)="copyLink(row.catalog)" class="flex h-[34px] items-center gap-1.5 rounded-full border border-solid border-line-strong bg-surface px-3 text-[13px] font-bold text-ink hover:bg-surface-subtle">
+                                <app-icon name="link" [size]="14"></app-icon>{{ 'catalogs.actions.copyLink' | translate }}
+                            </button>
+                            <button type="button" [disabled]="!row.active" (click)="share(row.catalog)" class="h-[34px] rounded-full border-0 bg-ink px-3 text-[13px] font-bold text-white hover:bg-ink-2 disabled:opacity-50">
+                                {{ 'catalogs.actions.share' | translate }}
+                            </button>
+                            <button type="button" appIconButton icon="pen" [label]="'catalogs.actions.edit' | translate" (click)="edit(row.catalog)"></button>
+                            <button type="button" appIconButton icon="more-horizontal" aria-haspopup="menu" aria-expanded="false" [label]="'common.actions.moreActions' | translate" (click)="openMoreMenu($event, row.catalog)"></button>
+                        </span>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
+</app-nav>

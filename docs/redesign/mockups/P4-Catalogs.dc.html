@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Catalogs and Share on WhatsApp</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans','Rubik',sans-serif;color:#1b1c20;background:#f5f4f0}
+a{color:#2F4BF0;text-decoration:none}a:hover{color:#1f36c4}
+button,input,textarea{font-family:inherit}button{cursor:pointer}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; display: flex; gap: 16px; padding: 16px; background: #F5F4F0; overflow: hidden; font-family: 'Plus Jakarta Sans', 'Rubik', sans-serif; color: #1B1C20; box-sizing: border-box">
+<dc-import name="P4-Sidebar" active="catalogs" hint-size="256px,968px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 6px 4px">
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; width: 380px; height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #6B6E76; font-size: 14px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg>Search or jump to…<span dir="ltr" style="margin-inline-start: auto; font-size: 12px; font-weight: 700; border: 1px solid #E7E5DF; border-radius: 8px; padding: 2px 8px">Ctrl K</span></button>
+<span style="flex-grow: 1"></span>
+<button type="button" aria-label="Notifications" style="width: 44px; height: 44px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></button>
+</div>
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1">Catalogs</h1><p style="margin: 0; font-size: 15px; color: #6B6E76">4 catalogs · 2 active</p></div>
+<button type="button" style="height: 46px; padding: 0 20px; border: 0; border-radius: 23px; background: #2F4BF0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>New catalog</button>
+</div>
+<section aria-label="Catalogs" style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); padding: 6px 0">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+<div style="{{r.rowStyle}}">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="display: flex; flex-shrink: 0"><sc-for list="{{r.tiles}}" as="t" hint-placeholder-count="3"><span style="{{t}}"></span></sc-for></span>
+<span style="font-size: 15px; font-weight: 700; flex-grow: 1; min-width: 0">{{r.products}}</span>
+<span style="{{r.pillStyle}}">{{r.status}}</span>
+</div>
+<span style="font-size: 13px; color: #6B6E76; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.names}}</span>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+<span style="font-size: 13px; color: #44464C">{{r.valid}} · {{r.created}}</span>
+<span style="display: flex; align-items: center; gap: 4px">
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid #D9D6CE; border-radius: 17px; background: #FFFFFF; color: #1B1C20; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71 M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>Copy link</button>
+<button type="button" style="height: 34px; padding: 0 12px; border: 0; border-radius: 17px; background: #1B1C20; color: #FFFFFF; font-size: 13px; font-weight: 700">Share</button>
+<button type="button" aria-label="Edit catalog" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg></button>
+<button type="button" aria-label="More actions" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M19 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M5 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2"></path></svg></button>
+</span>
+</div>
+</div>
+</sc-for></span><span style="font-size: 15px; font-weight: 700">{{r.products}}</span></span>
+<span style="font-size: 13px; color: #6B6E76; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.names}}</span>
+</span>
+<span style="width: 140px; flex-shrink: 0; display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">{{r.valid}}</span><span style="font-size: 12px; color: #6B6E76">{{r.created}}</span></span>
+<span style="width: 84px; flex-shrink: 0"><span style="{{r.pillStyle}}">{{r.status}}</span></span>
+<span style="display: flex; align-items: center; gap: 4px; flex-shrink: 0">
+<button type="button" style="height: 34px; padding: 0 12px; border: 1px solid #D9D6CE; border-radius: 17px; background: #FFFFFF; color: #1B1C20; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71 M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>Copy link</button>
+<button type="button" style="height: 34px; padding: 0 12px; border: 0; border-radius: 17px; background: #1B1C20; color: #FFFFFF; font-size: 13px; font-weight: 700">Share</button>
+<button type="button" aria-label="Edit catalog" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg></button>
+<button type="button" aria-label="More actions" style="width: 36px; height: 36px; border: 0; border-radius: 10px; background: transparent; color: #6B6E76; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M19 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2 M5 11a1 1 0 1 0 0 2a1 1 0 1 0 0-2"></path></svg></button>
+</span>
+</div>
+</sc-for>
+</section>
+</main>
+
+<aside aria-label="Share catalog" style="width: 440px; flex-shrink: 0; background: #FFFFFF; border-radius: 24px; box-shadow: 0 20px 50px rgba(27,28,32,0.16); display: flex; flex-direction: column; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 16px 12px 22px; border-bottom: 1px solid #EFEEE9">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 20px; font-weight: 800; letter-spacing: -0.4px">Share catalog</span><span style="font-size: 13px; color: #6B6E76">3 products · valid until Mon, 5 Oct</span></div>
+<button type="button" aria-label="Close" style="width: 36px; height: 36px; border: 0; border-radius: 18px; background: #F1F0EC; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+</div>
+<div style="padding: 16px 22px; display: flex; flex-direction: column; gap: 14px; flex-grow: 1; min-height: 0">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; color: #44464C">Link</span>
+<div style="display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 6px 0 16px; border: 1px solid #D9D6CE; border-radius: 23px; background: #FAF9F6; box-sizing: border-box"><span dir="ltr" style="flex-grow: 1; min-width: 0; font-size: 14px; color: #44464C; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">easyfit.app/catalog/7b0cdb55-2b02-42b0</span><button type="button" style="height: 34px; padding: 0 14px; border: 0; border-radius: 17px; background: #1B1C20; color: #FFFFFF; font-size: 13px; font-weight: 700">Copy link</button></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="sh-msg" style="font-size: 13px; font-weight: 700; color: #44464C">Message</label>
+<textarea id="sh-msg" rows="3" style="border: 1px solid #D9D6CE; border-radius: 18px; padding: 10px 14px; font-size: 14px; resize: none; color: #1B1C20">This week at Power House TLV: Whey Protein Vanilla, BCAA Watermelon and Creatine. See prices and order at the front desk: {link}</textarea>
+<span style="display: flex; justify-content: space-between; font-size: 12px; color: #6B6E76">The link goes where {link} is.<button type="button" style="border: 0; background: transparent; padding: 0; font-size: 12px; font-weight: 700; color: #2F4BF0">Copy message</button></span>
+</div>
+<div style="font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #8A8D94; padding-top: 2px">Send on WhatsApp</div>
+<div style="display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 14px; border: 1px solid #E7E5DF; border-radius: 21px; color: #6B6E76; box-sizing: border-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg><label for="sh-search" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search members</label><input id="sh-search" type="search" placeholder="Search members" style="border: 0; outline: none; flex-grow: 1; min-width: 0; font-size: 14px; background: transparent"></div>
+<div style="display: flex; flex-direction: column; overflow: hidden">
+<sc-for list="{{members}}" as="m" hint-placeholder-count="6">
+<div style="display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F3F2EE"><span style="width: 34px; height: 34px; border-radius: 17px; background: {{m.bg}}; color: {{m.fg}}; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center">{{m.initials}}</span><span style="display: flex; flex-direction: column; flex-grow: 1"><span style="font-size: 14px; font-weight: 600">{{m.name}}</span><bdi dir="ltr" style="font-size: 12px; color: #6B6E76">{{m.phone}}</bdi></span><a href="https://wa.me/" style="{{m.btnStyle}}">{{m.action}}</a></div>
+</sc-for>
+</div>
+</div>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+var AV = [['#E8ECFE', '#2F4BF0'], ['#FDE8E4', '#B4351F'], ['#E4F5EC', '#17693F'], ['#FDF1D8', '#7A4F00'], ['#EFE7FD', '#6D3BD8'], ['#E2F3F7', '#0E6A80']];
+var TILE = ['#E8ECFE', '#E4F5EC', '#FDF1D8', '#FDE8E4', '#EFE7FD'];
+var ROWS = [
+  { n: 3, names: 'Whey Protein Vanilla, BCAA Watermelon, Creatine Monohydrate', valid: '7 days', created: 'created Mon, 28 Sep', status: 'Active', selected: true },
+  { n: 2, names: 'Easyfit Hoodie, Easyfit Training Tee', valid: '14 days', created: 'created Thu, 24 Sep', status: 'Active' },
+  { n: 5, names: 'Whey Protein Chocolate, Vegan Protein, BCAA Lemon Ice +2', valid: '7 days', created: 'created Sun, 13 Sep', status: 'Expired' },
+  { n: 1, names: 'Lifting Gloves', valid: '3 days', created: 'created Wed, 2 Sep', status: 'Expired' }
+];
+var MEMBERS = [['Dana Levi', 'DL', 1, '0541234567', true], ['Omar Zoabi', 'OZ', 4, '0526612309'], ['Reem Khoury', 'RK', 0, '0548810233'], ['Samer Hamdan', 'SH', 1, '0534343396'], ['Maya Awad', 'MA', 4, '0527427888'], ['Ahmad Friedman', 'AF', 5, '0542020894']];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: ROWS.map(function (r) {
+        var tiles = [];
+        for (var i = 0; i < Math.min(r.n, 3); i++) {
+          tiles.push('width: 28px; height: 28px; border-radius: 9px; border: 2px solid #FFFFFF; margin-inline-start: ' + (i ? '-8px' : '0') + '; background: ' + TILE[i]);
+        }
+        var active = r.status === 'Active';
+        return {
+          products: r.n + (r.n === 1 ? ' product' : ' products'), names: r.names, valid: 'Valid for ' + r.valid, created: r.created, status: r.status, tiles: tiles,
+          pillStyle: 'font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px; ' + (active ? 'background: #E3F4EA; color: #17693F' : 'background: #ECEBE6; color: #55585F'),
+          rowStyle: 'display: flex; flex-direction: column; gap: 6px; padding: 14px 20px; border-top: 1px solid #F3F2EE; ' + (r.selected ? 'background: #E2E6FD' : '') + (active ? '' : '; opacity: 0.7')
+        };
+      }),
+      members: MEMBERS.map(function (m) {
+        var sent = !!m[4];
+        return { name: m[0], initials: m[1], bg: AV[m[2]][0], fg: AV[m[2]][1], phone: m[3], action: sent ? 'Opened ✓' : 'WhatsApp',
+          btnStyle: 'height: 32px; padding: 0 12px; border-radius: 16px; font-size: 13px; font-weight: 700; display: flex; align-items: center; ' + (sent ? 'background: #E3F4EA; color: #17693F' : 'background: #1B1C20; color: #FFFFFF') };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

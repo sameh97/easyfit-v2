@@ -72,6 +72,12 @@ export class AuthenticationService {
     this.currentUserSubject.next(user);
   }
 
+  /** Keeps the token the server re-issued (e.g. after the user edited their profile). */
+  public replaceToken(token: string): void {
+    window.localStorage.setItem(AppConsts.KEY_USER_TOKEN, token);
+    this.currentUserSubject.next(this.extractUserFromToken(token));
+  }
+
   logout() {
     localStorage.removeItem(AppConsts.KEY_USER_TOKEN);
     this.currentUserSubject.next(null);

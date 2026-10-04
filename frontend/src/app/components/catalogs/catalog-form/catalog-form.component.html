@@ -1,0 +1,20 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="catalog-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-form-section [title]="'catalogs.form.productsSection' | translate: { count: productCount }">
+            <app-multi-select [control]="products" [options]="productOptions" [label]="'catalogs.form.products' | translate" [hideLabel]="true" [required]="true"
+                [placeholder]="'catalogs.form.productsPlaceholder' | translate" [messages]="{ required: 'validation.productsRequired' }"></app-multi-select>
+        </app-form-section>
+        <app-form-section [title]="'catalogs.form.linkSection' | translate">
+            <app-text-field [control]="durationDays" inputmode="numeric" [ltr]="true" [label]="'catalogs.form.days' | translate" [required]="true" name="durationDays"
+                [help]="'catalogs.form.daysHelp' | translate" [messages]="{ min: 'validation.daysRange', max: 'validation.daysRange' }"></app-text-field>
+        </app-form-section>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="catalog-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'catalogs.actions.create') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

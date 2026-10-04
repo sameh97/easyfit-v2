@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AppUtil } from 'src/app/common/app-util';
 import { AppConsts } from 'src/app/common/consts';
 import { CoreUtil } from 'src/app/common/core-util';
@@ -64,6 +64,22 @@ export class UsersService {
         })
       )
       .pipe(catchError(AppUtil.handleError));
+  };
+
+  /**
+   * Updates the signed-in user's own profile. The server re-issues the token (the user is in it)
+   * in the Authorization header; emits the saved user and that token (null if missing).
+   */
+  public updateOwnProfile = (user: User): Observable<{ user: User; token: string | null }> => {
+    return this.http
+      .put<User>(`${this.url}/user`, user, {
+        headers: CoreUtil.createAuthorizationHeader(),
+        observe: 'response',
+      })
+      .pipe(
+        map((response: HttpResponse<User>) => ({ user: response.body as User, token: response.headers.get('Authorization') })),
+        catchError(AppUtil.handleError)
+      );
   };
 
   public delete = (id: number): Observable<any> => {

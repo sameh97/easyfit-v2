@@ -11,10 +11,8 @@ import { Product } from "../models/product";
 import { ProductsRepository } from "../repositories/products-repository";
 import { NotFound } from "../exeptions/notFound-exeption";
 import { OutOfDateError } from "../exeptions/out-of-date-error";
-import { parse } from "node-html-parser";
-import { catalogTemplate } from "./easyfit-catalog-template";
-import { catalogNotFoundTemplate } from "../templates/catalog-not-found-template";
-import { catalogOutOfDateTemplate } from "../templates/catalog-out-of-date";
+import { Gym } from "../models/gym";
+import { CatalogLang, CatalogPageView, renderCatalogMessagePage, renderCatalogPage } from "./easyfit-catalog-template";
 const wbm = require("wbm");
 
 @injectable()
@@ -73,6 +71,25 @@ export class TempUrlService {
     return tempUrls;
   }
 
+  /** The public page's data: the catalog's products, its gym and when it expires. Same rules as getByUUID. */
+  public async getPublicCatalog(uuid: string): Promise<CatalogPageView> {
+    const products: Product[] = await this.getByUUID(uuid);
+    const tempUrl: TempUrl = await this.tempUrlRepository.getByUUID(uuid);
+    const gym: Gym | null = await Gym.findOne({ where: { id: tempUrl.gymId }, attributes: ["id", "name", "phone"] });
+    return {
+      gymName: gym ? gym.name : null,
+      gymPhone: gym ? gym.phone : null,
+      expiresAt: AppUtils.addDays(tempUrl.createdAt, tempUrl.durationDays),
+      products: products.map((product: Product) => ({
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        categoryID: product.categoryID,
+        imgUrl: product.imgUrl || null,
+      })),
+    };
+  }
+
   public async getByUUID(uuid: string): Promise<Product[]> {
     try {
       const tempUrl: TempUrl = await this.tempUrlRepository.getByUUID(uuid);
@@ -127,40 +144,16 @@ export class TempUrlService {
     return products;
   };
 
-  public buildCatalogOutOfDateHtml = async (): Promise<string> => {
-    const root = parse(catalogOutOfDateTemplate);
-
-    return root.toString();
+  public buildCatalogOutOfDateHtml = async (lang: CatalogLang): Promise<string> => {
+    return renderCatalogMessagePage("expired", lang);
   };
 
-  public buildCatalogNotFoundHtml = async (): Promise<string> => {
-    const root = parse(catalogNotFoundTemplate);
-
-    return root.toString();
+  public buildCatalogNotFoundHtml = async (lang: CatalogLang): Promise<string> => {
+    return renderCatalogMessagePage("notFound", lang);
   };
 
-  public buildCatalogHtml = async (products: Product[]): Promise<string> => {
-    const root = parse(catalogTemplate);
-    // append products to html div
-    for (let product of products) {
-      const pro = parse(`<div class="card">
-      <div class="item-flex-container">
-      <div><img style="width:100px;hight:100px" src="${product.imgUrl}"></div>
-      <div class="dd">
-      <h2>${product.name}</h2>
-      <p><b>price:</b> ${product.price}</p>
-      <p><b>description:</b> ${AppUtils.addBreakLinesToString(
-        product.description
-      )}</p>
-     
-      </div>
-      </div>
-      </div>
-        `);
-
-      root.querySelector("#easyfit-catalog-container").appendChild(pro);
-    }
-    return root.toString();
+  public buildCatalogHtml = async (view: CatalogPageView, lang: CatalogLang): Promise<string> => {
+    return renderCatalogPage(view, lang);
   };
 
   public update = async (tempUrl: TempUrl): Promise<TempUrl> => {

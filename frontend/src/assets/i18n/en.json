@@ -109,7 +109,8 @@
         "overview": "Overview",
         "people": "People",
         "equipment": "Equipment",
-        "shop": "Shop"
+        "shop": "Shop",
+        "admin": "Admin"
       },
       "items": {
         "dashboard": "Dashboard",
@@ -120,7 +121,9 @@
         "maintenance": "Maintenance",
         "products": "Products",
         "catalogs": "Catalogs",
-        "profile": "Profile & settings"
+        "profile": "Profile & settings",
+        "gyms": "Gyms",
+        "users": "Users"
       }
     },
     "user": {
@@ -217,7 +220,9 @@
         "newClass": "New class",
         "addTrainer": "Add trainer",
         "addProduct": "Add product",
-        "scheduleMaintenance": "Schedule maintenance"
+        "scheduleMaintenance": "Schedule maintenance",
+        "addGym": "Add gym",
+        "addUser": "Add user"
       },
       "membersError": "Could not load members.",
       "membersLoading": "Loading members…",
@@ -441,7 +446,18 @@
     "endInPast": "Pick an end after now.",
     "endBeforeStart": "The end must be after the start.",
     "frequencyMin": "Enter at least 1 day.",
-    "frequencyTooLong": "That's longer than the time from start to end."
+    "frequencyTooLong": "That's longer than the time from start to end.",
+    "productName": "Start with a letter (English or Hebrew); then letters, digits, spaces, _ or .",
+    "productCode": "Use English letters, digits and - only.",
+    "israeliId": "Enter a valid Israeli ID number.",
+    "quantityMin": "Enter a quantity above 0.",
+    "quantityStock": "Only {{max}} in stock.",
+    "productsRequired": "Add at least one product.",
+    "daysRange": "Enter a number of days from 1 to 100.",
+    "israeliPhone": "Enter a valid Israeli phone number, digits only (e.g. 0541234567).",
+    "gymName": "Start with a letter (English or Hebrew); then letters, digits, spaces, _ or .",
+    "password": "Use 8+ characters with upper and lower case letters, a digit and a symbol (#?!@$%^&*-).",
+    "passwordsMatch": "The passwords don't match."
   },
   "members": {
     "page": {
@@ -985,5 +1001,409 @@
       "deleteTitle": "Delete {{name}}?",
       "deleteBody": "This removes the job for good. It can't be undone."
     }
+  },
+  "products": {
+    "page": {
+      "title": "Products",
+      "count": {
+        "one": "{{count}} product",
+        "two": "{{count}} products",
+        "other": "{{count}} products"
+      },
+      "lowCount": {
+        "one": "{{count}} low on stock",
+        "two": "{{count}} low on stock",
+        "other": "{{count}} low on stock"
+      },
+      "tabsLabel": "Products and sales",
+      "tabProducts": "Products",
+      "tabSales": "Sales",
+      "categoryFilter": "Category: {{name}}",
+      "categoryAll": "All",
+      "categoryFilterLabel": "Filter by category",
+      "searchLabel": "Search products",
+      "searchPlaceholder": "Name or code"
+    },
+    "filters": {
+      "label": "Filter by stock",
+      "all": "All",
+      "low": "Low stock",
+      "out": "Out of stock"
+    },
+    "stock": {
+      "out": "Out of stock",
+      "inStock": {
+        "one": "{{count}} in stock",
+        "two": "{{count}} in stock",
+        "other": "{{count}} in stock"
+      },
+      "left": {
+        "one": "{{count}} left",
+        "two": "{{count}} left",
+        "other": "{{count}} left"
+      }
+    },
+    "actions": {
+      "add": "Add product"
+    },
+    "empty": {
+      "title": "No products yet",
+      "body": "Add the products you sell at the front desk.",
+      "noMatchTitle": "No products match",
+      "noMatchBody": "Try another search or filter."
+    },
+    "detail": {
+      "label": "Product details",
+      "eyebrow": "Product",
+      "price": "Price",
+      "code": "Code",
+      "description": "Description",
+      "recentSales": {
+        "one": "Recent sales · {{count}} this month",
+        "two": "Recent sales · {{count}} this month",
+        "other": "Recent sales · {{count}} this month"
+      },
+      "allSales": "All sales",
+      "noSales": "No sales of this product yet."
+    },
+    "form": {
+      "addTitle": "Add product",
+      "editTitle": "Edit product",
+      "details": "Product",
+      "name": "Name",
+      "namePlaceholder": "Whey Protein Vanilla",
+      "category": "Category",
+      "categoryPlaceholder": "Choose a category",
+      "description": "Description",
+      "pricing": "Code, price and stock",
+      "code": "Code",
+      "price": "Price (₪)",
+      "quantity": "Quantity in stock"
+    },
+    "toast": {
+      "added": "{{name}} was added",
+      "updated": "Changes to {{name}} saved",
+      "saveError": "Couldn't save {{name}}. Try again.",
+      "deleted": "{{name}} was deleted",
+      "deleteError": "Couldn't delete {{name}}. Try again.",
+      "notFound": "That product wasn't found. It may have been deleted."
+    },
+    "confirm": {
+      "deleteTitle": "Delete {{name}}?",
+      "deleteBody": "This removes the product for good. Its past sales stay in the Sales list."
+    }
+  },
+  "sales": {
+    "title": "Sales",
+    "error": "Couldn't load the sales.",
+    "revenue": "Revenue · {{period}}",
+    "allTime": "all time",
+    "itemsSold": "Items sold",
+    "salesCount": "Sales",
+    "rangeLabel": "Date range",
+    "ranges": {
+      "month": "This month",
+      "lastMonth": "Last month",
+      "year": "This year",
+      "all": "All"
+    },
+    "searchLabel": "Search sales",
+    "searchPlaceholder": "Customer, phone or product",
+    "table": {
+      "date": "Date",
+      "product": "Product",
+      "customer": "Customer",
+      "qty": "Qty",
+      "total": "Total"
+    },
+    "csv": {
+      "time": "Time"
+    },
+    "actions": {
+      "sell": "Sell",
+      "sellName": "Sell {{name}}",
+      "delete": "Delete sale",
+      "export": "Export",
+      "moreFor": "More actions for the sale of {{product}} to {{customer}}"
+    },
+    "empty": {
+      "title": "No sales yet",
+      "body": "Sales show up here when you sell a product.",
+      "noMatchTitle": "No sales match",
+      "noMatchBody": "Try another date range or search."
+    },
+    "form": {
+      "title": "Sell product",
+      "each": "each",
+      "quantity": "Quantity",
+      "less": "One less",
+      "more": "One more",
+      "upTo": "Up to {{count}}",
+      "customer": "Customer",
+      "member": "Find a member (optional)",
+      "memberPlaceholder": "Name or phone",
+      "memberHelp": "Fills in the name and phone below.",
+      "name": "Name",
+      "phone": "Phone",
+      "idNumber": "ID number",
+      "idHelp": "Israeli ID, 9 digits",
+      "sell": "Sell",
+      "sellFor": "Sell · {{total}}"
+    },
+    "toast": {
+      "sold": "Sold {{count}} × {{product}} · {{total}}",
+      "stockError": "There isn't enough in stock anymore. Check the quantity.",
+      "sellError": "Couldn't save the sale. Try again.",
+      "deleted": "Sale of {{product}} deleted",
+      "deleteError": "Couldn't delete the sale. Try again."
+    },
+    "confirm": {
+      "deleteTitle": "Delete the sale of {{product}} to {{customer}} ({{total}})?",
+      "deleteBody": {
+        "one": "{{count}} {{product}} will go back into stock.",
+        "two": "{{count}} {{product}} will go back into stock.",
+        "other": "{{count}} {{product}} will go back into stock."
+      }
+    }
+  },
+  "catalogs": {
+    "page": {
+      "title": "Catalogs",
+      "count": {
+        "one": "{{count}} catalog",
+        "two": "{{count}} catalogs",
+        "other": "{{count}} catalogs"
+      },
+      "active": {
+        "one": "{{count}} active",
+        "two": "{{count}} active",
+        "other": "{{count}} active"
+      }
+    },
+    "actions": {
+      "new": "New catalog",
+      "create": "Create catalog",
+      "edit": "Edit catalog",
+      "share": "Share",
+      "copyLink": "Copy link",
+      "copyMessage": "Copy message"
+    },
+    "status": {
+      "active": "Active",
+      "expired": "Expired"
+    },
+    "row": {
+      "products": {
+        "one": "{{count}} product",
+        "two": "{{count}} products",
+        "other": "{{count}} products"
+      },
+      "validFor": {
+        "one": "Valid for 1 day",
+        "two": "Valid for {{count}} days",
+        "other": "Valid for {{count}} days"
+      },
+      "until": "until {{date}}",
+      "expiredOn": "Expired {{date}}",
+      "created": "created {{date}}"
+    },
+    "empty": {
+      "title": "No catalogs yet",
+      "body": "A catalog is a link to some of your products that you can send to members."
+    },
+    "form": {
+      "addTitle": "New catalog",
+      "editTitle": "Edit catalog",
+      "productsSection": "Products · {{count}}",
+      "products": "Products",
+      "productsPlaceholder": "Add products by name or code",
+      "linkSection": "Link",
+      "days": "Valid for (days)",
+      "daysHelp": "How many days the link works, from 1 to 100."
+    },
+    "share": {
+      "title": "Share catalog",
+      "validUntil": "valid until {{date}}",
+      "link": "Link",
+      "message": "Message",
+      "messageHelp": "{link} is where the link goes.",
+      "defaultMessage": "New at the gym: {{products}}. See prices and order at the front desk: {link}",
+      "sendSection": "Send on WhatsApp",
+      "searchLabel": "Search members",
+      "searchPlaceholder": "Name or phone",
+      "noMembers": "No active members with a mobile number match.",
+      "sendTo": "Send on WhatsApp to {{name}}",
+      "whatsapp": "WhatsApp",
+      "opened": "Opened",
+      "showMore": "Show {{count}} more",
+      "done": "Done"
+    },
+    "toast": {
+      "added": "Catalog created",
+      "updated": "Catalog saved",
+      "saveError": "Couldn't save the catalog. Try again.",
+      "deleted": "Catalog deleted",
+      "deleteError": "Couldn't delete the catalog. Try again.",
+      "linkCopied": "Link copied",
+      "messageCopied": "Message copied",
+      "copyError": "Couldn't copy. Select the text and copy it instead."
+    },
+    "confirm": {
+      "deleteTitle": "Delete this catalog?",
+      "deleteBody": {
+        "one": "The link to its product stops working. It can't be undone.",
+        "two": "The link to its {{count}} products stops working. It can't be undone.",
+        "other": "The link to its {{count}} products stops working. It can't be undone."
+      }
+    }
+  },
+  "profile": {
+    "page": {
+      "title": "Profile and settings",
+      "subtitle": "Your details, your gym and how EasyFit looks for you"
+    },
+    "since": "since {{date}}",
+    "actions": {
+      "edit": "Edit profile"
+    },
+    "fields": {
+      "email": "Email (sign-in)"
+    },
+    "gym": {
+      "note": "Gym details are managed by the EasyFit admin."
+    },
+    "preferences": {
+      "title": "Preferences",
+      "languageHelp": "Hebrew switches the whole app to right-to-left."
+    },
+    "form": {
+      "title": "Edit profile",
+      "email": "Email",
+      "emailHelp": "This is the email you sign in with. It can't be changed here."
+    },
+    "toast": {
+      "updated": "Profile saved",
+      "saveError": "Couldn't save your profile. Try again."
+    }
+  },
+  "admin": {
+    "gyms": {
+      "page": {
+        "title": "Gyms",
+        "count": {
+          "one": "{{count}} gym",
+          "two": "{{count}} gyms",
+          "other": "{{count}} gyms"
+        },
+        "inGyms": {
+          "one": "in {{count}} gym",
+          "two": "in {{count}} gyms",
+          "other": "in {{count}} gyms"
+        },
+        "searchLabel": "Search gyms",
+        "searchPlaceholder": "Name, address or phone"
+      },
+      "table": {
+        "gym": "Gym",
+        "phone": "Phone",
+        "address": "Address",
+        "users": "Users"
+      },
+      "actions": {
+        "add": "Add gym",
+        "editName": "Edit {{name}}"
+      },
+      "empty": {
+        "title": "No gyms yet",
+        "body": "Add a gym, then add its users.",
+        "noMatchTitle": "No gyms match"
+      },
+      "form": {
+        "addTitle": "Add gym",
+        "editTitle": "Edit gym",
+        "section": "Gym",
+        "name": "Name",
+        "phone": "Phone",
+        "address": "Address"
+      },
+      "toast": {
+        "added": "{{name}} was added",
+        "updated": "Changes to {{name}} saved",
+        "saveError": "Couldn't save {{name}}. Try again.",
+        "deleted": "{{name}} was deleted",
+        "deleteError": "Couldn't delete {{name}}. It may still have users or data."
+      },
+      "confirm": {
+        "deleteTitle": "Delete {{name}}?",
+        "deleteBody": "This removes the gym for good. It can't be undone.",
+        "deleteBodyUsers": {
+          "one": "It still has {{count}} user, who won't be able to work in it. It can't be undone.",
+          "two": "It still has {{count}} users, who won't be able to work in it. It can't be undone.",
+          "other": "It still has {{count}} users, who won't be able to work in it. It can't be undone."
+        }
+      }
+    },
+    "users": {
+      "page": {
+        "title": "Users",
+        "subtitle": "{{users}} {{gyms}}",
+        "count": {
+          "one": "{{count}} user",
+          "two": "{{count}} users",
+          "other": "{{count}} users"
+        },
+        "gymFilter": "Gym: {{name}}",
+        "gymAll": "All",
+        "gymFilterLabel": "Filter by gym",
+        "searchLabel": "Search users",
+        "searchPlaceholder": "Name, email or phone"
+      },
+      "table": {
+        "user": "User",
+        "phone": "Phone",
+        "gym": "Gym",
+        "role": "Role"
+      },
+      "actions": {
+        "add": "Add user",
+        "editName": "Edit {{name}}"
+      },
+      "empty": {
+        "title": "No users yet",
+        "body": "Add the managers who run each gym.",
+        "noMatchTitle": "No users match"
+      },
+      "form": {
+        "addTitle": "Add user",
+        "editTitle": "Edit user",
+        "account": "Account",
+        "gym": "Gym",
+        "gymPlaceholder": "Choose a gym",
+        "email": "Email (sign-in)",
+        "password": "Password",
+        "passwordHelp": "8+ characters: upper and lower case letters, a digit and a symbol.",
+        "passwordKeep": "Leave empty to keep the current password.",
+        "confirmPassword": "Confirm password"
+      },
+      "toast": {
+        "added": "{{name}} was added",
+        "updated": "Changes to {{name}} saved",
+        "saveError": "Couldn't save {{name}}. The email may already be in use.",
+        "deleted": "{{name}} was deleted",
+        "deleteError": "Couldn't delete {{name}}. Try again."
+      },
+      "confirm": {
+        "deleteTitle": "Delete {{name}}?",
+        "deleteBody": "They won't be able to sign in anymore. It can't be undone."
+      }
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "bodyBefore": "There's nothing at ",
+    "bodyAfter": ". It may have moved, or the link has a typo.",
+    "backToDashboard": "Back to dashboard",
+    "backToGyms": "Back to gyms",
+    "signIn": "Go to sign in"
   }
 }

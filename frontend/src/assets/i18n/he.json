@@ -109,7 +109,8 @@
         "overview": "סקירה",
         "people": "אנשים",
         "equipment": "ציוד",
-        "shop": "חנות"
+        "shop": "חנות",
+        "admin": "ניהול"
       },
       "items": {
         "dashboard": "לוח בקרה",
@@ -120,7 +121,9 @@
         "maintenance": "תחזוקה",
         "products": "מוצרים",
         "catalogs": "קטלוגים",
-        "profile": "פרופיל והגדרות"
+        "profile": "פרופיל והגדרות",
+        "gyms": "חדרי כושר",
+        "users": "משתמשים"
       }
     },
     "user": {
@@ -217,7 +220,9 @@
         "newClass": "שיעור חדש",
         "addTrainer": "הוספת מאמן",
         "addProduct": "הוספת מוצר",
-        "scheduleMaintenance": "תזמון תחזוקה"
+        "scheduleMaintenance": "תזמון תחזוקה",
+        "addGym": "הוספת חדר כושר",
+        "addUser": "הוספת משתמש"
       },
       "membersError": "לא הצלחנו לטעון את המנויים.",
       "membersLoading": "טוען מנויים…",
@@ -441,7 +446,18 @@
     "endInPast": "יש לבחור מועד סיום מאוחר מעכשיו.",
     "endBeforeStart": "מועד הסיום חייב להיות אחרי מועד ההתחלה.",
     "frequencyMin": "יש להזין לפחות יום אחד.",
-    "frequencyTooLong": "זה ארוך מהזמן שבין ההתחלה לסיום."
+    "frequencyTooLong": "זה ארוך מהזמן שבין ההתחלה לסיום.",
+    "productName": "יש להתחיל באות (עברית או אנגלית); אחר כך אותיות, ספרות, רווחים, _ או .",
+    "productCode": "יש להשתמש רק באותיות באנגלית, ספרות ומקף (-).",
+    "israeliId": "יש להזין מספר תעודת זהות ישראלי תקין.",
+    "quantityMin": "יש להזין כמות גדולה מ-0.",
+    "quantityStock": "יש רק {{max}} במלאי.",
+    "productsRequired": "יש להוסיף לפחות מוצר אחד.",
+    "daysRange": "יש להזין מספר ימים בין 1 ל-100.",
+    "israeliPhone": "יש להזין מספר טלפון ישראלי תקין, ספרות בלבד (למשל 0541234567).",
+    "gymName": "יש להתחיל באות (עברית או אנגלית); אחר כך אותיות, ספרות, רווחים, _ או .",
+    "password": "יש להשתמש ב-8 תווים לפחות, עם אותיות גדולות וקטנות באנגלית, ספרה וסימן (#?!@$%^&*-).",
+    "passwordsMatch": "הסיסמאות לא תואמות."
   },
   "members": {
     "page": {
@@ -985,5 +1001,409 @@
       "deleteTitle": "למחוק את {{name}}?",
       "deleteBody": "המשימה תימחק לצמיתות. אי אפשר לבטל את הפעולה."
     }
+  },
+  "products": {
+    "page": {
+      "title": "מוצרים",
+      "count": {
+        "one": "מוצר אחד",
+        "two": "שני מוצרים",
+        "other": "{{count}} מוצרים"
+      },
+      "lowCount": {
+        "one": "אחד במלאי נמוך",
+        "two": "{{count}} במלאי נמוך",
+        "other": "{{count}} במלאי נמוך"
+      },
+      "tabsLabel": "מוצרים ומכירות",
+      "tabProducts": "מוצרים",
+      "tabSales": "מכירות",
+      "categoryFilter": "קטגוריה: {{name}}",
+      "categoryAll": "הכל",
+      "categoryFilterLabel": "סינון לפי קטגוריה",
+      "searchLabel": "חיפוש מוצרים",
+      "searchPlaceholder": "שם או קוד"
+    },
+    "filters": {
+      "label": "סינון לפי מלאי",
+      "all": "הכל",
+      "low": "מלאי נמוך",
+      "out": "אזל מהמלאי"
+    },
+    "stock": {
+      "out": "אזל מהמלאי",
+      "inStock": {
+        "one": "אחד במלאי",
+        "two": "{{count}} במלאי",
+        "other": "{{count}} במלאי"
+      },
+      "left": {
+        "one": "נשאר אחד",
+        "two": "נשארו {{count}}",
+        "other": "נשארו {{count}}"
+      }
+    },
+    "actions": {
+      "add": "הוספת מוצר"
+    },
+    "empty": {
+      "title": "עדיין אין מוצרים",
+      "body": "הוסיפו את המוצרים שאתם מוכרים בקבלה.",
+      "noMatchTitle": "אין מוצרים מתאימים",
+      "noMatchBody": "נסו חיפוש או סינון אחר."
+    },
+    "detail": {
+      "label": "פרטי המוצר",
+      "eyebrow": "מוצר",
+      "price": "מחיר",
+      "code": "קוד",
+      "description": "תיאור",
+      "recentSales": {
+        "one": "מכירות אחרונות · אחת החודש",
+        "two": "מכירות אחרונות · {{count}} החודש",
+        "other": "מכירות אחרונות · {{count}} החודש"
+      },
+      "allSales": "כל המכירות",
+      "noSales": "עדיין אין מכירות של המוצר הזה."
+    },
+    "form": {
+      "addTitle": "הוספת מוצר",
+      "editTitle": "עריכת מוצר",
+      "details": "מוצר",
+      "name": "שם",
+      "namePlaceholder": "Whey Protein Vanilla",
+      "category": "קטגוריה",
+      "categoryPlaceholder": "בחירת קטגוריה",
+      "description": "תיאור",
+      "pricing": "קוד, מחיר ומלאי",
+      "code": "קוד",
+      "price": "מחיר (₪)",
+      "quantity": "כמות במלאי"
+    },
+    "toast": {
+      "added": "{{name}} נוסף",
+      "updated": "השינויים ב{{name}} נשמרו",
+      "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+      "deleted": "{{name}} נמחק",
+      "deleteError": "לא הצלחנו למחוק את {{name}}. נסו שוב.",
+      "notFound": "המוצר לא נמצא. ייתכן שנמחק."
+    },
+    "confirm": {
+      "deleteTitle": "למחוק את {{name}}?",
+      "deleteBody": "המוצר יימחק לצמיתות. המכירות הקודמות שלו יישארו ברשימת המכירות."
+    }
+  },
+  "sales": {
+    "title": "מכירות",
+    "error": "לא הצלחנו לטעון את המכירות.",
+    "revenue": "הכנסות · {{period}}",
+    "allTime": "מאז ומעולם",
+    "itemsSold": "פריטים שנמכרו",
+    "salesCount": "מכירות",
+    "rangeLabel": "טווח תאריכים",
+    "ranges": {
+      "month": "החודש",
+      "lastMonth": "החודש שעבר",
+      "year": "השנה",
+      "all": "הכל"
+    },
+    "searchLabel": "חיפוש מכירות",
+    "searchPlaceholder": "לקוח, טלפון או מוצר",
+    "table": {
+      "date": "תאריך",
+      "product": "מוצר",
+      "customer": "לקוח",
+      "qty": "כמות",
+      "total": "סה״כ"
+    },
+    "csv": {
+      "time": "שעה"
+    },
+    "actions": {
+      "sell": "מכירה",
+      "sellName": "מכירת {{name}}",
+      "delete": "מחיקת המכירה",
+      "export": "ייצוא",
+      "moreFor": "פעולות נוספות למכירה של {{product}} ל{{customer}}"
+    },
+    "empty": {
+      "title": "עדיין אין מכירות",
+      "body": "מכירות יופיעו כאן כשתמכרו מוצר.",
+      "noMatchTitle": "אין מכירות מתאימות",
+      "noMatchBody": "נסו טווח תאריכים או חיפוש אחר."
+    },
+    "form": {
+      "title": "מכירת מוצר",
+      "each": "ליחידה",
+      "quantity": "כמות",
+      "less": "אחד פחות",
+      "more": "אחד יותר",
+      "upTo": "עד {{count}}",
+      "customer": "לקוח",
+      "member": "חיפוש מנוי (לא חובה)",
+      "memberPlaceholder": "שם או טלפון",
+      "memberHelp": "ממלא את השם והטלפון למטה.",
+      "name": "שם",
+      "phone": "טלפון",
+      "idNumber": "תעודת זהות",
+      "idHelp": "ת״ז ישראלית, 9 ספרות",
+      "sell": "מכירה",
+      "sellFor": "מכירה · {{total}}"
+    },
+    "toast": {
+      "sold": "נמכרו {{count}} × {{product}} · {{total}}",
+      "stockError": "אין מספיק במלאי. בדקו את הכמות.",
+      "sellError": "לא הצלחנו לשמור את המכירה. נסו שוב.",
+      "deleted": "המכירה של {{product}} נמחקה",
+      "deleteError": "לא הצלחנו למחוק את המכירה. נסו שוב."
+    },
+    "confirm": {
+      "deleteTitle": "למחוק את המכירה של {{product}} ל{{customer}} ({{total}})?",
+      "deleteBody": {
+        "one": "יחידה אחת של {{product}} תחזור למלאי.",
+        "two": "{{count}} יחידות של {{product}} יחזרו למלאי.",
+        "other": "{{count}} יחידות של {{product}} יחזרו למלאי."
+      }
+    }
+  },
+  "catalogs": {
+    "page": {
+      "title": "קטלוגים",
+      "count": {
+        "one": "קטלוג אחד",
+        "two": "שני קטלוגים",
+        "other": "{{count}} קטלוגים"
+      },
+      "active": {
+        "one": "אחד פעיל",
+        "two": "{{count}} פעילים",
+        "other": "{{count}} פעילים"
+      }
+    },
+    "actions": {
+      "new": "קטלוג חדש",
+      "create": "יצירת קטלוג",
+      "edit": "עריכת קטלוג",
+      "share": "שיתוף",
+      "copyLink": "העתקת קישור",
+      "copyMessage": "העתקת ההודעה"
+    },
+    "status": {
+      "active": "פעיל",
+      "expired": "פג תוקף"
+    },
+    "row": {
+      "products": {
+        "one": "מוצר אחד",
+        "two": "שני מוצרים",
+        "other": "{{count}} מוצרים"
+      },
+      "validFor": {
+        "one": "בתוקף ליום אחד",
+        "two": "בתוקף ליומיים",
+        "other": "בתוקף ל-{{count}} ימים"
+      },
+      "until": "עד {{date}}",
+      "expiredOn": "פג תוקף: {{date}}",
+      "created": "נוצר: {{date}}"
+    },
+    "empty": {
+      "title": "עדיין אין קטלוגים",
+      "body": "קטלוג הוא קישור לחלק מהמוצרים שלכם שאפשר לשלוח למנויים."
+    },
+    "form": {
+      "addTitle": "קטלוג חדש",
+      "editTitle": "עריכת קטלוג",
+      "productsSection": "מוצרים · {{count}}",
+      "products": "מוצרים",
+      "productsPlaceholder": "הוספת מוצרים לפי שם או קוד",
+      "linkSection": "קישור",
+      "days": "בתוקף ל- (ימים)",
+      "daysHelp": "כמה ימים הקישור עובד, מ-1 עד 100."
+    },
+    "share": {
+      "title": "שיתוף קטלוג",
+      "validUntil": "בתוקף עד {{date}}",
+      "link": "קישור",
+      "message": "הודעה",
+      "messageHelp": "{link} הוא המקום שבו יופיע הקישור.",
+      "defaultMessage": "חדש בחדר הכושר: {{products}}. מחירים והזמנות בקבלה: {link}",
+      "sendSection": "שליחה בוואטסאפ",
+      "searchLabel": "חיפוש מנויים",
+      "searchPlaceholder": "שם או טלפון",
+      "noMembers": "אין מנויים פעילים עם מספר נייד שמתאימים לחיפוש.",
+      "sendTo": "שליחה בוואטסאפ ל{{name}}",
+      "whatsapp": "וואטסאפ",
+      "opened": "נפתח",
+      "showMore": "הצגת {{count}} נוספים",
+      "done": "סיום"
+    },
+    "toast": {
+      "added": "הקטלוג נוצר",
+      "updated": "הקטלוג נשמר",
+      "saveError": "לא הצלחנו לשמור את הקטלוג. נסו שוב.",
+      "deleted": "הקטלוג נמחק",
+      "deleteError": "לא הצלחנו למחוק את הקטלוג. נסו שוב.",
+      "linkCopied": "הקישור הועתק",
+      "messageCopied": "ההודעה הועתקה",
+      "copyError": "לא הצלחנו להעתיק. סמנו את הטקסט והעתיקו אותו ידנית."
+    },
+    "confirm": {
+      "deleteTitle": "למחוק את הקטלוג?",
+      "deleteBody": {
+        "one": "הקישור למוצר שלו יפסיק לעבוד. אי אפשר לבטל את הפעולה.",
+        "two": "הקישור לשני המוצרים שלו יפסיק לעבוד. אי אפשר לבטל את הפעולה.",
+        "other": "הקישור ל-{{count}} המוצרים שלו יפסיק לעבוד. אי אפשר לבטל את הפעולה."
+      }
+    }
+  },
+  "profile": {
+    "page": {
+      "title": "פרופיל והגדרות",
+      "subtitle": "הפרטים שלכם, חדר הכושר ואיך EasyFit נראה אצלכם"
+    },
+    "since": "מאז {{date}}",
+    "actions": {
+      "edit": "עריכת פרופיל"
+    },
+    "fields": {
+      "email": "אימייל (כניסה)"
+    },
+    "gym": {
+      "note": "פרטי חדר הכושר מנוהלים על ידי מנהל המערכת של EasyFit."
+    },
+    "preferences": {
+      "title": "העדפות",
+      "languageHelp": "בעברית כל האפליקציה עוברת לכיוון מימין לשמאל."
+    },
+    "form": {
+      "title": "עריכת פרופיל",
+      "email": "אימייל",
+      "emailHelp": "זה האימייל שאיתו אתם נכנסים. אי אפשר לשנות אותו כאן."
+    },
+    "toast": {
+      "updated": "הפרופיל נשמר",
+      "saveError": "לא הצלחנו לשמור את הפרופיל. נסו שוב."
+    }
+  },
+  "admin": {
+    "gyms": {
+      "page": {
+        "title": "חדרי כושר",
+        "count": {
+          "one": "חדר כושר אחד",
+          "two": "שני חדרי כושר",
+          "other": "{{count}} חדרי כושר"
+        },
+        "inGyms": {
+          "one": "בחדר כושר אחד",
+          "two": "בשני חדרי כושר",
+          "other": "ב-{{count}} חדרי כושר"
+        },
+        "searchLabel": "חיפוש חדרי כושר",
+        "searchPlaceholder": "שם, כתובת או טלפון"
+      },
+      "table": {
+        "gym": "חדר כושר",
+        "phone": "טלפון",
+        "address": "כתובת",
+        "users": "משתמשים"
+      },
+      "actions": {
+        "add": "הוספת חדר כושר",
+        "editName": "עריכת {{name}}"
+      },
+      "empty": {
+        "title": "עדיין אין חדרי כושר",
+        "body": "הוסיפו חדר כושר, ואז את המשתמשים שלו.",
+        "noMatchTitle": "אין חדרי כושר מתאימים"
+      },
+      "form": {
+        "addTitle": "הוספת חדר כושר",
+        "editTitle": "עריכת חדר כושר",
+        "section": "חדר כושר",
+        "name": "שם",
+        "phone": "טלפון",
+        "address": "כתובת"
+      },
+      "toast": {
+        "added": "{{name}} נוסף",
+        "updated": "השינויים ב{{name}} נשמרו",
+        "saveError": "לא הצלחנו לשמור את {{name}}. נסו שוב.",
+        "deleted": "{{name}} נמחק",
+        "deleteError": "לא הצלחנו למחוק את {{name}}. ייתכן שעדיין יש בו משתמשים או נתונים."
+      },
+      "confirm": {
+        "deleteTitle": "למחוק את {{name}}?",
+        "deleteBody": "חדר הכושר יימחק לצמיתות. אי אפשר לבטל את הפעולה.",
+        "deleteBodyUsers": {
+          "one": "יש בו עדיין משתמש אחד, שלא יוכל לעבוד בו. אי אפשר לבטל את הפעולה.",
+          "two": "יש בו עדיין שני משתמשים, שלא יוכלו לעבוד בו. אי אפשר לבטל את הפעולה.",
+          "other": "יש בו עדיין {{count}} משתמשים, שלא יוכלו לעבוד בו. אי אפשר לבטל את הפעולה."
+        }
+      }
+    },
+    "users": {
+      "page": {
+        "title": "משתמשים",
+        "subtitle": "{{users}} {{gyms}}",
+        "count": {
+          "one": "משתמש אחד",
+          "two": "שני משתמשים",
+          "other": "{{count}} משתמשים"
+        },
+        "gymFilter": "חדר כושר: {{name}}",
+        "gymAll": "הכל",
+        "gymFilterLabel": "סינון לפי חדר כושר",
+        "searchLabel": "חיפוש משתמשים",
+        "searchPlaceholder": "שם, אימייל או טלפון"
+      },
+      "table": {
+        "user": "משתמש",
+        "phone": "טלפון",
+        "gym": "חדר כושר",
+        "role": "תפקיד"
+      },
+      "actions": {
+        "add": "הוספת משתמש",
+        "editName": "עריכת {{name}}"
+      },
+      "empty": {
+        "title": "עדיין אין משתמשים",
+        "body": "הוסיפו את המנהלים של כל חדר כושר.",
+        "noMatchTitle": "אין משתמשים מתאימים"
+      },
+      "form": {
+        "addTitle": "הוספת משתמש",
+        "editTitle": "עריכת משתמש",
+        "account": "חשבון",
+        "gym": "חדר כושר",
+        "gymPlaceholder": "בחירת חדר כושר",
+        "email": "אימייל (כניסה)",
+        "password": "סיסמה",
+        "passwordHelp": "8 תווים לפחות: אותיות גדולות וקטנות באנגלית, ספרה וסימן.",
+        "passwordKeep": "השאירו ריק כדי לשמור על הסיסמה הנוכחית.",
+        "confirmPassword": "אימות סיסמה"
+      },
+      "toast": {
+        "added": "{{name}} נוסף/ה",
+        "updated": "השינויים של {{name}} נשמרו",
+        "saveError": "לא הצלחנו לשמור את {{name}}. ייתכן שהאימייל כבר בשימוש.",
+        "deleted": "{{name}} נמחק/ה",
+        "deleteError": "לא הצלחנו למחוק את {{name}}. נסו שוב."
+      },
+      "confirm": {
+        "deleteTitle": "למחוק את {{name}}?",
+        "deleteBody": "המשתמש לא יוכל להיכנס יותר. אי אפשר לבטל את הפעולה."
+      }
+    }
+  },
+  "notFound": {
+    "title": "הדף לא נמצא",
+    "bodyBefore": "אין כלום בכתובת ",
+    "bodyAfter": ". ייתכן שהדף הועבר, או שיש טעות בקישור.",
+    "backToDashboard": "חזרה ללוח הבקרה",
+    "backToGyms": "חזרה לחדרי הכושר",
+    "signIn": "מעבר לכניסה"
   }
 }

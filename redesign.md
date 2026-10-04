@@ -99,13 +99,13 @@ The first redesign pass is done for **Login**, the **app shell** (sidebar and to
 | `/group-trainings` | `ClassesPageComponent` | gym user | `app-nav` | ✅ Phase 3 |
 | `/machines` | `MachinesPageComponent` | gym user | `app-nav` | ✅ Phase 3 |
 | `/scheduler` | `MaintenancePageComponent` (machine maintenance) | gym user | `app-nav` | ✅ Phase 3 |
-| `/products` | `ProductsPageComponent` (+ bills tab) | gym user | `app-nav` | ❌ |
-| `/catalog` | `CatalogPageComponent` | gym user | `app-nav` | ❌ |
-| `/profile` | `UserProfileComponent` | gym user | `app-nav` | ❌ |
-| `/admin` | `AdminPageComponent` (gyms) | admin | `app-admin-nav` | ❌ |
-| `/users` | `UsersPageComponent` | admin | `app-admin-nav` | ❌ |
-| – | `RegisterPageComponent` | declared but **not routed** (Bootstrap form) | – | ❌ |
-| *(no route)* | 404 page | – | – | missing (a TODO in the code) |
+| `/products` | `ProductsPageComponent` (+ Sales tab) | gym user | `app-nav` | ✅ Phase 4 |
+| `/catalog` | `CatalogsPageComponent` | gym user | `app-nav` | ✅ Phase 4 |
+| `/profile` | `ProfilePageComponent` | gym user | `app-nav` | ✅ Phase 4 |
+| `/admin` | `GymsPageComponent` | admin | `app-nav` (admin mode) | ✅ Phase 4 |
+| `/users` | `UsersPageComponent` | admin | `app-nav` (admin mode) | ✅ Phase 4 |
+| – | `RegisterPageComponent` | deleted in Phase 4 | – | – |
+| `**` | `NotFoundComponent` | everyone | `app-nav` when signed in | ✅ Phase 4 |
 
 After login, admins go to `/admin` and everyone else goes to `/home`. The admin routes only have `AuthGuard`, **with no admin role check** (another TODO).
 
@@ -242,7 +242,16 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Categories** are hard-coded in the frontend: 1 protein, 2 BCAA, 3 Glutamine, 4 Creatine, 5 Clothes.
 - **Data:** Product `id, name, description, code, quantity, price, imgUrl, categoryID, gymId`. Bill `id, coustomerID, coustomerName, coustomerPhone, productID, productName, quantity, totalCost, gymId, createdAt`. (`coustomer` is misspelled in the DB.)
 
-> ✏️ Your vision (shop-style product grid, low-stock warnings, POS-like quick sell, sales table with totals/filters…):
+> ✅ **Decision (Phase 4).** Mockups: `P4-Products.dc.html`, `P4-Sell.dc.html`, `P4-Sales.dc.html`.
+> - **Two tabs on one page:** **Products** (card grid, §7.4 "cards for small visual sets") and **Sales** (the bills, as a `DataTable`). The tab is in the URL (`?tab=sales`).
+> - **Product card:** photo (or an icon tile), name, category pill, price (₪), code (LTR), and stock: "N in stock" (neutral), "N left" (warning at ≤ 5, the dashboard's low-stock rule), "Out of stock" (danger at 0). A **Sell** button on the card.
+> - **Toolbar:** search by name or code, a category filter (the five hard-coded categories), and a segmented **All · Low stock · Out of stock**.
+> - **Product detail panel:** photo, description, price, code, stock, the product's recent sales (from the bills already loaded), **Sell**, **Edit**, and a more-menu with **Delete** (confirm).
+> - **Sell = a quick side panel (POS-like):** quantity stepper (max = stock), customer name, phone (LTR) and Israeli ID, and the total (`price × quantity`) shown live. An optional **member search** prefills name and phone from a member; the ID is still typed (members have no ID field). Validation stays exactly as the legacy sell dialog (quantity > 0 and a whole number, name letters only, Israeli mobile, Israeli ID checksum); the backend already refuses more than the stock.
+> - **Sales tab:** columns date, product, customer (name and phone), quantity, total; default newest first; a date-range filter (This month / Last month / This year / All) with the **total revenue and item count of the filtered rows** above the table; CSV export like Members. Search by customer name, phone or product.
+> - **Add/Edit product side panel:** photo, name, category (select), description, code (LTR), price (LTR), quantity. Rules unchanged.
+> - Deep links `/products?product=<id>`, `/products?tab=sales`. The dashboard's Low stock rows and ⌘K "Sell product" / "Add product" open the new panels.
+> - ✅ **Deleting a sale restores the stock:** a small backend change (same request and response) adds the sale's quantity back to the product; the confirm says "N will go back into stock". Today the stock is not restored.
 
 ### 5.8 Catalogs `/catalog`
 - **Today:** a `mat-card` with a `mat-table`. Columns: link, duration (days), creation time, send on WhatsApp, edit, delete.
@@ -250,12 +259,19 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 - **Send catalog dialog:** pick member phones (chips) and send the link over WhatsApp. This **doesn't work in Docker** because `wbm` needs Chromium and a QR login.
 - The **public catalog page** that members open is **server-rendered HTML** in `backend/services/easyfit-catalog-template.ts` and `backend/templates/` (not Angular). Include it in the redesign if you want.
 
-> ✏️ Your vision (and should the public catalog page be redesigned too? Replace WhatsApp sending with "copy link" / share sheet?):
+> ✅ **Decision (Phase 4).** Mockups: `P4-Catalogs.dc.html`, `P4-Public-Catalog.dc.html`. Catalog rows have three lines (products and status · product names · validity and actions) so they fit next to the Share panel.
+> - **A table** (few columns, few rows): products (avatar stack of product photos + "N products"), link (shortened, LTR) with **Copy link**, valid for N days, created, **status** (Active / Expired: `creationTime + durationDays` before now), actions (Share, Edit, more-menu with Delete).
+> - **Create/Edit side panel:** products as chips (the Phase 3 `MultiSelect`), "valid for" days (1–100, as today). After creating, the panel shows the link with **Copy**.
+> - ✅ **Share on WhatsApp replaces `wbm` sending** (which doesn't work in Docker: it needs Chromium and a QR login): a searchable list of members with phones, each row a `https://wa.me/972…?text=…` link that opens WhatsApp with the message and link filled in; plus **Copy link** and **Copy message**. No backend change; the old send endpoint stays but is unused.
+> - ✅ **The public catalog page is restyled** (server-rendered `easyfit-catalog-template.ts`) in the Studio look: light, Plus Jakarta Sans/Rubik, product cards, Hebrew RTL when the browser is Hebrew. The last step of Phase 4; same URL and data, template only.
 
 ### 5.9 Profile `/profile`
-- **Today:** a `mat-card` with first and last name, "member since", email and phone, plus an *Edit* button. It opens the **Edit profile dialog** (name, email, phone, birthday, address, password, image).
+- **Today:** a `mat-card` with first and last name, "member since", email and phone, plus an *Edit* button. It opens the **Edit profile dialog** (name, email (read-only), phone, birthday, address, image; there is no password field), and Phase 2 added the language switch.
 
-> ✏️ Your vision:
+> ✅ **Decision (Phase 4).** Mockup: `P4-Profile.dc.html`.
+> - **A settings-style page** with three cards: **Profile** (avatar, name, role, email, phone LTR, birthday, address, member since; **Edit** opens the side panel), **Gym** (name, phone, address, read-only; the admin edits gyms), **Preferences** (language English / עברית, the existing switch).
+> - **Edit profile side panel:** photo, first/last name, phone, birthday, address; email shown read-only with the note that it is the sign-in name. Rules unchanged (`validateName`, `validateIsraeliPhoneNumber`, `validateBirthDay`).
+> - ✅ **No password change in Phase 4.** A gym user can't change their password today; it needs a new endpoint that checks the current password. Noted for later.
 
 ### 5.10 Notifications (top-bar bell)
 - The redesigned bell badge shows the unread count, which updates live over socket.io.
@@ -269,13 +285,21 @@ Each page lists what it shows **today**, the data fields, the actions, and the d
 ### 5.11 Admin: Gyms `/admin`, Users `/users`
 - **Today:** the old `mat-sidenav` shell. **Gyms** is a `mat-table` (name, phone, address, edit, delete) with add/edit gym dialogs. **Users** is a `mat-table` (first name, last name, email, phone, birthday, address, gym name, edit, delete) with add/edit user dialogs (all user fields plus a gym multiselect).
 
-> ✏️ Your vision:
+> ✅ **Decision (Phase 4).** Mockup: `P4-Admin-Users.dc.html` (Gyms uses the same table pattern). In the admin area ⌘K offers only pages and actions (no members to search).
+> - **The same Studio shell with an admin nav** (answers the ✏️ in §4): the floating sidebar with *Gyms* and *Users*, no gym card, no ⌘K member search (the palette keeps Pages and Actions), no bell. `app-admin-nav` is deleted.
+> - **Gyms:** a `DataTable` (name, phone LTR, address, users count), add/edit side panel (name, phone, address; rules unchanged), delete with confirm.
+> - **Users:** a `DataTable` (avatar and name, email LTR, phone LTR, gym, role), add/edit side panel (name, email, password + confirm on add, phone, birthday, address, gym select, photo; rules unchanged, including `validatePassword`), delete with confirm.
+> - **Admin role guard** on `/admin` and `/users` (frontend `AdminGuard`, roleId 2); a gym user who opens them is sent to `/home`. The backend already checks `verifyAdmin` on most admin endpoints.
+> - Admin pages are translated like the rest (English/Hebrew).
 
 ### 5.12 Missing pages
 - A **404 page** (a TODO in the routes).
 - **Register**: `RegisterPageComponent` exists but isn't routed.
 
-> ✏️ Want a 404? Public landing/marketing page? Forgot password? Anything else new?
+> ✅ **Decision (Phase 4).** Mockup: `P4-404.dc.html`.
+> - **404:** a Studio page for unknown URLs (`**` route): "Page not found", a short line and a button back to the dashboard (or to login when signed out). Inside the shell when signed in.
+> - **Register:** `RegisterPageComponent` is unrouted and admins create users; *recommendation:* delete it.
+> - Landing page, forgot password: out of scope for Phase 4 (✏️ say if you want either).
 
 ---
 
@@ -652,4 +676,40 @@ Branch `redesign/phase-3` (from master, after Phase 2 is merged). Mockups: the `
 - Deep links: `/group-trainings?day=YYYY-MM-DD&class=<id>`, `/machines?machine=<id>` (also `?serial=<serial>`), `/scheduler?machine=<serial>` (prefills the search).
 - New kit pieces: `TimeField`, `MultiSelect`, `Switch`, `Tabs`, `WeekStrip`; the machine badge and job-type pill live in `components/machines/machine-badges.component.ts`.
 
-**Phase 4+:** written after Phase 3, following the order in §7.5.
+**Phase 4: Products and Sales, Catalogs, Profile, Admin, 404** (✅ approved with the P4 mockups)
+Branch `redesign/phase-4` (from `redesign/phase-1`, after Phase 3 is merged). Mockups: the `P4-*.dc.html` files. Decisions: §5.7, §5.8, §5.9, §5.11, §5.12. Same rules as Phases 2–3 (translations, logical utilities, purge list, `data: { studio: true }`, one commit per step, prod build and EN/HE browser test per step).
+
+1. **Products and Sales** (§5.7): product card grid with stock states, filters, detail panel, add/edit side panel; the quick **Sell** side panel (member prefill); the Sales tab (`DataTable`, date range, totals, CSV). Deep links `?product=`, `?tab=sales`. Dashboard Low stock rows and ⌘K "Sell product" / "Add product" open the new panels. Deleting a sale restores stock (backend, same request and response).
+2. **Catalogs** (§5.8): table with status and Copy link, create/edit side panel (products as chips), **Share on WhatsApp** (wa.me links) instead of `wbm` sending.
+3. **Profile** (§5.9): settings page (Profile, Gym, Preferences) and the edit side panel.
+4. **Admin** (§5.11): the Studio shell with admin nav; Gyms and Users tables with side-panel forms; `AdminGuard` on `/admin` and `/users`; delete `app-admin-nav`.
+5. **404 and clean-up** (§5.12): `**` route with the 404 page; delete `RegisterPageComponent` and the replaced Products, Catalog, Profile and Admin components and dialogs once nothing references them.
+6. **Public catalog page** (§5.8): restyle the server-rendered template in the Studio look, same URL and data.
+
+**Do not in Phase 4:**
+- Change the DB schema, or any endpoint's request or response (the sale-delete stock fix keeps both).
+- Remove Bootstrap, jQuery, Angular Material, `ng-multiselect-dropdown` or the date-picker libraries (Phase 5).
+- Change validation rules.
+- Build any AI backend.
+
+**Phase 4 is done when:**
+- `ng build --prod` passes with no new warnings and no `any`; the backend type-checks.
+- Products can be created, viewed, edited, sold and deleted, sales listed, filtered, exported and deleted; catalogs created, edited, shared and deleted; the profile edited; gyms and users created, edited and deleted by the admin; against the real backend, in both languages.
+- A gym user can't open admin pages; unknown URLs show the 404 page.
+- No legacy (Material/Bootstrap) page is left in the gym or admin area.
+- `npm run check:studio` passes; screenshots at 1440, 1024 and 390 in English and Hebrew broadly match the P4 mockups.
+- Keyboard: panels and dialogs trap focus, close on Esc and return focus; every icon button has a translated `aria-label`.
+- **Report:** the new Hebrew strings, for the owner to review.
+
+#### Done in Phase 4 (decisions made while building it)
+- **Deleting a sale restores stock** (`DELETE /api/delete-bill`, same request and response): the product's quantity goes back up by the sale's quantity, in the same transaction.
+- **Sell panel** limits the quantity to the stock (the backend refuses more too); picking a member fills in the name and phone; the ID number is always typed (members have no ID field).
+- **Low stock** uses the dashboard's rule: ≤ 5 "N left" (warning), ≤ 2 in danger, 0 "Out of stock".
+- **Catalog sharing** is `wa.me` links per active member with a mobile number (opens WhatsApp with the message and link), plus Copy link / Copy message. The `wbm` endpoint is unused. The create response has no products, so the form passes on the ones it sent.
+- **Public catalog page** (`backend/services/easyfit-catalog-template.ts`): Studio look, Hebrew when the browser's Accept-Language prefers it, gym name and phone, expiry date; every value HTML-escaped (the old page inserted product text raw). Expired and not-found links get matching pages. The old `templates/` files are deleted; `node-html-parser` is now unused (remove in Phase 5).
+- **Profile edit never sends the password** (an empty one keeps the stored one; the JWT carries the stored hash, which would have been re-hashed) and keeps the token the server re-issues, so the new name survives a reload. A gym user can't read gym phone/address (`GET /api/gym` is admin-only), so the Gym card shows name, members and trainers.
+- **Admin mode of the shell**: admin nav (Gyms, Users), no gym card, AI, bell or profile; ⌘K has pages and Add gym / Add user only. `AdminGuard` sends gym users to `/home`. Gym-only loads (dashboard summary, alerts, maintenance status) are skipped for the admin.
+- **User passwords**: required for a new user; on edit optional, empty keeps the current one (the user list has no passwords, so the legacy edit forced a new password on every edit).
+- Deleted: the legacy Products, Catalog, Profile, Admin (incl. `app-admin-nav`) and Register components, and the unused Phase 1 chart components. `NavigationHelperService` and `ConfirmationDialogComponent` are now unused; they go with Material in Phase 5.
+
+**Phase 5+:** clean-up (§7.5), then the AI backend.

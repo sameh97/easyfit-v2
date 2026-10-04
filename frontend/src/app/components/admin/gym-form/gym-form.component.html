@@ -1,0 +1,16 @@
+<app-panel-layout [title]="title">
+    <form panelBody id="gym-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <app-form-section [title]="'admin.gyms.form.section' | translate">
+            <app-text-field [control]="name" [label]="'admin.gyms.form.name' | translate" [required]="true" autocomplete="off" name="name" placeholder="Power House TLV"></app-text-field>
+            <app-text-field [control]="phone" type="tel" inputmode="tel" [ltr]="true" [label]="'admin.gyms.form.phone' | translate" [required]="true" placeholder="035551234" name="phone"></app-text-field>
+            <app-text-field [control]="address" [label]="'admin.gyms.form.address' | translate" [required]="true" name="address" [placeholder]="'members.form.addressPlaceholder' | translate"></app-text-field>
+        </app-form-section>
+    </form>
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="gym-form" [disabled]="saving">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ (isEdit ? 'common.actions.save' : 'admin.gyms.actions.add') | translate }}
+        </button>
+    </ng-container>
+</app-panel-layout>

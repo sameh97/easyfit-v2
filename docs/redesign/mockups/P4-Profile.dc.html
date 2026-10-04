@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Profile and settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Rubik:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;font-family:'Plus Jakarta Sans','Rubik',sans-serif;color:#1b1c20;background:#f5f4f0}
+a{color:#2F4BF0;text-decoration:none}a:hover{color:#1f36c4}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; display: flex; gap: 16px; padding: 16px; background: #F5F4F0; overflow: hidden; font-family: 'Plus Jakarta Sans', 'Rubik', sans-serif; color: #1B1C20; box-sizing: border-box">
+<dc-import name="P4-Sidebar" active="settings" hint-size="256px,968px"></dc-import>
+<main style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 6px 4px">
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" style="display: flex; align-items: center; gap: 10px; width: 380px; height: 44px; padding: 0 16px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #6B6E76; font-size: 14px"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 3a8 8 0 1 0 0 16a8 8 0 1 0 0-16 M21 21l-4.3-4.3"></path></svg>Search or jump to…<span dir="ltr" style="margin-inline-start: auto; font-size: 12px; font-weight: 700; border: 1px solid #E7E5DF; border-radius: 8px; padding: 2px 8px">Ctrl K</span></button>
+<span style="flex-grow: 1"></span>
+<button type="button" aria-label="Notifications" style="width: 44px; height: 44px; border: 1px solid #E7E5DF; border-radius: 22px; background: #FFFFFF; color: #1B1C20; display: flex; align-items: center; justify-content: center"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9 M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1">Profile and settings</h1><p style="margin: 0; font-size: 15px; color: #6B6E76">Your details, your gym and how EasyFit looks for you</p></div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start">
+<section aria-labelledby="pf-title" style="grid-column: span 2; background: #FFFFFF; border-radius: 20px; padding: 24px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; align-items: center; gap: 16px">
+<span style="width: 72px; height: 72px; border-radius: 36px; background: #1B1C20; color: #FFFFFF; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center">DC</span>
+<div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1"><h2 id="pf-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px">Dana Cohen</h2><span style="font-size: 14px; color: #6B6E76">Owner · Power House TLV · since Mar 2024</span></div>
+<button type="button" style="height: 44px; padding: 0 18px; border: 1px solid #D9D6CE; border-radius: 22px; background: #FFFFFF; color: #1B1C20; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>Edit profile</button>
+</div>
+<dl style="margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-bottom: 1px solid #F3F2EE"><dt style="font-size: 13px; color: #6B6E76">Email (sign-in)</dt><dd style="margin: 0; font-size: 15px; font-weight: 600"><bdi dir="ltr">dana.cohen@powerhouse.co.il</bdi></dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-bottom: 1px solid #F3F2EE"><dt style="font-size: 13px; color: #6B6E76">Phone</dt><dd style="margin: 0; font-size: 15px; font-weight: 600"><bdi dir="ltr">0541234567</bdi></dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-bottom: 1px solid #F3F2EE"><dt style="font-size: 13px; color: #6B6E76">Birthday</dt><dd style="margin: 0; font-size: 15px; font-weight: 600">14 Mar 1988</dd></div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-bottom: 1px solid #F3F2EE"><dt style="font-size: 13px; color: #6B6E76">Address</dt><dd style="margin: 0; font-size: 15px; font-weight: 600">Dizengoff 120, Tel Aviv</dd></div>
+</dl>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<section aria-labelledby="gym-title" style="background: #FFFFFF; border-radius: 20px; padding: 22px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; gap: 12px"><span style="width: 44px; height: 44px; border-radius: 12px; background: #1B1C20; color: #FFFFFF; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center">PH</span><span style="display: flex; flex-direction: column"><h2 id="gym-title" style="margin: 0; font-size: 17px; font-weight: 800">Power House TLV</h2><span style="font-size: 13px; color: #6B6E76">486 members · 6 trainers</span></span></div>
+<dl style="margin: 0; display: flex; flex-direction: column">
+<div style="display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #F3F2EE"><dt style="width: 70px; font-size: 13px; color: #6B6E76">Phone</dt><dd style="margin: 0; font-size: 14px; font-weight: 600"><bdi dir="ltr">035551234</bdi></dd></div>
+<div style="display: flex; gap: 12px; padding: 8px 0"><dt style="width: 70px; font-size: 13px; color: #6B6E76">Address</dt><dd style="margin: 0; font-size: 14px; font-weight: 600">Ibn Gabirol 40, Tel Aviv</dd></div>
+</dl>
+<p style="margin: 0; font-size: 12px; color: #6B6E76">Gym details are managed by the EasyFit admin.</p>
+</section>
+<section aria-labelledby="pref-title" style="background: #FFFFFF; border-radius: 20px; padding: 22px; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05); display: flex; flex-direction: column; gap: 12px">
+<h2 id="pref-title" style="margin: 0; font-size: 17px; font-weight: 800">Preferences</h2>
+<div style="display: flex; flex-direction: column; gap: 8px"><span id="lang-label" style="font-size: 13px; font-weight: 700; color: #44464C">Language</span>
+<div role="radiogroup" aria-labelledby="lang-label" style="display: inline-flex; align-self: flex-start; gap: 2px; padding: 4px; background: #F1F0EC; border-radius: 999px">
+<button type="button" role="radio" aria-checked="true" style="border: 0; border-radius: 999px; padding: 9px 20px; font-size: 14px; font-weight: 700; background: #FFFFFF; color: #1B1C20; box-shadow: 0 1px 2px rgba(27,28,32,0.05), 0 6px 20px rgba(27,28,32,0.05)">English</button>
+<button type="button" role="radio" aria-checked="false" lang="he" style="border: 0; border-radius: 999px; padding: 9px 20px; font-size: 14px; font-weight: 600; background: transparent; color: #55585F">עברית</button>
+</div>
+<span style="font-size: 12px; color: #6B6E76">Hebrew switches the whole app to right-to-left.</span></div>
+</section>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

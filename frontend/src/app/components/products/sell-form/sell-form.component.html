@@ -1,0 +1,57 @@
+<app-panel-layout [title]="'sales.form.title' | translate">
+    <form panelBody id="sell-form" [formGroup]="form" (ngSubmit)="save()" novalidate class="flex flex-col gap-5">
+        <div class="flex items-center gap-3 rounded-2xl bg-surface-subtle p-3">
+            <span class="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-tile bg-accent-soft text-accent">
+                <img *ngIf="photo; else bag" [src]="photo" alt="" class="h-full w-full object-cover" />
+                <ng-template #bag><app-icon name="shopping-bag" [size]="20"></app-icon></ng-template>
+            </span>
+            <span class="flex min-w-0 flex-col">
+                <span class="truncate text-[15px] font-bold text-ink" dir="auto">{{ product.name }}</span>
+                <span class="text-[13px] text-ink-3"><bdi dir="ltr">{{ price }}</bdi> {{ 'sales.form.each' | translate }} · {{ stockText }}</span>
+            </span>
+        </div>
+
+        <app-form-section [title]="'sales.form.quantity' | translate">
+            <div class="flex flex-col gap-1.5">
+                <div class="flex items-center gap-3.5">
+                    <div role="group" [attr.aria-label]="'sales.form.quantity' | translate" class="flex h-[46px] items-center gap-1 rounded-full border border-solid px-1"
+                        [ngClass]="quantity.invalid && quantity.touched ? 'border-danger ring-[3px] ring-danger-ring' : 'border-line-strong'">
+                        <button type="button" appIconButton variant="soft" icon="minus" [label]="'sales.form.less' | translate" (click)="step(-1)"></button>
+                        <label for="sell-qty" class="sr-only">{{ 'sales.form.quantity' | translate }}</label>
+                        <input id="sell-qty" type="text" inputmode="numeric" dir="ltr" [formControl]="quantity"
+                            [attr.aria-invalid]="quantity.invalid && quantity.touched ? 'true' : null" aria-describedby="sell-qty-help"
+                            class="w-12 border-0 bg-transparent p-0 text-center text-[17px] font-extrabold text-ink outline-none" />
+                        <button type="button" appIconButton variant="soft" icon="plus" [label]="'sales.form.more' | translate" (click)="step(1)"></button>
+                    </div>
+                    <span id="sell-qty-help" class="text-[13px] text-ink-3">{{ 'sales.form.upTo' | translate: { count: stock } }}</span>
+                </div>
+                <app-field-error *ngIf="quantity.invalid && quantity.touched" [control]="quantity"
+                    [messages]="{ nonZero: 'validation.quantityMin', quantityNotValid: 'validation.quantityStock' }"></app-field-error>
+            </div>
+        </app-form-section>
+
+        <app-form-section [title]="'sales.form.customer' | translate">
+            <app-multi-select [control]="member" [options]="memberOptions" [single]="true" [label]="'sales.form.member' | translate"
+                [placeholder]="'sales.form.memberPlaceholder' | translate" [help]="'sales.form.memberHelp' | translate"></app-multi-select>
+            <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <app-text-field [control]="coustomerName" [label]="'sales.form.name' | translate" [required]="true" autocomplete="off" name="coustomerName"></app-text-field>
+                <app-text-field [control]="coustomerPhone" type="tel" inputmode="tel" [ltr]="true" [label]="'sales.form.phone' | translate" [required]="true" placeholder="05X-XXXXXXX" name="coustomerPhone"></app-text-field>
+            </div>
+            <app-text-field [control]="coustomerID" inputmode="numeric" [ltr]="true" [label]="'sales.form.idNumber' | translate" [required]="true" autocomplete="off" name="coustomerID"
+                [help]="'sales.form.idHelp' | translate"></app-text-field>
+        </app-form-section>
+
+        <div class="flex items-center justify-between rounded-2xl bg-accent-soft px-4 py-3.5" aria-live="polite">
+            <span class="text-sm font-semibold text-accent"><bdi dir="ltr">{{ totalDetail }}</bdi></span>
+            <span class="text-2xl font-extrabold text-ink"><bdi dir="ltr">{{ total || '—' }}</bdi></span>
+        </div>
+    </form>
+
+    <ng-container panelFooter>
+        <button appButton variant="secondary" type="button" (click)="ref.requestClose()">{{ 'common.actions.cancel' | translate }}</button>
+        <button appButton variant="primary" type="submit" form="sell-form" [disabled]="saving || stock <= 0">
+            <span *ngIf="saving" class="h-4 w-4 animate-spin rounded-full border-2 border-solid border-white border-t-transparent" aria-hidden="true"></span>
+            {{ total ? ('sales.form.sellFor' | translate: { total: total }) : ('sales.form.sell' | translate) }}
+        </button>
+    </ng-container>
+</app-panel-layout>

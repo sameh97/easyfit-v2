@@ -15,7 +15,8 @@ import { MenuService } from 'src/app/shared/ui/menu/menu.service';
 import { PillStatus } from 'src/app/shared/ui/status-pill/status-pill.component';
 import { ToastService } from 'src/app/shared/ui/overlay/toast.service';
 import { MemberActionsService } from '../member-actions.service';
-import { downloadCsv, membersCsv } from '../members-csv';
+import { downloadCsv } from 'src/app/shared/util/csv';
+import { membersCsv } from '../members-csv';
 import {
   EndNote,
   endNote,

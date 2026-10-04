@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ComponentType } from '@angular/cdk/portal';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { NavigationHelperService } from '../shared/services/navigation-helper.service';
 import { MemberFormComponent, MemberFormData } from '../components/members-components/member-form/member-form.component';
 import { TrainerFormComponent, TrainerFormData } from '../components/trainers-components/trainer-form/trainer-form.component';
 import { Trainer } from '../model/trainer';
@@ -12,35 +10,36 @@ import { MachineFormComponent, MachineFormData } from '../components/machines/ma
 import { Machine } from '../model/machine';
 import { JobFormComponent, JobFormData } from '../components/maintenance/job-form/job-form.component';
 import { ScheduledJob } from '../model/scheduled-job';
-import { AddProductComponent } from '../components/products-components/add-product/add-product.component';
-import { SellProductComponent } from '../components/products-components/sell-product/sell-product.component';
+import { ProductFormComponent, ProductFormData } from '../components/products/product-form/product-form.component';
+import { SellFormComponent, SellFormData } from '../components/products/sell-form/sell-form.component';
+import { Bill } from '../model/bill';
+import { CatalogFormComponent, CatalogFormData } from '../components/catalogs/catalog-form/catalog-form.component';
+import { CatalogShareComponent, CatalogShareData } from '../components/catalogs/catalog-share/catalog-share.component';
+import { Catalog } from '../model/catalog';
+import { ProfileFormComponent, ProfileFormData } from '../components/profile/profile-form/profile-form.component';
+import { User } from '../model/user';
+import { GymFormComponent, GymFormData } from '../components/admin/gym-form/gym-form.component';
+import { UserFormComponent, UserFormData } from '../components/admin/user-form/user-form.component';
+import { Gym } from '../model/gym';
 import { Member } from '../model/member';
 import { Product } from '../model/product';
 import { DashboardService } from './dashboard-service/dashboard.service';
 import { SidePanelService } from '../shared/ui/overlay/side-panel.service';
 import { LanguageService } from './language.service';
 
-/** Actions that open an existing create dialog without extra input. */
-export type CreateAction = 'add-member' | 'add-trainer' | 'new-class' | 'add-product' | 'schedule-maintenance';
-
-/** Legacy Material create dialogs, for pages not redesigned yet (Products, Phase 4). */
-const CREATE_DIALOGS: Record<'add-product', ComponentType<object>> = {
-  'add-product': AddProductComponent,
-};
+/** Actions that open a create panel without extra input. */
+export type CreateAction = 'add-member' | 'add-trainer' | 'new-class' | 'add-product' | 'schedule-maintenance' | 'add-gym' | 'add-user';
 
 /**
- * Opens the create/edit UIs from the shell, palette and dashboard: Studio side panels for
- * members, trainers, classes, machines and maintenance jobs, the existing (Material) dialogs
- * for pages not redesigned yet,
- * with the same options the owning pages use. Each method emits once when the dialog closes,
- * after which the dashboard summary (KPIs, gym card counts) is refreshed.
+ * Opens the Studio create/edit side panels from the shell, palette, dashboard and pages
+ * (members, trainers, classes, machines, maintenance jobs, products, sales). Each method emits
+ * once when the panel closes: the saved record, or undefined when cancelled.
  */
 @Injectable({
   providedIn: 'root',
 })
 export class ShellActionsService {
   constructor(
-    private navigationService: NavigationHelperService,
     private dashboardService: DashboardService,
     private sidePanel: SidePanelService,
     private language: LanguageService
@@ -59,7 +58,13 @@ export class ShellActionsService {
     if (action === 'schedule-maintenance') {
       return this.scheduleMaintenance();
     }
-    return this.afterClose(this.navigationService.openDialog(CREATE_DIALOGS[action], null, null, true));
+    if (action === 'add-gym') {
+      return this.addGym();
+    }
+    if (action === 'add-user') {
+      return this.addUser();
+    }
+    return this.addProduct();
   }
 
   /** Studio "Add member" side panel. Emits the new member, or undefined when cancelled. */
@@ -146,11 +151,93 @@ export class ShellActionsService {
     }).afterClosed$;
   }
 
-  sellProduct(product: Product): Observable<unknown> {
-    return this.afterClose(this.navigationService.openDialog(SellProductComponent, null, product, true));
+  /** Studio "Add product" side panel. Emits the new product, or undefined when cancelled. */
+  addProduct(): Observable<Product | undefined> {
+    return this.openProductForm(null);
   }
 
-  private afterClose(closed: Observable<unknown>): Observable<unknown> {
-    return closed.pipe(tap(() => this.dashboardService.load().subscribe({ error: () => undefined })));
+  editProduct(product: Product): Observable<Product | undefined> {
+    return this.openProductForm(product);
+  }
+
+  private openProductForm(product: Product | null): Observable<Product | undefined> {
+    return this.sidePanel
+      .open<ProductFormComponent, ProductFormData, Product>(ProductFormComponent, {
+        data: { product },
+        ariaLabel: this.language.t(product ? 'products.form.editTitle' : 'products.form.addTitle'),
+      })
+      .afterClosed$.pipe(tap(() => this.dashboardService.load().subscribe({ error: () => undefined })));
+  }
+
+  /** Studio "Sell product" side panel. Emits the new sale, or undefined when cancelled. */
+  sellProduct(product: Product): Observable<Bill | undefined> {
+    return this.sidePanel.open<SellFormComponent, SellFormData, Bill>(SellFormComponent, {
+      data: { product },
+      ariaLabel: this.language.t('sales.form.title'),
+    }).afterClosed$;
+  }
+
+  /** Studio "New catalog" side panel. Emits the new catalog, or undefined when cancelled. */
+  addCatalog(): Observable<Catalog | undefined> {
+    return this.openCatalogForm(null);
+  }
+
+  editCatalog(catalog: Catalog): Observable<Catalog | undefined> {
+    return this.openCatalogForm(catalog);
+  }
+
+  private openCatalogForm(catalog: Catalog | null): Observable<Catalog | undefined> {
+    return this.sidePanel.open<CatalogFormComponent, CatalogFormData, Catalog>(CatalogFormComponent, {
+      data: { catalog },
+      ariaLabel: this.language.t(catalog ? 'catalogs.form.editTitle' : 'catalogs.form.addTitle'),
+    }).afterClosed$;
+  }
+
+  /** Share catalog panel: link, message and WhatsApp per member. */
+  shareCatalog(catalog: Catalog): Observable<void | undefined> {
+    return this.sidePanel.open<CatalogShareComponent, CatalogShareData, void>(CatalogShareComponent, {
+      data: { catalog },
+      ariaLabel: this.language.t('catalogs.share.title'),
+    }).afterClosed$;
+  }
+
+  /** Studio "Edit profile" side panel for the signed-in user. */
+  editProfile(user: User): Observable<User | undefined> {
+    return this.sidePanel.open<ProfileFormComponent, ProfileFormData, User>(ProfileFormComponent, {
+      data: { user },
+      ariaLabel: this.language.t('profile.form.title'),
+    }).afterClosed$;
+  }
+
+  /** Admin: "Add gym" side panel. */
+  addGym(): Observable<Gym | undefined> {
+    return this.openGymForm(null);
+  }
+
+  editGym(gym: Gym): Observable<Gym | undefined> {
+    return this.openGymForm(gym);
+  }
+
+  private openGymForm(gym: Gym | null): Observable<Gym | undefined> {
+    return this.sidePanel.open<GymFormComponent, GymFormData, Gym>(GymFormComponent, {
+      data: { gym },
+      ariaLabel: this.language.t(gym ? 'admin.gyms.form.editTitle' : 'admin.gyms.form.addTitle'),
+    }).afterClosed$;
+  }
+
+  /** Admin: "Add user" side panel. */
+  addUser(): Observable<User | undefined> {
+    return this.openUserForm(null);
+  }
+
+  editUser(user: User): Observable<User | undefined> {
+    return this.openUserForm(user);
+  }
+
+  private openUserForm(user: User | null): Observable<User | undefined> {
+    return this.sidePanel.open<UserFormComponent, UserFormData, User>(UserFormComponent, {
+      data: { user },
+      ariaLabel: this.language.t(user ? 'admin.users.form.editTitle' : 'admin.users.form.addTitle'),
+    }).afterClosed$;
   }
 }
