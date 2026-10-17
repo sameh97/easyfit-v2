@@ -11,16 +11,13 @@ import {
 import { Injectable, OnDestroy } from '@angular/core';
 import { User } from './../model/user';
 import { BehaviorSubject, Observable, throwError, of, Subject } from 'rxjs';
-import * as Stomp from 'stompjs';
 
 import { SocketClientState, SocketTopics } from './../shared/util/socket-util';
 import { AppConsts } from './../common/consts';
 import { UserNotificationsService } from './user-notifications.service';
 import { AppNotificationMessage } from '../model/app-notification-message';
 
-// import * as socketIO from 'socket.io-client';
-const socketIO = require('socket.io-client');
-import { R3ExpressionFactoryMetadata } from '@angular/compiler/src/render3/r3_factory';
+import { io, Socket } from 'socket.io-client';
 import { AuthenticationService } from './authentication.service';
 
 @Injectable({
@@ -28,8 +25,7 @@ import { AuthenticationService } from './authentication.service';
 })
 export class WebSocketService implements OnDestroy {
   private static readonly URL = `${AppConsts.BASE_URL}`;
-  private stompClient: Stomp.Client;
-  private socket;
+  private socket: Socket;
 
   private sockectState: BehaviorSubject<SocketClientState>;
   private readonly RECONNECT_DELAY_SECS = 5;
@@ -100,7 +96,7 @@ export class WebSocketService implements OnDestroy {
   }
 
   private initSocketConnection(url: string): void {
-    this.socket = new socketIO(url);
+    this.socket = io(url);
 
     this.socket.on('connect', () => {
       this.socketConnectedCallback();
@@ -160,7 +156,7 @@ export class WebSocketService implements OnDestroy {
   ngOnDestroy(): void {
     this.connectToSocket()
       .pipe(first())
-      .subscribe((client: Stomp.Client) => client.disconnect(null));
+      .subscribe((socket: Socket) => socket.disconnect());
   }
 
   private handleNotificationFromTopic(message: any, topic: string): void {
@@ -185,7 +181,7 @@ export class WebSocketService implements OnDestroy {
 
   private socketFailedToConnectCallback(error: string): void {
     this.sockectState.next(SocketClientState.ERROR);
-    console.error('Unable to connect to STOMP endpoint, error:', error);
+    console.error('Unable to connect to the socket.io endpoint, error:', error);
     console.error(
       `Trying to connect again in ${this.RECONNECT_DELAY_SECS} seconds`
     );
