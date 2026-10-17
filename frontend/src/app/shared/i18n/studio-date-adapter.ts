@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 import { MatDateFormats, NativeDateAdapter } from '@angular/material/core';
 import { Subscription } from 'rxjs';
 import { Lang, LanguageService } from 'src/app/services/language.service';
@@ -22,8 +21,8 @@ export class StudioDateAdapter extends NativeDateAdapter implements OnDestroy {
   private lang: Lang;
   private readonly subscription: Subscription;
 
-  constructor(language: LanguageService, platform: Platform) {
-    super(language.current, platform);
+  constructor(language: LanguageService) {
+    super(language.current);
     this.lang = language.current;
     this.subscription = language.lang$.subscribe((lang: Lang) => {
       this.lang = lang;

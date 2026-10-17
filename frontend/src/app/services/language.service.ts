@@ -66,7 +66,7 @@ export class LanguageService {
 
   /** Runs before the first render (APP_INITIALIZER) so nothing flashes in the wrong language. */
   init(): Promise<void> {
-    this.translate.setDefaultLang(DEFAULT_LANG);
+    this.translate.setFallbackLang(DEFAULT_LANG);
     return this.apply(this.current);
   }
 

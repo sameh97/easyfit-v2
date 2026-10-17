@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LanguageService } from './services/language.service';
 import { I18nModule } from './shared/i18n/i18n.module';
 import { AppComponent } from './app.component';
@@ -52,10 +52,6 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { TrainersPageComponent } from './components/trainers-components/trainers/trainers.component';
 import { TrainerDetailComponent } from './components/trainers-components/trainer-detail/trainer-detail.component';
 import { TrainerFormComponent } from './components/trainers-components/trainer-form/trainer-form.component';
-
-export function createTranslateLoader(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 /** Load the saved language before the first render, so nothing flashes in the wrong language. */
 export function initLanguage(language: LanguageService): () => Promise<void> {
@@ -130,8 +126,8 @@ const routes: Routes = [
     UiModule,
     I18nModule,
     TranslateModule.forRoot({
-      defaultLanguage: 'en',
-      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
+      fallbackLang: 'en',
+      loader: provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
     }),
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,

@@ -20,6 +20,6 @@ FROM nginx:1.27-alpine
 ENV BACKEND_UPSTREAM=http://backend:3000
 
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
-COPY --from=build /app/dist/easyfit /usr/share/nginx/html
+COPY --from=build /app/dist/easyfit/browser /usr/share/nginx/html
 
 EXPOSE 80

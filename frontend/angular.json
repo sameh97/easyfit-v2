@@ -11,12 +11,15 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-devkit/build-angular:application",
                     "options": {
-                        "outputPath": "dist/easyfit",
+                        "outputPath": {
+                            "base": "dist/easyfit"
+                        },
                         "index": "src/index.html",
-                        "main": "src/main.ts",
-                        "polyfills": "src/polyfills.ts",
+                        "polyfills": [
+                            "src/polyfills.ts"
+                        ],
                         "tsConfig": "tsconfig.app.json",
                         "assets": [
                             "src/favicon.ico",
@@ -26,7 +29,11 @@
                             "src/datepicker-theme.scss",
                             "src/styles.css"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "browser": "src/main.ts",
+                        "allowedCommonJsDependencies": [
+                            "israeli-id-validator"
+                        ]
                     },
                     "configurations": {
                         "production": {
@@ -41,8 +48,6 @@
                             "sourceMap": false,
                             "namedChunks": false,
                             "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -57,9 +62,7 @@
                             ]
                         },
                         "development": {
-                            "vendorChunk": true,
                             "extractLicenses": false,
-                            "buildOptimizer": false,
                             "sourceMap": true,
                             "optimization": false,
                             "namedChunks": true
@@ -70,14 +73,14 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "easyfit:build"
+                        "buildTarget": "easyfit:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "easyfit:build:production"
+                            "buildTarget": "easyfit:build:production"
                         },
                         "development": {
-                            "browserTarget": "easyfit:build:development"
+                            "buildTarget": "easyfit:build:development"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -85,7 +88,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "easyfit:build"
+                        "buildTarget": "easyfit:build"
                     }
                 }
             }
