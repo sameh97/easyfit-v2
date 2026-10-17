@@ -55,7 +55,7 @@ The API lives under `/api/*`. Tables are created by `sequelize.sync()`; there ar
 
 > ✅ **Remove Bootstrap, jQuery and Angular Material?** Done in Phase 5. Bootstrap, jQuery and every Material component except the datepicker are gone; the datepicker stays inside the Studio `DateField` (decided with the owner: keyboard and screen-reader support come for free).
 >
-> ✏️ **Upgrade Angular?** Proposed as **Phase 5b** (§7.10): Angular 11 → 22, one major at a time. Waiting for the owner's decisions listed there.
+> ✅ **Upgrade Angular?** Yes, as **Phase 5b** (§7.10): Angular 11 → 22, one major at a time.
 
 ---
 
@@ -452,7 +452,7 @@ Reference: `mockups/Final-Dashboard.dc.html` (shell), `mockups/Nav-1-Sidebar-AI-
 2. **Phase 3:** Classes (group trainings), Machines, Maintenance (scheduler), notifications panel
 3. **Phase 4:** Products and Sales, Catalogs, Profile and settings, Admin (Gyms, Users, the same shell with admin nav), 404
 4. **Phase 5 ✅:** clean-up. Remove Bootstrap, jQuery, Angular Material components and the extra date pickers; turn preflight back on; drop `important`. Then decide on the Angular upgrade.
-5. **Phase 5b ✏️:** Angular 11 → 22 upgrade, no UI changes (§7.10)
+5. **Phase 5b ✅:** Angular 11 → 22 upgrade, no UI changes (§7.10)
 6. **Phase 6:** the AI backend (§7.6)
 
 ### 7.6 New features or fields
@@ -747,7 +747,7 @@ Branch `redesign/phase-5` (from `redesign/phase-1`, after Phase 4 is merged). No
   - v15: the Material datepicker moves to MDC; re-check `datepicker-theme.scss` and the `.studio-datepicker` overrides.
   - v17+: standalone components, `@if`/`@for`, signals and the esbuild builder are optional follow-ups. They don't need to be done in the same phase.
 
-**Phase 5b: Angular upgrade** ✏️ (proposed; waiting for the decisions below)
+**Phase 5b: Angular upgrade** ✅ (approved 2026-10-17 with the recommended decisions: Angular 22, `node:24`, remove Karma, esbuild builder)
 Branch `redesign/phase-5b` (from `redesign/phase-1`, after Phase 5 is merged). **Goal:** the same app, on a supported stack. Every page looks and behaves exactly as at the end of Phase 5.
 
 **Target (checked on npm, Oct 2026):**
@@ -818,7 +818,7 @@ Branch `redesign/phase-5b` (from `redesign/phase-1`, after Phase 5 is merged). *
 - `docker compose up -d --build` works on `node:24` without `--openssl-legacy-provider`, and the app on http://localhost behaves as before.
 - `npm ls` shows no peer-dependency errors (so `--legacy-peer-deps` can go), and `npm audit` is no worse than before.
 
-**Decisions for the owner:**
+**Decisions (owner chose the recommended option for each):**
 1. **Target version:** **Angular 22 (recommended)**, the newest major with the longest support ahead. Or stop at 21.
 2. **Docker build image:** move `frontend/Dockerfile` from `node:18` to **`node:24` (recommended)**. §7.7 lists Docker as out of scope, so this needs an explicit OK. Angular 22 doesn't run on Node 18, and Node 18 itself is out of support.
 3. **Unit tests:**
