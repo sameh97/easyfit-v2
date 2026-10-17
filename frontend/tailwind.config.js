@@ -56,30 +56,7 @@ function logicalUtilities({ matchUtilities, addUtilities, theme }) {
 
 module.exports = {
   mode: 'jit',
-  // Utilities are generated ONLY from Studio code. Legacy templates use Bootstrap helpers
-  // (p-3, mt-4, text-danger…) whose names collide with Tailwind's; scanning them would let
-  // Tailwind restyle legacy pages. Add new Studio folders here as pages are redesigned.
-  purge: [
-    './src/app/shared/ui/**/*.{html,ts}',
-    './src/app/components/nav/**/*.{html,ts}',
-    './src/app/components/shell/**/*.{html,ts}',
-    './src/app/components/home/**/*.{html,ts}',
-    './src/app/components/login/**/*.{html,ts}',
-    './src/app/components/members-components/**/*.{html,ts}',
-    './src/app/components/trainers-components/**/*.{html,ts}',
-    './src/app/components/classes/**/*.{html,ts}',
-    './src/app/components/machines/**/*.{html,ts}',
-    './src/app/components/maintenance/**/*.{html,ts}',
-    './src/app/components/products/**/*.{html,ts}',
-    './src/app/components/catalogs/**/*.{html,ts}',
-    './src/app/components/profile/**/*.{html,ts}',
-    './src/app/components/admin/**/*.{html,ts}',
-    './src/app/components/not-found/**/*.{html,ts}',
-  ],
-  // Bootstrap 4 ships !important helpers with the same names (p-5 = 3rem, bg-white, text-warning…)
-  // and body.mat-typography styles h1/h2/p at higher specificity than a utility. Making utilities
-  // !important lets Studio markup win; it only affects classes generated from the paths above.
-  important: true,
+  purge: ['./src/**/*.{html,ts}'],
   darkMode: false,
   theme: {
     extend: {
@@ -122,6 +99,8 @@ module.exports = {
         // Plus Jakarta Sans has no Hebrew letters; Rubik covers them (§7.8).
         sans: ['"Plus Jakarta Sans"', 'Rubik', 'system-ui', 'sans-serif'],
       },
+      // Preflight gives every element this border colour, so `border` alone draws a Studio line.
+      borderColor: (theme) => ({ DEFAULT: theme('colors.line.DEFAULT') }),
       borderRadius: {
         tile: '12px',
         card: '20px',
@@ -140,11 +119,6 @@ module.exports = {
         label: '1.4px',
       },
     },
-  },
-  corePlugins: {
-    // Existing pages still rely on Bootstrap's reboot and Angular Material's
-    // base styles; Tailwind's preflight would override them.
-    preflight: false,
   },
   plugins: [logicalUtilities],
 };

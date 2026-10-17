@@ -1,5 +1,5 @@
 <app-nav>
-    <div class="studio flex flex-col gap-[18px]">
+    <div class="flex flex-col gap-[18px]">
         <app-page-header [title]="'catalogs.page.title' | translate" [subtitle]="state === 'ready' && rows.length ? subtitle : null">
             <ng-container actions>
                 <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'catalogs.actions.new' | translate }}</button>

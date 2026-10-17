@@ -34,7 +34,7 @@ export class ConfirmDialogService {
       new OverlayConfig({
         hasBackdrop: true,
         backdropClass: 'studio-backdrop',
-        panelClass: ['studio', 'studio-dialog'],
+        panelClass: 'studio-dialog',
         direction: this.language.dir,
         scrollStrategy: this.overlay.scrollStrategies.block(),
         positionStrategy: this.overlay.position().global().centerHorizontally().centerVertically(),

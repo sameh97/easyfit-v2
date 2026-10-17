@@ -9,7 +9,7 @@
         [attr.aria-modal]="docked ? null : 'true'"
         [cdkTrapFocus]="!docked"
         (keydown)="onKeydown($event)"
-        class="studio z-50 flex flex-col overflow-hidden bg-surface shadow-card"
+        class="z-50 flex flex-col overflow-hidden bg-surface shadow-card"
         [ngClass]="docked
             ? 'sticky top-4 h-[calc(100vh-2rem)] w-[400px] flex-shrink-0 rounded-panel'
             : (phone ? 'fixed inset-0' : 'fixed bottom-4 end-4 top-4 w-[400px] max-w-[calc(100vw-2rem)] rounded-panel shadow-overlay')"

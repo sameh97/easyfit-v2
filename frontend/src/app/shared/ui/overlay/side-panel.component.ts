@@ -38,7 +38,7 @@ const LAYOUT: Record<DetailMode, string> = {
       *ngIf="open"
       #panel
       tabindex="-1"
-      class="studio flex flex-col overflow-hidden bg-surface outline-none"
+      class="flex flex-col overflow-hidden bg-surface outline-none"
       [ngClass]="layoutClass"
       [attr.role]="mode === 'phone' ? 'dialog' : 'complementary'"
       [attr.aria-modal]="mode === 'phone' ? 'true' : null"

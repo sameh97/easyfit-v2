@@ -29,7 +29,7 @@ export class MenuService {
       new OverlayConfig({
         hasBackdrop: true,
         backdropClass: 'cdk-overlay-transparent-backdrop',
-        panelClass: ['studio', 'studio-menu'],
+        panelClass: 'studio-menu',
         direction: this.language.dir,
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
         positionStrategy: this.overlay.position().flexibleConnectedTo(trigger).withPositions(POSITIONS).withPush(true),
