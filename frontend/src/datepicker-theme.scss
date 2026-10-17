@@ -3,7 +3,6 @@
 // datepicker (plus the buttons in its header) coloured with the Studio accent and set in the Studio font.
 // Studio overrides (radius, shadow, weights) live in styles.css under `.studio-datepicker`.
 @use '@angular/material' as mat;
-@use '@angular/cdk' as cdk;
 
 $studio-accent: #2f4bf0;
 $studio-accent-soft: #e2e6fd;
@@ -42,14 +41,17 @@ $studio-palette: (
   ),
 );
 
-$studio-theme: mat.define-light-theme(mat.define-palette($studio-palette), mat.define-palette($studio-palette));
 $studio-typography: mat.define-typography-config($font-family: '"Plus Jakarta Sans", "Rubik", system-ui, sans-serif');
+$studio-theme: mat.define-light-theme((
+  color: (primary: mat.define-palette($studio-palette), accent: mat.define-palette($studio-palette)),
+  typography: $studio-typography,
+  density: 0,
+));
 
-@include cdk.overlay();
-@include cdk.a11y-visually-hidden();
-@include mat.ripple();
+// CDK overlay and a11y, ripples and focus indicators.
+@include mat.core();
 
-@include mat.datepicker-color($studio-theme);
-@include mat.datepicker-typography($studio-typography);
-@include mat.button-color($studio-theme);
-@include mat.button-typography($studio-typography);
+@include mat.datepicker-theme($studio-theme);
+// The calendar header uses the MDC text and icon buttons (Material 15+).
+@include mat.button-theme($studio-theme);
+@include mat.icon-button-theme($studio-theme);
