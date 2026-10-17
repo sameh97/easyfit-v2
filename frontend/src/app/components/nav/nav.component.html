@@ -1,5 +1,5 @@
 <div class="min-h-screen bg-canvas">
-    <a href="#main-content" class="studio skip-link">{{ 'shell.skipToContent' | translate }}</a>
+    <a href="#main-content" class="skip-link">{{ 'shell.skipToContent' | translate }}</a>
 
     <!-- Phone drawer backdrop -->
     <div *ngIf="isPhone && drawerOpen" class="fixed inset-0 z-40 bg-ink bg-opacity-40" (click)="closeDrawer()" aria-hidden="true"></div>
@@ -7,7 +7,7 @@
     <div class="flex min-h-screen md:gap-4 md:p-4">
         <!-- ============ Sidebar (inline-start side: left in English, right in Hebrew) ============ -->
         <aside
-            class="studio z-50 flex flex-shrink-0 flex-col gap-[18px] bg-surface shadow-card"
+            class="z-50 flex flex-shrink-0 flex-col gap-[18px] bg-surface shadow-card"
             [ngClass]="isPhone
                 ? 'fixed inset-y-0 start-0 w-72 max-w-[85vw] transform overflow-y-auto rounded-e-panel px-3.5 py-[18px] transition-transform duration-200 ease-out ' + (drawerOpen ? 'translate-x-0' : '-translate-x-full rtl:translate-x-full invisible')
                 : 'sticky top-4 h-[calc(100vh-2rem)] rounded-panel py-[18px] ' + (collapsed ? 'w-[72px] items-center px-3' : 'w-64 overflow-y-auto px-3.5')"
@@ -127,7 +127,7 @@
         <!-- ============ Main column ============ -->
         <div class="flex min-w-0 flex-1 flex-col gap-5 px-4 pb-6 pt-4 md:px-1 md:pb-1.5 md:pt-1.5">
             <!-- Top row: ⌘K trigger + bell -->
-            <div class="studio flex items-center gap-2.5">
+            <div class="flex items-center gap-2.5">
                 <button *ngIf="isPhone" appIconButton variant="outline" size="md" icon="menu" [label]="'shell.sidebar.openNavigation' | translate" [attr.aria-expanded]="drawerOpen" (click)="openDrawer()"></button>
 
                 <button type="button" (click)="shell.openPalette()" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K"
@@ -149,7 +149,7 @@
             </div>
 
             <!-- Legacy (not yet redesigned) pages stay English and LTR until their phase (§7.8). -->
-            <main id="main-content" tabindex="-1" class="min-w-0 flex-1 outline-none" [dir]="contentDir" [attr.lang]="contentLang">
+            <main id="main-content" tabindex="-1" class="min-w-0 flex-1 outline-none">
                 <ng-content></ng-content>
             </main>
         </div>

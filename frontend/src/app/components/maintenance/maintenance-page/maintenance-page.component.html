@@ -1,5 +1,5 @@
 <app-nav>
-    <div class="studio flex flex-col gap-[18px]">
+    <div class="flex flex-col gap-[18px]">
         <app-page-header [title]="'maintenance.page.title' | translate" [subtitle]="!loading && state === 'ready' ? subtitle : null">
             <ng-container actions>
                 <button appButton variant="primary" icon="plus" type="button" (click)="add()">{{ 'maintenance.actions.schedule' | translate }}</button>

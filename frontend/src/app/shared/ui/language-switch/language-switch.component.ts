@@ -7,7 +7,7 @@ import { Lang, LANGUAGES, LANGUAGE_NAMES, LanguageService } from 'src/app/servic
   selector: 'app-language-switch',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex flex-wrap items-center justify-between gap-3" [ngClass]="labelled ? 'studio w-full px-4 pb-2 pt-3' : ''">
+    <div class="flex flex-wrap items-center justify-between gap-3" [ngClass]="labelled ? 'w-full px-4 pb-2 pt-3' : ''">
     <span *ngIf="labelled" class="text-sm font-bold text-ink-2" aria-hidden="true">{{ 'common.language.label' | translate }}</span>
     <div role="group" [attr.aria-label]="'common.language.label' | translate" class="inline-flex gap-0.5 rounded-full bg-surface-muted p-1">
       <button

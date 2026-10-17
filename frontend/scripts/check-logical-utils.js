@@ -1,5 +1,5 @@
 // Fails when Studio templates use physical-direction utilities (redesign.md §7.10, Phase 2 step 1).
-// Studio folders = the Tailwind `purge` list, so a newly redesigned folder is checked as soon as it's added.
+// Checks every folder Tailwind scans (the `purge` list: all of src/).
 // Usage: node scripts/check-logical-utils.js
 const fs = require('fs');
 const path = require('path');
@@ -41,4 +41,4 @@ if (problems) {
   console.error(`\n✖ ${problems} physical-direction utilit${problems === 1 ? 'y' : 'ies'}; use ms-/me-/ps-/pe-/start-/end-/text-start/border-s/rounded-s instead`);
   process.exit(1);
 }
-console.log(`✔ No physical-direction utilities in ${folders.length} Studio folders`);
+console.log(`✔ No physical-direction utilities in ${folders.join(", ")}`);

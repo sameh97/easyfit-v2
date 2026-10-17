@@ -40,7 +40,7 @@ export class SidePanelService {
       new OverlayConfig({
         hasBackdrop: true,
         backdropClass: 'studio-backdrop',
-        panelClass: ['studio', 'studio-side-panel'],
+        panelClass: 'studio-side-panel',
         direction: this.language.dir,
         scrollStrategy: this.overlay.scrollStrategies.block(),
       })
