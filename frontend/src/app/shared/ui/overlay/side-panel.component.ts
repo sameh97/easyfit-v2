@@ -31,9 +31,9 @@ const LAYOUT: Record<DetailMode, string> = {
  * Put it next to the list inside a flex row: `<div class="flex items-start gap-4">…</div>`.
  */
 @Component({
-  selector: 'app-side-panel',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-side-panel',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <aside
       *ngIf="open"
       #panel
@@ -58,7 +58,8 @@ const LAYOUT: Record<DetailMode, string> = {
       </div>
     </aside>
   `,
-  styles: [':host { display: contents; }'],
+    styles: [':host { display: contents; }'],
+    standalone: false
 })
 export class SidePanelComponent implements OnInit, OnChanges, OnDestroy {
   @Input() open: boolean = false;

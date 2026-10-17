@@ -8,8 +8,9 @@ import { ShellStateService } from 'src/app/services/shell-state.service';
  * (the dashboard, or Gyms for the admin) and the ⌘K search; signed out: a plain page to sign in.
  */
 @Component({
-  selector: 'app-not-found',
-  templateUrl: './not-found.component.html',
+    selector: 'app-not-found',
+    templateUrl: './not-found.component.html',
+    standalone: false
 })
 export class NotFoundComponent {
   /** The path that wasn't found, shown left to right. */

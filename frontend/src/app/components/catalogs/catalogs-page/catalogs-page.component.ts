@@ -29,8 +29,9 @@ const SKELETON_ROWS: readonly number[] = [1, 2, 3];
  * status · product names · validity and actions), Copy link, Share on WhatsApp, edit, delete.
  */
 @Component({
-  selector: 'app-catalogs-page',
-  templateUrl: './catalogs-page.component.html',
+    selector: 'app-catalogs-page',
+    templateUrl: './catalogs-page.component.html',
+    standalone: false
 })
 export class CatalogsPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

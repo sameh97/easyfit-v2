@@ -29,9 +29,10 @@ export interface SellFormData {
  * Israeli mobile, Israeli ID checksum.
  */
 @Component({
-  selector: 'app-sell-form',
-  templateUrl: './sell-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-sell-form',
+    templateUrl: './sell-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class SellFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly product: Product;

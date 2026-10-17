@@ -59,8 +59,8 @@ const SUGGESTIONS: readonly string[] = Array.from({ length: (24 * 60) / STEP_MIN
  * Pair it with `timeValidator` so malformed input shows `validation.timeFormat`.
  */
 @Component({
-  selector: 'app-time-field',
-  template: `
+    selector: 'app-time-field',
+    template: `
     <div class="flex flex-col gap-1.5" (focusout)="onFocusOut($event)">
       <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
       <div class="relative">
@@ -123,7 +123,8 @@ const SUGGESTIONS: readonly string[] = Array.from({ length: (24 * 60) / STEP_MIN
       <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
     </div>
   `,
-  styles: [':host { display: block; min-width: 0; }'],
+    styles: [':host { display: block; min-width: 0; }'],
+    standalone: false
 })
 export class TimeFieldComponent {
   @Input() control!: UntypedFormControl;

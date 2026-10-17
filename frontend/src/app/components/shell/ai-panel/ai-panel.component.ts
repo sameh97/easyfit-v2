@@ -16,9 +16,10 @@ const EXAMPLE_QUESTIONS: readonly string[] = [
  * Sits on the inline-end side. Docks as a third column on ≥ xl, slides over the page below xl, full-screen on phones.
  */
 @Component({
-  selector: 'app-ai-panel',
-  templateUrl: './ai-panel.component.html',
-  styles: [':host { display: contents; }'],
+    selector: 'app-ai-panel',
+    templateUrl: './ai-panel.component.html',
+    styles: [':host { display: contents; }'],
+    standalone: false
 })
 export class AiPanelComponent implements OnInit, OnDestroy {
   /** True on ≥ xl: the panel takes a column instead of overlaying the page. */

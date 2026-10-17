@@ -11,8 +11,8 @@ export interface TabItem<T extends string = string> {
  * `{idPrefix}-tab-{id}`. Arrow keys follow the reading direction; Home and End jump.
  */
 @Component({
-  selector: 'app-tabs',
-  template: `
+    selector: 'app-tabs',
+    template: `
     <div role="tablist" [attr.aria-label]="label" class="flex gap-0.5 rounded-full bg-surface-muted p-1" (keydown)="onKeydown($event)">
       <button
         *ngFor="let tab of tabs; trackBy: trackById"
@@ -30,7 +30,8 @@ export interface TabItem<T extends string = string> {
       </button>
     </div>
   `,
-  styles: [':host { display: block; }'],
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class TabsComponent {
   @Input() tabs: TabItem[] = [];

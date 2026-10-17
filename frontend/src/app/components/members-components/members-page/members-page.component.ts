@@ -52,8 +52,9 @@ interface RowInfo {
  * deep link /members?member=<id>.
  */
 @Component({
-  selector: 'app-members-page',
-  templateUrl: './members-page.component.html',
+    selector: 'app-members-page',
+    templateUrl: './members-page.component.html',
+    standalone: false
 })
 export class MembersPageComponent implements OnInit, OnDestroy {
   state: DataTableState = 'loading';

@@ -8,8 +8,8 @@ const ACCEPTED_TYPES: readonly string[] = ['image/png', 'image/jpeg'];
  * It only picks the file; the form uploads it with the existing FileUploadService on save.
  */
 @Component({
-  selector: 'app-image-upload',
-  template: `
+    selector: 'app-image-upload',
+    template: `
     <div class="flex items-center gap-4">
       <span
         class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-muted text-ink-4"
@@ -34,7 +34,8 @@ const ACCEPTED_TYPES: readonly string[] = ['image/png', 'image/jpeg'];
       <input #fileInput type="file" class="sr-only" tabindex="-1" aria-hidden="true" accept=".png,.jpg,.jpeg" (change)="onFile(fileInput)" />
     </div>
   `,
-  styles: [':host { display: block; }'],
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class ImageUploadComponent implements OnDestroy {
   /** Photo already saved (S3 URL), shown until a new file is picked. */

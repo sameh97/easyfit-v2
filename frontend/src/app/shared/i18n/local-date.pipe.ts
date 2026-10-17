@@ -9,8 +9,9 @@ import { DateFormatName, DateInput, formatLocalDate } from './date-formats';
  * Impure, but memoised: it only re-formats when the value, format or language changes.
  */
 @Pipe({
-  name: 'localDate',
-  pure: false,
+    name: 'localDate',
+    pure: false,
+    standalone: false
 })
 export class LocalDatePipe implements PipeTransform, OnDestroy {
   private lang: Lang;

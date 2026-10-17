@@ -25,9 +25,10 @@ export interface ProfileFormData {
  * new name survives a reload.
  */
 @Component({
-  selector: 'app-profile-form',
-  templateUrl: './profile-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-profile-form',
+    templateUrl: './profile-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class ProfileFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: User;

@@ -1,6 +1,5 @@
 import { Observable, Subscription } from 'rxjs';
 import { throwError } from 'rxjs';
-import * as _ from 'lodash';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BadInputError } from '../exceptions';
 import { NotFoundError } from '../exceptions/not-found-error';

@@ -21,10 +21,11 @@ const DEFAULT_LABEL_KEYS: Record<PillStatus, string | null> = {
 
 /** Small rounded status chip. `label` overrides the default text for `status`. */
 @Component({
-  selector: 'app-status-pill',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<ng-container *ngIf="label !== null; else byStatus">{{ label }}</ng-container
+    selector: 'app-status-pill',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `<ng-container *ngIf="label !== null; else byStatus">{{ label }}</ng-container
     ><ng-template #byStatus>{{ defaultKey ? (defaultKey | translate) : '' }}</ng-template>`,
+    standalone: false
 })
 export class StatusPillComponent {
   @Input() status: PillStatus = 'neutral';

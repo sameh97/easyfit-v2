@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { LanguageService } from './services/language.service';
 import { I18nModule } from './shared/i18n/i18n.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -120,23 +120,22 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     UiModule,
     I18nModule,
-    TranslateModule.forRoot({
-      fallbackLang: 'en',
-      loader: provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
-    }),
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     LayoutModule,
     A11yModule,
   ],
-
   providers: [
     { provide: APP_INITIALIZER, useFactory: initLanguage, deps: [LanguageService], multi: true },
+    provideHttpClient(withInterceptorsFromDi()),
+    provideTranslateService({
+      fallbackLang: 'en',
+      loader: provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
+    }),
   ],
   bootstrap: [AppComponent],
 })

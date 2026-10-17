@@ -31,9 +31,10 @@ export interface JobFormData {
  * 1 and not longer than the time from start to end.
  */
 @Component({
-  selector: 'app-job-form',
-  templateUrl: './job-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-job-form',
+    templateUrl: './job-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class JobFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: ScheduledJob | null;

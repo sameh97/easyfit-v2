@@ -32,9 +32,10 @@ const SKELETON_ROWS: readonly number[] = [1, 2, 3, 4, 5, 6];
  * Empty content is projected with `[tableEmpty]`; cells with `<ng-template appCell="key" let-row>`.
  */
 @Component({
-  selector: 'app-data-table',
-  templateUrl: './data-table.component.html',
-  styles: [':host { display: block; min-width: 0; }'],
+    selector: 'app-data-table',
+    templateUrl: './data-table.component.html',
+    styles: [':host { display: block; min-width: 0; }'],
+    standalone: false
 })
 export class DataTableComponent<T> implements OnInit, OnChanges, OnDestroy {
   @Input() rows: T[] = [];

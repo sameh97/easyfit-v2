@@ -3,9 +3,9 @@ import { PillStatus } from '../status-pill/status-pill.component';
 
 /** Dashboard KPI: label, big number, optional chip, caption. */
 @Component({
-  selector: 'app-kpi-card',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-kpi-card',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <app-card padding="sm" class="flex h-full flex-col gap-2">
       <span class="text-sm font-semibold text-ink-3">{{ label }}</span>
       <div class="flex flex-wrap items-baseline gap-2.5">
@@ -15,7 +15,8 @@ import { PillStatus } from '../status-pill/status-pill.component';
       <span *ngIf="caption" class="text-[13px] text-ink-3">{{ caption }}</span>
     </app-card>
   `,
-  styles: [':host { display: block; min-width: 0; }'],
+    styles: [':host { display: block; min-width: 0; }'],
+    standalone: false
 })
 export class KpiCardComponent {
   @Input() label: string = '';

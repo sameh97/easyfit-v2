@@ -18,8 +18,9 @@ const ROLE_KEYS: Record<number, string> = { 1: 'shell.user.roles.manager', 2: 's
  * only: gym details are the admin's), and preferences (language).
  */
 @Component({
-  selector: 'app-profile-page',
-  templateUrl: './profile-page.component.html',
+    selector: 'app-profile-page',
+    templateUrl: './profile-page.component.html',
+    standalone: false
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
   user: User | null = null;

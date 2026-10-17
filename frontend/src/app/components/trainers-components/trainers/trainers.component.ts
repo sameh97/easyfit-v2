@@ -24,8 +24,9 @@ const SKELETON_CARDS: readonly number[] = [1, 2, 3, 4, 5, 6];
 
 /** Trainers (redesign.md §5.3): a card grid, the shared detail panel, side-panel forms. Deep link ?trainer=<id>. */
 @Component({
-  selector: 'app-trainers-page',
-  templateUrl: './trainers.component.html',
+    selector: 'app-trainers-page',
+    templateUrl: './trainers.component.html',
+    standalone: false
 })
 export class TrainersPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

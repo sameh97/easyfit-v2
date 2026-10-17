@@ -21,9 +21,10 @@ type Viewport = 'phone' | 'tablet' | 'desktop' | 'wide';
 const ROLE_KEYS: Record<number, string> = { 1: 'shell.user.roles.manager', 2: 'shell.user.roles.admin' };
 
 @Component({
-  selector: 'app-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css'],
+    selector: 'app-nav',
+    templateUrl: './nav.component.html',
+    styleUrls: ['./nav.component.css'],
+    standalone: false
 })
 export class NavComponent implements OnInit, OnDestroy {
   notificationNumber: number = 0;

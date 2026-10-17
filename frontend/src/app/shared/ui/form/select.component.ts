@@ -10,8 +10,8 @@ export interface SelectOption<T = string | number> {
 
 /** Native <select> in a Studio pill, with a chevron at the inline end. */
 @Component({
-  selector: 'app-select',
-  template: `
+    selector: 'app-select',
+    template: `
     <div class="flex flex-col gap-1.5">
       <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
       <div [class]="boxClass" class="relative">
@@ -32,7 +32,8 @@ export interface SelectOption<T = string | number> {
       <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
     </div>
   `,
-  styles: [':host { display: block; min-width: 0; }'],
+    styles: [':host { display: block; min-width: 0; }'],
+    standalone: false
 })
 export class SelectComponent {
   @Input() control!: UntypedFormControl;

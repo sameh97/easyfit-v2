@@ -31,9 +31,10 @@ const PAGE: number = 30;
  * filled in for that member. Replaces the server-side `wbm` sending.
  */
 @Component({
-  selector: 'app-catalog-share',
-  templateUrl: './catalog-share.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-catalog-share',
+    templateUrl: './catalog-share.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class CatalogShareComponent implements OnDestroy {
   readonly catalog: Catalog;

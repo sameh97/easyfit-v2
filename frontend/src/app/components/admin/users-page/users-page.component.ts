@@ -16,8 +16,9 @@ type LoadState = 'loading' | 'ready' | 'error';
 
 /** Admin: Users (redesign.md §5.11): every gym's users in a table, a gym filter and search; add/edit side panel, delete. */
 @Component({
-  selector: 'app-users-page',
-  templateUrl: './users-page.component.html',
+    selector: 'app-users-page',
+    templateUrl: './users-page.component.html',
+    standalone: false
 })
 export class UsersPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

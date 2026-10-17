@@ -11,8 +11,8 @@ export type TextFieldType = 'text' | 'email' | 'tel' | 'password' | 'number';
  * error replaces after blur or submit. Phone and email fields pass `ltr` (§7.8).
  */
 @Component({
-  selector: 'app-text-field',
-  template: `
+    selector: 'app-text-field',
+    template: `
     <div class="flex flex-col gap-1.5">
       <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
       <div [class]="boxClass">
@@ -36,7 +36,8 @@ export type TextFieldType = 'text' | 'email' | 'tel' | 'password' | 'number';
       <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
     </div>
   `,
-  styles: [':host { display: block; min-width: 0; }'],
+    styles: [':host { display: block; min-width: 0; }'],
+    standalone: false
 })
 export class TextFieldComponent {
   @Input() control!: UntypedFormControl;

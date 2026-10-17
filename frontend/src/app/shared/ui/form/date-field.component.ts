@@ -13,13 +13,13 @@ import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIEL
  * typed day-first dates (14/03/2027). The control holds a local-midnight Date (or null).
  */
 @Component({
-  selector: 'app-date-field',
-  providers: [
-    { provide: DateAdapter, useClass: StudioDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: STUDIO_DATE_FORMATS },
-    { provide: Directionality, useClass: LanguageDirectionality },
-  ],
-  template: `
+    selector: 'app-date-field',
+    providers: [
+        { provide: DateAdapter, useClass: StudioDateAdapter },
+        { provide: MAT_DATE_FORMATS, useValue: STUDIO_DATE_FORMATS },
+        { provide: Directionality, useClass: LanguageDirectionality },
+    ],
+    template: `
     <div class="flex flex-col gap-1.5">
       <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
       <div [class]="boxClass">
@@ -50,7 +50,8 @@ import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIEL
       <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
     </div>
   `,
-  styles: [':host { display: block; min-width: 0; }'],
+    styles: [':host { display: block; min-width: 0; }'],
+    standalone: false
 })
 export class DateFieldComponent {
   @Input() control!: UntypedFormControl;

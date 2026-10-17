@@ -36,8 +36,9 @@ function rangeBounds(range: SalesRange, now: Date): [Date | null, Date | null] {
  * product, CSV export, and Delete sale (stock goes back).
  */
 @Component({
-  selector: 'app-sales-tab',
-  templateUrl: './sales-tab.component.html',
+    selector: 'app-sales-tab',
+    templateUrl: './sales-tab.component.html',
+    standalone: false
 })
 export class SalesTabComponent implements OnChanges {
   @Input() bills: Bill[] = [];

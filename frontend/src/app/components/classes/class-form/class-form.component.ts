@@ -33,9 +33,10 @@ export interface ClassFormData {
  * after another of theirs (the backend's check, shown on the time field before saving).
  */
 @Component({
-  selector: 'app-class-form',
-  templateUrl: './class-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-class-form',
+    templateUrl: './class-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class ClassFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: GroupTraining | null;

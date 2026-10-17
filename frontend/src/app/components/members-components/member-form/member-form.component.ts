@@ -30,9 +30,10 @@ const LENGTHS: readonly number[] = [1, 3, 6, 12];
  * Validation rules are exactly the legacy add/update member dialogs' ones (FormInputComponent).
  */
 @Component({
-  selector: 'app-member-form',
-  templateUrl: './member-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-member-form',
+    templateUrl: './member-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class MemberFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Member | null;

@@ -29,8 +29,9 @@ const SKELETON_CARDS: readonly number[] = [1, 2, 3, 4, 5, 6];
  * detail panel with open alerts and jobs, and the add/edit side panel. Deep link ?machine=<id>.
  */
 @Component({
-  selector: 'app-machines-page',
-  templateUrl: './machines-page.component.html',
+    selector: 'app-machines-page',
+    templateUrl: './machines-page.component.html',
+    standalone: false
 })
 export class MachinesPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

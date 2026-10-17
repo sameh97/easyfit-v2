@@ -5,8 +5,9 @@ import { pluralForm } from './plural-form';
 
 /** `{{ 'common.relative.inDays' | plural: days | translate: { count: days } }}` */
 @Pipe({
-  name: 'plural',
-  pure: false,
+    name: 'plural',
+    pure: false,
+    standalone: false
 })
 export class PluralPipe implements PipeTransform, OnDestroy {
   private lang: Lang;

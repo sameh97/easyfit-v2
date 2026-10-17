@@ -17,9 +17,10 @@ const PARTICIPANTS_PREVIEW: number = 8;
 
 /** Class detail panel (§5.4): when, description, trainer (opens the trainer), participants (open the member), Edit and Delete. */
 @Component({
-  selector: 'app-class-detail',
-  templateUrl: './class-detail.component.html',
-  styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    selector: 'app-class-detail',
+    templateUrl: './class-detail.component.html',
+    styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class ClassDetailComponent implements OnChanges {
   @Input() training!: GroupTraining;

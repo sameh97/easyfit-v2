@@ -25,9 +25,10 @@ export interface TrainerFormData {
  * without the membership section. Validation rules are exactly the legacy trainer dialogs' ones.
  */
 @Component({
-  selector: 'app-trainer-form',
-  templateUrl: './trainer-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-trainer-form',
+    templateUrl: './trainer-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class TrainerFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Trainer | null;

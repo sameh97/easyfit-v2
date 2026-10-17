@@ -31,9 +31,10 @@ const GYM_USER_ROLE_ID: number = 1;
  * the admin set a new one every time).
  */
 @Component({
-  selector: 'app-user-form',
-  templateUrl: './user-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-user-form',
+    templateUrl: './user-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class UserFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: User | null;

@@ -36,8 +36,9 @@ export interface RowGroup {
  * Clean / Service filter and a machine search (?machine=<serial> prefills it).
  */
 @Component({
-  selector: 'app-maintenance-page',
-  templateUrl: './maintenance-page.component.html',
+    selector: 'app-maintenance-page',
+    templateUrl: './maintenance-page.component.html',
+    standalone: false
 })
 export class MaintenancePageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

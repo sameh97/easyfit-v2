@@ -18,9 +18,10 @@ export type SalesState = 'loading' | 'ready' | 'error';
 
 /** Product detail panel (§5.7): photo, category, stock, Sell / Edit / Delete, price, code, description, recent sales. */
 @Component({
-  selector: 'app-product-detail',
-  templateUrl: './product-detail.component.html',
-  styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    selector: 'app-product-detail',
+    templateUrl: './product-detail.component.html',
+    styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class ProductDetailComponent {
   @Input() product!: Product;

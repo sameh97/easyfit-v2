@@ -10,8 +10,8 @@ export interface SegmentedFieldOption<T> {
 
 /** A form control drawn as a segmented pill (radio group), e.g. gender. Arrow keys follow the reading direction. */
 @Component({
-  selector: 'app-segmented-field',
-  template: `
+    selector: 'app-segmented-field',
+    template: `
     <div class="flex flex-col gap-1.5">
       <span [id]="id + '-label'" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></span>
       <div
@@ -44,7 +44,8 @@ export interface SegmentedFieldOption<T> {
       <app-field-error *ngIf="invalid" [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
     </div>
   `,
-  styles: [':host { display: block; }'],
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class SegmentedFieldComponent<T> {
   @Input() control!: UntypedFormControl;

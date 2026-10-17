@@ -34,7 +34,8 @@ export interface CellContext<T> {
 
 /** `<ng-template appCell="phone" let-row>{{ row.phone }}</ng-template>` */
 @Directive({
-  selector: '[appCell]',
+    selector: '[appCell]',
+    standalone: false
 })
 export class CellDefDirective<T> {
   @Input('appCell') key: string = '';

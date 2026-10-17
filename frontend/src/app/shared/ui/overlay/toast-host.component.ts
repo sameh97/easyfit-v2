@@ -4,9 +4,9 @@ import { Toast, ToastService } from './toast.service';
 
 /** Bottom-centre stack of dark pill toasts. Lives once in AppComponent so toasts survive navigation. */
 @Component({
-  selector: 'app-toast-host',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-toast-host',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div
       class="pointer-events-none fixed inset-x-0 bottom-6 z-[1100] flex flex-col items-center gap-2 px-4"
       aria-live="polite"
@@ -45,6 +45,7 @@ import { Toast, ToastService } from './toast.service';
       </div>
     </div>
   `,
+    standalone: false
 })
 export class ToastHostComponent {
   readonly toasts$: Observable<Toast[]> = this.toasts.toasts$;

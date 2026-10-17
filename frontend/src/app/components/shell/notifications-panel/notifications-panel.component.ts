@@ -14,8 +14,9 @@ import { dayDiff } from 'src/app/shared/ui/week-strip/week-strip.component';
  * outside close it.
  */
 @Component({
-  selector: 'app-notifications-panel',
-  templateUrl: './notifications-panel.component.html',
+    selector: 'app-notifications-panel',
+    templateUrl: './notifications-panel.component.html',
+    standalone: false
 })
 export class NotificationsPanelComponent implements OnInit, OnDestroy {
   /** The bell: clicks on it toggle the panel, so they don't count as "outside". */

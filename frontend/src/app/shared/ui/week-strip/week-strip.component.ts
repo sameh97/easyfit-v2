@@ -35,8 +35,8 @@ export function dayDiff(from: Date, to: Date): number {
  * edge: the owner then shows the next week), Home and End jump to the ends of the week.
  */
 @Component({
-  selector: 'app-week-strip',
-  template: `
+    selector: 'app-week-strip',
+    template: `
     <div role="tablist" [attr.aria-label]="label" class="grid grid-cols-7 gap-1.5 sm:gap-2" (keydown)="onKeydown($event)">
       <button
         *ngFor="let day of days; trackBy: trackByTime"
@@ -59,7 +59,8 @@ export function dayDiff(from: Date, to: Date): number {
       </button>
     </div>
   `,
-  styles: [':host { display: block; }'],
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class WeekStripComponent {
   @Input() days: WeekStripDay[] = [];

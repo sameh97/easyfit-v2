@@ -35,8 +35,9 @@ const SKELETON_ROWS: readonly number[] = [1, 2, 3, 4];
  * the add/edit side panel. The day and the class are in the URL: ?day=YYYY-MM-DD&class=<id>.
  */
 @Component({
-  selector: 'app-classes-page',
-  templateUrl: './classes-page.component.html',
+    selector: 'app-classes-page',
+    templateUrl: './classes-page.component.html',
+    standalone: false
 })
 export class ClassesPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

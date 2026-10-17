@@ -24,9 +24,9 @@ export function initialsOf(name: string): string {
 
 /** Round avatar: the photo when there is one, otherwise initials on a pastel (or dark) circle. */
 @Component({
-  selector: 'app-avatar',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-avatar',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <span
       class="inline-flex flex-shrink-0 select-none items-center justify-center overflow-hidden rounded-full font-extrabold"
       [style.width.px]="size"
@@ -48,7 +48,8 @@ export function initialsOf(name: string): string {
       <ng-template #initialsTpl>{{ initials }}</ng-template>
     </span>
   `,
-  styles: [':host { display: inline-flex; }'],
+    styles: [':host { display: inline-flex; }'],
+    standalone: false
 })
 export class AvatarComponent implements OnChanges {
   @Input() name: string = '';

@@ -41,9 +41,10 @@ interface ContactRow {
 
 /** Content of the member detail side panel (mockup P2-Members-Detail). */
 @Component({
-  selector: 'app-member-detail',
-  templateUrl: './member-detail.component.html',
-  styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    selector: 'app-member-detail',
+    templateUrl: './member-detail.component.html',
+    styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class MemberDetailComponent implements OnChanges, OnDestroy {
   @Input() member!: Member;

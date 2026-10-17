@@ -71,9 +71,10 @@ const METRICS: readonly ChartMetric[] = ['income', 'members', 'products'];
 const DAY_MS = 86400000;
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    standalone: false
 })
 export class HomeComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

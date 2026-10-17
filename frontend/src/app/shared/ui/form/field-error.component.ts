@@ -4,14 +4,15 @@ import { DEFAULT_FIELD_MESSAGES, FieldMessages } from './field';
 
 /** The translated message for a control's first error. Shown in place of the help text. */
 @Component({
-  selector: 'app-field-error',
-  template: `
+    selector: 'app-field-error',
+    template: `
     <span *ngIf="messageKey" class="flex items-center gap-1 text-xs font-semibold text-danger">
       <app-icon name="alert-circle" [size]="13"></app-icon>
       {{ messageKey | translate: params }}
     </span>
   `,
-  styles: [':host { display: block; }'],
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class FieldErrorComponent {
   @Input() control: AbstractControl | null = null;

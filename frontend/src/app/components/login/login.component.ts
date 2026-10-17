@@ -9,9 +9,10 @@ import { NotFoundError } from 'src/app/exceptions/not-found-error';
 import { FormInputComponent } from 'src/app/shared/components/form-input/form-input.component';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: false
 })
 export class LoginComponent extends FormInputComponent implements OnInit {
   showSpinner: boolean = false;

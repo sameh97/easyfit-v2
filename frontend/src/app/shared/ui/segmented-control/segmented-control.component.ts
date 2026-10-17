@@ -19,9 +19,9 @@ export interface SegmentOption {
  * Arrow keys move between options, as with native radios.
  */
 @Component({
-  selector: 'app-segmented-control',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-segmented-control',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div
       role="radiogroup"
       [attr.aria-label]="label"
@@ -47,7 +47,8 @@ export interface SegmentOption {
       </button>
     </div>
   `,
-  styles: [':host { display: inline-flex; max-width: 100%; overflow-x: auto; }'],
+    styles: [':host { display: inline-flex; max-width: 100%; overflow-x: auto; }'],
+    standalone: false
 })
 export class SegmentedControlComponent {
   @Input() options: SegmentOption[] = [];

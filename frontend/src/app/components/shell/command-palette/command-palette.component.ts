@@ -73,8 +73,9 @@ const MAX_MEMBER_RESULTS = 6;
 const MAX_PRODUCT_RESULTS = 8;
 
 @Component({
-  selector: 'app-command-palette',
-  templateUrl: './command-palette.component.html',
+    selector: 'app-command-palette',
+    templateUrl: './command-palette.component.html',
+    standalone: false
 })
 export class CommandPaletteComponent implements OnInit, OnDestroy {
   open: boolean = false;

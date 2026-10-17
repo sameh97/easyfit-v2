@@ -31,8 +31,9 @@ const SKELETON_CARDS: readonly number[] = [1, 2, 3, 4, 5, 6];
  * Sales tab lists the bills. Deep links ?product=<id> and ?tab=sales.
  */
 @Component({
-  selector: 'app-products-page',
-  templateUrl: './products-page.component.html',
+    selector: 'app-products-page',
+    templateUrl: './products-page.component.html',
+    standalone: false
 })
 export class ProductsPageComponent implements OnInit, OnDestroy {
   tab: PageTab = 'products';

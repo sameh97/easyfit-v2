@@ -26,14 +26,15 @@ const SIZES: Record<ButtonSize, string> = {
  * `<button appButton variant="primary" icon="plus">Add member</button>`
  */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'button[appButton], a[appButton]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    // eslint-disable-next-line @angular-eslint/component-selector
+    selector: 'button[appButton], a[appButton]',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <app-icon *ngIf="icon" [name]="icon" [size]="size === 'sm' ? 14 : 18"></app-icon>
     <ng-content></ng-content>
     <app-icon *ngIf="iconRight" [name]="iconRight" [size]="size === 'sm' ? 14 : 18"></app-icon>
   `,
+    standalone: false
 })
 export class ButtonComponent {
   @Input() variant: ButtonVariant = 'secondary';

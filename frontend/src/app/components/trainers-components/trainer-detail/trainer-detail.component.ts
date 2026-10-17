@@ -30,9 +30,10 @@ interface InfoRow {
 
 /** Content of the trainer detail side panel (§5.3): Overview and Classes. */
 @Component({
-  selector: 'app-trainer-detail',
-  templateUrl: './trainer-detail.component.html',
-  styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    selector: 'app-trainer-detail',
+    templateUrl: './trainer-detail.component.html',
+    styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class TrainerDetailComponent implements OnChanges, OnDestroy {
   @Input() trainer!: Trainer;

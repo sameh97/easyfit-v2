@@ -23,9 +23,10 @@ export interface CatalogFormData {
  * Rules as the legacy dialogs: at least one product, 1–100 days.
  */
 @Component({
-  selector: 'app-catalog-form',
-  templateUrl: './catalog-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-catalog-form',
+    templateUrl: './catalog-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class CatalogFormComponent implements CloseGuard, OnDestroy {
   readonly original: Catalog | null;

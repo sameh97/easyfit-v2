@@ -6,9 +6,9 @@ import { IconName, IconShape, ICONS } from './icons';
  * Decorative by default (aria-hidden); pass `label` when the icon carries meaning on its own.
  */
 @Component({
-  selector: 'app-icon',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-icon',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <svg
       [attr.width]="size"
       [attr.height]="size"
@@ -42,7 +42,8 @@ import { IconName, IconShape, ICONS } from './icons';
       </ng-container>
     </svg>
   `,
-  styles: [':host { display: inline-flex; flex-shrink: 0; line-height: 0; }'],
+    styles: [':host { display: inline-flex; flex-shrink: 0; line-height: 0; }'],
+    standalone: false
 })
 export class IconComponent {
   @Input() name!: IconName;

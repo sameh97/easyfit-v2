@@ -20,8 +20,8 @@ const MAX_RESULTS: number = 50;
  * chips a "+N more" button shows the rest. The control holds the picked values (number[]).
  */
 @Component({
-  selector: 'app-multi-select',
-  template: `
+    selector: 'app-multi-select',
+    template: `
     <div class="flex flex-col gap-2.5" (focusout)="onFocusOut($event)">
       <label [for]="id" [class]="labelClass" [ngClass]="hideLabel ? 'sr-only' : ''">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
       <div class="relative">
@@ -108,7 +108,8 @@ const MAX_RESULTS: number = 50;
       <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
     </div>
   `,
-  styles: [':host { display: block; min-width: 0; }'],
+    styles: [':host { display: block; min-width: 0; }'],
+    standalone: false
 })
 export class MultiSelectComponent {
   @Input() control!: UntypedFormControl;

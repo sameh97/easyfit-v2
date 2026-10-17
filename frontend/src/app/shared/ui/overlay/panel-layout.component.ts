@@ -7,9 +7,9 @@ import { SidePanelRef } from './side-panel-ref';
  * `<app-panel-layout title="Add member"><div panelBody>…</div><ng-container panelFooter>…</ng-container></app-panel-layout>`
  */
 @Component({
-  selector: 'app-panel-layout',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-panel-layout',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="flex items-center justify-between gap-3 border-b border-solid border-line-soft pb-4 pe-5 ps-6 pt-5">
       <div class="flex min-w-0 flex-col gap-0.5">
         <h2 class="truncate text-[22px] font-extrabold tracking-card text-ink" dir="auto">{{ title }}</h2>
@@ -34,7 +34,8 @@ import { SidePanelRef } from './side-panel-ref';
       <ng-content select="[panelFooter]"></ng-content>
     </div>
   `,
-  styles: [':host { display: flex; flex-direction: column; height: 100%; min-height: 0; }'],
+    styles: [':host { display: flex; flex-direction: column; height: 100%; min-height: 0; }'],
+    standalone: false
 })
 export class PanelLayoutComponent {
   @Input() title: string = '';

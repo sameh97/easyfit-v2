@@ -22,9 +22,9 @@ export const MENU_CONTEXT = new InjectionToken<MenuContext>('MENU_CONTEXT');
 
 /** Popup menu body rendered by MenuService. ↑↓ Home End move, Enter picks, Esc closes, Tab leaves. */
 @Component({
-  selector: 'app-menu',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-menu',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div role="menu" [attr.aria-label]="context.ariaLabel" class="flex min-w-[200px] flex-col py-1.5" (keydown)="onKeydown($event)">
       <button
         *ngFor="let item of context.items"
@@ -45,6 +45,7 @@ export const MENU_CONTEXT = new InjectionToken<MenuContext>('MENU_CONTEXT');
       </button>
     </div>
   `,
+    standalone: false
 })
 export class MenuComponent implements AfterViewInit {
   constructor(@Inject(MENU_CONTEXT) public context: MenuContext, private host: ElementRef<HTMLElement>) {}

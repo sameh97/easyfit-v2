@@ -16,9 +16,10 @@ export interface GymFormData {
 
 /** Add / edit gym side panel (§5.11): name, phone (LTR), address. Rules as the legacy gym dialogs. */
 @Component({
-  selector: 'app-gym-form',
-  templateUrl: './gym-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-gym-form',
+    templateUrl: './gym-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class GymFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Gym | null;

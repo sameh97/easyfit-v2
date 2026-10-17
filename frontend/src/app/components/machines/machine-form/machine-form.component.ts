@@ -23,9 +23,10 @@ export interface MachineFormData {
  * price (LTR) and photo. Validation rules are exactly the legacy create/edit dialogs' ones.
  */
 @Component({
-  selector: 'app-machine-form',
-  templateUrl: './machine-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-machine-form',
+    templateUrl: './machine-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class MachineFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Machine | null;

@@ -14,9 +14,9 @@ export interface BarDatum {
  * Screen readers get a visually-hidden table with the same values.
  */
 @Component({
-  selector: 'app-bar-chart',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-bar-chart',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="flex h-full items-end gap-1.5 sm:gap-3.5" [style.minHeight.px]="height + 56" aria-hidden="true">
       <div *ngFor="let bar of bars" class="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2">
         <span
@@ -45,7 +45,8 @@ export interface BarDatum {
       </tbody>
     </table>
   `,
-  styles: [':host { display: block; }'],
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class BarChartComponent {
   @Input() bars: BarDatum[] = [];

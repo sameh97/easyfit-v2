@@ -27,9 +27,10 @@ export const PRODUCT_CATEGORY_IDS: readonly number[] = [1, 2, 3, 4, 5];
  * and quantity. Validation rules are exactly the legacy add/update product dialogs' ones.
  */
 @Component({
-  selector: 'app-product-form',
-  templateUrl: './product-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-product-form',
+    templateUrl: './product-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class ProductFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Product | null;

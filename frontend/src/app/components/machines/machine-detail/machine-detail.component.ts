@@ -17,9 +17,10 @@ import { dayTime, JobView, MachineView } from '../machine-status';
  * jobs (type, every N days, next run) linking to Maintenance; serial number, year, price, description.
  */
 @Component({
-  selector: 'app-machine-detail',
-  templateUrl: './machine-detail.component.html',
-  styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    selector: 'app-machine-detail',
+    templateUrl: './machine-detail.component.html',
+    styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    standalone: false
 })
 export class MachineDetailComponent {
   @Input() view!: MachineView;
