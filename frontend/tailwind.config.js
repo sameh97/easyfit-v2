@@ -3,61 +3,11 @@
 const ACCENT = '#2F4BF0';
 const ACCENT_SOFT = '#E2E6FD';
 
-/**
- * Logical-direction utilities (redesign.md §7.10, Phase 2 step 1).
- * Tailwind 2 has no ms-/ps-/start- utilities, so this plugin builds them from the
- * theme scales with CSS logical properties. They follow `dir`, so one template works
- * in English (LTR) and Hebrew (RTL). Studio code must use these, never ml-/pl-/left-…
- *
- * @param {{
- *   matchUtilities: (utilities: Record<string, (value: string) => Record<string, string>>, options: { values: Record<string, string> }) => void,
- *   addUtilities: (utilities: Record<string, Record<string, string>>) => void,
- *   theme: (path: string) => Record<string, string>,
- * }} api
- */
-function logicalUtilities({ matchUtilities, addUtilities, theme }) {
-  /** @param {string} property */
-  const one = (property) => (value) => ({ [property]: value });
-  /** @param {string[]} properties */
-  const many = (properties) => (value) => Object.fromEntries(properties.map((property) => [property, value]));
-
-  matchUtilities(
-    { ms: one('margin-inline-start'), me: one('margin-inline-end') },
-    { values: theme('margin') }
-  );
-  matchUtilities(
-    { ps: one('padding-inline-start'), pe: one('padding-inline-end') },
-    { values: theme('padding') }
-  );
-  matchUtilities(
-    { start: one('inset-inline-start'), end: one('inset-inline-end') },
-    { values: theme('inset') }
-  );
-  matchUtilities(
-    {
-      'rounded-s': many(['border-start-start-radius', 'border-end-start-radius']),
-      'rounded-e': many(['border-start-end-radius', 'border-end-end-radius']),
-    },
-    { values: theme('borderRadius') }
-  );
-
-  /** @type {Record<string, Record<string, string>>} */
-  const fixed = {
-    '.text-start': { 'text-align': 'start' },
-    '.text-end': { 'text-align': 'end' },
-  };
-  for (const [key, width] of Object.entries(theme('borderWidth'))) {
-    const suffix = key === 'DEFAULT' ? '' : `-${key}`;
-    fixed[`.border-s${suffix}`] = { 'border-inline-start-width': width };
-    fixed[`.border-e${suffix}`] = { 'border-inline-end-width': width };
-  }
-  addUtilities(fixed);
-}
-
+// Logical-direction utilities (ms-, pe-, start-, text-start, border-s, rounded-e…) are built into
+// Tailwind 3.3+; Studio code uses only these for horizontal direction (redesign.md §7.10, Phase 2).
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  mode: 'jit',
-  purge: ['./src/**/*.{html,ts}'],
-  darkMode: false,
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
@@ -120,5 +70,4 @@ module.exports = {
       },
     },
   },
-  plugins: [logicalUtilities],
 };

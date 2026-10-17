@@ -2,8 +2,8 @@
 // This replaces the prebuilt indigo-pink theme: the CDK overlay/a11y base, ripples, and the
 // datepicker (plus the buttons in its header) coloured with the Studio accent and set in the Studio font.
 // Studio overrides (radius, shadow, weights) live in styles.css under `.studio-datepicker`.
-@use '~@angular/material' as mat;
-@use '~@angular/cdk' as cdk;
+@use '@angular/material' as mat;
+@use '@angular/cdk' as cdk;
 
 $studio-accent: #2f4bf0;
 $studio-accent-soft: #e2e6fd;
