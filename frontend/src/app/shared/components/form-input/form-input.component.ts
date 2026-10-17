@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Directive, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormGroup,
@@ -8,10 +8,8 @@ import {
 import { AppUtil } from 'src/app/common/app-util';
 import isIsraeliIdValid from 'israeli-id-validator';
 
-@Component({
-  selector: 'app-form-input',
-  template: ``,
-})
+/** Base class of the Studio forms: the shared validation rules (redesign.md §7.7). */
+@Directive()
 export class FormInputComponent implements OnInit {
   imageToUpload: File = null;
   uploadedImageUrl = null;

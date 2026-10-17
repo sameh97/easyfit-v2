@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ActivatedRouteSnapshot, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { merge, Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
@@ -13,7 +13,7 @@ import { ShellContext, ShellContextService } from 'src/app/services/shell-contex
 import { initialsOf } from 'src/app/shared/ui/avatar/avatar.component';
 import { DashboardService } from 'src/app/services/dashboard-service/dashboard.service';
 import { ConfirmDialogService } from 'src/app/shared/ui/overlay/confirm-dialog.service';
-import { Lang, LANGUAGES, LANGUAGE_NAMES, LanguageService, TextDir } from 'src/app/services/language.service';
+import { Lang, LANGUAGES, LANGUAGE_NAMES, LanguageService } from 'src/app/services/language.service';
 
 /** Below md: off-canvas drawer. md–lg: 72px rail. ≥ lg: full sidebar (user can collapse). ≥ xl: AI panel docks. */
 type Viewport = 'phone' | 'tablet' | 'desktop' | 'wide';
@@ -35,8 +35,6 @@ export class NavComponent implements OnInit, OnDestroy {
   userMenuOpen: boolean = false;
   aiPanelOpen: boolean = false;
   lang: Lang;
-  /** Redesigned pages follow the UI language; legacy pages are pinned to English LTR. */
-  studioRoute: boolean = false;
   readonly languages: readonly Lang[] = LANGUAGES;
   readonly languageNames: Record<Lang, string> = LANGUAGE_NAMES;
   private userCollapsed: boolean = false;
@@ -75,7 +73,6 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.studioRoute = this.isStudioRoute();
     this.subscriptions.push(this.language.lang$.subscribe((lang: Lang) => (this.lang = lang)));
 
     this.subscriptions.push(
@@ -117,7 +114,6 @@ export class NavComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           this.drawerOpen = false;
           this.userMenuOpen = false;
-          this.studioRoute = this.isStudioRoute();
         })
     );
 
@@ -230,25 +226,8 @@ export class NavComponent implements OnInit, OnDestroy {
 
   // ---- Language ----------------------------------------------------------
 
-  get contentDir(): TextDir {
-    return this.studioRoute ? this.language.dir : 'ltr';
-  }
-
-  get contentLang(): Lang {
-    return this.studioRoute ? this.lang : 'en';
-  }
-
   setLanguage(lang: Lang): void {
     this.language.use(lang);
-  }
-
-  /** Routes opt in with `data: { studio: true }` once their page is redesigned. */
-  private isStudioRoute(): boolean {
-    let route: ActivatedRouteSnapshot | null = this.router.routerState.snapshot.root;
-    while (route?.firstChild) {
-      route = route.firstChild;
-    }
-    return route?.data?.studio === true;
   }
 
   formatCount(count: number): string {
