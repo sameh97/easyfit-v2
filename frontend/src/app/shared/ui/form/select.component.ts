@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_PAD, FIELD_HELP, FIELD_LABEL } from './field-shell';
 
@@ -35,7 +35,7 @@ export interface SelectOption<T = string | number> {
   styles: [':host { display: block; min-width: 0; }'],
 })
 export class SelectComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() options: SelectOption[] = [];
   @Input() required: boolean = false;

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_HELP, FIELD_LABEL } from './field-shell';
 
@@ -27,7 +27,7 @@ import { FIELD_HELP, FIELD_LABEL } from './field-shell';
   styles: [':host { display: block; min-width: 0; }'],
 })
 export class TextAreaComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() rows: number = 3;
   @Input() required: boolean = false;

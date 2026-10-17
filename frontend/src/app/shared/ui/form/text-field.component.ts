@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { IconName } from '../icon/icons';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_PAD, FIELD_HELP, FIELD_INPUT, FIELD_LABEL } from './field-shell';
@@ -39,7 +39,7 @@ export type TextFieldType = 'text' | 'email' | 'tel' | 'password' | 'number';
   styles: [':host { display: block; min-width: 0; }'],
 })
 export class TextFieldComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() type: TextFieldType = 'text';
   @Input() required: boolean = false;

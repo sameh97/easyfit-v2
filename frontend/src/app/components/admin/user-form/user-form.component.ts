@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AppConsts } from 'src/app/common/consts';
@@ -38,16 +38,16 @@ const GYM_USER_ROLE_ID: number = 1;
 export class UserFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: User | null;
   readonly isEdit: boolean;
-  readonly firstName: FormControl;
-  readonly lastName: FormControl;
-  readonly email: FormControl;
-  readonly password: FormControl;
-  readonly confirmPassword: FormControl;
-  readonly phone: FormControl;
-  readonly birthDay: FormControl;
-  readonly address: FormControl;
-  readonly gymId: FormControl;
-  readonly form: FormGroup;
+  readonly firstName: UntypedFormControl;
+  readonly lastName: UntypedFormControl;
+  readonly email: UntypedFormControl;
+  readonly password: UntypedFormControl;
+  readonly confirmPassword: UntypedFormControl;
+  readonly phone: UntypedFormControl;
+  readonly birthDay: UntypedFormControl;
+  readonly address: UntypedFormControl;
+  readonly gymId: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   gymOptions: SelectOption<number>[] = [];
   currentPhoto: string | null;
@@ -69,16 +69,16 @@ export class UserFormComponent extends FormInputComponent implements CloseGuard,
     const u: User | null = data?.user ?? null;
     this.original = u;
     this.isEdit = !!u;
-    this.firstName = new FormControl(u?.firstName ?? '', [Validators.required, this.validateName]);
-    this.lastName = new FormControl(u?.lastName ?? '', [Validators.required, this.validateName]);
-    this.email = new FormControl(u?.email ?? '', [Validators.required, Validators.email]);
-    this.password = new FormControl('', this.isEdit ? [this.optionalPassword] : [Validators.required, this.validatePassword]);
-    this.confirmPassword = new FormControl('', [this.matchesPassword]);
-    this.phone = new FormControl(u?.phone ?? '', [Validators.required, this.validateIsraeliPhoneNumber]);
-    this.birthDay = new FormControl(u ? fromApiDate(u.birthDay) : null, [Validators.required, this.validateBirthDay]);
-    this.address = new FormControl(u?.address ?? '', [Validators.required]);
-    this.gymId = new FormControl(u?.gymId ?? null, [Validators.required]);
-    this.form = new FormGroup({
+    this.firstName = new UntypedFormControl(u?.firstName ?? '', [Validators.required, this.validateName]);
+    this.lastName = new UntypedFormControl(u?.lastName ?? '', [Validators.required, this.validateName]);
+    this.email = new UntypedFormControl(u?.email ?? '', [Validators.required, Validators.email]);
+    this.password = new UntypedFormControl('', this.isEdit ? [this.optionalPassword] : [Validators.required, this.validatePassword]);
+    this.confirmPassword = new UntypedFormControl('', [this.matchesPassword]);
+    this.phone = new UntypedFormControl(u?.phone ?? '', [Validators.required, this.validateIsraeliPhoneNumber]);
+    this.birthDay = new UntypedFormControl(u ? fromApiDate(u.birthDay) : null, [Validators.required, this.validateBirthDay]);
+    this.address = new UntypedFormControl(u?.address ?? '', [Validators.required]);
+    this.gymId = new UntypedFormControl(u?.gymId ?? null, [Validators.required]);
+    this.form = new UntypedFormGroup({
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,

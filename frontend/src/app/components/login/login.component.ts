@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AppUtil } from 'src/app/common/app-util';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/model/user';
 import { AccessDeniedError } from 'src/app/exceptions/access-denied-error';
 import { NotFoundError } from 'src/app/exceptions/not-found-error';
@@ -18,7 +18,7 @@ export class LoginComponent extends FormInputComponent implements OnInit {
   hide: boolean = true;
   invalidLogin: boolean;
 
-  loginForm: FormGroup = this.fb.group({
+  loginForm: UntypedFormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(3)]], // TODO: change in production
   });
@@ -26,7 +26,7 @@ export class LoginComponent extends FormInputComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
   }

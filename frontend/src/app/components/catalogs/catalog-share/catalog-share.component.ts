@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Catalog } from 'src/app/model/catalog';
 import { Member } from 'src/app/model/member';
@@ -38,7 +38,7 @@ const PAGE: number = 30;
 export class CatalogShareComponent implements OnDestroy {
   readonly catalog: Catalog;
   readonly link: string;
-  readonly message: FormControl;
+  readonly message: UntypedFormControl;
   query: string = '';
   limit: number = PAGE;
   opened = new Set<number>();
@@ -56,7 +56,7 @@ export class CatalogShareComponent implements OnDestroy {
     this.catalog = data.catalog;
     this.link = catalogUrl(this.catalog);
     const names: string = (this.catalog.products ?? []).map((p) => p.name).join(', ');
-    this.message = new FormControl(this.language.t('catalogs.share.defaultMessage', { products: names }));
+    this.message = new UntypedFormControl(this.language.t('catalogs.share.defaultMessage', { products: names }));
     this.subscriptions.push(
       this.members.getAll().subscribe((members: Member[] | null) => {
         if (!members) {

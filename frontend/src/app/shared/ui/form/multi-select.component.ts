@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIELD_LABEL, FIELD_PAD } from './field-shell';
 
@@ -111,7 +111,7 @@ const MAX_RESULTS: number = 50;
   styles: [':host { display: block; min-width: 0; }'],
 })
 export class MultiSelectComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   /** The label stays for screen readers when a section title already names the field. */
   @Input() hideLabel: boolean = false;

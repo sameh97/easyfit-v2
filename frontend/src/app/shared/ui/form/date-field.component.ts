@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { LanguageDirectionality } from 'src/app/shared/i18n/language-directionality';
@@ -53,7 +53,7 @@ import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIEL
   styles: [':host { display: block; min-width: 0; }'],
 })
 export class DateFieldComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() required: boolean = false;
   @Input() help: string | null = null;

@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 
 /** Error key → translation key, to override the default message for one field. */
 export type FieldMessages = Readonly<Record<string, string>>;
@@ -48,7 +48,7 @@ export function showsError(control: AbstractControl | null): boolean {
  * Submit helper: shows every error, then moves focus to the first invalid field in `root`.
  * Returns true when the form is valid.
  */
-export function validateAndFocus(form: FormGroup, root: HTMLElement): boolean {
+export function validateAndFocus(form: UntypedFormGroup, root: HTMLElement): boolean {
   form.markAllAsTouched();
   if (form.valid) {
     return true;

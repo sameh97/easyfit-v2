@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { formatMoney } from 'src/app/common/money';
 import { Catalog } from 'src/app/model/catalog';
@@ -30,9 +30,9 @@ export interface CatalogFormData {
 export class CatalogFormComponent implements CloseGuard, OnDestroy {
   readonly original: Catalog | null;
   readonly isEdit: boolean;
-  readonly products: FormControl;
-  readonly durationDays: FormControl;
-  readonly form: FormGroup;
+  readonly products: UntypedFormControl;
+  readonly durationDays: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   productOptions: MultiSelectOption[] = [];
   saving: boolean = false;
@@ -50,13 +50,13 @@ export class CatalogFormComponent implements CloseGuard, OnDestroy {
   ) {
     this.original = data?.catalog ?? null;
     this.isEdit = !!this.original;
-    this.products = new FormControl((this.original?.products ?? []).map((p: Product) => p.id), [Validators.required]);
-    this.durationDays = new FormControl(this.original ? String(this.original.durationDays) : '7', [
+    this.products = new UntypedFormControl((this.original?.products ?? []).map((p: Product) => p.id), [Validators.required]);
+    this.durationDays = new UntypedFormControl(this.original ? String(this.original.durationDays) : '7', [
       Validators.required,
       Validators.min(1),
       Validators.max(100),
     ]);
-    this.form = new FormGroup({ products: this.products, durationDays: this.durationDays });
+    this.form = new UntypedFormGroup({ products: this.products, durationDays: this.durationDays });
 
     this.subscriptions.push(
       this.productsService.getAll().subscribe((products: Product[] | null) => {

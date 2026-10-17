@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { AbstractControl, FormControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, ValidationErrors } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIELD_LABEL } from './field-shell';
 
@@ -126,7 +126,7 @@ const SUGGESTIONS: readonly string[] = Array.from({ length: (24 * 60) / STEP_MIN
   styles: [':host { display: block; min-width: 0; }'],
 })
 export class TimeFieldComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() required: boolean = false;
   @Input() help: string | null = null;

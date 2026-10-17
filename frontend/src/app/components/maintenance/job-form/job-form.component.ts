@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { merge, Observable, Subscription } from 'rxjs';
 import { AppUtil } from 'src/app/common/app-util';
 import { Machine } from 'src/app/model/machine';
@@ -39,15 +39,15 @@ export class JobFormComponent extends FormInputComponent implements CloseGuard, 
   readonly original: ScheduledJob | null;
   readonly isEdit: boolean;
 
-  readonly machine: FormControl;
-  readonly jobID: FormControl;
-  readonly startDate: FormControl;
-  readonly startTime: FormControl;
-  readonly endDate: FormControl;
-  readonly endTime: FormControl;
-  readonly daysFrequency: FormControl;
-  readonly isActive: FormControl;
-  readonly form: FormGroup;
+  readonly machine: UntypedFormControl;
+  readonly jobID: UntypedFormControl;
+  readonly startDate: UntypedFormControl;
+  readonly startTime: UntypedFormControl;
+  readonly endDate: UntypedFormControl;
+  readonly endTime: UntypedFormControl;
+  readonly daysFrequency: UntypedFormControl;
+  readonly isActive: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   machineOptions: SelectOption<string>[] = [];
   typeOptions: SegmentedFieldOption<number>[] = [];
@@ -73,15 +73,15 @@ export class JobFormComponent extends FormInputComponent implements CloseGuard, 
     const end: Date | null = j ? new Date(j.endTime) : null;
     const today: Date = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
-    this.machine = new FormControl(j?.machineSerialNumber ?? data?.machineSerialNumber ?? null, [Validators.required]);
-    this.jobID = new FormControl(j ? Number(j.jobID) : 1, [Validators.required]);
-    this.startDate = new FormControl(start ? midnight(start) : today, [Validators.required]);
-    this.startTime = new FormControl(start ? timeOf(start) : '', [Validators.required, timeValidator]);
-    this.endDate = new FormControl(end ? midnight(end) : null, [Validators.required]);
-    this.endTime = new FormControl(end ? timeOf(end) : '', [Validators.required, timeValidator, this.validEnd]);
-    this.daysFrequency = new FormControl(j ? String(j.daysFrequency) : '', [Validators.required, this.validFrequency]);
-    this.isActive = new FormControl(j ? j.isActive === true : true);
-    this.form = new FormGroup({
+    this.machine = new UntypedFormControl(j?.machineSerialNumber ?? data?.machineSerialNumber ?? null, [Validators.required]);
+    this.jobID = new UntypedFormControl(j ? Number(j.jobID) : 1, [Validators.required]);
+    this.startDate = new UntypedFormControl(start ? midnight(start) : today, [Validators.required]);
+    this.startTime = new UntypedFormControl(start ? timeOf(start) : '', [Validators.required, timeValidator]);
+    this.endDate = new UntypedFormControl(end ? midnight(end) : null, [Validators.required]);
+    this.endTime = new UntypedFormControl(end ? timeOf(end) : '', [Validators.required, timeValidator, this.validEnd]);
+    this.daysFrequency = new UntypedFormControl(j ? String(j.daysFrequency) : '', [Validators.required, this.validFrequency]);
+    this.isActive = new UntypedFormControl(j ? j.isActive === true : true);
+    this.form = new UntypedFormGroup({
       machine: this.machine,
       jobID: this.jobID,
       startDate: this.startDate,

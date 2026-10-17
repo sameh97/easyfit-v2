@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { newFieldId } from './field';
 import { FIELD_HELP } from './field-shell';
 
@@ -34,7 +34,7 @@ import { FIELD_HELP } from './field-shell';
   styles: [':host { display: block; }'],
 })
 export class SwitchComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() help: string | null = null;
 

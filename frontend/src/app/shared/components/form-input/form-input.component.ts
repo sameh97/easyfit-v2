@@ -1,7 +1,7 @@
 import { Directive, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormGroup,
+  UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
@@ -39,7 +39,7 @@ export class FormInputComponent implements OnInit {
   }
 
   public checkPasswordsValidator: ValidatorFn = (
-    group: FormGroup
+    group: UntypedFormGroup
   ): ValidationErrors | null => {
     const pass = group.controls.password.value;
     const confirmPass = group.controls.confirmPassword.value;
@@ -344,7 +344,7 @@ export class FormInputComponent implements OnInit {
     return null;
   };
 
-  public passwordsMatch(form: FormGroup): boolean {
+  public passwordsMatch(form: UntypedFormGroup): boolean {
     if (!form) {
       return false;
     }
