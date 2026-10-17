@@ -55,7 +55,7 @@ The API lives under `/api/*`. Tables are created by `sequelize.sync()`; there ar
 
 > ✅ **Remove Bootstrap, jQuery and Angular Material?** Done in Phase 5. Bootstrap, jQuery and every Material component except the datepicker are gone; the datepicker stays inside the Studio `DateField` (decided with the owner: keyboard and screen-reader support come for free).
 >
-> ✏️ **Upgrade Angular?** Not done in the redesign. Recommendation in §7.10 "Done in Phase 5".
+> ✏️ **Upgrade Angular?** Proposed as **Phase 5b** (§7.10): Angular 11 → 22, one major at a time. Waiting for the owner's decisions listed there.
 
 ---
 
@@ -452,7 +452,8 @@ Reference: `mockups/Final-Dashboard.dc.html` (shell), `mockups/Nav-1-Sidebar-AI-
 2. **Phase 3:** Classes (group trainings), Machines, Maintenance (scheduler), notifications panel
 3. **Phase 4:** Products and Sales, Catalogs, Profile and settings, Admin (Gyms, Users, the same shell with admin nav), 404
 4. **Phase 5 ✅:** clean-up. Remove Bootstrap, jQuery, Angular Material components and the extra date pickers; turn preflight back on; drop `important`. Then decide on the Angular upgrade.
-5. **Phase 6:** the AI backend (§7.6)
+5. **Phase 5b ✏️:** Angular 11 → 22 upgrade, no UI changes (§7.10)
+6. **Phase 6:** the AI backend (§7.6)
 
 ### 7.6 New features or fields
 **AI assistant ("EasyFit AI").** The UI is in §7.3. The backend has two separate capabilities, and they need different architectures:
@@ -745,5 +746,85 @@ Branch `redesign/phase-5` (from `redesign/phase-1`, after Phase 4 is merged). No
   - v13: View Engine is gone, and Tailwind 3 becomes possible. Move to v3 then: the `mode: 'jit'`/`purge` keys become `content`, and the logical-utility plugin can give way to Tailwind's built-in `ms-`/`ps-`/`start-`.
   - v15: the Material datepicker moves to MDC; re-check `datepicker-theme.scss` and the `.studio-datepicker` overrides.
   - v17+: standalone components, `@if`/`@for`, signals and the esbuild builder are optional follow-ups. They don't need to be done in the same phase.
+
+**Phase 5b: Angular upgrade** ✏️ (proposed; waiting for the decisions below)
+Branch `redesign/phase-5b` (from `redesign/phase-1`, after Phase 5 is merged). **Goal:** the same app, on a supported stack. Every page looks and behaves exactly as at the end of Phase 5.
+
+**Target (checked on npm, Oct 2026):**
+
+| Package | Now | Target | Notes |
+|---|---|---|---|
+| Angular (core, cli, cdk, material) | 11.2 | **22.x** (latest, June 2026) | Needs Node `^22.22` or `^24.15` |
+| TypeScript | 4.0 | the version Angular 22 asks for | `ng update` moves it |
+| RxJS | 6.6 | 7.x | `@ngx-translate` 18 needs it |
+| zone.js | 0.10 | 0.16 | |
+| `@ngx-translate/core` + `http-loader` | 13 / 6 | 18 / 18 | Step up with Angular: 14 at A13, 15 at A16, 17 at A17, 18 at A18+ |
+| `@auth0/angular-jwt` | 2.1 | 5.x | 5.2 needs Angular 14+ |
+| Tailwind CSS | 2.2 (JIT) | **3.4** | Tailwind 4 is a separate, later job |
+| `socket.io-client` | 4.0 | 4.8 | Same protocol; the backend stays on socket.io 4 |
+| Node (Docker build image) | 18 + `--openssl-legacy-provider` | **24 LTS**, no legacy flag | Windows dev machine already runs Node 24.15 |
+
+**How every step is done:**
+- `ng update` for one Angular major, plus the library majors that major needs. Use the CLI migrations and don't hand-edit what they cover.
+- Then: `ng build --prod` (or `ng build` once production is the default), `npm run check:studio`, and the Phase 5 browser regression.
+  - The regression is `p5-pages.js` (all pages, EN/HE × 1440/1024/390), `p5-flow.js` (member add/edit/delete), `p5-socket.js` (live alerts), and `p5-diff.js` against the Phase 5 screenshots.
+  - The diff must stay at about 0%, apart from changes the step explains.
+- One commit per step. Rebuild the Docker images at the end of steps 2, 5, 8 and 10.
+
+**Steps:**
+0. **Baseline and prep.**
+   - Take the Phase 5 screenshots as the baseline.
+   - Remove dead tooling that blocks updates: Protractor and the `e2e/` folder, `tslint` and `codelyzer`, and the `lint`/`e2e` targets in `angular.json`.
+1. **Angular 12.**
+   - `ng build` now means a production build (the migration moves `--prod` into the default configuration). Update the `Dockerfile` and README build commands to match.
+   - `datepicker-theme.scss` still uses `@import '~@angular/material/theming'`, which is deprecated but works here.
+2. **Angular 13, RxJS 7, Tailwind 3.4, `@ngx-translate` 14.**
+   - Tailwind 3: `purge` becomes `content`, and `mode: 'jit'` and `TAILWIND_MODE=watch` go away.
+   - Tailwind 3.3+ has `ms-`/`me-`/`ps-`/`pe-`/`start-`/`end-`, `text-start`/`text-end`, `border-s`/`border-e` and `rounded-s`/`rounded-e` built in, so the logical-utility plugin is deleted. `check:rtl` stays.
+   - Tailwind 3 also changes some default colours and opacity syntax; the screenshot diff catches any change.
+   - RxJS 7: fix deprecated `toPromise`, any `subscribe(next, error)` overloads that are now errors, and their typings.
+3. **Angular 14, `@auth0/angular-jwt` 5.** The typed-forms migration turns `FormGroup`/`FormControl` into `UntypedFormGroup`/`UntypedFormControl`. Rewriting the forms as typed forms is a follow-up, not this phase.
+4. **Angular 15: Material moves to MDC.**
+   - Rewrite `datepicker-theme.scss` with `@use '@angular/material' as mat` (`mat.core()`, `mat.define-light-theme`, `mat.datepicker-theme`, `mat.button-theme`).
+   - Check the `.studio-datepicker` overrides against the new class names (the header buttons become `mat-mdc-button`).
+   - The calendar must look and work the same: the screenshot diff, plus keyboard use of the calendar.
+5. **Angular 16.**
+   - ngcc is gone, so every library must ship Ivy (all targets above do).
+   - Bump `@ngx-translate` to 15.
+6. **Angular 17, and the esbuild "application" builder.**
+   - The build output moves to `dist/easyfit/browser`, so `frontend/Dockerfile`'s `COPY` changes.
+   - Tailwind 3 keeps working through `tailwind.config.js` + PostCSS.
+   - `@ngx-translate` 17.
+7. **Angular 18 and 19.**
+   - `@ngx-translate` 18.
+   - At 19 the migration adds `standalone: false` to every NgModule component; that's expected, and nothing else changes.
+8. **Angular 20, 21 and 22, Node 24.**
+   - `frontend/Dockerfile` moves to `node:24`, without `--openssl-legacy-provider`. Drop `--legacy-peer-deps` if the peer tree is clean by then.
+   - zone.js 0.16. `README.md` run instructions are updated.
+9. **Unit-test setup** (owner decision 3).
+10. **Clean-up and docs.**
+    - Remove leftovers: unused polyfills and old `tsconfig` flags.
+    - Final Docker rebuild, plus "Done in Phase 5b" in this file.
+
+**Do not in Phase 5b:**
+- Change any UI, wording, behaviour, route, API, DB schema or validation rule.
+- Convert to standalone components, the `@if`/`@for` control flow, signals, typed forms or zoneless. These are optional follow-ups after the upgrade; each has its own automatic migration.
+- Move to Tailwind 4 (CSS-first config; a separate job once on Angular 22).
+- Touch the backend. Its own Node and Express upgrade would be a separate phase.
+
+**Phase 5b is done when:**
+- `package.json` is on Angular 22 and the targets above. `ng build` passes with no new warnings and no `any`. `npm run check:studio` passes.
+- The browser regression passes with the same results as Phase 5: 84/84 page checks, the member flow, the live-alert socket, and screenshots unchanged apart from the explained differences.
+- `docker compose up -d --build` works on `node:24` without `--openssl-legacy-provider`, and the app on http://localhost behaves as before.
+- `npm ls` shows no peer-dependency errors (so `--legacy-peer-deps` can go), and `npm audit` is no worse than before.
+
+**Decisions for the owner:**
+1. **Target version:** **Angular 22 (recommended)**, the newest major with the longest support ahead. Or stop at 21.
+2. **Docker build image:** move `frontend/Dockerfile` from `node:18` to **`node:24` (recommended)**. §7.7 lists Docker as out of scope, so this needs an explicit OK. Angular 22 doesn't run on Node 18, and Node 18 itself is out of support.
+3. **Unit tests:**
+   - **(a) Recommended:** remove Karma, Jasmine and the stale `*.spec.ts` files; the browser regression is the real safety net. Angular 21+ no longer uses Karma by default.
+   - **(b)** Move them to Vitest (Angular's new default) and fix them so they pass.
+   - **(c)** Leave them, broken.
+4. **Builder:** switch to the esbuild application builder at Angular 17 (**recommended**: faster builds, the default from then on). Or keep the webpack builder.
 
 **Phase 6:** the AI backend (§7.6).
