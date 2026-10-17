@@ -2,7 +2,8 @@
 // This replaces the prebuilt indigo-pink theme: the CDK overlay/a11y base, ripples, and the
 // datepicker (plus the buttons in its header) coloured with the Studio accent and set in the Studio font.
 // Studio overrides (radius, shadow, weights) live in styles.css under `.studio-datepicker`.
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
+@use '~@angular/cdk' as cdk;
 
 $studio-accent: #2f4bf0;
 $studio-accent-soft: #e2e6fd;
@@ -41,14 +42,14 @@ $studio-palette: (
   ),
 );
 
-$studio-theme: mat-light-theme(mat-palette($studio-palette), mat-palette($studio-palette));
-$studio-typography: mat-typography-config($font-family: '"Plus Jakarta Sans", "Rubik", system-ui, sans-serif');
+$studio-theme: mat.define-light-theme(mat.define-palette($studio-palette), mat.define-palette($studio-palette));
+$studio-typography: mat.define-typography-config($font-family: '"Plus Jakarta Sans", "Rubik", system-ui, sans-serif');
 
-@include cdk-overlay();
-@include cdk-a11y();
-@include mat-ripple();
+@include cdk.overlay();
+@include cdk.a11y-visually-hidden();
+@include mat.ripple();
 
-@include mat-datepicker-color($studio-theme);
-@include mat-datepicker-typography($studio-typography);
-@include mat-button-color($studio-theme);
-@include mat-button-typography($studio-typography);
+@include mat.datepicker-color($studio-theme);
+@include mat.datepicker-typography($studio-typography);
+@include mat.button-color($studio-theme);
+@include mat.button-typography($studio-typography);

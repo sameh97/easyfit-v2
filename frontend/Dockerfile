@@ -11,7 +11,7 @@ COPY . .
 # Angular 11's webpack needs the legacy OpenSSL provider on Node >= 17
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
-RUN npx ng build --prod
+RUN npx ng build
 
 # ---- Runtime stage: serve with nginx and proxy the API ----
 FROM nginx:1.27-alpine

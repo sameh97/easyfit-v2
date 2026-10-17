@@ -344,23 +344,6 @@ export class FormInputComponent implements OnInit {
     return null;
   };
 
-  public validateQuantity = (
-    inputControl: AbstractControl
-  ): ValidationErrors | null => {
-    if (!inputControl) {
-      return null;
-    }
-
-    const regex = new RegExp('^+?(0|[1-9]d*)$');
-
-    // TODO: cover number type input case
-    if (!inputControl.value.match(regex)) {
-      return { quantityNotValid: true };
-    }
-
-    return null;
-  };
-
   public passwordsMatch(form: FormGroup): boolean {
     if (!form) {
       return false;
