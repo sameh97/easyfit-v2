@@ -25,13 +25,14 @@ EasyFit is a **gym management web app** for gym owners and staff (not for gym me
 | Area | Tech | Notes |
 |---|---|---|
 | Framework | **Angular 11.2.14**, TypeScript 4.0 | One `AppModule`, no lazy loading, no standalone components (they don't exist in v11) |
-| Styling (new) | **Tailwind CSS 2.2** (JIT mode) + PostCSS 8 | Config in `frontend/tailwind.config.js`. Tailwind 3+ needs Angular 13+ |
-| Styling (legacy) | **Angular Material 11** (`indigo-pink` prebuilt theme), **Bootstrap 4.3** (CSS from CDN + jQuery/Bootstrap JS), `@angular/flex-layout` | Most pages still use these |
-| Icons | Google **Material Icons** font (`<span class="material-icons">name</span>`) | Loaded in `index.html` |
-| Fonts | **Inter** (body), **Barlow Condensed** (display/headings), Roboto (legacy Material) | Google Fonts in `index.html` |
-| Charts | **Chart.js 3.5** (used directly via `new Chart(canvas)`) | 4 charts on the dashboard |
-| Date pickers | `@angular-material-components/datetime-picker`, `ng-pick-datetime` (Owl), Material datepicker | Three different libraries are in use |
-| Multi-select | `ng-multiselect-dropdown` | Used for picking members, trainers, products and machines |
+| Styling | **Tailwind CSS 2.2** (JIT mode, preflight on) + PostCSS 8 | Config in `frontend/tailwind.config.js`. Tailwind 3+ needs Angular 13+ |
+| Overlays and a11y | `@angular/cdk` (overlay, portal, a11y, layout, bidi) | Side panels, menus, confirm dialog, focus traps |
+| Date picker | The **Material datepicker** inside the Studio `DateField`, the only Angular Material left | Themed by `src/datepicker-theme.scss` (no prebuilt theme) |
+| Icons | Inline Lucide-style SVGs (`<app-icon>`) | |
+| Fonts | **Plus Jakarta Sans** + **Rubik** (Hebrew) | Google Fonts in `index.html` |
+| Charts | Inline SVG on the dashboard | |
+| Multi-select | Studio `MultiSelect` (`shared/ui`) | |
+| i18n | `@ngx-translate` 13, `en.json` / `he.json` | |
 | Realtime | `socket.io-client` 4 | Live notification count in the top bar |
 | Auth | JWT stored client-side, `@auth0/angular-jwt`, `AuthGuard` on routes | |
 | Forms | Reactive forms; shared validators live in `shared/components/form-input/form-input.component.ts` | Components extend `FormInputComponent` |
@@ -48,13 +49,13 @@ The API lives under `/api/*`. Tables are created by `sequelize.sync()`; there ar
 ### Hard constraints for the redesign (from `CLAUDE.md` and the stack)
 1. All new UI uses **Tailwind**, with a *modern, clean, athletic* look.
 2. The TypeScript must be strictly typed.
-3. Tailwind **preflight is disabled** so that Bootstrap and Material pages keep working. Unless all of them are migrated, new components must set their own base styles (margins on `h1`/`p`, button resets and so on).
+3. Tailwind **preflight is on** (since Phase 5; Bootstrap and the Material theme are gone). Before Phase 5 it was off and Studio code carried its own base layer.
 4. Tailwind 2 syntax applies: `bg-opacity-*` (no `bg-black/50`), `transform` must be added before `translate-*`, and arbitrary values like `w-[37px]` work because JIT is on.
 5. `ng serve` needs `NODE_OPTIONS=--openssl-legacy-provider` and `TAILWIND_MODE=watch`.
 
-> ✏️ **Should the redesign also remove Bootstrap, jQuery and/or Angular Material entirely?** (Removing them would let Tailwind's preflight be turned back on and makes the bundle smaller. Material would still be useful for dialogs, datepickers and tables, restyled.)
+> ✅ **Remove Bootstrap, jQuery and Angular Material?** Done in Phase 5. Bootstrap, jQuery and every Material component except the datepicker are gone; the datepicker stays inside the Studio `DateField` (decided with the owner: keyboard and screen-reader support come for free).
 >
-> ✏️ **Upgrade Angular (to 17+) as part of this?** That unlocks Tailwind 3/4, standalone components, the new control flow (`@if`/`@for`) and signals. It's a big job; it can happen before or after the redesign.
+> ✏️ **Upgrade Angular?** Not done in the redesign. Recommendation in §7.10 "Done in Phase 5".
 
 ---
 
@@ -450,7 +451,7 @@ Reference: `mockups/Final-Dashboard.dc.html` (shell), `mockups/Nav-1-Sidebar-AI-
 1. **Phase 2:** shared patterns (§7.4) + **Hebrew/RTL** + **Members** + **Trainers**
 2. **Phase 3:** Classes (group trainings), Machines, Maintenance (scheduler), notifications panel
 3. **Phase 4:** Products and Sales, Catalogs, Profile and settings, Admin (Gyms, Users, the same shell with admin nav), 404
-4. **Phase 5:** clean-up. Remove Bootstrap, jQuery, Angular Material components and the extra date pickers; turn preflight back on; drop `important`. Then decide on the Angular upgrade.
+4. **Phase 5 ✅:** clean-up. Remove Bootstrap, jQuery, Angular Material components and the extra date pickers; turn preflight back on; drop `important`. Then decide on the Angular upgrade.
 5. **Phase 6:** the AI backend (§7.6)
 
 ### 7.6 New features or fields
@@ -549,6 +550,8 @@ Work in phases. **Only do the phase you are asked for**, and leave anything stil
 - Screenshots at 1440, 1024 and 390px wide broadly match the mockups.
 
 #### Notes for later phases
+
+> **Superseded in Phase 5:** Bootstrap and the Material theme are gone, so preflight is on, `important: true` and the `.studio` layer are removed, and Tailwind scans all of `src/`. The notes below explain Phases 1–4 only.
 
 **Tailwind runs with `important: true` and only scans Studio files** (decided in Phase 1, see `frontend/tailwind.config.js`).
 
@@ -712,4 +715,35 @@ Branch `redesign/phase-4` (from `redesign/phase-1`, after Phase 3 is merged). Mo
 - **User passwords**: required for a new user; on edit optional, empty keeps the current one (the user list has no passwords, so the legacy edit forced a new password on every edit).
 - Deleted: the legacy Products, Catalog, Profile, Admin (incl. `app-admin-nav`) and Register components, and the unused Phase 1 chart components. `NavigationHelperService` and `ConfirmationDialogComponent` are now unused; they go with Material in Phase 5.
 
-**Phase 5+:** clean-up (§7.5), then the AI backend.
+**Phase 5: clean-up** (§7.5)
+Branch `redesign/phase-5` (from `redesign/phase-1`, after Phase 4 is merged). No UI or API changes; every page should look and behave as in Phase 4.
+
+1. Drop the unused Material modules and legacy code; every route is a Studio route.
+2. Remove Bootstrap, jQuery, the Material prebuilt theme, `mat-typography`, Roboto and Material Icons.
+3. Tailwind: preflight on, `important: true` off, scan `./src/**/*.{html,ts}`; remove the `.studio` layer and class.
+4. Remove the unused packages (frontend and backend).
+5. Docs, and a recommendation on the Angular upgrade.
+
+#### Done in Phase 5 (decisions made while building it)
+- **Material = the datepicker only.** `UiModule` imports `MatDatepickerModule`; `src/datepicker-theme.scss` replaces the prebuilt `indigo-pink` theme with what the Studio date field needs: the CDK overlay and a11y base, ripples, and the datepicker and its header buttons in the Studio accent and font. `.studio-datepicker` overrides in `styles.css` stay. `@angular/cdk` stays (side panels, menus, dialogs, focus traps).
+- **Base styles:** Tailwind's preflight is the reset. `styles.css` adds the font, ink colour, focus ring, disabled cursor, heading-tracking variables and `flip-rtl`; reduced motion applies to the whole app. Preflight's default border colour is the Studio `line` colour (`borderColor.DEFAULT`).
+- **No more `studio` class or `data: { studio: true }`:** every page is a Studio page, so the nav's "legacy page → English, LTR" switch is gone and `<main>` follows the UI language like the rest of the app. Overlay panel classes are just `studio-side-panel`, `studio-menu`, `studio-dialog`.
+- **New pages need no extra setup:** Tailwind scans all of `src/` and `npm run check:rtl` checks all of `src/`.
+- `FormInputComponent` is now an abstract base `@Directive()` (it was a component declared in the deleted `SharedModule`); its rules are unchanged.
+- `WebSocketService` imports `io` / `Socket` from `socket.io-client` (it used `require` and the `stompjs` types). Same connection, topics and reconnect; the `global` shim in `index.html` is gone.
+- **Removed packages.** Frontend: `@angular-material-components/datetime-picker`, `ng-pick-datetime`, `ng-material-datetimepicker`, `ng-multiselect-dropdown`, `@angular/flex-layout`, `@material/*`, `bootstrap`, `jquery`, `@types/jquery`, `material-design-icons`, `chart.js`, `net`, `@types/stompjs`. Backend: `node-html-parser` (lockfile kept at version 1). `wbm` stays: its endpoint still exists, and removing it would change the API.
+- **Size:** the initial bundle went from 1.58 MB to 1.19 MB, and the Bootstrap CSS from the CDN (~160 KB) is no longer loaded.
+- **Visual change:** a few px of vertical rhythm (preflight makes SVG icons `display: block`, and line-height comes from preflight instead of Bootstrap). Layouts, colours and components are unchanged at 1440, 1024 and 390 in both languages.
+- **Unit tests:** the old Karma specs were already broken before Phase 5. The one that no longer compiled (`trainers.component.spec.ts`) is deleted; the rest compile. Karma's Chrome launcher doesn't connect on the dev machine, so they weren't run.
+- **Known issue, not caused by Phase 5:** at 1024px in Hebrew, with the member detail panel open, the members table is too narrow (names cut to two letters, dates wrap). It's the same in Phase 4.
+
+**Angular upgrade: recommendation**
+- **Why:** Angular 11 has had no security fixes since 2022. The build only runs on Node ≥ 17 with `--openssl-legacy-provider`, TypeScript is stuck at 4.0, and Tailwind 3+ is blocked.
+- **When:** as its own phase, after this one is merged and before Phase 6 adds new frontend work (the AI panel). The redesign removed most of the risky dependencies (Bootstrap/jQuery, Owl and ngx-mat pickers, flex-layout, multiselect), so now is the cheapest time it will be.
+- **How:** `ng update` one major at a time (11 → 12 → … → the current LTS), one commit and one run of the browser regression per major. Known stops:
+  - v12: Ivy-only libraries. `@auth0/angular-jwt` and `@ngx-translate` need newer majors.
+  - v13: View Engine is gone, and Tailwind 3 becomes possible. Move to v3 then: the `mode: 'jit'`/`purge` keys become `content`, and the logical-utility plugin can give way to Tailwind's built-in `ms-`/`ps-`/`start-`.
+  - v15: the Material datepicker moves to MDC; re-check `datepicker-theme.scss` and the `.studio-datepicker` overrides.
+  - v17+: standalone components, `@if`/`@for`, signals and the esbuild builder are optional follow-ups. They don't need to be done in the same phase.
+
+**Phase 6:** the AI backend (§7.6).
