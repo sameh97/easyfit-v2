@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GroupTraining } from 'src/app/model/group-training';
 import { Member } from 'src/app/model/member';
@@ -33,20 +33,22 @@ export interface ClassFormData {
  * after another of theirs (the backend's check, shown on the time field before saving).
  */
 @Component({
-  selector: 'app-class-form',
-  templateUrl: './class-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-class-form',
+    templateUrl: './class-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ClassFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: GroupTraining | null;
   readonly isEdit: boolean;
 
-  readonly date: FormControl;
-  readonly time: FormControl;
-  readonly description: FormControl;
-  readonly trainerId: FormControl;
-  readonly members: FormControl;
-  readonly form: FormGroup;
+  readonly date: UntypedFormControl;
+  readonly time: UntypedFormControl;
+  readonly description: UntypedFormControl;
+  readonly trainerId: UntypedFormControl;
+  readonly members: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   trainerOptions: SelectOption<number>[] = [];
   memberOptions: MultiSelectOption[] = [];
@@ -80,12 +82,12 @@ export class ClassFormComponent extends FormInputComponent implements CloseGuard
       ? requested
       : this.today;
 
-    this.date = new FormControl(day, [Validators.required]);
-    this.time = new FormControl(start ? timeOf(start) : '', [Validators.required, timeValidator, this.futureStart, this.trainerFree]);
-    this.description = new FormControl(t?.description ?? '', [Validators.required]);
-    this.trainerId = new FormControl(t?.trainerId ?? null, [Validators.required]);
-    this.members = new FormControl((t?.members ?? []).map((member: Member) => member.id), [Validators.required]);
-    this.form = new FormGroup({
+    this.date = new UntypedFormControl(day, [Validators.required]);
+    this.time = new UntypedFormControl(start ? timeOf(start) : '', [Validators.required, timeValidator, this.futureStart, this.trainerFree]);
+    this.description = new UntypedFormControl(t?.description ?? '', [Validators.required]);
+    this.trainerId = new UntypedFormControl(t?.trainerId ?? null, [Validators.required]);
+    this.members = new UntypedFormControl((t?.members ?? []).map((member: Member) => member.id), [Validators.required]);
+    this.form = new UntypedFormGroup({
       date: this.date,
       time: this.time,
       description: this.description,
@@ -127,7 +129,7 @@ export class ClassFormComponent extends FormInputComponent implements CloseGuard
   /** `dateNotValid` (as FormInputComponent.checkDate) when the date and time are not after now. */
   private futureStart = (control: AbstractControl): ValidationErrors | null => {
     const start: Date | null = combineDateAndTime(this.date?.value ?? null, control.value);
-    return start ? this.checkDate(new FormControl(start)) : null;
+    return start ? this.checkDate(new UntypedFormControl(start)) : null;
   };
 
   /** `trainerBusy` when the trainer's other class started in the hour up to this start. */

@@ -11,9 +11,10 @@ const PADDING: Record<CardPadding, string> = {
 
 /** White surface, 20px radius, soft shadow, no border. */
 @Component({
-  selector: 'app-card',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: '<ng-content></ng-content>',
+    selector: 'app-card',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: '<ng-content></ng-content>',
+    standalone: false
 })
 export class CardComponent {
   @Input() padding: CardPadding = 'lg';

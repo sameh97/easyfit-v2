@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 import { AuthenticationService } from './authentication.service';
 
 /** Admin pages (/admin, /users) are for the admin role only; a gym user is sent to the dashboard. */
 @Injectable({
   providedIn: 'root',
 })
-export class AdminGuardService implements CanActivate {
+export class AdminGuardService {
   constructor(private auth: AuthenticationService, private router: Router) {}
 
   canActivate(): boolean | UrlTree {

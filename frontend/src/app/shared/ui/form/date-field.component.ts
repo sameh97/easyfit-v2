@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { LanguageDirectionality } from 'src/app/shared/i18n/language-directionality';
@@ -13,15 +13,17 @@ import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIEL
  * typed day-first dates (14/03/2027). The control holds a local-midnight Date (or null).
  */
 @Component({
-  selector: 'app-date-field',
-  providers: [
-    { provide: DateAdapter, useClass: StudioDateAdapter },
-    { provide: MAT_DATE_FORMATS, useValue: STUDIO_DATE_FORMATS },
-    { provide: Directionality, useClass: LanguageDirectionality },
-  ],
-  template: `
+    selector: 'app-date-field',
+    providers: [
+        { provide: DateAdapter, useClass: StudioDateAdapter },
+        { provide: MAT_DATE_FORMATS, useValue: STUDIO_DATE_FORMATS },
+        { provide: Directionality, useClass: LanguageDirectionality },
+    ],
+    template: `
     <div class="flex flex-col gap-1.5">
-      <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
+      <label [for]="id" [class]="labelClass">{{ label }}@if (required) {
+        <span class="text-danger" aria-hidden="true"> *</span>
+      }</label>
       <div [class]="boxClass">
         <input
           [id]="id"
@@ -35,25 +37,32 @@ import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIEL
           [attr.aria-invalid]="invalid ? 'true' : null"
           [attr.aria-describedby]="invalid ? id + '-error' : help ? id + '-help' : null"
           [class]="inputClass"
-        />
+          />
         <button
           type="button"
           class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-0 text-ink-3 hover:bg-surface-muted hover:text-ink"
           [attr.aria-label]="'common.form.openCalendar' | translate"
           (click)="picker.open()"
-        >
+          >
           <app-icon name="calendar" [size]="17"></app-icon>
         </button>
         <mat-datepicker #picker panelClass="studio-datepicker" (closed)="control.markAsTouched()"></mat-datepicker>
       </div>
-      <app-field-error *ngIf="invalid; else helpTpl" [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
-      <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
+      @if (invalid) {
+        <app-field-error [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
+      } @else {
+        @if (help) {
+          <span [id]="id + '-help'" [class]="helpClass">{{ help }}</span>
+        }
+      }
     </div>
-  `,
-  styles: [':host { display: block; min-width: 0; }'],
+    `,
+    styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class DateFieldComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() required: boolean = false;
   @Input() help: string | null = null;

@@ -4,27 +4,31 @@ import { Lang, LANGUAGES, LANGUAGE_NAMES, LanguageService } from 'src/app/servic
 
 /** "English / עברית" pill (§7.8). Each name is shown in its own language. */
 @Component({
-  selector: 'app-language-switch',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-language-switch',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="flex flex-wrap items-center justify-between gap-3" [ngClass]="labelled ? 'w-full px-4 pb-2 pt-3' : ''">
-    <span *ngIf="labelled" class="text-sm font-bold text-ink-2" aria-hidden="true">{{ 'common.language.label' | translate }}</span>
-    <div role="group" [attr.aria-label]="'common.language.label' | translate" class="inline-flex gap-0.5 rounded-full bg-surface-muted p-1">
-      <button
-        *ngFor="let option of languages"
-        type="button"
-        [attr.lang]="option"
-        [attr.aria-pressed]="option === (lang$ | async)"
-        (click)="language.use(option)"
-        class="h-9 rounded-full border-0 px-3.5 text-[13px] transition-colors"
-        [ngClass]="option === (lang$ | async) ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-ink-3 hover:text-ink'"
-      >
-        {{ names[option] }}
-      </button>
+      @if (labelled) {
+        <span class="text-sm font-bold text-ink-2" aria-hidden="true">{{ 'common.language.label' | translate }}</span>
+      }
+      <div role="group" [attr.aria-label]="'common.language.label' | translate" class="inline-flex gap-0.5 rounded-full bg-surface-muted p-1">
+        @for (option of languages; track option) {
+          <button
+            type="button"
+            [attr.lang]="option"
+            [attr.aria-pressed]="option === (lang$ | async)"
+            (click)="language.use(option)"
+            class="h-9 rounded-full border-0 px-3.5 text-[13px] transition-colors"
+            [ngClass]="option === (lang$ | async) ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-ink-3 hover:text-ink'"
+            >
+            {{ names[option] }}
+          </button>
+        }
+      </div>
     </div>
-    </div>
-  `,
-  styles: [':host { display: block; }'],
+    `,
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class LanguageSwitchComponent {
   /** Adds a "Language" label and Studio base styles, for use inside legacy pages (Profile). */

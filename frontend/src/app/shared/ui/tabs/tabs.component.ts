@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 export interface TabItem<T extends string = string> {
   id: T;
@@ -11,26 +11,29 @@ export interface TabItem<T extends string = string> {
  * `{idPrefix}-tab-{id}`. Arrow keys follow the reading direction; Home and End jump.
  */
 @Component({
-  selector: 'app-tabs',
-  template: `
+    selector: 'app-tabs',
+    template: `
     <div role="tablist" [attr.aria-label]="label" class="flex gap-0.5 rounded-full bg-surface-muted p-1" (keydown)="onKeydown($event)">
-      <button
-        *ngFor="let tab of tabs; trackBy: trackById"
-        type="button"
-        role="tab"
-        [id]="idPrefix + '-tab-' + tab.id"
-        [attr.aria-selected]="tab.id === value"
-        [attr.aria-controls]="idPrefix + '-tabpanel-' + tab.id"
-        [attr.tabindex]="tab.id === value ? 0 : -1"
-        (click)="select(tab.id)"
-        class="flex-1 whitespace-nowrap rounded-full border-0 px-2 py-2 text-[13px] transition-colors"
-        [ngClass]="tab.id === value ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-neutral hover:text-ink'"
-      >
-        {{ tab.label }}
-      </button>
+      @for (tab of tabs; track trackById($index, tab)) {
+        <button
+          type="button"
+          role="tab"
+          [id]="idPrefix + '-tab-' + tab.id"
+          [attr.aria-selected]="tab.id === value"
+          [attr.aria-controls]="idPrefix + '-tabpanel-' + tab.id"
+          [attr.tabindex]="tab.id === value ? 0 : -1"
+          (click)="select(tab.id)"
+          class="flex-1 whitespace-nowrap rounded-full border-0 px-2 py-2 text-[13px] transition-colors"
+          [ngClass]="tab.id === value ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-neutral hover:text-ink'"
+          >
+          {{ tab.label }}
+        </button>
+      }
     </div>
-  `,
-  styles: [':host { display: block; }'],
+    `,
+    styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class TabsComponent {
   @Input() tabs: TabItem[] = [];

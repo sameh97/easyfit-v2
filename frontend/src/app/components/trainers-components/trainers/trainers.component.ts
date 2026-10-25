@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -24,8 +24,10 @@ const SKELETON_CARDS: readonly number[] = [1, 2, 3, 4, 5, 6];
 
 /** Trainers (redesign.md §5.3): a card grid, the shared detail panel, side-panel forms. Deep link ?trainer=<id>. */
 @Component({
-  selector: 'app-trainers-page',
-  templateUrl: './trainers.component.html',
+    selector: 'app-trainers-page',
+    templateUrl: './trainers.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class TrainersPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

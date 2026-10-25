@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AppConsts } from 'src/app/common/consts';
@@ -30,25 +30,27 @@ const LENGTHS: readonly number[] = [1, 3, 6, 12];
  * Validation rules are exactly the legacy add/update member dialogs' ones (FormInputComponent).
  */
 @Component({
-  selector: 'app-member-form',
-  templateUrl: './member-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-member-form',
+    templateUrl: './member-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class MemberFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Member | null;
   readonly isEdit: boolean;
   readonly lengths: readonly number[] = LENGTHS;
 
-  readonly firstName: FormControl;
-  readonly lastName: FormControl;
-  readonly phone: FormControl;
-  readonly email: FormControl;
-  readonly birthDay: FormControl;
-  readonly gender: FormControl;
-  readonly address: FormControl;
-  readonly joinDate: FormControl;
-  readonly endOfMembershipDate: FormControl;
-  readonly form: FormGroup;
+  readonly firstName: UntypedFormControl;
+  readonly lastName: UntypedFormControl;
+  readonly phone: UntypedFormControl;
+  readonly email: UntypedFormControl;
+  readonly birthDay: UntypedFormControl;
+  readonly gender: UntypedFormControl;
+  readonly address: UntypedFormControl;
+  readonly joinDate: UntypedFormControl;
+  readonly endOfMembershipDate: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   genderOptions: SegmentedFieldOption<number>[] = [];
   /** Add: "end before join" has its own message. Edit uses checkDate (must be in the future). */
@@ -75,23 +77,23 @@ export class MemberFormComponent extends FormInputComponent implements CloseGuar
     const m: Member | null = this.original;
 
     // Same validators, per field and per mode, as the legacy add/update member dialogs had.
-    this.firstName = new FormControl(m?.firstName ?? '', [Validators.required, Validators.minLength(3), this.validateName]);
-    this.lastName = new FormControl(
+    this.firstName = new UntypedFormControl(m?.firstName ?? '', [Validators.required, Validators.minLength(3), this.validateName]);
+    this.lastName = new UntypedFormControl(
       m?.lastName ?? '',
       this.isEdit ? [Validators.required, this.validateName] : [Validators.required, Validators.minLength(2), this.validateName]
     );
-    this.email = new FormControl(m?.email ?? '', [Validators.required, Validators.email]);
-    this.joinDate = new FormControl(m ? fromApiDate(m.joinDate) : startOfToday(), [Validators.required]);
-    this.endOfMembershipDate = new FormControl(m ? fromApiDate(m.endOfMembershipDate) : null, [
+    this.email = new UntypedFormControl(m?.email ?? '', [Validators.required, Validators.email]);
+    this.joinDate = new UntypedFormControl(m ? fromApiDate(m.joinDate) : startOfToday(), [Validators.required]);
+    this.endOfMembershipDate = new UntypedFormControl(m ? fromApiDate(m.endOfMembershipDate) : null, [
       Validators.required,
       this.isEdit ? this.checkDate : this.checkEndDate,
     ]);
-    this.gender = new FormControl(m ? Number(m.gender) || null : null, [Validators.required]);
-    this.phone = new FormControl(m?.phone ?? '', [Validators.required, this.validatePhoneNumber]);
-    this.address = new FormControl(m?.address ?? '', [Validators.required]);
-    this.birthDay = new FormControl(m ? fromApiDate(m.birthDay) : null, [Validators.required, this.validateBirthDay]);
+    this.gender = new UntypedFormControl(m ? Number(m.gender) || null : null, [Validators.required]);
+    this.phone = new UntypedFormControl(m?.phone ?? '', [Validators.required, this.validatePhoneNumber]);
+    this.address = new UntypedFormControl(m?.address ?? '', [Validators.required]);
+    this.birthDay = new UntypedFormControl(m ? fromApiDate(m.birthDay) : null, [Validators.required, this.validateBirthDay]);
 
-    this.form = new FormGroup({
+    this.form = new UntypedFormGroup({
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,

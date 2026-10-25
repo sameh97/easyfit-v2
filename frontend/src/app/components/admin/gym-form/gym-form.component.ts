@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Gym } from 'src/app/model/gym';
 import { GymsService } from 'src/app/services/gyms-service/gyms.service';
@@ -16,17 +16,19 @@ export interface GymFormData {
 
 /** Add / edit gym side panel (§5.11): name, phone (LTR), address. Rules as the legacy gym dialogs. */
 @Component({
-  selector: 'app-gym-form',
-  templateUrl: './gym-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-gym-form',
+    templateUrl: './gym-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class GymFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Gym | null;
   readonly isEdit: boolean;
-  readonly name: FormControl;
-  readonly phone: FormControl;
-  readonly address: FormControl;
-  readonly form: FormGroup;
+  readonly name: UntypedFormControl;
+  readonly phone: UntypedFormControl;
+  readonly address: UntypedFormControl;
+  readonly form: UntypedFormGroup;
   saving: boolean = false;
   private readonly subscriptions: Subscription[] = [];
 
@@ -41,10 +43,10 @@ export class GymFormComponent extends FormInputComponent implements CloseGuard, 
     super();
     this.original = data?.gym ?? null;
     this.isEdit = !!this.original;
-    this.name = new FormControl(this.original?.name ?? '', [Validators.required, this.validateGymName]);
-    this.phone = new FormControl(this.original?.phone ?? '', [Validators.required, this.validateIsraeliPhoneNumber]);
-    this.address = new FormControl(this.original?.address ?? '', [Validators.required]);
-    this.form = new FormGroup({ name: this.name, phone: this.phone, address: this.address });
+    this.name = new UntypedFormControl(this.original?.name ?? '', [Validators.required, this.validateGymName]);
+    this.phone = new UntypedFormControl(this.original?.phone ?? '', [Validators.required, this.validateIsraeliPhoneNumber]);
+    this.address = new UntypedFormControl(this.original?.address ?? '', [Validators.required]);
+    this.form = new UntypedFormGroup({ name: this.name, phone: this.phone, address: this.address });
   }
 
   get title(): string {

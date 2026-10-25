@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { IconName } from '../icon/icons';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_PAD, FIELD_HELP, FIELD_INPUT, FIELD_LABEL } from './field-shell';
@@ -11,12 +11,16 @@ export type TextFieldType = 'text' | 'email' | 'tel' | 'password' | 'number';
  * error replaces after blur or submit. Phone and email fields pass `ltr` (§7.8).
  */
 @Component({
-  selector: 'app-text-field',
-  template: `
+    selector: 'app-text-field',
+    template: `
     <div class="flex flex-col gap-1.5">
-      <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
+      <label [for]="id" [class]="labelClass">{{ label }}@if (required) {
+        <span class="text-danger" aria-hidden="true"> *</span>
+      }</label>
       <div [class]="boxClass">
-        <app-icon *ngIf="icon" [name]="icon" [size]="17" class="text-ink-3"></app-icon>
+        @if (icon) {
+          <app-icon [name]="icon" [size]="17" class="text-ink-3"></app-icon>
+        }
         <input
           [id]="id"
           [type]="type"
@@ -30,16 +34,23 @@ export type TextFieldType = 'text' | 'email' | 'tel' | 'password' | 'number';
           [attr.aria-invalid]="invalid ? 'true' : null"
           [attr.aria-describedby]="describedBy"
           [class]="inputClass"
-        />
+          />
       </div>
-      <app-field-error *ngIf="invalid; else helpTpl" [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
-      <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
+      @if (invalid) {
+        <app-field-error [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
+      } @else {
+        @if (help) {
+          <span [id]="id + '-help'" [class]="helpClass">{{ help }}</span>
+        }
+      }
     </div>
-  `,
-  styles: [':host { display: block; min-width: 0; }'],
+    `,
+    styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class TextFieldComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() type: TextFieldType = 'text';
   @Input() required: boolean = false;

@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_PAD, FIELD_HELP, FIELD_LABEL } from './field-shell';
 
@@ -10,10 +10,12 @@ export interface SelectOption<T = string | number> {
 
 /** Native <select> in a Studio pill, with a chevron at the inline end. */
 @Component({
-  selector: 'app-select',
-  template: `
+    selector: 'app-select',
+    template: `
     <div class="flex flex-col gap-1.5">
-      <label [for]="id" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
+      <label [for]="id" [class]="labelClass">{{ label }}@if (required) {
+        <span class="text-danger" aria-hidden="true"> *</span>
+      }</label>
       <div [class]="boxClass" class="relative">
         <select
           [id]="id"
@@ -22,20 +24,31 @@ export interface SelectOption<T = string | number> {
           [attr.aria-invalid]="invalid ? 'true' : null"
           [attr.aria-describedby]="invalid ? id + '-error' : help ? id + '-help' : null"
           class="h-full min-w-0 flex-grow cursor-pointer appearance-none border-0 bg-transparent p-0 pe-6 text-[15px] font-medium text-ink outline-none"
-        >
-          <option *ngIf="placeholder" [ngValue]="null" disabled>{{ placeholder }}</option>
-          <option *ngFor="let option of options" [ngValue]="option.value">{{ option.label }}</option>
+          >
+          @if (placeholder) {
+            <option [ngValue]="null" disabled>{{ placeholder }}</option>
+          }
+          @for (option of options; track option) {
+            <option [ngValue]="option.value">{{ option.label }}</option>
+          }
         </select>
         <app-icon name="chevron-down" [size]="16" class="pointer-events-none absolute end-4 text-ink-3"></app-icon>
       </div>
-      <app-field-error *ngIf="invalid; else helpTpl" [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
-      <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
+      @if (invalid) {
+        <app-field-error [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
+      } @else {
+        @if (help) {
+          <span [id]="id + '-help'" [class]="helpClass">{{ help }}</span>
+        }
+      }
     </div>
-  `,
-  styles: [':host { display: block; min-width: 0; }'],
+    `,
+    styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SelectComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() options: SelectOption[] = [];
   @Input() required: boolean = false;

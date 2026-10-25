@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { classTitle } from 'src/app/common/class-title';
 import { Member } from 'src/app/model/member';
@@ -41,9 +41,11 @@ interface ContactRow {
 
 /** Content of the member detail side panel (mockup P2-Members-Detail). */
 @Component({
-  selector: 'app-member-detail',
-  templateUrl: './member-detail.component.html',
-  styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    selector: 'app-member-detail',
+    templateUrl: './member-detail.component.html',
+    styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class MemberDetailComponent implements OnChanges, OnDestroy {
   @Input() member!: Member;

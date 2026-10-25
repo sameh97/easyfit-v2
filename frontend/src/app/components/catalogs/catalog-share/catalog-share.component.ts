@@ -1,5 +1,5 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Catalog } from 'src/app/model/catalog';
 import { Member } from 'src/app/model/member';
@@ -31,14 +31,16 @@ const PAGE: number = 30;
  * filled in for that member. Replaces the server-side `wbm` sending.
  */
 @Component({
-  selector: 'app-catalog-share',
-  templateUrl: './catalog-share.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-catalog-share',
+    templateUrl: './catalog-share.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class CatalogShareComponent implements OnDestroy {
   readonly catalog: Catalog;
   readonly link: string;
-  readonly message: FormControl;
+  readonly message: UntypedFormControl;
   query: string = '';
   limit: number = PAGE;
   opened = new Set<number>();
@@ -56,7 +58,7 @@ export class CatalogShareComponent implements OnDestroy {
     this.catalog = data.catalog;
     this.link = catalogUrl(this.catalog);
     const names: string = (this.catalog.products ?? []).map((p) => p.name).join(', ');
-    this.message = new FormControl(this.language.t('catalogs.share.defaultMessage', { products: names }));
+    this.message = new UntypedFormControl(this.language.t('catalogs.share.defaultMessage', { products: names }));
     this.subscriptions.push(
       this.members.getAll().subscribe((members: Member[] | null) => {
         if (!members) {

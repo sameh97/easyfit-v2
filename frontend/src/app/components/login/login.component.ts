@@ -1,24 +1,26 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppUtil } from 'src/app/common/app-util';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/model/user';
 import { AccessDeniedError } from 'src/app/exceptions/access-denied-error';
 import { NotFoundError } from 'src/app/exceptions/not-found-error';
 import { FormInputComponent } from 'src/app/shared/components/form-input/form-input.component';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class LoginComponent extends FormInputComponent implements OnInit {
   showSpinner: boolean = false;
   hide: boolean = true;
   invalidLogin: boolean;
 
-  loginForm: FormGroup = this.fb.group({
+  loginForm: UntypedFormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(3)]], // TODO: change in production
   });
@@ -26,7 +28,7 @@ export class LoginComponent extends FormInputComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {
     super();
   }

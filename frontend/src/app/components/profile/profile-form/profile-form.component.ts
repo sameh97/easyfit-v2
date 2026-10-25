@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AppConsts } from 'src/app/common/consts';
@@ -25,18 +25,20 @@ export interface ProfileFormData {
  * new name survives a reload.
  */
 @Component({
-  selector: 'app-profile-form',
-  templateUrl: './profile-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-profile-form',
+    templateUrl: './profile-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ProfileFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: User;
-  readonly firstName: FormControl;
-  readonly lastName: FormControl;
-  readonly phone: FormControl;
-  readonly birthDay: FormControl;
-  readonly address: FormControl;
-  readonly form: FormGroup;
+  readonly firstName: UntypedFormControl;
+  readonly lastName: UntypedFormControl;
+  readonly phone: UntypedFormControl;
+  readonly birthDay: UntypedFormControl;
+  readonly address: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   currentPhoto: string | null;
   saving: boolean = false;
@@ -57,12 +59,12 @@ export class ProfileFormComponent extends FormInputComponent implements CloseGua
     super();
     const u: User = data.user;
     this.original = u;
-    this.firstName = new FormControl(u.firstName ?? '', [Validators.required, this.validateName]);
-    this.lastName = new FormControl(u.lastName ?? '', [Validators.required, this.validateName]);
-    this.phone = new FormControl(u.phone ?? '', [Validators.required, this.validateIsraeliPhoneNumber]);
-    this.birthDay = new FormControl(fromApiDate(u.birthDay), [Validators.required, this.validateBirthDay]);
-    this.address = new FormControl(u.address ?? '', [Validators.required]);
-    this.form = new FormGroup({
+    this.firstName = new UntypedFormControl(u.firstName ?? '', [Validators.required, this.validateName]);
+    this.lastName = new UntypedFormControl(u.lastName ?? '', [Validators.required, this.validateName]);
+    this.phone = new UntypedFormControl(u.phone ?? '', [Validators.required, this.validateIsraeliPhoneNumber]);
+    this.birthDay = new UntypedFormControl(fromApiDate(u.birthDay), [Validators.required, this.validateBirthDay]);
+    this.address = new UntypedFormControl(u.address ?? '', [Validators.required]);
+    this.form = new UntypedFormGroup({
       firstName: this.firstName,
       lastName: this.lastName,
       phone: this.phone,

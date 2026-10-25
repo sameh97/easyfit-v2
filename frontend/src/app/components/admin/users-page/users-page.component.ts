@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { Gym } from 'src/app/model/gym';
 import { ADMIN_ROLE_ID, User } from 'src/app/model/user';
@@ -16,8 +16,10 @@ type LoadState = 'loading' | 'ready' | 'error';
 
 /** Admin: Users (redesign.md §5.11): every gym's users in a table, a gym filter and search; add/edit side panel, delete. */
 @Component({
-  selector: 'app-users-page',
-  templateUrl: './users-page.component.html',
+    selector: 'app-users-page',
+    templateUrl: './users-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class UsersPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';

@@ -31,34 +31,36 @@ const LAYOUT: Record<DetailMode, string> = {
  * Put it next to the list inside a flex row: `<div class="flex items-start gap-4">…</div>`.
  */
 @Component({
-  selector: 'app-side-panel',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <aside
-      *ngIf="open"
-      #panel
-      tabindex="-1"
-      class="flex flex-col overflow-hidden bg-surface outline-none"
-      [ngClass]="layoutClass"
-      [attr.role]="mode === 'phone' ? 'dialog' : 'complementary'"
-      [attr.aria-modal]="mode === 'phone' ? 'true' : null"
-      [attr.aria-label]="label"
-      [cdkTrapFocus]="mode === 'phone'"
-      (keydown.escape)="onEscape($event)"
-    >
-      <div class="flex items-center justify-between gap-2 pe-4 ps-5 pt-3.5">
-        <span class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ eyebrow }}</span>
-        <div class="flex items-center gap-1">
-          <ng-content select="[panelActions]"></ng-content>
-          <button type="button" appIconButton icon="x" variant="soft" [label]="'common.actions.close' | translate" (click)="close()"></button>
+    selector: 'app-side-panel',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
+    @if (open) {
+      <aside
+        #panel
+        tabindex="-1"
+        class="flex flex-col overflow-hidden bg-surface outline-none"
+        [ngClass]="layoutClass"
+        [attr.role]="mode === 'phone' ? 'dialog' : 'complementary'"
+        [attr.aria-modal]="mode === 'phone' ? 'true' : null"
+        [attr.aria-label]="label"
+        [cdkTrapFocus]="mode === 'phone'"
+        (keydown.escape)="onEscape($event)"
+        >
+        <div class="flex items-center justify-between gap-2 pe-4 ps-5 pt-3.5">
+          <span class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ eyebrow }}</span>
+          <div class="flex items-center gap-1">
+            <ng-content select="[panelActions]"></ng-content>
+            <button type="button" appIconButton icon="x" variant="soft" [label]="'common.actions.close' | translate" (click)="close()"></button>
+          </div>
         </div>
-      </div>
-      <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
-        <ng-content></ng-content>
-      </div>
-    </aside>
-  `,
-  styles: [':host { display: contents; }'],
+        <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+          <ng-content></ng-content>
+        </div>
+      </aside>
+    }
+    `,
+    styles: [':host { display: contents; }'],
+    standalone: false
 })
 export class SidePanelComponent implements OnInit, OnChanges, OnDestroy {
   @Input() open: boolean = false;

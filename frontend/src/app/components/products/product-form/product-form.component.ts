@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AppConsts } from 'src/app/common/consts';
@@ -27,21 +27,23 @@ export const PRODUCT_CATEGORY_IDS: readonly number[] = [1, 2, 3, 4, 5];
  * and quantity. Validation rules are exactly the legacy add/update product dialogs' ones.
  */
 @Component({
-  selector: 'app-product-form',
-  templateUrl: './product-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-product-form',
+    templateUrl: './product-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ProductFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Product | null;
   readonly isEdit: boolean;
 
-  readonly name: FormControl;
-  readonly categoryID: FormControl;
-  readonly description: FormControl;
-  readonly code: FormControl;
-  readonly price: FormControl;
-  readonly quantity: FormControl;
-  readonly form: FormGroup;
+  readonly name: UntypedFormControl;
+  readonly categoryID: UntypedFormControl;
+  readonly description: UntypedFormControl;
+  readonly code: UntypedFormControl;
+  readonly price: UntypedFormControl;
+  readonly quantity: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   categoryOptions: SelectOption<number>[] = [];
   currentPhoto: string | null;
@@ -64,13 +66,13 @@ export class ProductFormComponent extends FormInputComponent implements CloseGua
     this.isEdit = !!this.original;
     const p: Product | null = this.original;
 
-    this.name = new FormControl(p?.name ?? '', [Validators.required, this.validateProductName]);
-    this.categoryID = new FormControl(p ? Number(p.categoryID) : null, [Validators.required]);
-    this.description = new FormControl(p?.description ?? '', [Validators.required]);
-    this.code = new FormControl(p?.code ?? '', [Validators.required, this.validateProductCode]);
-    this.price = new FormControl(p ? String(p.price ?? '') : '', [Validators.required, Validators.min(0), this.validatePrice]);
-    this.quantity = new FormControl(p ? String(p.quantity ?? '') : '', [Validators.compose([Validators.required, this.nonZero])]);
-    this.form = new FormGroup({
+    this.name = new UntypedFormControl(p?.name ?? '', [Validators.required, this.validateProductName]);
+    this.categoryID = new UntypedFormControl(p ? Number(p.categoryID) : null, [Validators.required]);
+    this.description = new UntypedFormControl(p?.description ?? '', [Validators.required]);
+    this.code = new UntypedFormControl(p?.code ?? '', [Validators.required, this.validateProductCode]);
+    this.price = new UntypedFormControl(p ? String(p.price ?? '') : '', [Validators.required, Validators.min(0), this.validatePrice]);
+    this.quantity = new UntypedFormControl(p ? String(p.quantity ?? '') : '', [Validators.compose([Validators.required, this.nonZero])]);
+    this.form = new UntypedFormGroup({
       name: this.name,
       categoryID: this.categoryID,
       description: this.description,

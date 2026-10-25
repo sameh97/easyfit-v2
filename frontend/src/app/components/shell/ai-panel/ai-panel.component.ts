@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppUtil } from 'src/app/common/app-util';
 import { ShellStateService } from 'src/app/services/shell-state.service';
@@ -16,9 +16,11 @@ const EXAMPLE_QUESTIONS: readonly string[] = [
  * Sits on the inline-end side. Docks as a third column on ≥ xl, slides over the page below xl, full-screen on phones.
  */
 @Component({
-  selector: 'app-ai-panel',
-  templateUrl: './ai-panel.component.html',
-  styles: [':host { display: contents; }'],
+    selector: 'app-ai-panel',
+    templateUrl: './ai-panel.component.html',
+    styles: [':host { display: contents; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class AiPanelComponent implements OnInit, OnDestroy {
   /** True on ≥ xl: the panel takes a column instead of overlaying the page. */

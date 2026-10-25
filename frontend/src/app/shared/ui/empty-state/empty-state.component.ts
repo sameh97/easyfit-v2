@@ -11,21 +11,24 @@ const TILE_TONES: Record<EmptyStateTone, string> = {
 
 /** Icon, a short line and (projected) main action. Also used for error states. */
 @Component({
-  selector: 'app-empty-state',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-empty-state',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="flex flex-col items-center justify-center gap-3 px-4 text-center" [ngClass]="compact ? 'py-4' : 'py-10'">
       <span class="flex h-11 w-11 items-center justify-center rounded-tile" [ngClass]="tileClass">
         <app-icon [name]="icon" [size]="20"></app-icon>
       </span>
       <div class="flex max-w-xs flex-col gap-1">
         <p class="text-[15px] font-bold text-ink">{{ title }}</p>
-        <p *ngIf="message" class="text-[13px] text-ink-3">{{ message }}</p>
+        @if (message) {
+          <p class="text-[13px] text-ink-3">{{ message }}</p>
+        }
       </div>
       <ng-content></ng-content>
     </div>
-  `,
-  styles: [':host { display: block; }'],
+    `,
+    styles: [':host { display: block; }'],
+    standalone: false
 })
 export class EmptyStateComponent {
   @Input() icon: IconName = 'inbox';

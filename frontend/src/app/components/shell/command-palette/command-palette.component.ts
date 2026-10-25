@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -73,8 +73,10 @@ const MAX_MEMBER_RESULTS = 6;
 const MAX_PRODUCT_RESULTS = 8;
 
 @Component({
-  selector: 'app-command-palette',
-  templateUrl: './command-palette.component.html',
+    selector: 'app-command-palette',
+    templateUrl: './command-palette.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class CommandPaletteComponent implements OnInit, OnDestroy {
   open: boolean = false;

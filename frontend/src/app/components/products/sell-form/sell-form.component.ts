@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { formatMoney } from 'src/app/common/money';
 import { Bill } from 'src/app/model/bill';
@@ -29,18 +29,20 @@ export interface SellFormData {
  * Israeli mobile, Israeli ID checksum.
  */
 @Component({
-  selector: 'app-sell-form',
-  templateUrl: './sell-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-sell-form',
+    templateUrl: './sell-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SellFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly product: Product;
-  readonly member: FormControl = new FormControl([]);
-  readonly quantity: FormControl;
-  readonly coustomerName: FormControl;
-  readonly coustomerPhone: FormControl;
-  readonly coustomerID: FormControl;
-  readonly form: FormGroup;
+  readonly member: UntypedFormControl = new UntypedFormControl([]);
+  readonly quantity: UntypedFormControl;
+  readonly coustomerName: UntypedFormControl;
+  readonly coustomerPhone: UntypedFormControl;
+  readonly coustomerID: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   memberOptions: MultiSelectOption[] = [];
   saving: boolean = false;
@@ -59,11 +61,11 @@ export class SellFormComponent extends FormInputComponent implements CloseGuard,
   ) {
     super();
     this.product = data.product;
-    this.quantity = new FormControl('1', [Validators.required, this.nonZero, this.withinStock]);
-    this.coustomerName = new FormControl('', [Validators.required, this.validateName]);
-    this.coustomerPhone = new FormControl('', [Validators.required, this.validatePhoneNumber]);
-    this.coustomerID = new FormControl('', [Validators.required, this.validateID]);
-    this.form = new FormGroup({
+    this.quantity = new UntypedFormControl('1', [Validators.required, this.nonZero, this.withinStock]);
+    this.coustomerName = new UntypedFormControl('', [Validators.required, this.validateName]);
+    this.coustomerPhone = new UntypedFormControl('', [Validators.required, this.validatePhoneNumber]);
+    this.coustomerID = new UntypedFormControl('', [Validators.required, this.validateID]);
+    this.form = new UntypedFormGroup({
       quantity: this.quantity,
       coustomerName: this.coustomerName,
       coustomerPhone: this.coustomerPhone,

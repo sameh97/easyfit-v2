@@ -1,5 +1,5 @@
 // Fails when Studio templates use physical-direction utilities (redesign.md §7.10, Phase 2 step 1).
-// Checks every folder Tailwind scans (the `purge` list: all of src/).
+// Checks every folder Tailwind scans (the `content` list: all of src/).
 // Usage: node scripts/check-logical-utils.js
 const fs = require('fs');
 const path = require('path');
@@ -13,7 +13,7 @@ const BANNED =
   /(?<![\w-])(?:[\w-]+:)*-?(?:(?:ml|mr|pl|pr|left|right)-[\w.\/\[\]%-]+|text-(?:left|right)|border-[lr](?:-\d+)?|rounded-(?:[lr]|tl|tr|bl|br)(?:-[\w\[\]]+)?)(?![\w-])/g;
 
 /** "./src/app/foo/**\/*.{html,ts}" → "src/app/foo" */
-const folders = config.purge.map((glob) => glob.replace(/^\.\//, '').split('/**')[0]);
+const folders = config.content.map((glob) => glob.replace(/^\.\//, '').split('/**')[0]);
 
 /** @param {string} dir @returns {string[]} */
 function files(dir) {

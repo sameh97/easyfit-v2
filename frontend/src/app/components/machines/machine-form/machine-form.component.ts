@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AppConsts } from 'src/app/common/consts';
@@ -23,20 +23,22 @@ export interface MachineFormData {
  * price (LTR) and photo. Validation rules are exactly the legacy create/edit dialogs' ones.
  */
 @Component({
-  selector: 'app-machine-form',
-  templateUrl: './machine-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-machine-form',
+    templateUrl: './machine-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class MachineFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Machine | null;
   readonly isEdit: boolean;
 
-  readonly name: FormControl;
-  readonly serialNumber: FormControl;
-  readonly description: FormControl;
-  readonly productionYear: FormControl;
-  readonly price: FormControl;
-  readonly form: FormGroup;
+  readonly name: UntypedFormControl;
+  readonly serialNumber: UntypedFormControl;
+  readonly description: UntypedFormControl;
+  readonly productionYear: UntypedFormControl;
+  readonly price: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   currentPhoto: string | null;
   saving: boolean = false;
@@ -59,17 +61,17 @@ export class MachineFormComponent extends FormInputComponent implements CloseGua
     const m: Machine | null = this.original;
 
     // Same validators as the legacy create/edit machine dialogs.
-    this.name = new FormControl(m?.name ?? '', [Validators.required, this.validateMachineName]);
-    this.serialNumber = new FormControl(m?.serialNumber ?? '', [
+    this.name = new UntypedFormControl(m?.name ?? '', [Validators.required, this.validateMachineName]);
+    this.serialNumber = new UntypedFormControl(m?.serialNumber ?? '', [
       Validators.required,
       Validators.minLength(4),
       Validators.maxLength(50),
       this.validateSerialNumber,
     ]);
-    this.description = new FormControl(m?.description ?? '', [Validators.required]);
-    this.productionYear = new FormControl(m ? String(m.productionYear ?? '') : '', [Validators.required, this.validateYear]);
-    this.price = new FormControl(m ? String(m.price ?? '') : '', [Validators.required, Validators.min(0), this.validatePrice]);
-    this.form = new FormGroup({
+    this.description = new UntypedFormControl(m?.description ?? '', [Validators.required]);
+    this.productionYear = new UntypedFormControl(m ? String(m.productionYear ?? '') : '', [Validators.required, this.validateYear]);
+    this.price = new UntypedFormControl(m ? String(m.price ?? '') : '', [Validators.required, Validators.min(0), this.validatePrice]);
+    this.form = new UntypedFormGroup({
       name: this.name,
       serialNumber: this.serialNumber,
       description: this.description,

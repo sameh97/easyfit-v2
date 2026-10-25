@@ -11,9 +11,10 @@ const SHAPES: Record<SkeletonShape, string> = {
 
 /** Pulsing placeholder used while data loads. Size it with `width` / `height` (any CSS length). */
 @Component({
-  selector: 'app-skeleton',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: '',
+    selector: 'app-skeleton',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: '',
+    standalone: false
 })
 export class SkeletonComponent {
   @Input() shape: SkeletonShape = 'line';

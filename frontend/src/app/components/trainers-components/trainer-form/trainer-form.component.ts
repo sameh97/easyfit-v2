@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AppConsts } from 'src/app/common/consts';
@@ -25,24 +25,26 @@ export interface TrainerFormData {
  * without the membership section. Validation rules are exactly the legacy trainer dialogs' ones.
  */
 @Component({
-  selector: 'app-trainer-form',
-  templateUrl: './trainer-form.component.html',
-  styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    selector: 'app-trainer-form',
+    templateUrl: './trainer-form.component.html',
+    styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class TrainerFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {
   readonly original: Trainer | null;
   readonly isEdit: boolean;
 
-  readonly firstName: FormControl;
-  readonly lastName: FormControl;
-  readonly phone: FormControl;
-  readonly email: FormControl;
-  readonly birthDay: FormControl;
-  readonly gender: FormControl;
-  readonly address: FormControl;
-  readonly joinDate: FormControl;
-  readonly certificationDate: FormControl;
-  readonly form: FormGroup;
+  readonly firstName: UntypedFormControl;
+  readonly lastName: UntypedFormControl;
+  readonly phone: UntypedFormControl;
+  readonly email: UntypedFormControl;
+  readonly birthDay: UntypedFormControl;
+  readonly gender: UntypedFormControl;
+  readonly address: UntypedFormControl;
+  readonly joinDate: UntypedFormControl;
+  readonly certificationDate: UntypedFormControl;
+  readonly form: UntypedFormGroup;
 
   genderOptions: SegmentedFieldOption<number>[] = [];
   currentPhoto: string | null;
@@ -66,24 +68,24 @@ export class TrainerFormComponent extends FormInputComponent implements CloseGua
     const t: Trainer | null = this.original;
 
     // Same validators, per field and per mode, as the legacy add/update trainer dialogs had.
-    this.firstName = new FormControl(t?.firstName ?? '', [Validators.required, Validators.minLength(3), this.validateName]);
-    this.lastName = new FormControl(t?.lastName ?? '', [Validators.required, this.validateName]);
-    this.email = new FormControl(t?.email ?? '', [Validators.required, Validators.email]);
-    this.joinDate = new FormControl(t ? fromApiDate(t.joinDate) : null, [Validators.required]);
-    this.certificationDate = new FormControl(t ? fromApiDate(t.certificationDate) : null, [Validators.required]);
+    this.firstName = new UntypedFormControl(t?.firstName ?? '', [Validators.required, Validators.minLength(3), this.validateName]);
+    this.lastName = new UntypedFormControl(t?.lastName ?? '', [Validators.required, this.validateName]);
+    this.email = new UntypedFormControl(t?.email ?? '', [Validators.required, Validators.email]);
+    this.joinDate = new UntypedFormControl(t ? fromApiDate(t.joinDate) : null, [Validators.required]);
+    this.certificationDate = new UntypedFormControl(t ? fromApiDate(t.certificationDate) : null, [Validators.required]);
     // Trainers have no gender column; the legacy forms still require it (it picks the placeholder
     // photo). Prefill it from that placeholder when possible so editing doesn't always ask again.
-    this.gender = new FormControl(t ? Number(t.gender) || genderFromPlaceholder(t.imageURL) : null, [Validators.required]);
-    this.phone = new FormControl(
+    this.gender = new UntypedFormControl(t ? Number(t.gender) || genderFromPlaceholder(t.imageURL) : null, [Validators.required]);
+    this.phone = new UntypedFormControl(
       t?.phone ?? '',
       this.isEdit
         ? [Validators.required, this.validatePhoneNumber]
         : [Validators.required, Validators.minLength(4), this.validatePhoneNumber]
     );
-    this.address = new FormControl(t?.address ?? '', [Validators.required, Validators.minLength(3)]);
-    this.birthDay = new FormControl(t ? fromApiDate(t.birthDay) : null, [Validators.required, this.validateBirthDay]);
+    this.address = new UntypedFormControl(t?.address ?? '', [Validators.required, Validators.minLength(3)]);
+    this.birthDay = new UntypedFormControl(t ? fromApiDate(t.birthDay) : null, [Validators.required, this.validateBirthDay]);
 
-    this.form = new FormGroup({
+    this.form = new UntypedFormGroup({
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,

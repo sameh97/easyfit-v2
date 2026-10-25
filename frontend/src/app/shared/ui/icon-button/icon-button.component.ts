@@ -21,13 +21,14 @@ const SIZES: Record<IconButtonSize, string> = {
 
 /** Icon-only button. `label` is required and becomes the aria-label. */
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'button[appIconButton], a[appIconButton]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    // eslint-disable-next-line @angular-eslint/component-selector
+    selector: 'button[appIconButton], a[appIconButton]',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <app-icon [name]="icon" [size]="resolvedIconSize"></app-icon>
     <ng-content></ng-content>
   `,
+    standalone: false
 })
 export class IconButtonComponent {
   @Input() icon!: IconName;

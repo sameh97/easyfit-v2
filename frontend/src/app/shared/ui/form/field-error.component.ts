@@ -1,17 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { DEFAULT_FIELD_MESSAGES, FieldMessages } from './field';
 
 /** The translated message for a control's first error. Shown in place of the help text. */
 @Component({
-  selector: 'app-field-error',
-  template: `
-    <span *ngIf="messageKey" class="flex items-center gap-1 text-xs font-semibold text-danger">
-      <app-icon name="alert-circle" [size]="13"></app-icon>
-      {{ messageKey | translate: params }}
-    </span>
-  `,
-  styles: [':host { display: block; }'],
+    selector: 'app-field-error',
+    template: `
+    @if (messageKey) {
+      <span class="flex items-center gap-1 text-xs font-semibold text-danger">
+        <app-icon name="alert-circle" [size]="13"></app-icon>
+        {{ messageKey | translate: params }}
+      </span>
+    }
+    `,
+    styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class FieldErrorComponent {
   @Input() control: AbstractControl | null = null;

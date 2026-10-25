@@ -7,9 +7,11 @@ const PILL: string = 'inline-flex items-center justify-center whitespace-nowrap 
 
 /** Machine status badge (§5.5): Overdue / Due today (danger), Next: {date}, No jobs (neutral). */
 @Component({
-  selector: 'app-machine-badge',
-  template: `<span [class]="cls">{{ label }}</span>`,
-  styles: [':host { display: inline-flex; }'],
+    selector: 'app-machine-badge',
+    template: `<span [class]="cls">{{ label }}</span>`,
+    styles: [':host { display: inline-flex; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class MachineBadgeComponent {
   @Input() view!: MachineView;
@@ -37,10 +39,11 @@ export class MachineBadgeComponent {
 
 /** Clean / Service pill (P3 mockups: teal and violet). `fixed` gives every pill the same width for lists. */
 @Component({
-  selector: 'app-job-type-pill',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<span [class]="cls">{{ 'maintenance.types.' + type | translate }}</span>`,
-  styles: [':host { display: inline-flex; flex-shrink: 0; }'],
+    selector: 'app-job-type-pill',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `<span [class]="cls">{{ 'maintenance.types.' + type | translate }}</span>`,
+    styles: [':host { display: inline-flex; flex-shrink: 0; }'],
+    standalone: false
 })
 export class JobTypePillComponent {
   @Input() type: JobType = 'clean';

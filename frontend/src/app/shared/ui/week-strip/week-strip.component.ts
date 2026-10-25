@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { LanguageService } from 'src/app/services/language.service';
 
 export interface WeekStripDay {
@@ -35,31 +35,34 @@ export function dayDiff(from: Date, to: Date): number {
  * edge: the owner then shows the next week), Home and End jump to the ends of the week.
  */
 @Component({
-  selector: 'app-week-strip',
-  template: `
+    selector: 'app-week-strip',
+    template: `
     <div role="tablist" [attr.aria-label]="label" class="grid grid-cols-7 gap-1.5 sm:gap-2" (keydown)="onKeydown($event)">
-      <button
-        *ngFor="let day of days; trackBy: trackByTime"
-        type="button"
-        role="tab"
-        [id]="idPrefix + '-' + day.date.getTime()"
-        [attr.aria-selected]="isSelected(day)"
-        [attr.aria-controls]="panelId"
-        [attr.aria-label]="ariaLabel(day)"
-        [attr.tabindex]="isSelected(day) ? 0 : -1"
-        (click)="pick(day.date)"
-        class="flex h-[72px] min-w-0 flex-col items-center justify-center gap-1 rounded-[18px] px-1 transition-colors duration-150 sm:h-[92px] sm:gap-1.5"
-        [ngClass]="isSelected(day) ? 'border-0 bg-ink text-white' : 'border border-solid border-line bg-surface text-ink hover:border-line-strong'"
-      >
-        <span class="text-xs font-bold uppercase tracking-[1px] opacity-75 rtl:text-[13px] rtl:normal-case rtl:tracking-normal">{{ day.date | localDate: 'weekday' }}</span>
-        <span class="text-xl font-extrabold leading-none tracking-[-0.5px] sm:text-2xl rtl:tracking-normal">{{ day.date.getDate() }}</span>
-        <span class="text-xs font-bold" [ngClass]="countClass(day)">
-          <span class="hidden sm:inline">{{ countLabel(day) }}</span><span class="sm:hidden" aria-hidden="true">{{ day.count || '·' }}</span>
-        </span>
-      </button>
+      @for (day of days; track trackByTime($index, day)) {
+        <button
+          type="button"
+          role="tab"
+          [id]="idPrefix + '-' + day.date.getTime()"
+          [attr.aria-selected]="isSelected(day)"
+          [attr.aria-controls]="panelId"
+          [attr.aria-label]="ariaLabel(day)"
+          [attr.tabindex]="isSelected(day) ? 0 : -1"
+          (click)="pick(day.date)"
+          class="flex h-[72px] min-w-0 flex-col items-center justify-center gap-1 rounded-[18px] px-1 transition-colors duration-150 sm:h-[92px] sm:gap-1.5"
+          [ngClass]="isSelected(day) ? 'border-0 bg-ink text-white' : 'border border-solid border-line bg-surface text-ink hover:border-line-strong'"
+          >
+          <span class="text-xs font-bold uppercase tracking-[1px] opacity-75 rtl:text-[13px] rtl:normal-case rtl:tracking-normal">{{ day.date | localDate: 'weekday' }}</span>
+          <span class="text-xl font-extrabold leading-none tracking-[-0.5px] sm:text-2xl rtl:tracking-normal">{{ day.date.getDate() }}</span>
+          <span class="text-xs font-bold" [ngClass]="countClass(day)">
+            <span class="hidden sm:inline">{{ countLabel(day) }}</span><span class="sm:hidden" aria-hidden="true">{{ day.count || '·' }}</span>
+          </span>
+        </button>
+      }
     </div>
-  `,
-  styles: [':host { display: block; }'],
+    `,
+    styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class WeekStripComponent {
   @Input() days: WeekStripDay[] = [];

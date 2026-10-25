@@ -1,16 +1,18 @@
-import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
 import { newFieldId } from './field';
 import { FIELD_HELP } from './field-shell';
 
 /** On/off switch (role="switch") bound to a boolean control, with its label and help text beside it. */
 @Component({
-  selector: 'app-switch',
-  template: `
+    selector: 'app-switch',
+    template: `
     <div class="flex items-center justify-between gap-4 rounded-2xl bg-surface-subtle px-4 py-3">
       <span class="flex min-w-0 flex-col gap-0.5">
         <span [id]="id + '-label'" class="text-sm font-bold text-ink">{{ label }}</span>
-        <span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span>
+        @if (help) {
+          <span [id]="id + '-help'" [class]="helpClass">{{ help }}</span>
+        }
       </span>
       <button
         type="button"
@@ -22,7 +24,7 @@ import { FIELD_HELP } from './field-shell';
         (click)="toggle()"
         class="relative h-7 w-12 flex-shrink-0 rounded-full border-0 p-0 transition-colors duration-150"
         [ngClass]="on ? 'bg-accent' : 'bg-line-strong'"
-      >
+        >
         <span
           class="absolute top-1 h-5 w-5 rounded-full bg-surface shadow-card transition-all duration-150"
           [ngClass]="on ? 'start-6' : 'start-1'"
@@ -30,11 +32,13 @@ import { FIELD_HELP } from './field-shell';
         ></span>
       </button>
     </div>
-  `,
-  styles: [':host { display: block; }'],
+    `,
+    styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SwitchComponent {
-  @Input() control!: FormControl;
+  @Input() control!: UntypedFormControl;
   @Input() label: string = '';
   @Input() help: string | null = null;
 

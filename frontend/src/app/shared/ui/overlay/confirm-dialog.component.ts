@@ -21,9 +21,9 @@ export const CONFIRM_DIALOG_CONTEXT = new InjectionToken<ConfirmDialogContext>('
 
 /** Small centred Studio modal: title, one sentence, Cancel + a (destructive) action. */
 @Component({
-  selector: 'app-confirm-dialog',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
+    selector: 'app-confirm-dialog',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    template: `
     <div class="flex flex-col gap-2 p-6 pb-5">
       <h2 id="confirm-dialog-title" class="text-lg font-extrabold tracking-card text-ink">{{ context.options.title }}</h2>
       <p id="confirm-dialog-message" class="text-sm leading-relaxed text-ink-3">{{ context.options.message }}</p>
@@ -42,6 +42,7 @@ export const CONFIRM_DIALOG_CONTEXT = new InjectionToken<ConfirmDialogContext>('
       </button>
     </div>
   `,
+    standalone: false
 })
 export class ConfirmDialogComponent {
   constructor(@Inject(CONFIRM_DIALOG_CONTEXT) public context: ConfirmDialogContext) {}

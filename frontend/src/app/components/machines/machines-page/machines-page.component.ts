@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { combineLatest, Subscription } from 'rxjs';
@@ -29,8 +29,10 @@ const SKELETON_CARDS: readonly number[] = [1, 2, 3, 4, 5, 6];
  * detail panel with open alerts and jobs, and the add/edit side panel. Deep link ?machine=<id>.
  */
 @Component({
-  selector: 'app-machines-page',
-  templateUrl: './machines-page.component.html',
+    selector: 'app-machines-page',
+    templateUrl: './machines-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class MachinesPageComponent implements OnInit, OnDestroy {
   state: LoadState = 'loading';
