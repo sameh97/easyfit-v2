@@ -13,7 +13,9 @@ export interface SegmentedFieldOption<T> {
     selector: 'app-segmented-field',
     template: `
     <div class="flex flex-col gap-1.5">
-      <span [id]="id + '-label'" [class]="labelClass">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></span>
+      <span [id]="id + '-label'" [class]="labelClass">{{ label }}@if (required) {
+        <span class="text-danger" aria-hidden="true"> *</span>
+      }</span>
       <div
         role="radiogroup"
         [attr.aria-labelledby]="id + '-label'"
@@ -25,25 +27,28 @@ export interface SegmentedFieldOption<T> {
         [ngClass]="invalid ? 'ring-[3px] ring-danger-ring' : ''"
         (keydown)="onKeydown($event)"
         (focusout)="onFocusOut($event)"
-      >
-        <button
-          #segment
-          *ngFor="let option of options"
-          type="button"
-          role="radio"
-          [attr.aria-checked]="option.value === control.value"
-          [attr.tabindex]="option.value === control.value ? 0 : -1"
-          [disabled]="control.disabled"
-          (click)="select(option.value)"
-          class="whitespace-nowrap rounded-full border-0 px-[22px] py-[9px] text-sm transition-colors duration-150"
-          [ngClass]="option.value === control.value ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-neutral hover:text-ink'"
         >
-          {{ option.label }}
-        </button>
+        @for (option of options; track option) {
+          <button
+            #segment
+            type="button"
+            role="radio"
+            [attr.aria-checked]="option.value === control.value"
+            [attr.tabindex]="option.value === control.value ? 0 : -1"
+            [disabled]="control.disabled"
+            (click)="select(option.value)"
+            class="whitespace-nowrap rounded-full border-0 px-[22px] py-[9px] text-sm transition-colors duration-150"
+            [ngClass]="option.value === control.value ? 'bg-surface font-bold text-ink shadow-card' : 'bg-transparent font-semibold text-neutral hover:text-ink'"
+            >
+            {{ option.label }}
+          </button>
+        }
       </div>
-      <app-field-error *ngIf="invalid" [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
+      @if (invalid) {
+        <app-field-error [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
+      }
     </div>
-  `,
+    `,
     styles: [':host { display: block; }'],
     standalone: false
 })

@@ -14,18 +14,23 @@ const ACCEPTED_TYPES: readonly string[] = ['image/png', 'image/jpeg'];
       <span
         class="flex h-[72px] w-[72px] flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-surface-muted text-ink-4"
         [ngClass]="previewUrl ? '' : 'border-2 border-dashed border-line-strong'"
-      >
-        <img *ngIf="previewUrl; else emptyIcon" [src]="previewUrl" alt="" class="h-full w-full object-cover" />
-        <ng-template #emptyIcon><app-icon name="camera" [size]="24"></app-icon></ng-template>
+        >
+        @if (previewUrl) {
+          <img [src]="previewUrl" alt="" class="h-full w-full object-cover" />
+        } @else {
+          <app-icon name="camera" [size]="24"></app-icon>
+        }
       </span>
       <div class="flex flex-col items-start gap-1.5">
         <div class="flex flex-wrap gap-2">
           <button appButton variant="secondary" size="sm" type="button" icon="upload" (click)="fileInput.click()" [attr.aria-describedby]="id + '-help'">
             {{ (previewUrl ? 'common.form.changePhoto' : 'common.form.uploadPhoto') | translate }}
           </button>
-          <button *ngIf="previewUrl" appButton variant="ghost" size="sm" type="button" (click)="remove()">
-            {{ 'common.form.removePhoto' | translate }}
-          </button>
+          @if (previewUrl) {
+            <button appButton variant="ghost" size="sm" type="button" (click)="remove()">
+              {{ 'common.form.removePhoto' | translate }}
+            </button>
+          }
         </div>
         <span [id]="id + '-help'" class="text-xs" [ngClass]="typeError ? 'font-semibold text-danger' : 'text-ink-3'">
           {{ (typeError ? 'validation.imageType' : 'common.form.photoHelp') | translate }}
@@ -33,7 +38,7 @@ const ACCEPTED_TYPES: readonly string[] = ['image/png', 'image/jpeg'];
       </div>
       <input #fileInput type="file" class="sr-only" tabindex="-1" aria-hidden="true" accept=".png,.jpg,.jpeg" (change)="onFile(fileInput)" />
     </div>
-  `,
+    `,
     styles: [':host { display: block; }'],
     standalone: false
 })

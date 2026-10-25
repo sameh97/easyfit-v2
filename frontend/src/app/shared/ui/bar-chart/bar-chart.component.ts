@@ -18,33 +18,37 @@ export interface BarDatum {
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
     <div class="flex h-full items-end gap-1.5 sm:gap-3.5" [style.minHeight.px]="height + 56" aria-hidden="true">
-      <div *ngFor="let bar of bars" class="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2">
-        <span
-          class="whitespace-nowrap text-[11px] font-bold sm:text-xs"
-          [ngClass]="bar.highlight ? 'text-ink' : 'hidden text-ink-4 sm:inline'"
-          >{{ bar.valueLabel }}</span
-        >
-        <div
-          class="w-full rounded-tile transition-all duration-300"
-          [ngClass]="bar.highlight ? 'bg-accent' : 'bg-accent-soft'"
-          [style.height.px]="barHeight(bar.value)"
-        ></div>
-        <span class="text-xs font-semibold text-ink-3 sm:text-[13px]">{{ bar.label }}</span>
+      @for (bar of bars; track bar) {
+        <div class="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-2">
+          <span
+            class="whitespace-nowrap text-[11px] font-bold sm:text-xs"
+            [ngClass]="bar.highlight ? 'text-ink' : 'hidden text-ink-4 sm:inline'"
+            >{{ bar.valueLabel }}</span
+            >
+            <div
+              class="w-full rounded-tile transition-all duration-300"
+              [ngClass]="bar.highlight ? 'bg-accent' : 'bg-accent-soft'"
+              [style.height.px]="barHeight(bar.value)"
+            ></div>
+            <span class="text-xs font-semibold text-ink-3 sm:text-[13px]">{{ bar.label }}</span>
+          </div>
+        }
       </div>
-    </div>
-    <table class="sr-only">
-      <caption>{{ caption }}</caption>
-      <thead>
-        <tr><th scope="col">{{ 'common.chart.month' | translate }}</th><th scope="col">{{ 'common.chart.value' | translate }}</th></tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let bar of bars">
-          <th scope="row">{{ bar.label }}</th>
-          <td>{{ bar.valueLabel }}</td>
-        </tr>
-      </tbody>
-    </table>
-  `,
+      <table class="sr-only">
+        <caption>{{ caption }}</caption>
+        <thead>
+          <tr><th scope="col">{{ 'common.chart.month' | translate }}</th><th scope="col">{{ 'common.chart.value' | translate }}</th></tr>
+        </thead>
+        <tbody>
+          @for (bar of bars; track bar) {
+            <tr>
+              <th scope="row">{{ bar.label }}</th>
+              <td>{{ bar.valueLabel }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    `,
     styles: [':host { display: block; }'],
     standalone: false
 })

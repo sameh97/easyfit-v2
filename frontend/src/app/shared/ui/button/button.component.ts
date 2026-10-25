@@ -30,10 +30,14 @@ const SIZES: Record<ButtonSize, string> = {
     selector: 'button[appButton], a[appButton]',
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-    <app-icon *ngIf="icon" [name]="icon" [size]="size === 'sm' ? 14 : 18"></app-icon>
+    @if (icon) {
+      <app-icon [name]="icon" [size]="size === 'sm' ? 14 : 18"></app-icon>
+    }
     <ng-content></ng-content>
-    <app-icon *ngIf="iconRight" [name]="iconRight" [size]="size === 'sm' ? 14 : 18"></app-icon>
-  `,
+    @if (iconRight) {
+      <app-icon [name]="iconRight" [size]="size === 'sm' ? 14 : 18"></app-icon>
+    }
+    `,
     standalone: false
 })
 export class ButtonComponent {

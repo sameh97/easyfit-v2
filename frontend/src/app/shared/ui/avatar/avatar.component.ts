@@ -37,17 +37,19 @@ export function initialsOf(name: string): string {
       [attr.aria-hidden]="decorative ? 'true' : null"
       [attr.role]="decorative ? null : 'img'"
       [attr.aria-label]="decorative ? null : name"
-    >
-      <img
-        *ngIf="showImage; else initialsTpl"
-        [src]="imageUrl"
-        alt=""
-        class="h-full w-full object-cover"
-        (error)="onImageError()"
-      />
-      <ng-template #initialsTpl>{{ initials }}</ng-template>
+      >
+      @if (showImage) {
+        <img
+          [src]="imageUrl"
+          alt=""
+          class="h-full w-full object-cover"
+          (error)="onImageError()"
+          />
+      } @else {
+        {{ initials }}
+      }
     </span>
-  `,
+    `,
     styles: [':host { display: inline-flex; }'],
     standalone: false
 })

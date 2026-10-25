@@ -22,26 +22,32 @@ import { IconName, IconShape, ICONS } from './icons';
       [attr.role]="label ? 'img' : null"
       [attr.aria-label]="label"
       focusable="false"
-    >
-      <ng-container *ngFor="let shape of shapes">
-        <svg:path *ngIf="shape.kind === 'path'" [attr.d]="asPath(shape).d"></svg:path>
-        <svg:circle
-          *ngIf="shape.kind === 'circle'"
-          [attr.cx]="asCircle(shape).cx"
-          [attr.cy]="asCircle(shape).cy"
-          [attr.r]="asCircle(shape).r"
-        ></svg:circle>
-        <svg:rect
-          *ngIf="shape.kind === 'rect'"
-          [attr.x]="asRect(shape).x"
-          [attr.y]="asRect(shape).y"
-          [attr.width]="asRect(shape).width"
-          [attr.height]="asRect(shape).height"
-          [attr.rx]="asRect(shape).rx"
-        ></svg:rect>
-      </ng-container>
-    </svg>
-  `,
+      >
+      @for (shape of shapes; track shape) {
+        <ng-container>
+          @if (shape.kind === 'path') {
+            <svg:path [attr.d]="asPath(shape).d"></svg:path>
+            }
+            @if (shape.kind === 'circle') {
+              <svg:circle
+                [attr.cx]="asCircle(shape).cx"
+                [attr.cy]="asCircle(shape).cy"
+                [attr.r]="asCircle(shape).r"
+                ></svg:circle>
+              }
+              @if (shape.kind === 'rect') {
+                <svg:rect
+                  [attr.x]="asRect(shape).x"
+                  [attr.y]="asRect(shape).y"
+                  [attr.width]="asRect(shape).width"
+                  [attr.height]="asRect(shape).height"
+                  [attr.rx]="asRect(shape).rx"
+                  ></svg:rect>
+                }
+              </ng-container>
+            }
+          </svg>
+    `,
     styles: [':host { display: inline-flex; flex-shrink: 0; line-height: 0; }'],
     standalone: false
 })

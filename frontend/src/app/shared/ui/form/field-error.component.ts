@@ -6,11 +6,13 @@ import { DEFAULT_FIELD_MESSAGES, FieldMessages } from './field';
 @Component({
     selector: 'app-field-error',
     template: `
-    <span *ngIf="messageKey" class="flex items-center gap-1 text-xs font-semibold text-danger">
-      <app-icon name="alert-circle" [size]="13"></app-icon>
-      {{ messageKey | translate: params }}
-    </span>
-  `,
+    @if (messageKey) {
+      <span class="flex items-center gap-1 text-xs font-semibold text-danger">
+        <app-icon name="alert-circle" [size]="13"></app-icon>
+        {{ messageKey | translate: params }}
+      </span>
+    }
+    `,
     styles: [':host { display: block; }'],
     standalone: false
 })

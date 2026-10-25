@@ -27,26 +27,27 @@ export interface SegmentOption {
       [attr.aria-label]="label"
       class="inline-flex gap-0.5 rounded-full bg-surface-muted p-1"
       (keydown)="onKeydown($event)"
-    >
-      <button
-        #segment
-        *ngFor="let option of options; let i = index"
-        type="button"
-        role="radio"
-        [attr.aria-checked]="option.value === value"
-        [attr.tabindex]="option.value === value ? 0 : -1"
-        (click)="select(option.value)"
-        class="whitespace-nowrap rounded-full border-0 px-3.5 py-1.5 text-[13px] leading-tight transition-colors duration-150"
+      >
+      @for (option of options; track option; let i = $index) {
+        <button
+          #segment
+          type="button"
+          role="radio"
+          [attr.aria-checked]="option.value === value"
+          [attr.tabindex]="option.value === value ? 0 : -1"
+          (click)="select(option.value)"
+          class="whitespace-nowrap rounded-full border-0 px-3.5 py-1.5 text-[13px] leading-tight transition-colors duration-150"
         [ngClass]="
           option.value === value
             ? 'bg-surface font-bold text-ink shadow-card'
             : 'bg-transparent font-semibold text-ink-3 hover:text-ink'
         "
-      >
-        {{ option.label }}
-      </button>
+          >
+          {{ option.label }}
+        </button>
+      }
     </div>
-  `,
+    `,
     styles: [':host { display: inline-flex; max-width: 100%; overflow-x: auto; }'],
     standalone: false
 })

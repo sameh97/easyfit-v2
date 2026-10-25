@@ -26,25 +26,32 @@ export const MENU_CONTEXT = new InjectionToken<MenuContext>('MENU_CONTEXT');
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
     <div role="menu" [attr.aria-label]="context.ariaLabel" class="flex min-w-[200px] flex-col py-1.5" (keydown)="onKeydown($event)">
-      <button
-        *ngFor="let item of context.items"
-        type="button"
-        [attr.role]="item.checked === undefined ? 'menuitem' : 'menuitemradio'"
-        [attr.aria-checked]="item.checked === undefined ? null : item.checked"
-        [disabled]="item.disabled"
-        tabindex="-1"
-        (click)="context.choose(item.id, true)"
-        class="flex w-full items-center gap-3 border-0 bg-transparent px-4 py-2.5 text-start text-sm font-semibold outline-none hover:bg-surface-subtle focus:bg-surface-subtle disabled:opacity-50"
-        [ngClass]="item.tone === 'danger' ? 'text-danger' : 'text-ink-2 hover:text-ink'"
-      >
-        <span *ngIf="item.checked !== undefined" class="flex w-4 justify-center text-accent">
-          <app-icon *ngIf="item.checked" name="check" [size]="15"></app-icon>
-        </span>
-        <app-icon *ngIf="item.icon" [name]="item.icon" [size]="17"></app-icon>
-        <span class="whitespace-nowrap">{{ item.label }}</span>
-      </button>
+      @for (item of context.items; track item) {
+        <button
+          type="button"
+          [attr.role]="item.checked === undefined ? 'menuitem' : 'menuitemradio'"
+          [attr.aria-checked]="item.checked === undefined ? null : item.checked"
+          [disabled]="item.disabled"
+          tabindex="-1"
+          (click)="context.choose(item.id, true)"
+          class="flex w-full items-center gap-3 border-0 bg-transparent px-4 py-2.5 text-start text-sm font-semibold outline-none hover:bg-surface-subtle focus:bg-surface-subtle disabled:opacity-50"
+          [ngClass]="item.tone === 'danger' ? 'text-danger' : 'text-ink-2 hover:text-ink'"
+          >
+          @if (item.checked !== undefined) {
+            <span class="flex w-4 justify-center text-accent">
+              @if (item.checked) {
+                <app-icon name="check" [size]="15"></app-icon>
+              }
+            </span>
+          }
+          @if (item.icon) {
+            <app-icon [name]="item.icon" [size]="17"></app-icon>
+          }
+          <span class="whitespace-nowrap">{{ item.label }}</span>
+        </button>
+      }
     </div>
-  `,
+    `,
     standalone: false
 })
 export class MenuComponent implements AfterViewInit {

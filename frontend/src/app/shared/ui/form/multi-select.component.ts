@@ -23,7 +23,9 @@ const MAX_RESULTS: number = 50;
     selector: 'app-multi-select',
     template: `
     <div class="flex flex-col gap-2.5" (focusout)="onFocusOut($event)">
-      <label [for]="id" [class]="labelClass" [ngClass]="hideLabel ? 'sr-only' : ''">{{ label }}<span *ngIf="required" class="text-danger" aria-hidden="true"> *</span></label>
+      <label [for]="id" [class]="labelClass" [ngClass]="hideLabel ? 'sr-only' : ''">{{ label }}@if (required) {
+        <span class="text-danger" aria-hidden="true"> *</span>
+      }</label>
       <div class="relative">
         <div [class]="boxClass">
           <app-icon name="search" [size]="17" class="text-ink-3"></app-icon>
@@ -47,67 +49,88 @@ const MAX_RESULTS: number = 50;
             (focus)="openList()"
             (click)="openList()"
             (keydown)="onKeydown($event)"
-          />
+            />
         </div>
-
-        <ul
-          *ngIf="open"
-          [id]="id + '-list'"
-          role="listbox"
-          aria-multiselectable="true"
-          [attr.aria-label]="label"
-          class="absolute inset-x-0 top-full z-10 mb-0 mt-1.5 max-h-64 list-none overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-overlay"
-        >
-          <li *ngIf="!results.length" class="px-3 py-2.5 text-sm text-ink-3" role="presentation">{{ 'common.multiSelect.noResults' | translate }}</li>
-          <li
-            *ngFor="let option of results; let i = index; trackBy: trackByValue"
-            [id]="id + '-opt-' + option.value"
-            role="option"
-            aria-selected="false"
-            (mousedown)="$event.preventDefault()"
-            (click)="add(option)"
-            class="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2"
-            [ngClass]="i === active ? 'bg-accent-soft' : 'hover:bg-surface-subtle'"
-          >
-            <app-avatar [name]="option.label" [id]="option.value" [imageUrl]="option.imageUrl || null" [size]="30"></app-avatar>
-            <span class="flex min-w-0 flex-col">
-              <span class="truncate text-sm font-semibold text-ink" dir="auto">{{ option.label }}</span>
-              <span *ngIf="option.caption" class="truncate text-xs text-ink-3"><bdi dir="ltr">{{ option.caption }}</bdi></span>
-            </span>
-          </li>
-          <li *ngIf="truncated" class="px-3 py-2 text-xs text-ink-3" role="presentation">{{ 'common.multiSelect.typeToNarrow' | translate }}</li>
-        </ul>
+    
+        @if (open) {
+          <ul
+            [id]="id + '-list'"
+            role="listbox"
+            aria-multiselectable="true"
+            [attr.aria-label]="label"
+            class="absolute inset-x-0 top-full z-10 mb-0 mt-1.5 max-h-64 list-none overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-overlay"
+            >
+            @if (!results.length) {
+              <li class="px-3 py-2.5 text-sm text-ink-3" role="presentation">{{ 'common.multiSelect.noResults' | translate }}</li>
+            }
+            @for (option of results; track trackByValue(i, option); let i = $index) {
+              <li
+                [id]="id + '-opt-' + option.value"
+                role="option"
+                aria-selected="false"
+                (mousedown)="$event.preventDefault()"
+                (click)="add(option)"
+                class="flex cursor-pointer items-center gap-2.5 rounded-xl px-2.5 py-2"
+                [ngClass]="i === active ? 'bg-accent-soft' : 'hover:bg-surface-subtle'"
+                >
+                <app-avatar [name]="option.label" [id]="option.value" [imageUrl]="option.imageUrl || null" [size]="30"></app-avatar>
+                <span class="flex min-w-0 flex-col">
+                  <span class="truncate text-sm font-semibold text-ink" dir="auto">{{ option.label }}</span>
+                  @if (option.caption) {
+                    <span class="truncate text-xs text-ink-3"><bdi dir="ltr">{{ option.caption }}</bdi></span>
+                  }
+                </span>
+              </li>
+            }
+            @if (truncated) {
+              <li class="px-3 py-2 text-xs text-ink-3" role="presentation">{{ 'common.multiSelect.typeToNarrow' | translate }}</li>
+            }
+          </ul>
+        }
       </div>
-
-      <ul *ngIf="picked.length" class="m-0 flex list-none flex-wrap gap-1.5 p-0" [attr.aria-label]="'common.multiSelect.selected' | translate: { label: label }">
-        <li *ngFor="let option of visibleChips; trackBy: trackByValue" class="flex h-[34px] items-center gap-1.5 rounded-full bg-surface-muted px-1 text-[13px] font-bold text-ink">
-          <app-avatar [name]="option.label" [id]="option.value" [imageUrl]="option.imageUrl || null" [size]="26"></app-avatar>
-          <span class="max-w-[160px] truncate" dir="auto">{{ option.label }}</span>
-          <button
-            type="button"
-            class="flex h-[26px] w-[26px] items-center justify-center rounded-full border-0 bg-transparent p-0 text-ink-3 hover:bg-surface hover:text-ink"
-            [attr.aria-label]="'common.multiSelect.remove' | translate: { name: option.label }"
-            (click)="remove(option)"
-          >
-            <app-icon name="x" [size]="13"></app-icon>
-          </button>
-        </li>
-        <li *ngIf="hiddenCount > 0">
-          <button type="button" class="h-[34px] rounded-full border border-solid border-line-strong bg-surface px-3 text-[13px] font-bold text-ink hover:bg-surface-subtle" (click)="expanded = true">
-            {{ 'common.multiSelect.more' | translate: { count: hiddenCount } }}
-          </button>
-        </li>
-        <li *ngIf="expanded && picked.length > collapseAfter">
-          <button type="button" class="h-[34px] rounded-full border-0 bg-transparent px-3 text-[13px] font-bold text-accent hover:underline" (click)="expanded = false">
-            {{ 'common.multiSelect.less' | translate }}
-          </button>
-        </li>
-      </ul>
-
-      <app-field-error *ngIf="invalid; else helpTpl" [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
-      <ng-template #helpTpl><span *ngIf="help" [id]="id + '-help'" [class]="helpClass">{{ help }}</span></ng-template>
+    
+      @if (picked.length) {
+        <ul class="m-0 flex list-none flex-wrap gap-1.5 p-0" [attr.aria-label]="'common.multiSelect.selected' | translate: { label: label }">
+          @for (option of visibleChips; track trackByValue($index, option)) {
+            <li class="flex h-[34px] items-center gap-1.5 rounded-full bg-surface-muted px-1 text-[13px] font-bold text-ink">
+              <app-avatar [name]="option.label" [id]="option.value" [imageUrl]="option.imageUrl || null" [size]="26"></app-avatar>
+              <span class="max-w-[160px] truncate" dir="auto">{{ option.label }}</span>
+              <button
+                type="button"
+                class="flex h-[26px] w-[26px] items-center justify-center rounded-full border-0 bg-transparent p-0 text-ink-3 hover:bg-surface hover:text-ink"
+                [attr.aria-label]="'common.multiSelect.remove' | translate: { name: option.label }"
+                (click)="remove(option)"
+                >
+                <app-icon name="x" [size]="13"></app-icon>
+              </button>
+            </li>
+          }
+          @if (hiddenCount > 0) {
+            <li>
+              <button type="button" class="h-[34px] rounded-full border border-solid border-line-strong bg-surface px-3 text-[13px] font-bold text-ink hover:bg-surface-subtle" (click)="expanded = true">
+                {{ 'common.multiSelect.more' | translate: { count: hiddenCount } }}
+              </button>
+            </li>
+          }
+          @if (expanded && picked.length > collapseAfter) {
+            <li>
+              <button type="button" class="h-[34px] rounded-full border-0 bg-transparent px-3 text-[13px] font-bold text-accent hover:underline" (click)="expanded = false">
+                {{ 'common.multiSelect.less' | translate }}
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    
+      @if (invalid) {
+        <app-field-error [id]="id + '-error'" [control]="control" [messages]="messages"></app-field-error>
+      } @else {
+        @if (help) {
+          <span [id]="id + '-help'" [class]="helpClass">{{ help }}</span>
+        }
+      }
     </div>
-  `,
+    `,
     styles: [':host { display: block; min-width: 0; }'],
     standalone: false
 })

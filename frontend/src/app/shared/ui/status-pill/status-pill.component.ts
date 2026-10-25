@@ -23,8 +23,11 @@ const DEFAULT_LABEL_KEYS: Record<PillStatus, string | null> = {
 @Component({
     selector: 'app-status-pill',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    template: `<ng-container *ngIf="label !== null; else byStatus">{{ label }}</ng-container
-    ><ng-template #byStatus>{{ defaultKey ? (defaultKey | translate) : '' }}</ng-template>`,
+    template: `@if (label !== null) {
+  {{ label }}
+} @else {
+  {{ defaultKey ? (defaultKey | translate) : '' }}
+}`,
     standalone: false
 })
 export class StatusPillComponent {

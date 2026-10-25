@@ -20,11 +20,13 @@ const TILE_TONES: Record<EmptyStateTone, string> = {
       </span>
       <div class="flex max-w-xs flex-col gap-1">
         <p class="text-[15px] font-bold text-ink">{{ title }}</p>
-        <p *ngIf="message" class="text-[13px] text-ink-3">{{ message }}</p>
+        @if (message) {
+          <p class="text-[13px] text-ink-3">{{ message }}</p>
+        }
       </div>
       <ng-content></ng-content>
     </div>
-  `,
+    `,
     styles: [':host { display: block; }'],
     standalone: false
 })
