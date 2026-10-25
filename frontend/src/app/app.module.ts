@@ -6,7 +6,7 @@ import { LanguageService } from './services/language.service';
 import { I18nModule } from './shared/i18n/i18n.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -131,7 +131,7 @@ const routes: Routes = [
   ],
   providers: [
     { provide: APP_INITIALIZER, useFactory: initLanguage, deps: [LanguageService], multi: true },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     provideTranslateService({
       fallbackLang: 'en',
       loader: provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),

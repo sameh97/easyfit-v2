@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { GroupTraining } from 'src/app/model/group-training';
@@ -36,6 +36,7 @@ export interface ClassFormData {
     selector: 'app-class-form',
     templateUrl: './class-form.component.html',
     styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ClassFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {

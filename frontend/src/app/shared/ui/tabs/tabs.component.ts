@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 
 export interface TabItem<T extends string = string> {
   id: T;
@@ -32,6 +32,7 @@ export interface TabItem<T extends string = string> {
     </div>
     `,
     styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TabsComponent {

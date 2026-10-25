@@ -2,7 +2,12 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+    // TypeScript 6 defaults to strict; the codebase was never compiled strict. Turning it on
+    // (about 150 errors, mostly model fields without initialisers) is a separate follow-up.
+    "strict": false,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "esModuleInterop": true,

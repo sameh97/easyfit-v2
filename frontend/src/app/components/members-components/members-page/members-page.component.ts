@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -54,6 +54,7 @@ interface RowInfo {
 @Component({
     selector: 'app-members-page',
     templateUrl: './members-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MembersPageComponent implements OnInit, OnDestroy {

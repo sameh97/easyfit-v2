@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -33,6 +33,7 @@ const LENGTHS: readonly number[] = [1, 3, 6, 12];
     selector: 'app-member-form',
     templateUrl: './member-form.component.html',
     styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MemberFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Trainer } from 'src/app/model/trainer';
@@ -20,6 +20,7 @@ const ROLE_KEYS: Record<number, string> = { 1: 'shell.user.roles.manager', 2: 's
 @Component({
     selector: 'app-profile-page',
     templateUrl: './profile-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -30,6 +30,7 @@ export const PRODUCT_CATEGORY_IDS: readonly number[] = [1, 2, 3, 4, 5];
     selector: 'app-product-form',
     templateUrl: './product-form.component.html',
     styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ProductFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {

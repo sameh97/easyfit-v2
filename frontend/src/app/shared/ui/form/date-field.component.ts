@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -58,6 +58,7 @@ import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIEL
     </div>
     `,
     styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DateFieldComponent {

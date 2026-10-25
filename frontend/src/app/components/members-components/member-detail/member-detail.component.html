@@ -112,13 +112,13 @@
           @if (activity?.classes?.upcoming?.length) {
             <section class="flex flex-col gap-2">
               <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.upcoming' | translate }}</h3>
-              <ng-container *ngTemplateOutlet="classList; context: { $implicit: activity?.classes?.upcoming, past: false }"></ng-container>
+              <ng-container *ngTemplateOutlet="classList; context: { $implicit: $safeNavigationMigration(activity?.classes?.upcoming), past: false }"></ng-container>
             </section>
           }
           @if (activity?.classes?.past?.length) {
             <section class="flex flex-col gap-2">
               <h3 class="text-[11px] font-bold uppercase tracking-label text-ink-4">{{ 'members.detail.past' | translate }}</h3>
-              <ng-container *ngTemplateOutlet="classList; context: { $implicit: activity?.classes?.past, past: true }"></ng-container>
+              <ng-container *ngTemplateOutlet="classList; context: { $implicit: $safeNavigationMigration(activity?.classes?.past), past: true }"></ng-container>
             </section>
           }
         }

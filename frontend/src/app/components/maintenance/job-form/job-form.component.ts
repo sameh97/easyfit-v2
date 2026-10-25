@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, UntypedFormControl, UntypedFormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { merge, Observable, Subscription } from 'rxjs';
 import { AppUtil } from 'src/app/common/app-util';
@@ -34,6 +34,7 @@ export interface JobFormData {
     selector: 'app-job-form',
     templateUrl: './job-form.component.html',
     styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class JobFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {

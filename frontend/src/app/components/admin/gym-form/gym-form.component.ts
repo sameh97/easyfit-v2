@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Gym } from 'src/app/model/gym';
@@ -19,6 +19,7 @@ export interface GymFormData {
     selector: 'app-gym-form',
     templateUrl: './gym-form.component.html',
     styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GymFormComponent extends FormInputComponent implements CloseGuard, OnDestroy {

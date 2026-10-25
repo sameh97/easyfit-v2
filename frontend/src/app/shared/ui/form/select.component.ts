@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_PAD, FIELD_HELP, FIELD_LABEL } from './field-shell';
@@ -44,6 +44,7 @@ export interface SelectOption<T = string | number> {
     </div>
     `,
     styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SelectComponent {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { IconName } from '../icon/icons';
 import { FieldMessages, newFieldId, showsError } from './field';
@@ -46,6 +46,7 @@ export type TextFieldType = 'text' | 'email' | 'tel' | 'password' | 'number';
     </div>
     `,
     styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TextFieldComponent {

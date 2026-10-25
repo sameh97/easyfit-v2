@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { newFieldId } from './field';
 
 const ACCEPTED_TYPES: readonly string[] = ['image/png', 'image/jpeg'];
@@ -40,6 +40,7 @@ const ACCEPTED_TYPES: readonly string[] = ['image/png', 'image/jpeg'];
     </div>
     `,
     styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ImageUploadComponent implements OnDestroy {

@@ -10,6 +10,7 @@ const PILL: string = 'inline-flex items-center justify-center whitespace-nowrap 
     selector: 'app-machine-badge',
     template: `<span [class]="cls">{{ label }}</span>`,
     styles: [':host { display: inline-flex; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MachineBadgeComponent {

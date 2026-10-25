@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Catalog } from 'src/app/model/catalog';
@@ -31,6 +31,7 @@ const SKELETON_ROWS: readonly number[] = [1, 2, 3];
 @Component({
     selector: 'app-catalogs-page',
     templateUrl: './catalogs-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CatalogsPageComponent implements OnInit, OnDestroy {

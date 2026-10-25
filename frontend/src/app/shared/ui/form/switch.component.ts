@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { newFieldId } from './field';
 import { FIELD_HELP } from './field-shell';
@@ -34,6 +34,7 @@ import { FIELD_HELP } from './field-shell';
     </div>
     `,
     styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SwitchComponent {

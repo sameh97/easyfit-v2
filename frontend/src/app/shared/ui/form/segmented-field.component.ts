@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, ViewChildren, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_LABEL } from './field-shell';
@@ -50,6 +50,7 @@ export interface SegmentedFieldOption<T> {
     </div>
     `,
     styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SegmentedFieldComponent<T> {

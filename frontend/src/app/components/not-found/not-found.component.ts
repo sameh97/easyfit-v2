@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { ShellStateService } from 'src/app/services/shell-state.service';
@@ -10,6 +10,7 @@ import { ShellStateService } from 'src/app/services/shell-state.service';
 @Component({
     selector: 'app-not-found',
     templateUrl: './not-found.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class NotFoundComponent {

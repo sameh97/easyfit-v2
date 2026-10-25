@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { formatMoney } from 'src/app/common/money';
 import { Machine } from 'src/app/model/machine';
 import { LanguageService } from 'src/app/services/language.service';
@@ -20,6 +20,7 @@ import { dayTime, JobView, MachineView } from '../machine-status';
     selector: 'app-machine-detail',
     templateUrl: './machine-detail.component.html',
     styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MachineDetailComponent {

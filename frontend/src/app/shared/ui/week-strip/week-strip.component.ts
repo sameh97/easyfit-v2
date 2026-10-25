@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { LanguageService } from 'src/app/services/language.service';
 
 export interface WeekStripDay {
@@ -61,6 +61,7 @@ export function dayDiff(from: Date, to: Date): number {
     </div>
     `,
     styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WeekStripComponent {

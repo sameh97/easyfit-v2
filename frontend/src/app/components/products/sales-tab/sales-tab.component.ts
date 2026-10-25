@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
 import { formatMoney } from 'src/app/common/money';
 import { Bill } from 'src/app/model/bill';
 import { LanguageService } from 'src/app/services/language.service';
@@ -38,6 +38,7 @@ function rangeBounds(range: SalesRange, now: Date): [Date | null, Date | null] {
 @Component({
     selector: 'app-sales-tab',
     templateUrl: './sales-tab.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class SalesTabComponent implements OnChanges {

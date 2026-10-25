@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { DEFAULT_FIELD_MESSAGES, FieldMessages } from './field';
 
@@ -14,6 +14,7 @@ import { DEFAULT_FIELD_MESSAGES, FieldMessages } from './field';
     }
     `,
     styles: [':host { display: block; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class FieldErrorComponent {

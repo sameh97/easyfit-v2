@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { GroupTraining } from 'src/app/model/group-training';
@@ -37,6 +37,7 @@ const SKELETON_ROWS: readonly number[] = [1, 2, 3, 4];
 @Component({
     selector: 'app-classes-page',
     templateUrl: './classes-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ClassesPageComponent implements OnInit, OnDestroy {

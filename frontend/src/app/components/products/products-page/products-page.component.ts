@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -33,6 +33,7 @@ const SKELETON_CARDS: readonly number[] = [1, 2, 3, 4, 5, 6];
 @Component({
     selector: 'app-products-page',
     templateUrl: './products-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ProductsPageComponent implements OnInit, OnDestroy {

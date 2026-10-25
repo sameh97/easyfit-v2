@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { GroupTraining } from 'src/app/model/group-training';
 import { Member } from 'src/app/model/member';
 import { Trainer } from 'src/app/model/trainer';
@@ -20,6 +20,7 @@ const PARTICIPANTS_PREVIEW: number = 8;
     selector: 'app-class-detail',
     templateUrl: './class-detail.component.html',
     styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class ClassDetailComponent implements OnChanges {

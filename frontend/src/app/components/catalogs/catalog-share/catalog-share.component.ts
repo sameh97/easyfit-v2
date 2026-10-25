@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Catalog } from 'src/app/model/catalog';
@@ -34,6 +34,7 @@ const PAGE: number = 30;
     selector: 'app-catalog-share',
     templateUrl: './catalog-share.component.html',
     styles: [':host { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CatalogShareComponent implements OnDestroy {

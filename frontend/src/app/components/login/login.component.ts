@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppUtil } from 'src/app/common/app-util';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { FormInputComponent } from 'src/app/shared/components/form-input/form-in
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LoginComponent extends FormInputComponent implements OnInit {

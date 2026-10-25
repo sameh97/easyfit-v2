@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, UntypedFormControl, ValidationErrors } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIELD_LABEL } from './field-shell';
@@ -133,6 +133,7 @@ const SUGGESTIONS: readonly string[] = Array.from({ length: (24 * 60) / STEP_MIN
     </div>
     `,
     styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TimeFieldComponent {

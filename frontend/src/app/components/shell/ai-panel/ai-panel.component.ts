@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AppUtil } from 'src/app/common/app-util';
 import { ShellStateService } from 'src/app/services/shell-state.service';
@@ -19,6 +19,7 @@ const EXAMPLE_QUESTIONS: readonly string[] = [
     selector: 'app-ai-panel',
     templateUrl: './ai-panel.component.html',
     styles: [':host { display: contents; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class AiPanelComponent implements OnInit, OnDestroy {

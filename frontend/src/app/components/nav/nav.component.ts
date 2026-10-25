@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { merge, Observable, Subscription } from 'rxjs';
@@ -24,6 +24,7 @@ const ROLE_KEYS: Record<number, string> = { 1: 'shell.user.roles.manager', 2: 's
     selector: 'app-nav',
     templateUrl: './nav.component.html',
     styleUrls: ['./nav.component.css'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class NavComponent implements OnInit, OnDestroy {

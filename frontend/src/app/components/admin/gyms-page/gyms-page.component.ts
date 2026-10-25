@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { Gym } from 'src/app/model/gym';
 import { User } from 'src/app/model/user';
@@ -18,6 +18,7 @@ type LoadState = 'loading' | 'ready' | 'error';
 @Component({
     selector: 'app-gyms-page',
     templateUrl: './gyms-page.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GymsPageComponent implements OnInit, OnDestroy {

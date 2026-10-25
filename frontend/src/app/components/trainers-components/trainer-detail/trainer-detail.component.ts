@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { classTitle } from 'src/app/common/class-title';
 import { GroupTraining } from 'src/app/model/group-training';
@@ -33,6 +33,7 @@ interface InfoRow {
     selector: 'app-trainer-detail',
     templateUrl: './trainer-detail.component.html',
     styles: [':host { display: flex; flex-direction: column; min-height: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TrainerDetailComponent implements OnChanges, OnDestroy {

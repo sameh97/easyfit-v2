@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AlertsState, JobType, MachineAlertGroup, MaintenanceAlertsService } from 'src/app/services/maintenance-alerts.service';
@@ -16,6 +16,7 @@ import { dayDiff } from 'src/app/shared/ui/week-strip/week-strip.component';
 @Component({
     selector: 'app-notifications-panel',
     templateUrl: './notifications-panel.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class NotificationsPanelComponent implements OnInit, OnDestroy {

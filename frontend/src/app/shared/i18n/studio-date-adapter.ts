@@ -22,8 +22,9 @@ export class StudioDateAdapter extends NativeDateAdapter implements OnDestroy {
   private readonly subscription: Subscription;
 
   constructor(language: LanguageService) {
-    super(language.current);
+    super();
     this.lang = language.current;
+    this.setLocale(language.current);
     this.subscription = language.lang$.subscribe((lang: Lang) => {
       this.lang = lang;
       this.setLocale(lang);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { FieldMessages, newFieldId, showsError } from './field';
 import { FIELD_BOX, FIELD_BOX_ERROR, FIELD_BOX_OK, FIELD_HELP, FIELD_INPUT, FIELD_LABEL, FIELD_PAD } from './field-shell';
@@ -132,6 +132,7 @@ const MAX_RESULTS: number = 50;
     </div>
     `,
     styles: [':host { display: block; min-width: 0; }'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class MultiSelectComponent {
