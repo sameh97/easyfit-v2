@@ -24,15 +24,15 @@ EasyFit is a **gym management web app** for gym owners and staff (not for gym me
 ### Frontend (`frontend/`)
 | Area | Tech | Notes |
 |---|---|---|
-| Framework | **Angular 11.2.14**, TypeScript 4.0 | One `AppModule`, no lazy loading, no standalone components (they don't exist in v11) |
-| Styling | **Tailwind CSS 2.2** (JIT mode, preflight on) + PostCSS 8 | Config in `frontend/tailwind.config.js`. Tailwind 3+ needs Angular 13+ |
+| Framework | **Angular 22**, TypeScript 6 (since Phase 5b; was 11.2 / 4.0) | One `AppModule` with `standalone: false` components, no lazy loading; esbuild application builder, output in `dist/easyfit/browser` |
+| Styling | **Tailwind CSS 3.4** (preflight on) | Config in `frontend/tailwind.config.js`; logical utilities (`ms-`, `pe-`, `start-`…) are built in |
 | Overlays and a11y | `@angular/cdk` (overlay, portal, a11y, layout, bidi) | Side panels, menus, confirm dialog, focus traps |
 | Date picker | The **Material datepicker** inside the Studio `DateField`, the only Angular Material left | Themed by `src/datepicker-theme.scss` (no prebuilt theme) |
 | Icons | Inline Lucide-style SVGs (`<app-icon>`) | |
 | Fonts | **Plus Jakarta Sans** + **Rubik** (Hebrew) | Google Fonts in `index.html` |
 | Charts | Inline SVG on the dashboard | |
 | Multi-select | Studio `MultiSelect` (`shared/ui`) | |
-| i18n | `@ngx-translate` 13, `en.json` / `he.json` | |
+| i18n | `@ngx-translate` 18 (`provideTranslateService`, standalone `TranslatePipe`), `en.json` / `he.json` | |
 | Realtime | `socket.io-client` 4 | Live notification count in the top bar |
 | Auth | JWT stored client-side, `@auth0/angular-jwt`, `AuthGuard` on routes | |
 | Forms | Reactive forms; shared validators live in `shared/components/form-input/form-input.component.ts` | Components extend `FormInputComponent` |
@@ -50,8 +50,8 @@ The API lives under `/api/*`. Tables are created by `sequelize.sync()`; there ar
 1. All new UI uses **Tailwind**, with a *modern, clean, athletic* look.
 2. The TypeScript must be strictly typed.
 3. Tailwind **preflight is on** (since Phase 5; Bootstrap and the Material theme are gone). Before Phase 5 it was off and Studio code carried its own base layer.
-4. Tailwind 2 syntax applies: `bg-opacity-*` (no `bg-black/50`), `transform` must be added before `translate-*`, and arbitrary values like `w-[37px]` work because JIT is on.
-5. `ng serve` needs `NODE_OPTIONS=--openssl-legacy-provider` and `TAILWIND_MODE=watch`.
+4. Tailwind 3.4 syntax applies (Phase 5b; before that Tailwind 2: `bg-opacity-*`, `transform` before `translate-*`).
+5. Node 22.22+ or 24.15+; `npm start` / `npm run build` need no extra flags.
 
 > ✅ **Remove Bootstrap, jQuery and Angular Material?** Done in Phase 5. Bootstrap, jQuery and every Material component except the datepicker are gone; the datepicker stays inside the Studio `DateField` (decided with the owner: keyboard and screen-reader support come for free).
 >
@@ -452,7 +452,7 @@ Reference: `mockups/Final-Dashboard.dc.html` (shell), `mockups/Nav-1-Sidebar-AI-
 2. **Phase 3:** Classes (group trainings), Machines, Maintenance (scheduler), notifications panel
 3. **Phase 4:** Products and Sales, Catalogs, Profile and settings, Admin (Gyms, Users, the same shell with admin nav), 404
 4. **Phase 5 ✅:** clean-up. Remove Bootstrap, jQuery, Angular Material components and the extra date pickers; turn preflight back on; drop `important`. Then decide on the Angular upgrade.
-5. **Phase 5b ✅:** Angular 11 → 22 upgrade, no UI changes (§7.10)
+5. **Phase 5b ✅ (done):** Angular 11 → 22 upgrade, no UI changes (§7.10)
 6. **Phase 6:** the AI backend (§7.6)
 
 ### 7.6 New features or fields
@@ -826,5 +826,36 @@ Branch `redesign/phase-5b` (from `redesign/phase-1`, after Phase 5 is merged). *
    - **(b)** Move them to Vitest (Angular's new default) and fix them so they pass.
    - **(c)** Leave them, broken.
 4. **Builder:** switch to the esbuild application builder at Angular 17 (**recommended**: faster builds, the default from then on). Or keep the webpack builder.
+
+#### Done in Phase 5b (decisions made while building it)
+- **Versions:** Angular 22.2 (core, CLI, CDK, Material), TypeScript 6.0, RxJS 7.8, zone.js 0.16, `@ngx-translate` 18, `@auth0/angular-jwt` 5.2, Tailwind 3.4, `socket.io-client` 4.8. The Docker build uses `node:24` with plain `npm ci`: no `--legacy-peer-deps` and no `--openssl-legacy-provider`.
+- **Same app:** all 84 page checks (EN/HE × 1440/1024/390, gym and admin), the member add/edit/delete flow, the live-alert socket and the calendar keyboard test pass on every major. Pages are 0.00% different from a same-day Angular 17 run. The only visible change is Material 19 moving the calendar's contents about 2px up.
+- **Changes made by `ng update` itself:**
+  - Angular 14: `UntypedFormControl`/`UntypedFormGroup`.
+  - Angular 16: class guards without `CanActivate`.
+  - Angular 18: `provideHttpClient(withInterceptorsFromDi())`.
+  - Angular 19: `standalone: false` on every component.
+  - Angular 21: **the control-flow migration (`@if`/`@for`/`@switch`) runs automatically**, so it happened here, although the spec had left it for later. It was kept: CLI migrations aren't hand-edited, and rendering is unchanged.
+  - Angular 22: `ChangeDetectionStrategy.Eager` pinned on components, and `provideZoneChangeDetection()` in `main.ts`, so change detection works as before.
+- **Hand changes:**
+  - **Datepicker theme:** `datepicker-theme.scss` is on the MDC theming API (`m2-*` theme, datepicker, button and icon-button themes).
+  - **Date adapter and direction:** `StudioDateAdapter` follows Material's `NativeDateAdapter` constructor changes (no `Platform`, then no argument), and `LanguageDirectionality` implements CDK 20's `valueSignal`.
+  - **Translations:** `@ngx-translate` 17 brought `provideTranslateHttpLoader` and `fallbackLang`. 18 has no `TranslateModule`: `provideTranslateService` lives in `AppModule`, and `I18nModule` re-exports `TranslatePipe`.
+  - **Tailwind 3:** `content` replaces `purge`, the custom logical-utility plugin is deleted (Tailwind has them built in), and `check:rtl` reads `content`.
+  - **Build output:** the esbuild application builder puts it in `dist/easyfit/browser`; the Dockerfile copies from there. `israeli-id-validator` is the one allowed CommonJS dependency. `polyfills.ts` is replaced by the `zone.js` polyfill entry.
+  - **TypeScript 6:** `paths` replaces `baseUrl`.
+- **Removed:**
+  - Karma/Jasmine and the stale specs, Protractor and `e2e/`, and tslint/codelyzer.
+  - Code: an unused and invalid `FormInputComponent.validateQuantity`, and an unused `lodash` import (lodash was never a dependency).
+  - `.browserslistrc`; Angular's default browser list applies.
+- **`strict` is explicitly `false`.** TypeScript 6 defaults to strict, but the codebase was never compiled strict: about 150 errors, mostly model fields without initialisers and `null` passed to non-null parameters. Turning it on (and `strictTemplates`) is a recommended follow-up.
+- **Bundle:** the initial bundle is 1.32 MB (268 KB gzipped), up from 1.19 MB (244 KB) on Angular 11; that's the newer framework.
+- **Follow-ups (optional, each with its own Angular migration):**
+  - `strict` and `strictTemplates`
+  - typed reactive forms
+  - standalone components
+  - signals / zoneless
+  - Tailwind 4
+  - lazy-loaded routes, to win back bundle size
 
 **Phase 6:** the AI backend (§7.6).

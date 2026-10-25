@@ -1,7 +1,7 @@
 # EasyFit V2 Context
 
 ## Architecture
-* Frontend: Angular
+* Frontend: Angular 22 (NgModule-based, `standalone: false`), Tailwind 3.4, Node 22.22+/24.15+
 * Backend: Node.js, Express (located in /backend)
 * Database: PostgreSQL
 
