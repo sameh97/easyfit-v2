@@ -36,4 +36,4 @@ The frontend calls the API on its own origin, so the same image works on any dom
 ## Local development (without Docker)
 
 - Backend: `cd backend && npm install && npm start` (reads `.env` from `backend/`, or export the variables).
-- Frontend: `cd frontend && npm install --legacy-peer-deps`, then with `NODE_OPTIONS=--openssl-legacy-provider` and `TAILWIND_MODE=watch` set, `npm start` → http://localhost:4200 (API at `http://localhost:3000`, see `src/environments/environment.ts`).
+- Frontend (Node 22.22+ or 24.15+): `cd frontend && npm install && npm start` → http://localhost:4200 (API at `http://localhost:3000`, see `src/environments/environment.ts`). `npm run build` makes a production build in `dist/easyfit/browser`.

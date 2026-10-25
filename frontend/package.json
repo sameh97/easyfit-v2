@@ -35,7 +35,7 @@
     "@angular-devkit/build-angular": "^22.2.4",
     "@angular/cli": "^22.2.4",
     "@angular/compiler-cli": "^22.2.3",
-    "@types/node": "^12.11.1",
+    "@types/node": "^24.19.2",
     "autoprefixer": "^10.6.1",
     "postcss": "^8.5.30",
     "tailwindcss": "~3.4.19",
